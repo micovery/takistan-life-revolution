@@ -1,0 +1,21 @@
+player groupchat format["WELCOME TO THE CROW SLOT - player groupchat"];
+player globalchat format["WELCOME TO THE CROW SLOT - player globalchat"];
+player commandchat format["WELCOME TO THE CROW SLOT - player commandchat"];
+player sidechat format["WELCOME TO THE CROW SLOT - player sidechat"];
+player vehiclechat format["WELCOME TO THE CROW SLOT - player vehiclechat"];
+
+server globalchat format["WELCOME TO THE CROW SLOT - server globalchat"];
+
+_player = _this select 0;
+_killer = _this select 1;
+_seagull = _this select 2;
+
+server globalchat format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
+player globalchat format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
+
+player sidechat format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
+player groupchat format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
+player commandchat format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
+player vehiclechat format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
+
+diag_log format["PLAYER: %1		KILLER: %2		SEAGULL: %3", _player, _killer, _seagull];
