@@ -32,7 +32,7 @@ cop_salary_handout = {
 	_income = if (isNil "_income") then { add_copmoney } else {_income};
 	_income = if (typeName _income != "SCALAR") then { add_copmoney } else { _income };
 	
-	[(round _income)] call bank_transaction;
+	[player, (round _income)] call bank_transaction;
 	
 	player groupChat format[localize "STRS_moneh_copmoneyadd", rolestring, strM((round _income))];
 	sleep 1;
@@ -106,7 +106,7 @@ civilian_salary_handout = {
 	_income = if (typeName _income != "SCALAR") then { add_civmoney } else { _income };
 	
 	_income = round _income;
-	[_income] call bank_transaction;
+	[player, _income] call bank_transaction;
 	
 	player groupChat format[localize "STRS_moneh_civmoneyadd", rolestring, strM(_income)];
 	
@@ -115,8 +115,8 @@ civilian_salary_handout = {
 	if (isMayor) then {
 		MayorTaxes = MayorTaxes + _taxes;
 		MayorTaxes = round(MayorTaxes*(MayorTaxPercent/100));
-		[(MayorTaxes + MayorExtraPay)] call bank_transaction;
-		player groupchat format["As President you get an extra paycheck of $%1. You also got $%2 taxes.", strM(MayorExtraPay), strM(MayorTaxes)];
+		[player, (MayorTaxes + MayorExtraPay)] call bank_transaction;
+		player groupchat format["As president you get an extra paycheck of $%1. You also got $%2 taxes.", strM(MayorExtraPay), strM(MayorTaxes)];
 		MayorTaxes = 0;
 	}
 	else {if (_taxes > 0) then {
