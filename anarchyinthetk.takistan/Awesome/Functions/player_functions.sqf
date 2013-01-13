@@ -635,7 +635,7 @@ player_prison_bail = {
 	_percent = _percent / 100;
 	
 	private["_bail", "_money"];
-	_money = call player_get_total_money;
+	_money =  [_player] call player_get_total_money;
 	_bail = round(_percent * _money);
 	_bail = if (_bail <= 0) then { 100000 } else { _bail };
 	[_player, _bail] call player_set_bail;
@@ -656,9 +656,9 @@ player_prison_strip = {
 	//remove stolen cash, and illlal items
 	[_player] call INV_RemoveIllegal;
 	if (stolencash > 0) then {
-		[stolencash] call player_lose_money;
+		[_player, stolencash] call player_lose_money;
 		private["_message"];
-		_message = format["%1-%2 was a bank robber, and has been charded $%2!", _player, (name _player), stolencash];
+		_message = format["%1-%2 was a bank robber, and has been charded $%3!", _player, (name _player), stolencash];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	};
 	stolencash = 0;

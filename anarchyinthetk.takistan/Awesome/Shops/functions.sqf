@@ -1350,7 +1350,7 @@ shop_distribute_drug_sale = {
 	_gang_members_count = (count _gang_members);
 	_income = round(_total_due/_gang_members_count);
 	
-	format['if((name player) in %1) then {player groupchat "You received $%2 from a drug sale"; [%2] call bank_transaction;};', _gang_members, strM(_income)] call broadcast;
+	format['if((name player) in %1) then {player groupchat "You received $%2 from a drug sale"; [player, %2] call bank_transaction;};', _gang_members, strM(_income)] call broadcast;
 };
 
 shop_get_drug_list = {

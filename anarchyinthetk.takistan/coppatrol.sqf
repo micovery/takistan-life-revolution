@@ -37,7 +37,7 @@ while {pmissionactive} do {
 		{
 		deleteMarkerLocal "patrolmarker";
 		_moneyearned = (ceil(_distance * patrolmoneyperkm));
-		[_moneyearned] call bank_transaction;
+		[player, _moneyearned] call bank_transaction;
 		player sidechat format["You earned $%1 for patroling", _moneyearned];
 		player sidechat "please wait a moment for a new patrol point";
 

@@ -37,11 +37,11 @@ if (_art == "spielerliste") then {
 	lbClear (_DFML displayCtrl 1);
 	
 	private["_total_money", "_private_money", "_factory_money", "_cash"];
-	_total_money = call player_get_total_money;
-	_private_money = call player_get_private_storage_money;
-	_factory_money = call player_get_factory_storage_money;
+	_total_money = [player] call player_get_total_money;
+	_private_money = [player] call player_get_private_storage_money;
+	_factory_money = [player] call player_get_factory_money;
 	_cash = [player, 'money'] call INV_GetItemAmount;
-	_bank = call bank_get_value;
+	_bank = [player] call bank_get_value;
 	_trennlinie = "---------------------------------------------";
 	(_DFML displayCtrl 1) 	lbAdd format ["Date:     %3.%2.%1", (date select 0), (date select 1), (date select 2)];
 	(_DFML displayCtrl 1)	lbAdd format ["Runtime: %1 minutes", (round(time/60))];
