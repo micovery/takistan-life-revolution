@@ -196,7 +196,7 @@ while {true} do {
 	
 	if (convoytruck distance copbase1 < 150) exitwith 
 		{   
-		"if (iscop) then {[govconvoybonus] call bank_transaction; player sidechat format[""you received $%1 for the successfully escorting the convoy"", govconvoybonus];};" call broadcast;
+		"if (iscop) then {[player, govconvoybonus] call bank_transaction; player sidechat format[""you received $%1 for the successfully escorting the convoy"", govconvoybonus];};" call broadcast;
 		_sidewon = "Cops";
 		};
 				

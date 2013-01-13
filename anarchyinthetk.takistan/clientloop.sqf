@@ -199,7 +199,6 @@ cop_stun_gun_modify = {
 	};	
 };
 
-previous_bank_account = 0;
 check_money = {
 	private ["_player", "_money"];
 	_player = player;
@@ -217,19 +216,13 @@ check_money = {
 };
 
 check_bank = {
-	private ["_bank_account"];
-	
-	_bank_account = call bank_get_value;
+	private ["_bank_account", "_player"];
+	_player = player;
+	_bank_account = [_player] call bank_get_value;
 	
 	if (_bank_account > bank_limit) exitWith {
-		[bank_limit] call bank_set_value; 
+		[_player, bank_limit] call bank_set_value; 
 		player groupChat format["You can't have more than $%1 in your bank account. Money has been removed.", strM(bank_limit)];
-		_bank_account = bank_limit;
-	};
-	
-	if ((previous_bank_account != _bank_account) and (_bank_account != Startmoneh)) then {
-		["bankaccount", bankaccount] spawn stats_client_save;
-		previous_bank_account = _bank_account;
 	};
 };
 
