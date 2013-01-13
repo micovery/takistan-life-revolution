@@ -77,7 +77,7 @@ if (_art == "getajob_hostage") then {
 		"htargetmarker" setmarkerpos getpos hostage1;
 
 		if (_minutecounter >= 750 and alive player) exitWith {
-			[300000] call bank_transaction;
+			[player, 300000] call bank_transaction;
 			player groupchat "Well done, you kept the hostage for 15 minutes, $300000 has been transfered to your account.";
 			sleep 10;
 			"server globalchat ""Hostage Taker WINS, he kept the hostage for 15 minutes."";" call broadcast;
@@ -100,7 +100,7 @@ if (_art == "getajob_hostage") then {
 			server globalchat ""The Hostage taker has fled the area! Cops get $5000"";
 			_copplayernumber = playersNumber west;
 			_copbonus = 5000;
-			if (iscop) then {[_copbonus] call bank_transaction; player sidechat format[""you received $%1 for hostage taker fleeing the area"", _copbonus];};
+			if (iscop) then {[player, _copbonus] call bank_transaction; player sidechat format[""you received $%1 for hostage taker fleeing the area"", _copbonus];};
 			" call broadcast;
 			sleep 2;
 			player groupchat "You fled the area with the hostage, stay in the zone next time, mission failed!";
@@ -115,7 +115,7 @@ if (_art == "getajob_hostage") then {
 			server globalchat ""The Hostage taker has lost!"";
 			_copplayernumber = playersNumber west;
 			_copbonus = 5000;
-			if (iscop) then {[_copbonus] call bank_transaction; player sidechat format[""you received $%1 for the successful rescue of the hostage"", _copbonus];};
+			if (iscop) then {[player, _copbonus] call bank_transaction; player sidechat format[""you received $%1 for the successful rescue of the hostage"", _copbonus];};
 			" call broadcast;
 			sleep 2;
 			player groupchat "The Hostage was rescued, mission failed!";
