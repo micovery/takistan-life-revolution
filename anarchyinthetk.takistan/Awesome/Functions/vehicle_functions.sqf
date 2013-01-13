@@ -1,263 +1,141 @@
 if (not(isNil "vehicle_functions_defined")) exitWith {};
 
-/*
-vehicle_set_string = {
-	private["_vehicle", "_variable_name", "_variable_value"];
+
+// --------- Set variable functions
+vehicle_set_var = {
+	private["_vehicle", "_variable_name", "_variable_value", "_variable_type"];
 
 	_vehicle = _this select 0;
 	_variable_name = _this select 1;
 	_variable_value = _this select 2;
+	_variable_type = _this select 3;
+	
+	[_vehicle, _variable_name, _variable_value, _variable_type, true] call vehicle_set_var_checked;
+};
+
+vehicle_set_var_checked = {
+	private["_vehicle", "_variable_name", "_variable_value", "_checked", "_variable_type"];
+
+	_vehicle = _this select 0;
+	_variable_name = _this select 1;
+	_variable_value = _this select 2;
+	_variable_type = _this select 3;
+	_checked = _this select 4;
 	
 	
 	if (isNil "_vehicle") exitWith {};
 	if (isNil "_variable_name") exitWith {};
     if (isNil "_variable_value") exitWith {};
-	
-	if (typeName _variable_name != "STRING") exitWith {};
-	if (typeName _variable_value != "STRING") exitWith {};
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_string;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	
-	//player groupChat format["Saving %1 = %2", _variable_name, _variable_value];
-	_vehicle setVariable [_variable_name, _variable_value, true];
-	[_vehicle, _variable_name, _variable_value] call stats_vehicle_save;
-};
-*/
-
-vehicle_set_string = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	[_vehicle, _variable_name, _variable_value, true] call vehicle_set_string_checked;
-};
-vehicle_set_string_checked = {
-	private["_vehicle", "_variable_name", "_variable_value", "_checked"];
-
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	_checked = _this select 3;
-	
-	
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-    if (isNil "_variable_value") exitWith {};
+	if (isNil "_variable_type") exitWith {};
 	if (isNil "_checked") exitWith {};
 	
 	if (typeName _variable_name != "STRING") exitWith {};
-	if (typeName _variable_value != "STRING") exitWith {};
+	if (typeName _variable_type != "STRING") exitWith {};
+	if (typeName _variable_value != _variable_type) exitWith {};
 	if (typeName _checked != "BOOL") exitWith {};
 	
 	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_string;	
-	if (_checked && (_current_value == _variable_value)) exitWith {};
-	
-	//player groupChat format["Saving %1 = %2", _variable_name, _variable_value];
-	_vehicle setVariable [_variable_name, _variable_value, true];
-	[_vehicle, _variable_name, _variable_value] call stats_vehicle_save;
-};
-
-
-vehicle_get_string = {
-	private["_vehicle", "_variable_name"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-
-	private["_variable_value"];
-	_variable_value = _vehicle getVariable _variable_name;
-	_variable_value = if (isNil "_variable_value") then { "" } else { _variable_value };
-	_variable_value = if (typeName _variable_value != "STRING") then { "" } else {_variable_value };
-	_variable_value
-};
-
-vehicle_update_string = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_string;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	[_vehicle, _variable_name, _variable_value] call vehicle_set_string;
-};
-
-
-vehicle_set_array = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	[_vehicle, _variable_name, _variable_value, true] call vehicle_set_array_checked;
-};
-vehicle_set_array_checked = {
-	private["_vehicle", "_variable_name", "_variable_value", "_checked"];
-
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	_checked = _this select 3;
-	
-	
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-    if (isNil "_variable_value") exitWith {};
-	if (isNil "_checked") exitWith {};
-	
-	if (typeName _variable_name != "STRING") exitWith {};
-	if (typeName _variable_value != "ARRAY") exitWith {};
-	if (typeName _checked != "BOOL") exitWith {};
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_array;
+	_current_value = [_vehicle, _variable_name, _variable_type] call vehicle_get_var;
 	if(_checked && (str(_current_value) == str(_variable_value))) exitWith {};
 	
-	//player groupChat format["Saving %1 = %2", _variable_name, _variable_value];
 	_vehicle setVariable [_variable_name, _variable_value, true];
 	[_vehicle, _variable_name, _variable_value] call stats_vehicle_save;
 };
 
-
-vehicle_get_array = {
-	private["_vehicle", "_variable_name"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-
-	private["_variable_value"];
-	_variable_value = _vehicle getVariable _variable_name;
-	_variable_value = if (isNil "_variable_value") then { [] } else { _variable_value };
-	_variable_value = if (typeName _variable_value != "ARRAY") then { [] } else {_variable_value };
-	_variable_value
+vehicle_set_string = {
+	_this set [3, "STRING"];
+	_this call vehicle_set_var;
 };
 
-vehicle_update_array = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_array;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	[_vehicle, _variable_name, _variable_value] call vehicle_set_array;
+vehicle_set_string_checked = {
+	private["_checked"];
+	_checked = _this select 3;
+	_this set [3, "STRING"];
+	_this set [4, _checked];
+	_this call vehicle_set_var_checked;
 };
 
+vehicle_set_array = {
+	_this set [3, "ARRAY"];
+	_this call vehicle_set_var;
+};
+
+vehicle_set_array_checked = {
+	private["_checked"];
+	_checked = _this select 3;
+	_this set [3, "ARRAY"];
+	_this set [4, _checked];
+	_this call vehicle_set_var_checked;
+};
 
 vehicle_set_bool = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-    if (isNil "_variable_value") exitWith {};
-	
-	if (typeName _variable_name != "STRING") exitWith {};
-	if (typeName _variable_value != "BOOL") exitWith {};
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_bool;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	
-	//player groupChat format["Saving %1 = %2", _variable_name, _variable_value];
-	_vehicle setVariable [_variable_name, _variable_value, true];
-	[_vehicle, _variable_name, _variable_value] call stats_vehicle_save;
+	_this set [3, "BOOL"];
+	_this call vehicle_set_var;
 };
 
+vehicle_set_scalar = {
+	_this set [3, "SCALAR"];
+	_this call vehicle_set_var;
+};
 
-vehicle_get_bool = {
-	private["_vehicle", "_variable_name"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
+// --- UPDATE functions 
 
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-
-	private["_variable_value"];
-	_variable_value = _vehicle getVariable _variable_name;
-	_variable_value = if (isNil "_variable_value") then { false } else { _variable_value };
-	_variable_value = if (typeName _variable_value != "BOOL") then { false } else {_variable_value };
-	_variable_value
+vehicle_update_array = {
+	_this set [3, "ARRAY"];
+	_this call vehicle_set_var;
 };
 
 vehicle_update_bool = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_bool;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	[_vehicle, _variable_name, _variable_value] call vehicle_set_bool;
-};
-
-
-vehicle_set_scalar = {
-	private["_vehicle", "_variable_name", "_variable_value"];
-
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-	_variable_value = _this select 2;
-	
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-    if (isNil "_variable_value") exitWith {};
-	
-	if (typeName _variable_name != "STRING") exitWith {};
-	if (typeName _variable_value != "SCALAR") exitWith {};
-	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_scalar;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	
-	//player groupChat format["Saving %1 = %2", _variable_name, _variable_value];
-	_vehicle setVariable [_variable_name, _variable_value, true];
-	[_vehicle, _variable_name, _variable_value] call stats_vehicle_save;
-};
-
-
-vehicle_get_scalar = {
-	private["_vehicle", "_variable_name"];
-	_vehicle = _this select 0;
-	_variable_name = _this select 1;
-
-	if (isNil "_vehicle") exitWith {};
-	if (isNil "_variable_name") exitWith {};
-
-	private["_variable_value"];
-	_variable_value = _vehicle getVariable _variable_name;
-	_variable_value = if (isNil "_variable_value") then {0} else { _variable_value };
-	_variable_value = if (typeName _variable_value != "SCALAR") then { 0 } else {_variable_value };
-	_variable_value
+	_this set [3, "BOOL"];
+	_this call vehicle_set_var;
 };
 
 vehicle_update_scalar = {
-	private["_vehicle", "_variable_name", "_variable_value"];
+	_this set [3, "SCALAR"];
+	_this call vehicle_set_var;
+};
+
+vehicle_update_string = {
+	_this set [3, "STRING"];
+	_this call vehicle_set_var;
+};
+
+// GET functions
+
+vehicle_get_var = {
+	private["_vehicle", "_variable_name", "_variable_type", "_variable_value"];
 	_vehicle = _this select 0;
 	_variable_name = _this select 1;
-	_variable_value = _this select 2;
+	_variable_type = _this select 2;
 	
-	private["_current_value"];
-	_current_value = [_vehicle, _variable_name] call vehicle_get_scalar;
-	if (str(_current_value) == str(_variable_value)) exitWith {};
-	[_vehicle, _variable_name, _variable_value] call vehicle_set_scalar;
+	if (isNil "_vehicle") exitWith {};
+	if (isNil "_variable_name") exitWith {};
+	if (isNil "_variable_type") exitWith {};
+	if ((typeName _variable_name) != "STRING") exitWith {};
+	if ((typeName _variable_type) != "STRING") exitWith {};
+	_variable_value = _vehicle getVariable _variable_name;
+	_variable_value = if(isNil "_variable_value") then { "" } else { _variable_value };
+	_variable_value = if ((typeName _variable_value) != _variable_type) then { "" } else { _variable_value };
+	_variable_value
+};
+vehicle_get_string = {
+	_this set [2, "STRING"];
+	(_this call vehicle_get_var)
+};
+
+vehicle_get_array = {
+	_this set [2, "ARRAY"];
+	(_this call vehicle_get_var)
+};
+
+vehicle_get_bool = {
+	_this set [2, "BOOL"];
+	(_this call vehicle_get_var)
+};
+
+vehicle_get_scalar = {
+	_this set [2, "SCALAR"];
+	(_this call vehicle_get_var)
 };
 
 vehicle_despawn = { _this spawn {
