@@ -140,7 +140,7 @@ interact_arrest_player = {
 	_bounty = [_victim] call player_get_bounty;
 	if (_bounty > 0) then {
 		player groupChat format["%1-%2 had a bounty of $%3. You got that bounty!", _victim, (name _victim), _bounty];
-		[_bounty] call bank_transaction;
+		[_player, _bounty] call bank_transaction;
 		[_victim, 0] call player_set_bounty;
 	};
 	
@@ -162,7 +162,7 @@ interact_pay_bail = {
 	if (_bail <= 0) exitWith {};
 
 	private["_money"];
-	_money  = call player_get_total_money;
+	_money = [_player] call player_get_total_money;
 
 	if (_bail > _money) exitWith {
 		player groupChat format["You do not have enough money to pay $%1 in bail", _bail];
@@ -171,7 +171,7 @@ interact_pay_bail = {
 	private["_cop_count", "_cop_bail"];
 	_cop_count = playersNumber west;
 	_cop_bail = round(_bail/_cop_count);
-	[_bail] call player_lose_money;
+	[_player, _bail] call player_lose_money;
 	[_player, -(_bail)] call player_update_bail;
 		
 	player groupChat format ["You paid $%1 in bail", strM(_bail)];
@@ -462,14 +462,14 @@ interact_civilian_camera = {_this spawn {
 	_cost = _watchtime * civilian_camera_cost_per_second;
 	
 	private["_money"];
-	_money = call player_get_total_money;
+	_money = [_player] call player_get_total_money;
 	
 	
 	if (_money < _cost) exitWith {
 		player groupChat format["You do not have enough money to use civilian camera"];
 	};
 	
-	[_cost] call player_lose_money;
+	[_player, _cost] call player_lose_money;
 	
 	
 	if (not(([_target] call player_get_bounty) > 0)) exitWith {
@@ -636,7 +636,7 @@ interact_deposit_receive = {
 	if (typeName _amount != "SCALAR") exitWith {};
 	if (_amount <= 0) exitWith {};
 	
-	[_amount] call bank_transaction;
+	[_player, _amount] call bank_transaction;
 	
 	player groupChat format["You received $%1 from %2-%3 on your bank account", strM(_amount), _sender, (name _sender)];
 };
@@ -661,13 +661,13 @@ interact_deposit_other = {
 	private["_tax_fee", "_total_due"];
 	_tax_fee = round(_amount * (bank_tax/100));	
 	_total_due = _tax_fee + _amount;
-	_bank_amount = call bank_get_value;
+	_bank_amount = [_player] call bank_get_value;
 	
 	if (_bank_amount < _total_due) exitWith {
 		player groupChat format["You do not have enough money in your account to send $%1, with tax fee $%2", strM(_amount), strM(_tax_fee)];
 	};
 	
-	[-(_total_due)] call bank_transaction;
+	[_player, -(_total_due)] call bank_transaction;
 	[_tax_fee] call shop_update_taxes;
 	
 	player groupChat format["You have sent $%1 to %2-%3, your tax fee was $%4", strM(_amount), _target, (name _target), strM(_tax_fee)];
@@ -711,7 +711,7 @@ interact_deposit_self ={
 	};
 	
 	player groupChat format["You have deposited $%1 into your bank account", strM(_amount)];
-	[_amount] call bank_transaction;
+	[_player, _amount] call bank_transaction;
 	[_player, 'money', -(_amount)] call INV_AddInventoryItem;
 };
 
@@ -756,13 +756,13 @@ interact_withdraw = {
 	if ([_amount] call interact_check_trx_minimum) exitWith {};
 	
 	private["_bank_amount"];
-	_bank_amount = call bank_get_value;
+	_bank_amount = [_player] call bank_get_value;
 	
 	if (_amount > _bank_amount) exitWith {
 		player groupChat format["You do not have enough money on your bank account to withdraw $%1", strM(_amount)];
 	};
 	
-	[-(_amount)] call bank_transaction;
+	[_player, -(_amount)] call bank_transaction;
 	[_player, 'money', (_amount)] call INV_AddInventoryItem;
 	player groupChat format["You have withdrawn $%1 from your bank account", strM(_amount)];
 };
@@ -794,7 +794,7 @@ interact_atm_menu = { _this spawn {
 	while {ctrlVisible 1003} do {
 		private["_money", "_bank"];
 		_money = [player, "money"] call INV_GetItemAmount;
-		_bank = (call bank_get_value);
+		_bank = [player] call bank_get_value;
 		CtrlSetText [101, format ["Money in your Inventory: $%1", strM(_money)]];
 		CtrlSetText [102, format ["Money in your Account: $%1", strM(_bank)]];
 		private["_amount"];
@@ -1340,7 +1340,7 @@ interact_ticket_distribute = {
 	_cop_count = playersNumber west;
 	_cop_money = round(_amount / _cop_count);
 	player groupChat format["You got $%1 because %2-%3 paid %4-%5's ticket of $%6", _cop_money, _target, (name _target), _player, (name _player), strM(_amount)];
-	[_cop_money] call bank_transaction;
+	[player, _cop_money] call bank_transaction;
 };
 
 interact_ticket_receive = { _this spawn {
@@ -1369,7 +1369,7 @@ interact_ticket_receive = { _this spawn {
 	};
 
 	private ["_player_money"];
-	_player_money = call player_get_total_money;
+	_player_money = [_target] call player_get_total_money;
 		
 	if (_amount > _player_money ) exitWith {
 		private["_message"];
@@ -1377,7 +1377,7 @@ interact_ticket_receive = { _this spawn {
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	};
 
-	[_amount] call player_lose_money;
+	[_target, _amount] call player_lose_money;
 	format['[%1, %2, %3] call interact_ticket_distribute;', _player, _target, _amount] call broadcast;
 };};
 
@@ -2053,7 +2053,7 @@ interact_generic_storage = {
 	
 	if (_amount == 0) exitWith {};
 	
-	player groupChat format["interact_generic_storage %1", _this];
+	//player groupChat format["interact_generic_storage %1", _this];
 	
 	private["_item_kind"];
 	_item_kind = _item call INV_GetItemKindOf;

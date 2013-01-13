@@ -28,7 +28,7 @@ _array =
 			}],
 			
 		["Add 100k Dollars to Bank", {
-				[100000] call bank_transaction;
+				[player, 100000] call bank_transaction;
 			}],
 			
 		["Add 100k Dollars to Inventory", {

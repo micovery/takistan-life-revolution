@@ -15,8 +15,7 @@ vs_uid = 2;
 vs_money = 3;
 vs_euid = 4;
 
-add_killer =
-{
+add_killer = {
 	private ["_killers"];
 	_killer = _this select 0;
 	_type = _this select 1;
@@ -65,8 +64,7 @@ add_killer =
 	', player, _killer_uid, _killer_fletter, _type, _euid, _lost_money] call broadcast;
 };
 
-add_victim =
-{
+add_victim = {
 	private ["_victims"];
 	_victim = _this select 0;
 	_type = _this select 1;
@@ -95,8 +93,7 @@ add_victim =
 	player setVariable ["victims", _victims, true];
 };
 
-remove_killer =
-{
+remove_killer = {
 	private["_i"];
 	_euid = _this select 0;
 	
@@ -105,12 +102,10 @@ remove_killer =
 	
 	_i = 0;
 	_new_killers = [];
-	for [{_i = 0}, {_i < (count _killers)}, {_i = _i + 1}] do
-	{
+	for [{_i = 0}, {_i < (count _killers)}, {_i = _i + 1}] do {
 		_killer_data = _killers select _i;
 		_ceuid = _killer_data select ks_euid;
-		if (_ceuid != _euid) then
-		{
+		if (_ceuid != _euid) then {
 			_new_killers = _new_killers + [_killer_data];
 		};
 	};
@@ -120,8 +115,7 @@ remove_killer =
 	player setVariable["killers", _killers, true];
 };
 
-remove_victim =
-{
+remove_victim = {
 	_euid = _this select 0;
 	
 	_victims = player getVariable "victims";
@@ -129,12 +123,10 @@ remove_victim =
 	
 	_i = 0;
 	_new_victims = [];
-	for [{_i = 0}, {_i < (count _victims)}, {_i = _i + 1}] do
-	{
+	for [{_i = 0}, {_i < (count _victims)}, {_i = _i + 1}] do {
 		_victim_data = _victims select _i;
 		_ceuid = _victim_data select vs_euid;
-		if (_ceuid != _euid) then
-		{
+		if (_ceuid != _euid) then {
 			_new_victims = _new_victims + [_victim_data];
 		};
 	};
@@ -143,24 +135,21 @@ remove_victim =
 	player setVariable["victims", _victims, true];
 };
 
-calculate_fees =
-{
+calculate_fees = {
 	private ["_damages", "_fees"];
 	_damages = _this select 0;
 	_fees = 0;
 	
-	_all_money = call player_get_total_money;
+	_all_money = [player] call player_get_total_money;
 	_p20 = ceil(_all_money * 0.2);
-	if (_p20 > _damages) then
-	{
+	if (_p20 > _damages) then {
 		_fees = _p20 - _damages;
 	};
 	
 	_fees
 };
 
-fill_retributions =
-{
+fill_retributions = {
 	lbClear kvlist;
 	private ["_damages", "_fees"];
 	
@@ -176,14 +165,12 @@ fill_retributions =
 		_damages = _lost_money;
 		_fees = [_damages] call calculate_fees;
 
-		if (_type == "TK") then
-		{
+		if (_type == "TK") then {
 			_index = lbAdd [kvlist, format ["Victim(TK): %1 (+$%2, +$%3)", _victim_name, _damages, _fees]];
 			lbSetData [kvlist, _index, format["%1", ["vtk", _victim_data]]];
 			lbSetColor [kvlist, _index, [0, 1, 0, 1]];
 		}
-		else { if ( _type == "DM") then 
-		{
+		else { if ( _type == "DM") then {
 			_index = lbAdd [kvlist, format ["Victim(DM): %1 (+$%2, +$%3)", _victim_name, _damages, _fees]];
 			lbSetData [kvlist, _index, format["%1", ["vdm", _victim_data]]];
 			lbSetColor [kvlist, _index, [0, 1, 0, 1]];
@@ -198,14 +185,12 @@ fill_retributions =
 		_killer_uid =  _killer_data select ks_uid;
 		_lost_money = _killer_data select ks_money;
 		
-		if (_type == "TK") then
-		{
+		if (_type == "TK") then {
 			_index = lbAdd [kvlist, format ["Killer(TK): %1 (Set ablaze, -$%2)", _killer_name, _lost_money]];
 			lbSetData [kvlist, _index, format["%1", ["ktk", _killer_data]]];
 			lbSetColor [kvlist, _index, [1, 0, 0, 1]];
 		}
-		else { if ( _type == "DM") then 
-		{
+		else { if ( _type == "DM") then {
 			_index = lbAdd [kvlist, format ["Killer(DM): %1 (-$%2)", _killer_name, _lost_money]];
 			lbSetData [kvlist, _index, format["%1", ["kdm", _killer_data]]];
 			lbSetColor [kvlist, _index, [1, 0, 0, 1]];
@@ -215,26 +200,25 @@ fill_retributions =
 	
 };
 
-open_retributions = 
-{
+open_retributions =  {
 	if (dialog) exitWith { closeDialog 0; };
 	_ok = createDialog "Retribution";
-	if ( !_ok ) then { player groupChat "Unable to open the retributions dialog";};
+	if (not(_ok)) then { 
+		player groupChat "Unable to open the retributions dialog";
+	};
 	
 	[] call fill_retributions;	
 };
 
 
-get_retribution_selection =
-{
+get_retribution_selection = {
 	_selected_index = lbCurSel kvlist;
 	if (isNil "_selected_index" || typeName _selected_index != "SCALAR" || _selected_index < 0) exitWith { nil };
 	_selection = (call compile lbData [kvlist, _selected_index]);
 	_selection
 };
 
-kill_type_2_str =
-{
+kill_type_2_str = {
 	_type = _this select 0;
 	
 	if (_type == "vtk" || _type == "ktk") exitWith { "team-killing" };
@@ -243,9 +227,7 @@ kill_type_2_str =
 	"unknown"
 };
 
-compensate_player =
-{	
-
+compensate_player = {
 	_selection = [] call get_retribution_selection;
 	if (isNil "_selection") exitWith { player groupChat "You have not selected a player to compensate";};
 	_type = _selection select 0;
@@ -268,15 +250,13 @@ compensate_player =
 	_message = format["%1 paid $%2 in damages to %3 for %4", _killer_name, _damages, _victim_name, _type_str];
 	format[' server globalChat "%1"; ', _message] call broadcast;
 
-	if (_fees > 0) then
-	{
+	if (_fees > 0) then {
 		_message = format["%1 paid additional $%2 in criminal fees, for %3", _killer_name, _fees, _type_str];
-		format[' server globalChat "%1"; ', _message] call broadcast;
+		format['server globalChat "%1"; ', _message] call broadcast;
 	};
 	
-	
-	_compensation_money  =  _damages + _fees;
-	[_compensation_money] call player_lose_money;
+	_compensation_money = _damages + _fees;
+	[player, _compensation_money] call player_lose_money;
 	
 	[_euid] call remove_victim;
 	[] call fill_retributions;
@@ -293,8 +273,7 @@ compensate_player =
 		_euid = "%4";
 		_damages = %5;
 		
-		if (_victim_uid == _puid && _victim_fletter == _pfletter) then
-		{
+		if (_victim_uid == _puid && _victim_fletter == _pfletter) then {
 			[_euid] call remove_killer;
 			[] call fill_retributions;
 			[_damages] call bank_transaction;
@@ -303,9 +282,7 @@ compensate_player =
 };
 
 
-punish_player =
-{	
-
+punish_player = {	
 	_selection = [] call get_retribution_selection;
 	if (isNil "_selection") exitWith { player groupChat "You have not selected a player to punish";};
 	_type = _selection select 0;
@@ -324,7 +301,7 @@ punish_player =
 	_damages = _killer_money;
 	_type_str = [_type] call kill_type_2_str;
 	
-	[_damages] call bank_transaction;
+	[player, _damages] call bank_transaction;
 	_message = format["%1 collected $%2 in damages from %3, for %4", _victim_name, _damages, _killer_name, _type_str];
 	format[' server globalChat "%1"; ', _message] call broadcast;
 	
@@ -346,16 +323,14 @@ punish_player =
 		_damages = %4;
 		_type = "%5";
 		
-		if (_killer_uid == _puid && _killer_fletter == _pfletter) then
-		{
+		if (_killer_uid == _puid && _killer_fletter == _pfletter) then {
 			[_type, _euid, _damages] call punished_logic;
 		};
 	', _killer_fletter, _killer_uid, _euid, _damages, _type] call broadcast;
 };
 
 
-punished_logic =
-{
+punished_logic = {
 	private ["_damages", "_fees", "_message", "_type_str"];
 	
 	_type = _this select 0;
@@ -370,18 +345,16 @@ punished_logic =
 	_fees = [_damages] call calculate_fees;
 	_type_str = [_type] call kill_type_2_str;
 	
-	_punish_money  =  _damages + _fees;
-	[_punish_money] call player_lose_money;
+	_punish_money = _damages + _fees;
+	[player, _punish_money] call player_lose_money;
 	
-	if (_type == "ktk") then
-	{
+	if (_type == "ktk") then {
 		_message = format["%1 was set ablaze as punishment for %2", _killer_name, _type_str];
 		format[' server globalChat "%1"; ', _message] call broadcast;
 		[] call setablaze_player;	
 	};
 
-	if (_fees > 0) then
-	{
+	if (_fees > 0) then {
 		_message = format["%1 paid additional $%2 in criminal fees, for %3", _killer_name, _fees, _type_str];
 		format[' server globalChat "%1"; ', _message] call broadcast;
 	};
@@ -389,8 +362,7 @@ punished_logic =
 	
 };
 
-forgive_player =
-{	
+forgive_player = {	
 	_selection = [] call get_retribution_selection;
 	if (isNil "_selection") exitWith { player groupChat "You have not selected a player to punish";};
 	_type = _selection select 0;
@@ -425,8 +397,7 @@ forgive_player =
 		_killer_money = %4;
 		_type = "%5";
 		
-		if (_killer_uid == _puid && _killer_fletter == _pfletter) then
-		{
+		if (_killer_uid == _puid && _killer_fletter == _pfletter) then {
 			[_euid] call remove_victim;
 			[] call fill_retributions;
 		};
@@ -455,28 +426,22 @@ determine_retribution = {
 	_lost_money  = [player, 'money'] call INV_GetItemAmount;
 	
 	_default_comp = 20000;
-	if (isNil "_lost_money" || typeName _lost_money != "SCALAR" || _lost_money < _default_comp) then
-	{
+	if (isNil "_lost_money" || typeName _lost_money != "SCALAR" || _lost_money < _default_comp) then {
 		_lost_money = _default_comp
 	}
-	else { if ( _lost_money <= 100000) then
-	{
+	else { if ( _lost_money <= 100000) then {
 		_lost_money = round( _lost_money * 0.75);
 	} 
-	else { if (_lost_money > 100000 && _lost_money <= 250000) then 
-	{
+	else { if (_lost_money > 100000 && _lost_money <= 250000) then {
 		_lost_money = round( _lost_money * 0.50);
 	}
-	else { if (_lost_money > 250000 && _lost_money <= 500000) then
-	{
+	else { if (_lost_money > 250000 && _lost_money <= 500000) then {
 		_lost_money = round( _lost_money * 0.25);
 	}
-	else { if (_lost_money > 500000 && _lost_money <= 1000000) then
-	{
+	else { if (_lost_money > 500000 && _lost_money <= 1000000) then {
 		_lost_money = round( _lost_money * 0.10);
 	}
-	else { if (_lost_money > 1000000) then
-	{
+	else { if (_lost_money > 1000000) then {
 		_lost_money = _default_comp;
 	};};};};};};
 	
@@ -618,7 +583,7 @@ criminal_reward = {
 	
 	private["_reward"];
 	_reward = floor(_bounty/3);
-	[_reward] call bank_transaction; 
+	[_player, _reward] call bank_transaction; 
 	player groupChat format["You got 1/3 of the civs bounty totaling $%1", _reward];
 };
 
@@ -646,7 +611,7 @@ faction_reward = {
 	
 	if (_player != player) exitWith {};
 	
-	[_reward] call bank_transaction; 
+	[_player, _reward] call bank_transaction; 
 	player groupChat format["You have received a reward of $%1 for killing an enemy", _reward];
 };
 
@@ -886,7 +851,6 @@ victim = {
 	private["_killer", "_victim"];
 	//player groupChat format["In VICTIM!, _this = %1", _this];
 	
-	
 	_killer = _this select 0;
 	_victim = _this select 1;
 	
@@ -973,12 +937,9 @@ track_retributions = {
 		[_killer, "TK"] call add_killer;
 		player_unfair_killed = true;
 	};
-	
-	
 };
 
-respawn_retribution = 
-{
+respawn_retribution = {
 	if (isNil "player_unfair_killed" ) exitWith{};
 	if (typeName player_unfair_killed != "BOOL") exitWith{};
 	if (not(player_unfair_killed)) exitWith {};
@@ -1013,7 +974,6 @@ get_death_message = {
 		format["%1 committed suicide", _victim_name];	
 	};
 	
-
 	//Death messages
 	private ["_message", "_armed_str", "_vehicle_str", "_criminal_str"];
 
@@ -1038,44 +998,33 @@ get_death_message = {
 	_message
 };
 
-retributions_main =
-{
-	if (isNil "handling_retribution") then { handling_retribution = false;};
+retributions_main = {
+	handling_retribution = if (isNil "handling_retribution") then {false} else {handling_retribution};
 	
 	_action = _this select 0;
-	switch _action do
-	{
-		case "open":
-		{
-			
+	switch _action do {
+		case "open": {
 			[] call open_retributions;
 		};
-		
-		case "compensate":
-		{
-			if (handling_retribution) exitWith { hint "Cannot compensation request";};
+		case "compensate": {
+			if (handling_retribution) exitWith { hint "Cannot handle compensation request";};
 			handling_retribution = true;
 			[] call compensate_player;
 			handling_retribution = false;
 		};
-		
-		case "punish":
-		{
-			if (handling_retribution) exitWith { hint "Cannot punish request";};
+		case "punish": {
+			if (handling_retribution) exitWith { hint "Cannot handle punish request";};
 			handling_retribution = true;
 			[] call punish_player;
 			handling_retribution = false;
 		};
-		
-		case "forgive":
-		{
-			if (handling_retribution) exitWith { hint "Cannot forgiveness request";};
+		case "forgive": {
+			if (handling_retribution) exitWith { hint "Cannot handle forgiveness request";};
 			handling_retribution = true;
 			[] call forgive_player;
 			handling_retribution = false;
 		};
 	};
 };
-
 
 retribution_functions_defined = true;

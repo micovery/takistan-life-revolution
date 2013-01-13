@@ -161,7 +161,7 @@ if (_art == "getajob_assassin") then {
 		};
 
 		if (!alive VIPtarget and alive player) exitWith {
-			[200000] call bank_transaction;
+			[player, 200000] call bank_transaction;
 			player groupchat "Well done. Target elimated. $200000 has been transfered to your account.";
 			sleep 10;
 			"server globalchat ""The VIP target has been killed!"";" call broadcast;
@@ -178,7 +178,7 @@ if (_art == "getajob_assassin") then {
 			server globalchat ""The VIP target has been rescued!"";
 			_copplayernumber = playersNumber west;
 			_copbonus = 5000;
-			if (iscop) then {[_copbonus] call bank_transaction; player sidechat format[""you received $%1 for the successful rescue of the VIP"", _copbonus];};
+			if (iscop) then {[player, _copbonus] call bank_transaction; player sidechat format[""you received $%1 for the successful rescue of the VIP"", _copbonus];};
 			" call broadcast;
 			sleep 2;
 			player groupchat "The vip was rescued, mission failed!";
