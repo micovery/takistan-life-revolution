@@ -1,7 +1,9 @@
 if(A_running) exitwith {};
 A_running = true;
 
+private["_role"];
 _role = player;
+
 //====================================== HQ BOMB ======================================================
 action1 =	_role addaction ["Defuse Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;if(!alive player)exitwith{};bombactive=false;publicvariable "bombactive";"hint ""The bomb has been defused!"";server globalchat ""The bomb has been defused!"";playsound ""fanfare"";" call broadcast;',1,false,true,"","player distance HQ <= 5 and iscop and bombactive and !planting"];
 action2 =	_role addaction ["Plant Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;publicvariable "planting";player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;publicvariable "planting";if(!alive player)exitwith{};bombactive=true;publicvariable "bombactive";',1,false,true,"","player distance HQ <= 5 and !bombactive and !planting and isciv"];
@@ -16,7 +18,6 @@ action6 =	_role addaction ["Rob safe","bankrob.sqf", ["ausrauben", safe3],1,fals
 //===================================== ASSASSINATION =================================================
 action8 = 	_role addaction ["Get Assassination job","assassination.sqf",["getajob_assassin"],1,false,true,"","player distance assassin <= 3 and isciv"];
 action9 =   _role addaction ["Escort VIP", "noscript.sqf", "[VIPtarget] join (group player); player groupchat ""escort the VIP to the police base before he is assassinated!"";",1,false,true,"","player distance VIPtarget < 5 and iscop"];
-
 
 //========================================= HUNTING ===================================================
 action_h1 =  _role addaction ["Take boar meat","noscript.sqf",
