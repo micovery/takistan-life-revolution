@@ -4,8 +4,8 @@ _action = _this select 0;
 if (_action == 1) then {
 	private ["_unit"];
 	_unit = _this select 1;
-	
-	if ([currentWeapon _unit] call isPistol_class) then {
+	if(not(isCop)) exitWith {};
+	if (((currentWeapon _unit) == "M9") || ((currentWeapon _unit) == "M9SD")) then {
 		format["%1 say ""tazer"";", _unit] call broadcast;
 	};
 };

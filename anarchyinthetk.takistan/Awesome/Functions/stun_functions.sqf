@@ -771,23 +771,6 @@ stun_effects_full = {
 };
 
 stun_drop_weapons = {
-	private ["_unit", "_weapons", "_waffens", "_pos"];
-	
-	_unit = _this select 0;
-	_weapons = weapons _unit;
-	_weapons = _weapons - nonlethalweapons;
-	
-	if (count _weapons > 0) then {
-		{_unit removeWeapon _x} forEach _weapons;
-		_waffens = createVehicle ["weaponholder", (getPosATL _unit), [], 0, "NONE"];
-		sleep 0.01;
-		_pos = [	(getPosATL _unit) select 0, (getPosATL _unit) select 1, ((getPosATL _unit) select 2) + 0.05	];
-		_waffens setPosATL _pos;
-		{_waffens addWeaponCargoGlobal [_x, 1];} foreach _weapons;
-	};
-};
-
-stun_drop_weapons = {
 	private ["_unit", "_weapons", "_holder", "_pos"];
  
 	 liafu = true;
@@ -800,7 +783,8 @@ stun_drop_weapons = {
 	if (isPlayer _unit) then  {
 		{_unit removeWeapon _x} forEach _weapons;
 	} else {
-		removeAllWeapons _unit;
+		//Don't ask me why but it has to be broadcasted to work...
+		format["removeAllWeapons %1",_unit] call broadcast;
 	};
 	
 	_holder = createVehicle ["weaponholder", (getPosATL _unit), [], 0, "NONE"];
