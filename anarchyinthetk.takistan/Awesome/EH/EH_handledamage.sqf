@@ -42,7 +42,7 @@ _weapon = currentWeapon _source;
 if (_projectile == "B_9x19_SD") then {
 	sleep 1;
 	private["_stunq"];
-	_stunq = (([_weapon] call isPistol_class) && _source_cop);
+	_stunq = (((_weapon == "M9") || (_weapon == "M9SD")) && _source_cop);
 	if ( (_stunq) ) then {
 		_reduce = true;
 		_distance = _source distance _unit;
