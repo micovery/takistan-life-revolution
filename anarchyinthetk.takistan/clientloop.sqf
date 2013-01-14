@@ -261,6 +261,22 @@ check_factory_actions = {
 	[_player, _factory_id] call factory_add_actions;
 };
 
+check_gang_area_actions = {
+	private["_player"];
+	_player = player;
+	private["_vehicle", "_in_vehicle"];
+	_vehicle = (vehicle _player);
+	_in_vehicle = (_vehicle != _player);
+	
+	private["_gang_area"];
+	_gang_area = [_player, 5] call gang_area_player_near;
+	if (isNil "_gang_area" || not(INV_shortcuts) || _in_vehicle || not(alive _player)) exitWith {
+		[_player] call gang_area_remove_actions;
+	};
+
+	[_player, _gang_area] call gang_area_add_actions;
+};
+
 check_workplaces = {
 	{
 		private["_workplace", "_object", "_radius"];
@@ -505,6 +521,7 @@ client_loop = {
 		call check_bank;
 		call check_actions;
 		call check_factory_actions;
+		call check_gang_area_actions;
 		call check_inventory;
 		call cop_stun_gun_modify;
 		call check_workplaces;

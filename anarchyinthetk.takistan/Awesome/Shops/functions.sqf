@@ -532,7 +532,6 @@ shop_buy_item_validate_data = {
 	private ["_weight_str", "_base_weight", "_weight", "_price_str", "_buy_label", "_limitedStock", "_isItem", "_isIllegal"];
 	private ["_amount_str", "_class", "_logic", "_quiet", "_supply_str"];
 	
-	
 	_data = _this select 0;
 	if (isNil "_data") exitWith {nil};
 	
@@ -632,11 +631,13 @@ shop_buy_item_validate_data = {
 	
 	_player_money =  ([player, 'money'] call INV_GetItemAmount);
 	
-	if (_needsLicense && isciv && !(_license_1 call INV_HasLicense)) exitWith {
+	//player groupChat format["_license_1 = %1", _license_1];
+	if (_needsLicense && isciv && not(_license_1 call INV_HasLicense) && not(_license_1 == "")) exitWith {
 		[format["This item requires %1", (_license_1 call INV_GetLicenseName)], _quiet] call shop_set_status_message; nil
 	};
 	
-	if (_needsLicense && iscop && !(_license_2 call INV_HasLicense)) exitWith {
+	//player groupChat format["_license_2 = %1", _license_2];
+	if (_needsLicense && iscop && not(_license_2 call INV_HasLicense) && not(_license_2 == "")) exitWith {
 		[format["This item requires %1", (_license_2 call INV_GetLicenseName)], _quiet] call shop_set_status_message; nil
 	};
 	
@@ -647,8 +648,6 @@ shop_buy_item_validate_data = {
 	if (_amount > 1 && (_isFort || _isVehicle || _isBackpack)) exitWith {
 		["The item you have selected can only be bought one at a time", _quiet] call shop_set_status_message; nil
 	};
-	
-	
 	
 	if((_isFort || _isVehicle) && _near_vehicles_count > 0) exitWith {
 		["There is a vehicle blocking the spawn", _quiet] call shop_set_status_message; nil
@@ -694,7 +693,6 @@ shop_buy_item_validate_data = {
 		["The item you have selected to buy cannot be put in hands automatically", _quiet] call shop_set_status_message; nil
 	};
 	
-
 	_data set [shop_buy_item_total_due, _total_price];
 	_data set [shop_buy_item_sales_tax, _sales_tax];
 	_data set [shop_buy_item_market_adjust, _market_adjust];
@@ -1305,31 +1303,18 @@ shop_buy_fort = {
 };
 
 shop_get_gang_by_shop_id = {
-	private["_shop_id", "_shop_cache", "_control", "_gang", "_gang_name"];
+	private["_shop_id", "_shop_cache"];
 	_shop_id = _this select 0;
-	
 	_shop_cache = [_shop_id] call shop_lookup;
-	if (isNil "_shop_cache") exitWith {};
+	if (isNil "_shop_cache") exitWith {nil};
 	
-	_control = _shop_cache getVariable "control";
+	private["_gang_id", "_gang"];
+	_gang_id = _shop_cache getVariable "control";
+	if (isNil "_gang_id") exitWith {};
+	if (typeName _gang_id  != "STRING") exitWith {nil};
+	if (_gang_id == "") exitWith {nil};
 	
-	if (isNil "_control") exitWith {};
-	if (typeName _control  != "STRING") exitWith {};
-	if (_control == "") exitWith {};
-	
-	_gang = nil;
-	_gang_name = _control;
-	
-	{
-		private["_cgang", "_cgang_name"];
-		_cgang = _x;
-		_cgang_name = _cgang select gang_array_name;
-		if (_cgang_name == _gang_name) exitWith {
-			_gang = _cgang;
-		};
-	} foreach gangsarray;
-	
-	_gang
+	([_gang_id] call gangs_lookup_id)
 };
 
 shop_distribute_drug_sale = {
@@ -1344,13 +1329,15 @@ shop_distribute_drug_sale = {
 	
 	private["_gang", "_gang_name", "_gang_members", "_income"];
 	_gang = [_shop_id] call shop_get_gang_by_shop_id;
-	if (isNil "_gang") exitWith {};
-	_gang_name = _gang select gang_array_name;
-	_gang_members = _gang select gang_array_members;
-	_gang_members_count = (count _gang_members);
-	_income = round(_total_due/_gang_members_count);
 	
-	format['if((name player) in %1) then {player groupchat "You received $%2 from a drug sale"; [player, %2] call bank_transaction;};', _gang_members, strM(_income)] call broadcast;
+	if (isNil "_gang") exitWith {};
+	_gang_name = _gang select gang_name;
+	_gang_members = _gang select gang_members;
+	_gang_members_count = (count _gang_members);
+	if (_gang_members_count == 0) exitWith {};
+	
+	_income = round(_total_due/_gang_members_count);
+	format['if((getPlayerUID player) in %1) then {player groupchat "You received $%2 from a drug sale"; [player, %2] call bank_transaction;};', _gang_members, strM(_income)] call broadcast;
 };
 
 shop_get_drug_list = {

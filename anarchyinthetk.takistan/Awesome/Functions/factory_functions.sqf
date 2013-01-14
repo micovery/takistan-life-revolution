@@ -621,6 +621,9 @@ factory_loop = {
 		_this spawn factory_loop;
 	};
 
+	_prod = missionNamespace getVariable _prod_name;
+	_avail = missionNamespace getVariable _avail_name;
+	
 	//production complete, update the values
 	_prod = (_prod - 1) max (0);
 	_avail = _avail + 1;

@@ -59,12 +59,12 @@ _role RemoveAction action51;
 _role RemoveAction action52;
 _role RemoveAction action53;
 //_role RemoveAction action54;
-_role RemoveAction action55;
-_role RemoveAction action56;
-_role RemoveAction action57;
-_role RemoveAction action58;
-_role RemoveAction action59;
-_role RemoveAction action60;
+//_role RemoveAction action55;
+//_role RemoveAction action56;
+//_role RemoveAction action57;
+//_role RemoveAction action58;
+//_role RemoveAction action59;
+//_role RemoveAction action60;
 _role RemoveAction action61;
 _role RemoveAction action62;
 _role RemoveAction action63;
@@ -77,19 +77,19 @@ _role RemoveAction action69;
 _role RemoveAction action70;
 _role RemoveAction action71;
 _role RemoveAction action72;
-_role RemoveAction action73;
-_role RemoveAction action74;
-_role RemoveAction action75;
-_role RemoveAction action76;
-_role RemoveAction action77;
-_role RemoveAction action78;
+//_role RemoveAction action73;
+//_role RemoveAction action74;
+//_role RemoveAction action75;
+//_role RemoveAction action76;
+//_role RemoveAction action77;
+//_role RemoveAction action78;
 _role RemoveAction action79;
 _role RemoveAction action80;
 _role RemoveAction action81;
 _role RemoveAction action82;
-_role RemoveAction action83;
-_role RemoveAction action84;
-_role RemoveAction action85;
+//_role RemoveAction action83;
+//_role RemoveAction action84;
+//_role RemoveAction action85;
 _role RemoveAction action86;
 _role RemoveAction action87;
 _role RemoveAction action88;
@@ -125,7 +125,6 @@ _role RemoveAction action117;
 _role RemoveAction action118;
 _role RemoveAction action119;
 
-
 fuelshop1 RemoveAction gsshop1;
 fuelshop2 RemoveAction gsshop2;
 fuelshop3 RemoveAction gsshop3;
@@ -135,8 +134,6 @@ fuelshop6 RemoveAction gsshop6;
 fuelshop7 RemoveAction gsshop7;
 fuelshop8 RemoveAction gsshop8;
 fuelshop9 RemoveAction gsshop9;
-
-
 
 _role RemoveAction cpbkp;
 _role RemoveAction opbkp;
@@ -148,8 +145,6 @@ _role RemoveAction action_h4;
 _role RemoveAction action_h5;
 _role RemoveAction action_h6;
 _role RemoveAction action_h7;
-
-
 
 [] call clear_new_actions;
 [player] call holster_remove_actions;

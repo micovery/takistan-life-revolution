@@ -283,8 +283,15 @@ class gang_menu {
 	idd = -1;
 	movingEnable = true;
 	controlsBackground[] = {DLG_BACK1, background};
-	objects[] = { };
-	controls[] = {button_join, button_leave, button_manage, button_create, listbox_gilden, dummybutton};
+	objects[] = {};
+	controls[] = {
+		button_join, 
+		button_leave, 
+		button_manage, 
+		button_create, 
+		listbox_gilden, 
+		dummybutton
+	};
 
 	class DLG_BACK1: RscBackground {
 		x = 0.06; y = 0.15;
@@ -294,40 +301,39 @@ class gang_menu {
 	class background : RscBgRahmen {
 		x = 0.06; y = 0.15;
 		w = 0.87; h = 0.27;
-
-		text = $STRD_description_gildehauptmenu_header;
+		text = "Gangs";
 	};
 
 	class button_join : RscButton {
 		x = 0.08; y = 0.19;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_gildehauptmenu_button_join;
-		action = "[0, 0, 0, [""join"", (lbData [202, (lbCurSel 202)])]] execVm ""gangs.sqf""; closedialog 0;";
+		text = "Join gang";
+		action = "[player, (lbData [202, (lbCurSel 202)])] call interact_gang_join; closedialog 0;";
 	};
 
 	class button_leave : RscButton {
 		x = 0.50; y = 0.19;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_gildehauptmenu_button_leave;
-		action = "[0, 0, 0, [""leave""]] execVm ""gangs.sqf""; closedialog 0;";
+		text = "Leave gang";
+		action = "[player] call interact_gang_leave; closedialog 0;";
 	};
 
 	class button_manage : RscButton {
 		x = 0.29; y = 0.19;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_gildehauptmenu_button_manage;
-		action = "[0, 0, 0, [""gildenverwaltung""]] execVm ""maindialogs.sqf""; closedialog 0;";
+		text = "Manage gang";
+		action = "closedialog 0; [player, (lbData [202, (lbCurSel 202)])] call interact_gang_manage_menu;";
 	};
 
 	class button_create : RscButton {
 		x = 0.71; y = 0.19;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_gildehauptmenu_button_create;
-		action = "closedialog 0; createDialog ""gilde_gruenden"";";
+		text = "Create gang";
+		action = "closedialog 0; [player] call interact_gang_create_menu;";
 	};
 
 	class listbox_gilden : RscListBox {
@@ -357,7 +363,7 @@ class gilde_gruenden {
 		x = 0.25; y = 0.32;
 		w = 0.49; h = 0.34;
 
-		text = $STRD_description_gildegruenden_header;
+		text = "Create a new gang";
 	};
 
 	class gildenname : RscEdit {
@@ -373,8 +379,8 @@ class gilde_gruenden {
 		x = 0.29; y = 0.47;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_gildegruenden_submit;
-		action = "[0, 0, 0, [""create"", (ctrlText 1)]] execVm ""gangs.sqf""; closedialog 0;";
+		text = "Create";
+		action = "[player, (ctrlText 1)] call interact_gang_create; closedialog 0;";
 	};
 
 	class cancel : RscButton {
@@ -382,7 +388,7 @@ class gilde_gruenden {
 		x = 0.50; y = 0.47;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_cancel;
+		text = "Cancel";
 		action = "closedialog 0;";
 	};
 
@@ -391,7 +397,7 @@ class gilde_gruenden {
 		x = 0.29; y = 0.37;
 		w = 0.20; h = 0.04;
 
-		text = $STRD_description_gildegruenden_name;
+		text = "Gang name:";
 	};
 
 	class dummybutton : RscDummy {
@@ -399,12 +405,12 @@ class gilde_gruenden {
 	};
 
 	class hinweis : RscText {
+		idc = 5;
 		x = 0.29; y = 0.52;
 		w = 0.41; h = 0.12;
-
 		style = ST_MULTI;
 		linespacing = 1;
-		text = $STRD_description_gildegruenden_hinweis;
+		text = "";
 	};
 };
 
@@ -511,81 +517,99 @@ class gilden_punktekaufdialog {
 	};
 };
 
-class gilde_verwaltung {
+class GCheckBox {
+	idc = -1;
+	type = 7;
+	style = 2;
+	
+	colorText[] = {1, 1, 1, 1};
+	color[] = {0, 1, 0, 1};
+	colorTextSelect[] = {0, 0.8, 0, 1};
+	coloSelectedBg[] = {1, 1, 1, 0};
+	colorSelect[] = {0, 0, 0, 1};
+	colorTextDisable[] = {0.4, 0.4, 0.4, 1};
+	colorDisable[] = {0.4, 0.4, 0.4, 1};
+	font = "TahomaB";
+	SizeEX=0.025;
+	rows = 1;
+	columns = 1;
+	strings[] = {""};
+};
+
+class manage_gang_menu {
 	idd = -1;
 	movingEnable = true;
-	controlsBackground[] = {DLG_BACK1, background};
-	objects[] = { };
-	controls[] = {rauswerfen_spielerliste, rauswerfen_header, cancel, rauswerfen_submit, sperren_liste, sperren_header, sperren_submit, dummybutton};
-
-	class DLG_BACK1: Rscbackground {
-		x = 0.24; y = 0.13;
-		w = 0.47; h = 0.43;
+	controlsBackground[] = {box_background, box_frame};
+	objects[] = {};
+	controls[] = {
+		members_list, 
+		kick_member_button,
+		make_leader_button,
+		open_checkbox,
+		open_checkbox_label,
+		close_button, 
+		dummybutton
 	};
 
-	class background : RscBgRahmen {
-		x = 0.24; y = 0.13;
-		w = 0.47; h = 0.43;
-
-		text = $STRD_description_gildeverwalten_header;
+	class box_background : Rscbackground {
+		moving = 1;
+		x = 0.24; y = 0.11;
+		w = 0.42; h = 0.66;
 	};
 
-	class rauswerfen_spielerliste : RscListBox {
-		idc = 102;
-		x = 0.26; y = 0.22;
-		w = 0.20; h = 0.15;
-	};
-
-	class rauswerfen_header : RscText {
+	class box_frame : RscBgRahmen {
+		moving = 1;
 		idc = 101;
-		x = 0.26; y = 0.17;
-		w = 0.20; h = 0.04;
-
-		style = ST_CENTER;
-		text = $STRD_description_gildeverwalten_rauswerfen_header;
+		x = 0.24; y = 0.11;
+		w = 0.42; h = 0.66;
+		text = "Manage Gang";
 	};
 
-	class cancel : RscButton {
-		x = 0.38; y = 0.50;
-		w = 0.20; h = 0.04;
+	class members_list : RscListBox {
+		idc = 102;
+		x = 0.26; y = 0.15;
+		w = 0.38; h = 0.38;
+	};
+	
+	class open_checkbox_label : RscText {
+		idc = 202;
+		x = 0.26; y = 0.55;
+		w = 0.38; h = 0.04;
+		text = "Gang open";
+	};
+	
+	class open_checkbox: GCheckBox {
+		x = 0.26; y = 0.55;
+		w = 0.38; h = 0.04;
+		onCheckBoxesSelChanged = "[player] call interact_gang_toggle_open; call interact_gang_update_open_cbox;";
+	};
 
-		text = $STRD_description_buyitem_close;
+	class kick_member_button : RscButton {
+		idc = 103;
+		x = 0.26; y = 0.60;
+		w = 0.38; h = 0.04;
+
+		text = "Kick";
+		action = "[player, (lbData [102, (lbCurSel 102)])] call interact_gang_kick; closedialog 0;";
+	};
+	
+	class make_leader_button : RscButton {
+		idc = 104;
+		x = 0.26; y = 0.65;
+		w = 0.38; h = 0.04;
+
+		text = "Make Leader";
+		action = "[player, (lbData [102, (lbCurSel 102)])] call interact_gang_make_leader; closedialog 0;";
+	};
+
+	class close_button : RscButton {
+		x = 0.26; y = 0.70;
+		w = 0.38; h = 0.04;
+
+		text = "Close";
 		action = "closedialog 0;";
 	};
-
-	class rauswerfen_submit : RscButton {
-		idc = 103;
-		x = 0.26; y = 0.38;
-		w = 0.20; h = 0.04;
-
-		text = $STRD_description_gildeverwalten_rauswerfen_submit;
-		action = "[0, 0, 0, [""kick"", (lbData [102, (lbCurSel 102)]), (lbCurSel 102)]] execVm ""gangs.sqf""; closedialog 0;";
-	};
-
-	class sperren_liste : RscListBox {
-		idc = 201;
-		x = 0.50; y = 0.22;
-		w = 0.20; h = 0.08;
-	};
-
-	class sperren_header : RscText {
-		idc = 202;
-		x = 0.50; y = 0.17;
-		w = 0.20; h = 0.04;
-
-		style = ST_CENTER;
-		text = $STRD_description_gildeverwalten_sperren_header;
-	};
-
-	class sperren_submit : RscButton {
-		idc = 203;
-		x = 0.50; y = 0.32;
-		w = 0.20; h = 0.04;
-		
-		text = $STRD_description_gildeverwalten_sperren_submit;
-		action = "[0,0,0,[""allowjoin"", (lbData [201, (lbCurSel 201)]), (lbCurSel 201)]] execVM ""gangs.sqf""; closedialog 0;";
-	};
-
+	
 	class dummybutton : RscDummy {
 		idc = 1022;
 	};

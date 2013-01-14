@@ -1,5 +1,11 @@
 _emptyshop = [];
 
+shop_list_item = 0;
+shop_list_stock = 1;
+shop_list_stock_max = 2;
+
+["LandRover_MG_TK_EP1", -1, -1],
+
 //Fishing Shop
 //Syphon Refuel kit, Refuel Can, Small Repair Kit, Large Repair Kit
 _fs = 
@@ -393,7 +399,7 @@ _pmcair =
 	];
 
 //COP Shop
-_copshop        =
+_copshop =
 	[
 		["handy", -1, -1],
 		["kleinesreparaturkit", -1, -1],
@@ -1518,8 +1524,6 @@ _russ =
 		["Rnd_762x54_SVD", -1, -1]
 	];
 	
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 INV_ItemShops_Object = 0;
 INV_ItemShops_Name = 1;
 INV_ItemShops_Crate = 2;
@@ -1527,6 +1531,8 @@ INV_ItemShops_Logic = 3;
 INV_ItemShops_BuyList = 4;
 INV_ItemShops_SellList = 5;
 INV_ItemShops_License = 6;
+
+//note that the object (first element) must be unique to each shop, as this is used for caching shop data
 INV_ItemShops = [
 		[fuelshop1,"Fuel-station Shop",dummyobj,dummyobj,_fs,_fs,true],
 		[fuelshop2,"Fuel-station Shop",dummyobj,dummyobj,_fs,_fs,true],
@@ -1584,13 +1590,14 @@ INV_ItemShops = [
 
 		[OilSell1,"Oil Dealer", dummyobj,dummyobj, _emptyshop,_os,true],
 
-		[gangarea1,"Gang Shop",gangbox1,dummyobj,_gangshop_buy,_gangshop_buy,false],
-		[gangarea2,"Gang Shop",gangbox2,dummyobj,_gangshop_buy,_gangshop_buy,false],
-		[gangarea3,"Gang Shop",gangbox3,dummyobj,_gangshop_buy,_gangshop_buy,false],
+		[gangarea1, "Gang Shop", gangbox1, dummyobj, _gangshop_buy, _gangshop_buy, true],
+		[gangarea2, "Gang Shop", gangbox2, dummyobj, _gangshop_buy, _gangshop_buy, true],
+		[gangarea3, "Gang Shop", gangbox3, dummyobj, _gangshop_buy, _gangshop_buy, true],
 
-		[gangarea1,"Drug Trafficking",dummyobj,dummyobj,_db1,_emptyshop,true],
-		[gangarea2,"Drug Trafficking",dummyobj,dummyobj,_db2,_emptyshop,true],
-		[gangarea3,"Drug Trafficking",dummyobj,dummyobj,_db3,_emptyshop,true],
+		//Cannot use the same object for multiple shops
+		//[gangarea1, "Drug Trafficking", dummyobj, dummyobj, _db1,_emptyshop, true],
+		//[gangarea2, "Drug Trafficking", dummyobj, dummyobj, _db2,_emptyshop, true],
+		//[gangarea3, "Drug Trafficking", dummyobj, dummyobj, _db3,_emptyshop, true],
 
 		[cdrugsell,"Sell Cocaine",dummyobj,dummyobj,_emptyshop,_dsc,true],
 		[mdrugsell,"Sell Marijuana",dummyobj,dummyobj,_emptyshop,_dsm,true],
@@ -1654,79 +1661,97 @@ INV_ItemShops = [
 		[russmuggler,"Russian Arms Dealer",rusgunbox,dummyobj,_russ,_russ,true]
 	];
 
-if (isServer) then {
-		INV_ItemStocks		= [];
-	};
-INV_ItemMaxStocks	= [];
 
+
+
+//buidld the INV_ItemMaxStocks array
+if (isServer) then {
+	INV_ItemMaxStocks = [];
+	private["_i"];
+	_i = 0;
+	while { _i < (count INV_ItemShops) } do {
+		private["_newArray", "_buyList", "_sellList", "_newStock", "_newMax", "_newBuy", "_newSell"];
+		
+		_newArray = INV_ItemShops select _i;
+		_buyList = _newArray select INV_ItemShops_BuyList;
+
+		_newMax	= [];
+
+		{
+			private["_array", "_class", "_stock", "_max"];
+			_array = _x;
+			_max = _array select shop_list_stock_max;
+			_newMax set [count _newMax, _max];
+		} forEach _buyList;
+
+		INV_ItemMaxStocks set [_i, _newMax];
+		_i = _i + 1;
+	};
+	publicVariable "INV_ItemMaxStocks";
+};
+
+//buidld the INV_ItemStocks array
+if (isServer) then {
+	INV_ItemStocks = [];
+	private["_i"];
+	_i = 0;
+	while { _i < (count INV_ItemShops) } do {
+		private["_newArray", "_buyList", "_newStock"];
+		
+		_newArray = INV_ItemShops select _i;
+		_buyList = _newArray select INV_ItemShops_BuyList;
+		_newStock	= [];
+
+		{
+			private["_array", "_max"];
+			_array = _x;
+			_max = _array select shop_list_stock;
+			_newStock set [count _newStock, _max];
+		} forEach _buyList;
+
+		INV_ItemStocks set [_i, _newStock];
+		_i = _i + 1;
+	};
+	publicVariable "INV_ItemStocks";
+};
+
+//buidld the INV_ItemShops array
+private["_i"];
 _i = 0;
-{
-	_newArray	= _x;
-	_buyList	= _newArray select INV_ItemShops_BuyList;
-	_sellList	= _newArray select INV_ItemShops_SellList;
+while { _i < (count INV_ItemShops) } do {
+	private["_newArray", "_buyList", "_sellList", "_newBuy", "_newSell"];
 	
-	_newStock	= [];
-	_newMax		= [];
+	_newArray = INV_ItemShops select _i;
+	_buyList = _newArray select INV_ItemShops_BuyList;
+	_sellList = _newArray select INV_ItemShops_SellList;
 	
-	_newBuy		= [];
-	_newSell	= [];
+	_newBuy	= [];
+	_newSell = [];
 	
-	if ( ((count _buyList) == 0) || ((count _sellList) == 0)  ) then {
-			if ( ((count _buyList) == 0) ) then {
-					{
-						_array = _x;
-						_class	= _array select 0;
-						_stock	= _array select 1;
-						_max 	= _array select 2;
-						
-						_newStock	set [count _newStock, _stock];
-						_newMax		set [count _newMax, _max];
-						
-						_newSell set[count _newSell, _class];
-					} forEach _sellList;
-				} else {
-					{
-						_array = _x;
-						_class	= _array select 0;
-						_stock	= _array select 1;
-						_max 	= _array select 2;
-						
-						_newStock	set [count _newStock, _stock];
-						_newMax		set [count _newMax, _max];
-						
-						_newBuy set[count _newBuy, _class];
-					} forEach _buyList;
-				};
-		} else {
-			{
-				_array = _x;
-				_class	= _array select 0;
-				_stock	= _array select 1;
-				_max 	= _array select 2;
-				
-				_newStock	set [count _newStock, _stock];
-				_newMax		set [count _newMax, _max];
-				
-				_newBuy set[count _newBuy, _class];
-				_newSell set[count _newSell, _class];
-			} forEach _buyList;
-		};
-	if (isServer) then {
-			INV_ItemStocks		set [count INV_ItemStocks, _newStock];
-		};
-	INV_ItemMaxStocks	set [count INV_ItemMaxStocks, _newMax];
+	{
+		private["_array", "_item"];
+		_array = _x;
+		_item = _array select shop_list_item;
+		_newSell set[count _newSell, _item];
+	} forEach _sellList;
 	
-	_newArray	set[INV_ItemShops_BuyList, _newBuy];
-	_newArray	set[INV_ItemShops_SellList, _newSell];
+	{
+		private["_array", "_item"];
+		_array = _x;
+		_item = _array select shop_list_item;
+		_newBuy set[count _newBuy, _item];
+	} forEach _buyList;
+	
+	_newArray set[INV_ItemShops_BuyList, _newBuy];
+	_newArray set[INV_ItemShops_SellList, _newSell];
 	
 	INV_ItemShops set[_i, _newArray];
 	_i = _i + 1;
-} forEach INV_ItemShops;
+};
 
-
-if (isServer) then {
-		publicvariable "INV_ItemStocks";
-	};
-
+if (isClient) then {
+	waitUntil { not(isNil "INV_ItemStocks") };
+	waitUntil { not(isNil "INV_ItemMaxStocks") };
+};
 
 

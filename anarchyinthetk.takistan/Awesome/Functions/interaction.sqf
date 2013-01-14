@@ -389,7 +389,10 @@ interact_president_change_laws = {
 	
 	if (_number == -1) exitWith {};
 	
-	if ((_text call ISSE_str_Length) > 60) exitWith {
+	private["_text_length"];
+	
+	_text_length = [_text] call strlen;
+	if (_text_length > 60) exitWith {
 		player groupChat "The text for this law is too long";
 	};
 	
@@ -584,7 +587,7 @@ interact_mobile_send = {
 		
 	private["_max_size"];
 	_max_size = 100;
-	if (strlen(_text) > _max_size) exitWith {
+	if (([_text] call strlen) > _max_size) exitWith {
 		player groupChat format["Cannot send the text message. It is longer than %1 characters.", _max_size];
 	};
 
@@ -1038,9 +1041,10 @@ interact_check_inventory_receive = {
 	if (not([_target] call player_human)) exitWith {};
 	if (_target != player) exitWith {};
 	
-	private["_inventory"];
+	private["_inventory", "_licenses"];
 	_inventory = [_target] call player_get_inventory;
-	format['[%1, %2, %3, %4] call interact_check_inventory_response;', _player, _target, INV_LicenseOwner, _inventory] call broadcast;
+	_licenses = [_target, "INV_LicenseOwner"] call player_get_array;
+	format['[%1, %2, %3, %4] call interact_check_inventory_response;', _player, _target, _licenses, _inventory] call broadcast;
 };
 
 
@@ -2153,7 +2157,7 @@ interact_vehicle_breakout = {
 };
 
 
-/////////////// --- Poll triggered from the adminmenu --- ///////////////
+///////////////  Poll triggered from the adminmenu  ///////////////
 admin_create_poll = {
 	private["_question", "_pollID", "_polltime"];
 	_question = toArray(format["%1",(_this select 0)]);
@@ -2227,7 +2231,514 @@ admin_see_poll_results = {
 	server setVariable [_pollID, nil, true];
 };
 
+interact_gang_menu = {
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {};
+	
+	if (not(createDialog "gang_menu")) exitWith {
+		player groupChat format["ERROR: cannot create gang dialog"];	
+	};
+
+	private["_i", "_gangs_list"];
+	_gangs_list = call gangs_get_list;
+	_i = 0;
+	while {_i < count (_gangs_list) } do {
+		private["_gang"];
+		_gang = _gangs_list select _i;
+		private["_gang_id", "_gang_name", "_member_uids"];
+		_gang_id = _gang select gang_id;
+		_gang_name = _gang select gang_name;
+		_gang_open = _gang select gang_open;
+		_member_uids = _gang select gang_members;
+		
+		private["_member_names", "_open_str"];
+		_member_names = [_member_uids] call gangs_uids_2_names;
+		_open_str = if (_gang_open) then {"open"} else {"closed"};
+		
+		private["_index"];
+		_index = lbAdd [202, format["%1 (%2) - Members: %3", _gang_name, _open_str, _member_names]];
+		//player groupChat format["_index = %1, _gang_id = %2", _index, _gang_id];
+		lbSetData[202, _index, _gang_id];
+		_i = _i + 1;
+	};
+};
+
+interact_gang_join = {
+	//player groupChat format["interact_gang_join %1", _this];
+	private["_player", "_gang_id"];
+	_player = _this select 0;
+	_gang_id = _this select 1;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_gang_id") exitWith {};
+	if (typeName _gang_id != "STRING") exitWith {};
+	
+	if (_gang_id == "") exitWith {
+		player groupChat format["%1-%2, you have not selected any gang to join", _player, (name _player)];
+	};
+	
+	private["_gang"];
+	_gang = [_gang_id] call gangs_lookup_id;
+	if (isNil "_gang") exitWith {
+		player groupChat format["%1-%2, the selected gang does not exist",  _player, (name _player)];
+	};
+	
+	private["_cgang", "_player_uid"];
+	_player_uid = [_player] call gang_player_uid;
+	//player groupChat format["_player_uid = %1", _player_uid];
+	_cgang = [_player_uid] call gangs_lookup_player_uid;
+	//player groupChat format["_cgang = %1", _cgang];
+	
+	if (not(isNil "_cgang")) exitWith {
+		private["_cgang_name"];
+		_cgang_name = _cgang select gang_name;
+		player groupChat format["%1-%2, you are already in gang %3", _player, (name _player), _cgang_name];
+	};
+
+	private["_gang_name"];
+	_gang_name = _gang select gang_name;
+		
+	private["_recruiting"];
+	_recruiting = _gang select gang_open;
+	
+	if (not(_recruiting)) exitWith {
+		player groupChat format["%1-%2, gang %3 is not recruiting at the moment", _player, (name _player), _gang_name];
+	};
+	
+	player groupChat format["%1-%2, you have joined gang %3", _player, (name _player), _gang_name];
+	[_gang_id, _player] call gang_add_member;
+};
+
+interact_gang_leave = {
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {};
+	
+	private["_player_uid", "_gang"];
+	_player_uid = [_player] call gang_player_uid;
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	if (isNil "_gang") exitWith {
+		player groupChat format["%1-%2, you are not in any gang", _player, (name _player)];
+	};
+	
+	private["_gang_id"];
+	_gang_id = _gang select gang_id;
+	[_gang_id, _player_uid] call gang_remove_member;
+	player groupChat format["%1-%2, you have left gang %3", _player, (name _player), (_gang select gang_name)];
+};
+
+interact_gang_manage_menu = {
+	//player groupChat format["interact_gang_manage_menu %1", _this];
+	private["_player", "_gang_id"];
+	
+	_player = _this select 0;
+	_gang_id = _this select 1;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_gang_id") exitWith {};
+	if (typeName _gang_id != "STRING") exitWith {};
+	
+	private["_gang"];
+	_gang = [_gang_id] call gangs_lookup_id;
+	if (isNil "_gang") exitWith {};
+	
+	private["_gang_name", "_gang_open", "_player_uid"];
+	_gang_name = _gang select gang_name;
+	_gang_open = _gang select gang_open;
+	_player_uid = [_player] call gang_player_uid;
+	
+	if (not(([_gang_id] call gang_leader_uid) == _player_uid)) exitWith {
+		player groupChat format["%1-%2, you are not allowed to manage gang %3, you are not the leader", _player, (name _player), _gang_name];
+	};
+	
+	if (not(createDialog "manage_gang_menu")) exitWith {
+		player groupChat format["ERROR: clould not create gang management dialog"];
+	};
+	
+	ctrlSetText [101, format["Manage %1", _gang_name]];
+	
+	selected_gang_id = _gang_id;
+	call interact_gang_update_open_cbox;
+
+	private["_member_uids", "_members"];
+	_member_uids = _gang select gang_members;
+	_members = [_member_uids] call gangs_uids_2_players;
+	
+	{
+		private["_member", "_member_name", "_member_uid"];
+		_member = _x;
+		_member_name = (name _member);
+		_member_uid = [_member] call gang_player_uid;
+		private["_index"];
+		_index = lbAdd [102, (format ["%1 (%2)", _member_name, _member])];
+		lbSetData [102, _index, str(_member)];
+	} forEach _members;
+	
+};
+
+gang_animation = false;
+interact_play_gang_animation = {
+	if (true) exitWith {};
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {};
+	
+	gang_animation = true;
+	player playmove "AinvPknlMstpSlayWrflDnon_medic";
+	sleep 5;
+	waitUntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};
+	gang_animation = false;
+};
+
+interact_gang_area_neutralise = {
+	private["_player", "_gang_area"];
+	_player = _this select 0;
+	_gang_area = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_gang_area") exitWith {};
+	if (typeName _gang_area != "OBJECT") exitWith {};
+	
+	[_player] call interact_play_gang_animation;
+	
+	private["_new_pos"];
+	[_gang_area] call gang_flag_setup;
+	_new_pos = [_gang_area, [0,0,0.5*-1]] call gang_flag_set_offset;
+	
+	if (not((_new_pos select 2) <= -7)) exitWith {};
+
+	private["_gang", "_player_uid"];
+	_player_uid = [_player] call gang_player_uid;
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	if (isNil "_gang") exitWith {};
+	
+	private["_gang_name"];
+	_gang_name = _gang select gang_name;
+	[_gang_area, ""] call gang_area_set_control;
+	
+	private["_message"];
+	_message = format["%1 has been neutralised by %2!", _gang_area, _gang_name];
+	format['hint toString(%1);', toArray(_message)] call broadcast;
+};
+
+interact_gang_area_capture = {
+	private["_player", "_gang_area"];
+	_player = _this select 0;
+	_gang_area = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_gang_area") exitWith {};
+	if (typeName _gang_area != "OBJECT") exitWith {};
+	
+	[_player] call interact_play_gang_animation;
+	
+	private["_new_pos"];
+	[_gang_area] call gang_flag_setup;
+	
+	_new_pos = [_gang_area, [0,0,0.5]] call gang_flag_set_offset;
+
+	//player groupchat format["_new_pos = %1", _new_pos];
+	if (not((_new_pos select 2) >= 0)) exitWith {};
+	
+	[_gang_area, [0,0,0]] call gang_flag_reset_offset;
+	
+	private["_gang", "_player_uid"];
+	_player_uid = [_player] call gang_player_uid;
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	if (isNil "_gang") exitWith {};
+
+	private["_gang_id", "_gang_name"];
+	_gang_id = _gang select gang_id;
+	_gang_name = _gang select gang_name;
+	[_gang_area, _gang_id] call gang_area_set_control;
+		
+	private["_message"];
+	_message = format["%1 has been captured by %2!", _gang_area, _gang_name];
+	format['hint toString(%1);', toArray(_message)] call broadcast;
+};
+
+interact_gang_create_menu = {
+	//player groupChat format["interact_gang_create_menu"];
+	
+	if (not(createDialog "gilde_gruenden")) exitWith {
+		player groupChat format["ERROR: could not create gang creation dialog"];
+	};
+	
+	private["_info"];
+	_info = format["Note: Gang creation fee is $%1.", strM(gangcreatecost)] +
+			format["If you leave and rejoin the game, you must rejoin the gang (there is no join fee)."] +
+			format["The gang will be deleted after %1 minutes if there are no members in the gang.", round(gangdeltime/60)];
+			
+	ctrlSetText[5, _info];
+};
+
+interact_gang_create = {
+	//player groupChat format["interact_gang_create %1", _this];
+	private["_player", "_text"];
+	_player = _this select 0;
+	_text = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_text") exitWith {};
+	if (typeName _text != "STRING") exitWith {};
+	
+	//check that player is not in a gang
+	private["_gang", "_player_uid"];
+	_player_uid = [_player] call gang_player_uid;
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	if (not(isNil "_gang")) exitWith {
+		private["_gang_name"];
+		_gang_name = _gang select gang_name;
+		player groupChat format["%1-%2, you are already a member of gang %3", _player, (name _player), _gang_name];
+	};
+	
+	//check that there is no other gang with the same name
+	private["_cgang"];
+	_cgang = [_text] call gangs_lookup_name;
+	if (not(isNil "_cgang")) exitWith {
+		private["_cgang_name"];
+		_cgang_name = _cgang select gang_name;
+		player groupChat format["%1-%2, there is already a gang named %3", _player, (name _player), _cgang_name];
+	};
+	
+
+	//check that the gang meets the naming requirements
+	private["_text_length"];
+	_text_length = [_text] call strlen;
+	private["_max_length", "_min_length"];
+	_max_length = 30;
+	_min_length = 3;
+	
+	if (_text_length < _min_length) exitWith {
+		player groupChat format["%1-%2, the gang name you entered is less than %3 characters long", _player, (name _player), _min_length];
+	};
+	if (_text_length > _max_length) exitWith {
+		player groupChat format["%1-%2, the gang name you entered is more than %3 characters long", _player, (name _player), _max_length];
+	};
+
+	//check that player has enough money to create the gang
+	private["_money"];
+	_money = [_player, 'money'] call INV_GetItemAmount;
+	if (_money < gangcreatecost) exitWith {
+		player groupChat format["%1-%2, you do not have enough money to create a gang", _player, (name _player)];
+	};
+	
+	[player, 'money', -(gangcreatecost)] call INV_AddInventoryItem;
+	format['[%1, toString(%2)] call gang_create;', _player, toArray(_text)] call broadcast;
+	player groupChat format["%1-%2, you have created a new gang called %3", _player, (name _player), _text];
+};
+
+interact_gang_kick = { _this spawn {
+	
+	private["_player", "_member_variable"];
+	_player = _this select 0;
+	_member_variable = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_member_variable") exitWith {};
+	if (typeName _member_variable != "STRING") exitWith {};
+	
+	_member = missionNamespace getVariable _member_variable;
+	if (not([_member] call player_human)) exitWith {};
+	
+	private["_player_uid", "_member_uid"];
+	_player_uid = [_player] call gang_player_uid;
+	_member_uid = [_member] call gang_player_uid;
+	
+	private["_gang"];
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	if (isNil "_gang") exitWith {
+		player groupChat format["%1-%2, you are no in a gang", _player, (name _player)];
+	};
+	
+	private["_gang_id"];
+	_gang_id = _gang select gang_id;
+	if (not(([_gang_id] call gang_leader_uid) == _player_uid)) exitWith {
+		player groupChat format["%1-%2, you are not the leader of this gang", _player, (name _player)];
+	};
+	
+	if (_player_uid == _member_uid) exitWith {
+		player groupChat format["%1-%2, you cannot kick yourself from the gang", _player, (name _player)];
+	};
+	
+	private["_members"];
+	_members = _gang select gang_members;
+	if (not(_member_uid in _members)) exitWith {
+		player groupChat format["%1-%2, %3-%4 is not a member of your gang", _player, (name _player), _member, (name _member)];
+	};
+	
+	player groupChat format["%1-%2, you have kicked %3-%4 from your gang!", _player, (name _player), _member, (name _member)];
+	
+	[_gang_id, _member_uid] call gang_remove_member;
+	sleep 1;  //sleep a second to give enought time for the changes to take effect
+	
+	private["_message"];
+	_message = format["%1-%2, you have been kicked out of your gang!", _member, (name _member)];
+	format['if (player == %1) then {player groupChat toString(%2);};', _member, toArray(_message)] call broadcast;
+};};
+
+interact_gang_make_leader = { _this spawn {
+	private["_player", "_member_variable"];
+	_player = _this select 0;
+	_member_variable = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_member_variable") exitWith {};
+	if (typeName _member_variable != "STRING") exitWith {};
+	
+	_member = missionNamespace getVariable _member_variable;
+	if (not([_member] call player_human)) exitWith {};
+	
+	private["_player_uid", "_member_uid"];
+	_player_uid = [_player] call gang_player_uid;
+	_member_uid = [_member] call gang_player_uid;
+	
+	private["_gang"];
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	if (isNil "_gang") exitWith {
+		player groupChat format["%1-%2, you are no in a gang", _player, (name _player)];
+	};
+	
+	private["_gang_id"];
+	_gang_id = _gang select gang_id;
+	if (not(([_gang_id] call gang_leader_uid) == _player_uid)) exitWith {
+		player groupChat format["%1-%2, you are not the leader of this gang", _player, (name _player)];
+	};
+	
+	if (_player_uid == _member_uid) exitWith {
+		player groupChat format["%1-%2, you are already the leader of this gang", _player, (name _player)];
+	};
+	
+	private["_members"];
+	_members = _gang select gang_members;
+	if (not(_member_uid in _members)) exitWith {
+		player groupChat format["%1-%2, %3-%4 is not a member of your gang", _player, (name _player), _member, (name _member)];
+	};
+	
+	player groupChat format["%1-%2, you have made %3-%4 the leader of your gang!", _player, (name _player), _member, (name _member)];
+	
+	[_gang_id, _member_uid] call gang_make_leader;
+	sleep 1;  //sleep a second to give enought time for the changes to take effect
+	
+	private["_message"];
+	_message = format["%1-%2, you have been made the leader of your gang!", _member, (name _member)];
+	format['if (player == %1) then { player groupChat toString(%2);};', _member, toArray(_message)] call broadcast;
+};};
 
 
+
+interact_gang_update_open_cbox = {
+	private["_gang"];
+	_gang = [selected_gang_id] call gangs_lookup_id;
+	if (isNil "_gang") exitWith {};
+	
+	private["_open"];
+	_open = _gang select gang_open;
+	
+	private["_text"];
+	_text = if (_open) then { format["[x] Gang open"] } else {format["[ ] Gang open"]};
+	ctrlSetText [202, _text];
+};
+
+interact_gang_toggle_open = {
+	//player groupChat format["interact_gang_toggle_open %1", _this];
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {};
+	
+	private["_player_uid", "_gang"];
+	_player_uid = [_player] call gang_player_uid;
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+	
+	private["_gang_id"];
+	_gang_id = _gang select gang_id;
+	if (not(([_gang_id] call gang_leader_uid) == _player_uid)) exitWith {
+		player groupChat format["%1-%2, you are not the leader of this gang", _player, (name _player)];
+	};
+	
+	private["_open"];
+	_open = _gang select gang_open;
+	_open = not(_open);
+	_gang set [gang_open, _open];
+	[_gang] call gangs_update_list;
+	
+	if (not(_open)) then {
+		player groupChat format["%1-%2, you have closed your gang", _player, (name _player)];
+	}
+	else {
+		player groupChat format["%1-%2, you have opened your gang", _player, (name _player)];
+	};
+};
+
+interact_gang_open = {
+	private["_player", "_open"];
+	player groupChat format["interact_gang_open %1", _this];
+	_player = _this select 0;
+	_open = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_open") exitWith {};
+	if (typeName _open != "BOOL") exitWith {};
+	
+	private["_player_uid", "_gang"];
+	_player_uid = [_player] call gang_player_uid;
+	_gang = [_player_uid] call gangs_lookup_player_uid;
+
+	private["_gang_id"];
+	_gang_id = _gang select gang_id;
+	if (not(([_gang_id] call gang_leader_uid) == _player_uid)) exitWith {
+		player groupChat format["%1-%2, you are not the leader of this gang", _player, (name _player)];
+	};
+	
+	_gang set [gang_open, _open];
+	[_gang] call gangs_update_list;
+	
+	if (not(_open)) then {
+		player groupChat format["%1-%2, you have closed your gang", _player, (name _player)];
+	}
+	else {
+		player groupChat format["%1-%2, you have opened your gang", _player, (name _player)];
+	};
+};
+
+interact_item_process = {
+	//player groupChat format["interact_item_process %1", _this];
+	
+	private["_player", "_item_name", "_item"];
+	_player = _this select 0;
+	_input_item = _this select 1;
+	_output_item = _this select 2;
+	_input_amount_required = _this select 3;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_input_item") exitWith {};
+	if (isNil "_output_item") exitWith {};
+	if (isNil "_input_amount_required") exitWith {};
+	if (typeName _input_item != "STRING") exitWith {};
+	if (typeName _output_item != "STRING") exitWith {};
+	if (typeName _input_amount_required != "SCALAR") exitWith {};
+	if (_input_amount_required <= 0) exitWith {};
+	
+	private["_input_item_name", "_output_item_name"];
+	_input_item_name = _input_item call INV_GetItemName;
+	_output_item_name = _output_item call INV_GetItemName;
+	
+	if ([_player] call player_cop) exitWith {
+		player groupChat format["%1-%2, only civilians are allowed to process %3", _player, (name _player), _input_item_name];
+	};
+	
+	private["_input_amount"];
+	_input_amount = [_player, _input_item] call INV_GetItemAmount;
+	
+	if (_input_amount < _input_amount_required) exitWith {
+		player groupChat format["%1-%2, you require at least %3 %4 to produce %5 %6", _player, (name _player), _input_amount_required, _input_item_name, 1, _output_item_name];
+	};
+
+	private["_output_amount"];
+	_output_amount = floor(_input_amount/_input_amount_required);
+	
+	private["_input_amount_used"];
+	_input_amount_used = round(_input_amount_required * _output_amount);
+	
+	[_player, _input_item, -(_input_amount_used)] call INV_AddInventoryItem;
+	[_player, _output_item, _output_amount, ([_player] call player_inventory_name)] call INV_CreateItem;
+
+	player groupChat format["%1-%2, you porcessed %3 %4 into %5 %6", _player, (name _player), _input_amount_used, _input_item_name, _output_amount, _output_item_name];
+};
 
 interaction_functions_defined = true;

@@ -67,6 +67,78 @@ player_cop = {
 	(([_player] call player_side) == west)
 };
 
+player_has_license = {
+	private["_player"];
+	_player = _this select 0;
+	_license = _this select 1;
+	if (not([_player] call player_human)) exitWith {false};
+	if (isNil "_license") exitWith {false};
+	if (typeName _license != "STRING") exitWith {false};
+	
+	private["_licenses"];
+	_licenses = [_player, "INV_LicenseOwner"] call player_get_array;
+	(_license in _licenses)
+};
+
+player_add_licenses = {
+	private["_player"];
+	_player = _this select 0;
+	_licenses = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_licenses") exitWith {};
+	if (typeName _licenses != "ARRAY") exitWith {};
+	
+	private["_current_licenses"];
+	_current_licenses = [_player, "INV_LicenseOwner"] call player_get_array;
+
+	{if (true) then {
+		private["_license"];
+		_license = _x;
+		if (isNil "_license") exitWith {};
+		if (typeName _license != "STRING") exitWith {};
+		if (_license in _current_licenses) exitWith {};
+		_current_licenses = _current_licenses + [_license];
+	}} forEach _licenses;
+	
+	[_player, "INV_LicenseOwner", _current_licenses] call player_set_array;
+};
+
+player_remove_licenses = {
+	private["_player"];
+	_player = _this select 0;
+	_licenses = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_licenses") exitWith {};
+	if (typeName _licenses != "ARRAY") exitWith {};
+	
+	private["_current_licenses"];
+	_current_licenses = [_player, "INV_LicenseOwner"] call player_get_array;
+
+	{if (true) then {
+		private["_license"];
+		_license = _x;
+		if (isNil "_license") exitWith {};
+		if (typeName _license != "STRING") exitWith {};
+		if (not(_license in _current_licenses)) exitWith {};
+		_current_licenses = _current_licenses - [_license];
+	}} forEach _licenses;
+	
+	[_player, "INV_LicenseOwner", _current_licenses] call player_set_array;
+};
+
+player_gang_member = {
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {false};
+	
+	private["_player_gang_uid"];
+	_player_gang_uid = [_player] call gang_player_uid;
+	
+	private["_gang"];
+	_gang = [_player_gang_uid] call gangs_lookup_player_uid;
+	not(isNil "_gang")
+};
+
 player_get_dead = {
 	private["_player"];
 	_player = _this select 0;
@@ -992,7 +1064,6 @@ player_lookup_uid = {
 	_player
 };
 
-
 player_lookup_name = {
 	private["_name"];
 	_name = _this select 0;
@@ -1005,7 +1076,7 @@ player_lookup_name = {
 	{
 		private["_player_variable_name", "_player_variable"];
 		_player_variable_name = _x;
-		_player_variable =  missionNamespace getVariable _player_variable_name;
+		_player_variable = missionNamespace getVariable _player_variable_name;
 	
 		if ([_player_variable] call player_exists) then {
 			private["_cname"];
@@ -1019,7 +1090,28 @@ player_lookup_name = {
 	_player
 };
 
-
+//finds a player by his gang UID
+player_lookup_gang_uid = {
+	private["_player_gang_uid"];
+	_player_gang_uid = _this select 0;
+	if (isNil "_player_gang_uid") exitWith {nil};
+	if (typeName _player_gang_uid != "STRING") exitWith {nil};
+	
+	private["_player"];
+	_player = nil;
+	
+	{
+		private["_unit", "_unit_gang_uid"];
+		_unit = _x;
+		_unit_gang_uid = [_unit] call gang_player_uid;
+		
+		if (_unit_gang_uid == _player_gang_uid) then {
+			_player = _unit;
+		};
+	} forEach allUnits;
+	
+	(_player)
+};
 
 
 player_update_array = {
@@ -2436,6 +2528,26 @@ player_reset_prison = {
 	};};};
 };
 
+player_set_saved_group = {
+	private["_player"];
+	_player = _this select 0;
+	_group = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_group") exitWith {};
+	if (typeName _group != "GROUP") exitWith {};
+	
+	_player setVariable ["saved_group", _group, true];
+};
+
+player_get_saved_group = {
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {};
+	
+	private["_group"];
+	_group = _player getVariable "saved_group";
+	(_group)
+};
 
 
 player_spawn = { _this spawn {
@@ -2468,6 +2580,8 @@ player_spawn = { _this spawn {
 	[_player, false] call player_set_dead;
 	[_player] call name_tags_3d_controls_setup;
 };};
+
+
 
 player_wait = {
 	private["_flag_name"];
