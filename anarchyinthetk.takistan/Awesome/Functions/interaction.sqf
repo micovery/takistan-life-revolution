@@ -2379,7 +2379,6 @@ interact_gang_manage_menu = {
 
 gang_animation = false;
 interact_play_gang_animation = {
-	if (true) exitWith {};
 	private["_player"];
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {};
