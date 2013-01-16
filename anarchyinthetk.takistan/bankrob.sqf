@@ -47,7 +47,7 @@ if (_art == "ausrauben") then {
 
 
 if (_art == "opfer") then {
-	private["_bank_account"];
+	private["_bank_account", "_insurances_inv", "_insurances_stor"];
 	_robpool = _this select 2;
 
 	titleText [localize "STRS_bank_rob_titlemsg", "plain"];
@@ -69,14 +69,18 @@ if (_art == "opfer") then {
 	_verlustB = round(_bank_account*MaxbankrobpercentlostB);
 
 	_bank_account = [player] call bank_get_value;
-	if ((_bank_account <= _verlust) and (_bank_account >= 1) and (([player, 'bankversicherung'] call INV_GetItemAmount) == 0)) exitWith {
+	_insurances_inv = [player, 'bankversicherung'] call INV_GetItemAmount;
+	_insurances_stor = [player, 'bankversicherung', 'private_storage'] call INV_GetStorageAmount;
+	
+	
+	if ((_bank_account <= _verlust) and (_bank_account >= 1) and ((_insurances_inv + _insurances_stor) == 0)) exitWith {
 		[player, 0] call bank_set_value;	
 		player groupChat localize "STRS_bank_rob_allmoneylost";
 	};
 
 	//Takes 5 percent from bank account if player has less than 100k (1/24/2012 IsHoOtYoUnOw)
 	_bank_account = [player] call bank_get_value;
-	if((_bank_account >  _verlust) and (_bank_account <= 99999) and (([player, 'bankversicherung'] call INV_GetItemAmount) == 0)) exitWith {
+	if((_bank_account >  _verlust) and (_bank_account <= 99999) and ((_insurances_inv + _insurances_stor) == 0)) exitWith {
 		[player, -(_verlust)] call bank_transaction;
 		_bank_account = [player] call bank_get_value;
 		player groupChat format[localize "STRS_bank_rob_somemoneylost", strM(_verlust), strM(_bank_account)];
@@ -84,7 +88,7 @@ if (_art == "opfer") then {
 
 	//Takes 10 percent from bank account if player has 100k - 999k (1/24/2012 IsHoOtYoUnOw)	
 	_bank_account = [player] call bank_get_value;
-	if((_bank_account >  _verlust) and (_bank_account >= 100000) and (_bank_account <= 999999) and (([player, 'bankversicherung'] call INV_GetItemAmount) == 0)) exitWith {
+	if((_bank_account >  _verlust) and (_bank_account >= 100000) and (_bank_account <= 999999) and ((_insurances_inv + _insurances_stor) == 0)) exitWith {
 		[player, -(_verlustA)] call bank_transaction;
 		_bank_account = [player] call bank_get_value;
 		player groupChat format[localize "STRS_bank_rob_somemoneylost", strM(_verlustA), strM(_bank_account)];
@@ -92,15 +96,20 @@ if (_art == "opfer") then {
 
 	//Takes 20 percent from bank account if player has 1mil or more (1/24/2012 IsHoOtYoUnOw)
 	_bank_account =[player] call bank_get_value;
-	if((_bank_account >  _verlust) and (_bank_account >= 1000000) and (([player, 'bankversicherung'] call INV_GetItemAmount) == 0)) exitWith {
+	if((_bank_account >  _verlust) and (_bank_account >= 1000000) and ((_insurances_inv + _insurances_stor) == 0)) exitWith {
 		[player, -(_verlustB)] call bank_transaction;
 		_bank_account = [player] call bank_get_value;
 		player groupChat format[localize "STRS_bank_rob_somemoneylost", strM(_verlustB), strM(_bank_account)];
 	};	
 
-	if (([player, 'bankversicherung'] call INV_GetItemAmount) > 0) exitWith {
+	if (_insurances_inv > 0) exitWith {
 		player groupChat localize "STRS_bank_rob_lostnomoney";
 		[player, 'bankversicherung', -(1)] call INV_AddInventoryItem;
+	};
+	
+	if(_insurances_stor > 0) exitWith {
+		player groupChat localize "STRS_bank_rob_lostnomoney";
+		[player, 'bankversicherung', -(1), 'private_storage'] call INV_AddItemStorage;
 	};
 };
 
