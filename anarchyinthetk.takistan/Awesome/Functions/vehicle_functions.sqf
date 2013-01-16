@@ -1026,11 +1026,11 @@ vehicle_remove = {
 vehicle_list = {
 	private["_player", "_vehicles"];
 	_player = _this select 0;
-	if (not([_player] call player_human)) exitWith {player groupchat "v1!";[]};
+	if (not([_player] call player_human)) exitWith {[]};
 	
 	_vehicles =  _player getVariable "vehicles_list";
 	_vehicles = if (isNil "_vehicles") then {[]} else {_vehicles};
-	_vehicles = if (typeName _vehicles != "ARRAY") then {player groupchat "v3!";[]} else {_vehicles};
+	_vehicles = if (typeName _vehicles != "ARRAY") then {[]} else {_vehicles};
 	_vehicles
 };
 
