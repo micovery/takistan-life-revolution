@@ -270,9 +270,14 @@ C_change = {
 	};
 
 	addSwitchableUnit _newUnit;
-	[player, _newUnit] call stats_copy_variables;
-	
-	selectPlayer _newUnit;
+	[player, _newUnit] call stats_copy_variables;	
+	private["_vehicles"];
+//ISSUE #2 FIX, copy old unit vehicle list to new unit
+	_vehicles = [_oldUnit] call vehicle_list;	
+	selectPlayer _newUnit;	
+	{		
+		[_newUnit,_x] call vehicle_add;		
+	} foreach _vehicles;	
 	
 	_newUnit setRank _rank;
 	_newUnit addrating _rating;
