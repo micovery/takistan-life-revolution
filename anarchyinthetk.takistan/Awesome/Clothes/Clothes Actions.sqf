@@ -271,6 +271,7 @@ C_change = {
 
 	addSwitchableUnit _newUnit;
 	[player, _newUnit] call stats_copy_variables;	
+	selectPlayer _newUnit; 
 	_newUnit setRank _rank;
 	_newUnit addrating _rating;
 	_newUnit addscore _score;
