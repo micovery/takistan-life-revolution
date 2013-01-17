@@ -973,6 +973,7 @@ vehicle_load = {
 	private["_player"];
 	_player = player;
 	
+	[_player, "vehicles_list"] call stats_update_variables_list;
 	["vehicles_name_list", []] call stats_init_variable;
 
 	private["_vehicle_names"];
@@ -987,8 +988,7 @@ vehicle_load = {
 		[_player, _vehicle] call vehicle_add;
 	} foreach _vehicle_names;
 		
-	//};
-	[_player, "vehicles_list"] call stats_update_variables_list;
+	
 };
 
 vehicle_add = {

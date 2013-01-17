@@ -42,7 +42,9 @@ else { if (_uid in donators4) then {
     startmoneh = platinummoneh;
 };};};};
 
-if (isNil "bankaccount") then {[player, startmoneh] call bank_set_value;};
+if (isNil "bankaccount") then {
+	["bankaccount", ([startmoneh] call encode_number)] call stats_init_variable;
+};
 
 shopflagarray            = [shop1,shop2,shop3,shop4];
 bankflagarray            = [mainbank, copbank, coppbank_1, atm1, atm2, atm3, atm4, atm5, atm6, atm8, atm11, atm12, atmpf, atmins, pmcatm, adminbank];

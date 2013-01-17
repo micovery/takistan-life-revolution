@@ -189,13 +189,12 @@ C_change = {
 	if (C_changing) exitwith {player groupchat "C ERROR: already changing";};
 	C_changing = true;
 	
-	private ["_class", "_oldUnit", "_varname", "_side", "_group", "_leader", "_rating", "_score", "_rank", "_damage", "_dummyGroup", "_dummyUnit", "_newUnit", "_Gleader", "_x", "_c", "_uid", "_exit"];
+	private ["_class", "_oldUnit", "_rating", "_score", "_rank", "_damage", "_dummyUnit", "_newUnit", "_Gleader", "_x", "_c", "_uid", "_exit"];
 	
 	private["_first_time"];
 	_oldUnit = _this select 0;
 	_class = _this select 1;
 	_first_time = _this select 2;
-	_varname = vehicleVarName _oldUnit;
 	
 	if (not(_first_time)) then {
 		titleText ["Changing Clothes", "BLACK OUT", 1];
@@ -209,7 +208,6 @@ C_change = {
 	private["_position_atl", "_direction"];
 	_position_atl = getPosATL _oldUnit;
 	_direction = getDir _oldUnit;
-	
 	
 	private["_failed_change"];
 	_failed_change = {
@@ -230,97 +228,56 @@ C_change = {
 		call _failed_change;
 	};
 	
-	_side = C_Side;
-	_group = group _oldUnit;
-	_leader = ((leader _oldUnit) == _oldUnit);
-	_rating = rating _oldUnit;
 	_score = score _oldUnit;
 	_rank = rank _oldUnit;
 	_damage = damage _olUnit;
-	
 	_sarmor = _oldUnit getVariable "stun_armor";
 	_mask = _oldUnit getVariable "gasmask";
 	
 	_oldUnit switchCamera "INTERNAL";
-	_dummyGroup = (group server);
 	
-	if (isNull _dummyGroup) exitWith {
-		player groupchat "C ERROR: dummyGroup is null";
-		C_changing = false; C_change_fail = true; 
-		titleText ["Clothes - Failed", "BLACK IN", 0];
-	};
-
-	_dummyUnit = _group createUnit [_class, C_spawn, [], 0, "NONE"]; 
-
-	if (isNull _dummyUnit) exitWith {
-		player groupchat "C ERROR: dummyUnit is null";
+	private["_temp_group"];
+	_temp_group = (group server);
+	if (isNull _temp_group) exitWith {
+		player groupChat format["ERROR: Cannot change clothes, temporary group is null"];
 		call _failed_change;
-		[_dummyUnit] spawn C_delete;
 	};
 
-	[_oldUnit] joinSilent _dummyGroup;
-
-	_newUnit = _dummyGroup createUnit [_class, C_spawn, [], 0, "NONE"];
-
+	private["_group"];
+	_group = (group _oldUnit);
+	_newUnit = _group createUnit [_class, C_spawn, [], 0, "NONE"];
+	
 	if (isNull _newUnit) exitWith {
-		player groupchat "C ERROR: newUnit is null"; 
+		player groupchat "ERROR: Cannot change clothes, could not create new unit";
 		call _failed_change;
-		[_dummyUnit] spawn C_delete; 
-		[_newUnit] spawn C_delete;
 	};
-
+	[_oldUnit, _newUnit] call stats_copy_variables;	
+	
+	private["_var_name"];
+	_var_name = vehicleVarName _oldUnit;
+	clearVehicleInit _oldUnit;
+	_oldUnit setVehicleVarName format["old_%1", _var_name];
+	_newUnit setVehicleInit format['this setVehicleVarName "%1"; %1 = this;', _var_name];
+	processInitCommands;
+	
+	[_newUnit] joinSilent _group;
 	addSwitchableUnit _newUnit;
-	// HotFix for ISSUE #32, as the fix in bankfunctions.sqf load after of client clothe change.
-	// This can be safe removed after all client have bankaccount tracked
-	if(!("bankaccount" in ([player] call stats_get_variables_list))) then
-	 {[player, "bankaccount"] call stats_update_variables_list; };
-	[player, _newUnit] call stats_copy_variables;	
-	selectPlayer _newUnit; 
+	selectPlayer _newUnit;
+	_group selectLeader _newUnit;
+	[_oldUnit] call C_delete;
+	
 	_newUnit setRank _rank;
-	_newUnit addrating _rating;
 	_newUnit addscore _score;
 	_newUnit setdamage _damage;
 	
-	_oldUnit setVehicleInit format["liafu = true; this setVehicleVarName 'old_%1'; old_%1 = this;", _varname];
-	_newUnit setVehicleInit format["liafu = true; this setVehicleVarName '%1'; %1 = this;", _varname];
-	processInitCommands;
-
 	[_newUnit] call player_reset_gear;
 	[_newUnit] call player_reset_side_inventory;
 	[_newUnit, _gear] call player_set_gear;
 	[_newUnit, _inventory] call player_set_inventory;
 	_newUnit setPosATL _position_atl;
 	_newUnit setDir _direction;
-	_oldUnit setPos C_spawn;
-	
-	private["_newUnit_side"];
-	_newUnit_side = ([_newUnit] call player_side);
-	
-	if(((count (units _group)) == 0) && (_newUnit_side != C_side))then {
-		[_newUnit, _side] call C_change_side
-	} else {
-		[_newUnit] joinSilent _group;	
-		
-		private["_newUnit_side"];
-		_newUnit_side = ([_newUnit] call player_side);
-		
-		if (_newUnit_side != C_side) then {
-			_Gleader = leader _group;
-			[_Gleader, C_side] call C_change_side;
-			[_Gleader] joinsilent _group;
-			_group selectLeader _Gleader;
-		};		
-	};
-
-	//delete old unit
-	[_oldUnit] spawn C_delete;
-	[_dummyUnit] spawn C_delete;
 	
 	//set the leader
-	if (_leader) then {
-		(group _newUnit) selectLeader _newUnit;
-	};
-
 	if (_class == C_original_c) then {
 		C_haschanged = false;
 		C_haschanged_c = _class;
@@ -330,23 +287,9 @@ C_change = {
 	};
 
 	[] spawn C_save;
-
-	if ( C_T_Change ) then {
-		private["_c"];
-		for [{_c = 0}, {_c < (count C_T_P) }, {_c = _c + 1}] do {
-			_x = C_T_P select _c;
-			if ( (typeName _x) == "STRING" ) then {
-				//_newUnit setObjectTexture [_c, _x];
-				//format["%1 setObjectTexture %2", _newUnit, [_c, _x]] call broadcast;
-				(vehicle player) setVehicleInit format["liafu = true; this setObjectTexture %1", [_c, _x]];
-				processInitCommands;
-			};
-		};
-		C_T_Change = false;
-	};
-	
 	C_changing = false;
 	
+	role = _newUnit;
 	_newUnit addEventHandler ["fired", {_this execVM "Awesome\EH\EH_fired.sqf"}];
 	_newUnit addEventHandler ["handleDamage", {_this execVM "Awesome\EH\EH_handledamage.sqf"}];
 	_newUnit addEventHandler ["WeaponAssembled", {_this execVM "Awesome\EH\EH_weaponassembled.sqf"}];
@@ -356,7 +299,7 @@ C_change = {
 	_newUnit setVariable ["stun_armor", _sarmor, true];
 	_newUnit setVariable ["gasmask", _mask, true];
 	[_newUnit, "isstunned", false] call player_set_bool;
-	role = _newUnit;
+	
 
 	if (not(_first_time)) then {
 		titleText ["Changing Clothes", "BLACK IN", 1];
@@ -366,30 +309,19 @@ C_change = {
 	(_newUnit)
 };
 
-C_change_side = {
-	private ["_unit","_newside","_newgroup"];
-	_unit = _this select 0;
-	_newside = _this select 1;
-	
-	private["_unit_side"];
-	_unit_side = ([_unit] call player_side);
-	
-	if (_unit_side == _newside) exitWith {};
-	_newgroup = createGroup _newside;
-//	[format["%1 (%2, %3, %4) - C_change_side: group created %5",  round(time), player, (name player), (getPlayerUID player), _newgroup]] call l4a;
-	
-	[_unit] joinSilent grpNull;
-	[_unit] joinSilent _newgroup;
-};
-
-
 // Deletes a unit
-C_delete = {
-	private ["_oldUnit"];
-	_oldUnit = _this select 0;
-	_oldUnit setPosATL [-1, -1, 0];
-	_oldUnit setDamage 1;
-
-	waituntil {(!(isPlayer _oldUnit))};
-	deleteVehicle _oldUnit;
-};
+C_delete = { _this spawn {
+	private ["_unit"];
+	_unit = _this select 0;
+	if (not([_unit] call player_exists)) exitWith {};
+	_unit setPosATL [-1, -1, 0];
+	_unit setDamage 1;
+	
+	private["_i"];
+	_i = 0;
+	while { _i < 10 } do {
+		hideBody _unit;
+		_i = _i + 1;
+	};
+	deleteVehicle _unit;
+};};

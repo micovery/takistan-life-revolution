@@ -4,8 +4,7 @@ bank_get_value = {
 	private["_player"];
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {0};
-	if(!("bankaccount" in ([player] call stats_get_variables_list))) then
-	 {[player, "bankaccount"] call stats_update_variables_list; };
+	
 	private ["_value"];
 	_value = [_player, "bankaccount"] call player_get_array;
 	_value = ([_value] call decode_number);
