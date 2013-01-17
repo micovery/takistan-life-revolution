@@ -270,6 +270,10 @@ C_change = {
 	};
 
 	addSwitchableUnit _newUnit;
+	// HotFix for ISSUE #32, as the fix in bankfunctions.sqf load after of client clothe change.
+	// This can be safe removed after all client have bankaccount tracked
+	if(!("bankaccount" in ([player] call stats_get_variables_list))) then
+	 {[player, "bankaccount"] call stats_update_variables_list; };
 	[player, _newUnit] call stats_copy_variables;	
 	selectPlayer _newUnit; 
 	_newUnit setRank _rank;
