@@ -35,7 +35,7 @@ invoke_java_method = {
 	_method_str = "<M>" + _method + "</M>";
 	_invoke_str = "<MI>" + _method_str + _argument_str + "</MI>";
 	
-	diag_log  _invoke_str;
+	//diag_log  _invoke_str;
 	private["_result"];
 	_result = "jni" callExtension _invoke_str;
 	

@@ -36,5 +36,3 @@ INV_Licenses =
         ["paramedic_license",[tdoc,tdoc,tdoc,tdoc],"Paramedic Training",750000]
         //["assassin",[agunshop,agunshop,objnull],"Assassin Training",30000]
     ];
-
-["INV_LicenseOwner", []] call stats_init_variable;

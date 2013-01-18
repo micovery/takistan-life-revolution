@@ -659,8 +659,8 @@ remove_vehicle_licenses = {
 	if (_player != player) exitWith {};
 	
 	player groupchat "You have lost your vehicle licenses for reckless driving!";
-	INV_LicenseOwner = INV_LicenseOwner - ["car","truck"];
-	["INV_LicenseOwner", INV_LicenseOwner] spawn stats_client_save;
+	[_player, ["car","truck"]] call player_remove_licenses;
+	
 	demerits = 0;
 };
 
@@ -671,8 +671,7 @@ remove_weapon_licenses = {
 	if (_player != player) exitWith {};
 	
 	player groupchat "You are now wanted, and lost your gun licenses!";
-	INV_LicenseOwner = INV_LicenseOwner - ["pistollicense","riflelicense","automatic"];
-	["INV_LicenseOwner", INV_LicenseOwner] spawn stats_client_save;
+	[_player, ["pistollicense","riflelicense","automatic"]] call player_remove_licenses;
 };
 
 remove_licenses = {

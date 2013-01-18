@@ -338,13 +338,14 @@ stats_server_player_disconnected = {
 	private["_player"]; 
 	_player = [_name] call player_lookup_name;
 	
-	diag_log format["%1,%2,%3 - Disconnected!", _player, _name];
+	diag_log format["%1,%2,%3 - Disconnected!", _player, _name, _uid];
 	
 	[_player] call player_save_side_gear;
 	[_player] call player_save_side_inventory;
 	[_player] call player_save_side_position;
 	[_player] call player_save_side_damage;
 	[_player] call player_save_side_vehicle;
+	[_player] call gang_player_disconnected;
 	
 	private["_vehicle"];
 	_vehicle = (vehicle _player);
@@ -421,25 +422,33 @@ stats_client_server_setup_wait = {
 	_complete
 };
 
-stats_compile_sequential = {
-	private["_data", "_object", "_sequential"];
+stats_compile_loading = {
+	private["_data", "_object"];
 	_data = _this select 0;
 	_object = _this select 1;
-	[_data, _object, true] call stats_compile;
+	[_data, _object, true, true] call stats_compile;
+};
+
+stats_compile_sequential = {
+	private["_data", "_object"];
+	_data = _this select 0;
+	_object = _this select 1;
+	[_data, _object, true, false] call stats_compile;
 };
 
 stats_compile_parallel = {
-	private["_data", "_object", "_sequential"];
+	private["_data", "_object"];
 	_data = _this select 0;
 	_object = _this select 1;
-	[_data, _object, false] call stats_compile;
+	[_data, _object, false, false] call stats_compile;
 };
 
 stats_compile = {
-	private["_data", "_object", "_sequential"];
+	private["_data", "_object", "_sequential", "_loading"];
 	_data = _this select 0;
 	_object = _this select 1;
 	_sequential = _this select 2;
+	_loading = _this select 3;
 	
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
@@ -450,6 +459,10 @@ stats_compile = {
 	if (isNil "_sequential") exitWith {};
 	if (typeName _sequential != "BOOL") exitWith {};
 	
+	if (isNil "_loading") exitWith {};
+	if (typeName _loading != "BOOL") exitWith {};
+	
+	
 	private["_i", "_count"];
 	
 	_count = count _data;
@@ -457,7 +470,13 @@ stats_compile = {
 	while { _i < _count } do {
 		private["_entry"];
 		_entry = _data select _i;
+		
 		[_entry, _object] spawn stats_compile_entry;
+		
+		if (_loading) then {
+			[format["Initializing %1/%2 client stats ... ", (_i + 1), (count _data)]] call stats_client_update_loading_title;
+		};
+		
 		if (_sequential) then {
 			//uses a time-out approach as opposed to just "CALLING" stats_compile_entry
 			//this is so that compilation errors of a single stat entry do not affect compliation
@@ -590,7 +609,6 @@ stats_compile_entry = {
 	_value = (call compile _value) select 0;
 	
 	[_object, _name, _value] call stats_init_entry;
-	[_object, _name] call stats_update_variables_list;
 };
 
 
@@ -620,6 +638,8 @@ stats_init_entry = {
 	else {
 		_object setVariable [_variable, _value, true];
 	};
+	
+	[_object, _variable] call stats_update_variables_list;
 };
 
 
@@ -663,7 +683,6 @@ stats_client_update_loading_progress = {
 	
 	stats_loading_progress = _progress;
 	progressLoadingScreen _progress;
-	uiSleep 1;
 };
 
 
@@ -713,30 +732,36 @@ stats_client_setup = {
 	["Waiting for server initialization ... "] call stats_client_update_loading_title;
 	[0.2] call stats_client_update_loading_progress;
 	call stats_client_server_setup_wait;
+	uiSleep 1;
 	
 	["Waiting for player uid ... "] call stats_client_update_loading_title;
 	[0.4] call stats_client_update_loading_progress;
+	uiSleep 1;
+	
 	private["_uid"];
 	_uid = call stats_client_wait_uid;
 	
 	["Fetching client stats from server ... "] call stats_client_update_loading_title;
 	[0.6] call stats_client_update_loading_progress;
+	uiSleep 1;
 	private["_data"];
 	_data = [_uid] call stats_load_request_send;
 	
 	[format["Initializing %1 client stats ... ", (count _data)]] call stats_client_update_loading_title;
 	[0.8] call stats_client_update_loading_progress;
-	[_data, player] call stats_compile_sequential;
+	uiSleep 1;
+	[_data, player] call stats_compile_loading;
 	
+	[format["Restoring client continuity ... "]] call stats_client_update_loading_title;
+	[0.9] call stats_client_update_loading_progress;
+	uiSleep 1;
 	call stats_load_core_libraries;
 	call player_continuity;
 
-
 	["Client stats setup complete ... "] call stats_client_update_loading_title;
 	[1] call stats_client_update_loading_progress;
+	uiSleep 1;
 	call stats_client_stop_loading;
-	
-	
 };
 
 stats_setup = {

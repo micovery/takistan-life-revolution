@@ -118,68 +118,108 @@ if (_art == "spielerliste") then {
 	};};}; 
 
 
-	(_DFML displayCtrl 1)	lbAdd _trennlinie;
-	(_DFML displayCtrl 1)	lbAdd "G A N G S:";
-
-	for [{_i=0}, {_i < (count gangsarray)}, {_i=_i+1}] do {
-		_gangarray = gangsarray select _i;
-		_gangname  = _gangarray select 0;
-		_members   = _gangarray select 1;
-		_territory = "None";
-
-		_control1 = gangarea1 getvariable "control";
-		_control2 = gangarea2 getvariable "control";
-		_control3 = gangarea3 getvariable "control";
-
-		if(_control1 == _gangname)then{_territory = "Gang area 1"};
-		if(_control2 == _gangname)then{if(_territory == "None")then{_territory = "Gang area 2"}else{_territory = _territory + ", Gang area 2"};};
-		if(_control3 == _gangname)then{if(_territory == "None")then{_territory = "Gang area 3"}else{_territory = _territory + ", Gang area 3"};};
-		_territory = _territory + ".";
-
-		(_DFML displayCtrl 1)	lbAdd format["%1 - Territory: %2 - Members:", _gangarray select 0, _territory];
-		private "_j"; /// BUG FIX
-		for [{_j=0}, {_j < (count _members)}, {_j=_j+1}] do {if(_j == 0)then{(_DFML displayCtrl 1) lbAdd format["%1 (leader)", _members select _j]}else{(_DFML displayCtrl 1) lbAdd format["%1", _members select _j]};};
-	};
-
 	(_DFML displayCtrl 1) lbAdd _trennlinie;
-
-	(_DFML displayCtrl 1)	lbAdd "B A N K:";
-	(_DFML displayCtrl 1)	lbAdd (format ["Est. total funds in the main bank safe's: $%1", strM(robpoolsafe1 + robpoolsafe2 + robpoolsafe3)]);
+	(_DFML displayCtrl 1) lbAdd "G A N G S: ";
+	private["_gangs_list"];
+	_gangs_list = call gangs_get_list;
+	
+	{if (true) then {
+		private["_gang"];
+		_gang = _x;
+		private["_gang_name"];
+		_gang_name = _gang select gang_name;
+		
+		private["_member_uids", "_member_names"];
+		_member_uids = _gang select gang_members;
+		_member_names = [_member_uids] call gangs_uids_2_names;
+		
+		if (count(_member_names) == 0) exitWith {};
+		private["_leader_name"];
+		_leader_name = _member_names select 0;
+		
+		(_DFML displayCtrl 1) lbAdd format["%1 (%2)", _gang_name, _leader_name];
+		
+		private["_i"];
+		_i = 1; //(starting at 1 because 0 is the leader)
+		while {_i < (count _member_names) } do {
+			private["_member_name"];
+			_member_name = _member_names select _i;
+			(_DFML displayCtrl 1) lbAdd format["    %1. %2", _i, _member_name];
+			_i = _i + 1;
+		};
+	};} forEach _gangs_list;
+	
+	
+	(_DFML displayCtrl 1) lbAdd _trennlinie;
+	(_DFML displayCtrl 1) lbAdd "G A N G - A R E A S: ";
+	{ if (true) then {
+		private["_gang_area"];
+		_gang_area = _x;
+		
+		private["_gang_area_name"];
+		_gang_area_name = str(_gang_area);
+		
+		if ([_gang_area] call gang_area_neutral) then {
+			(_DFML displayCtrl 1) lbAdd format["    %1 - (Neutral)", _gang_area_name];
+		}
+		else {
+			private["_gang_id"];
+			_gang_id = [_gang_area] call gang_area_get_control;
+			player groupChat format["_gang_id = %1", _gang_id];
+			
+			private["_gang"];
+			_gang = [_gang_id] call gangs_lookup_id;
+			player groupChat format["_gang = %1", _gang];
+			
+			if (isNil "_gang") then {
+				(_DFML displayCtrl 1) lbAdd format["    %1 - (Abandoned)", _gang_area_name];
+			}
+			else {
+				private["_gang_name"];
+				_gang_name = _gang select gang_name;
+				(_DFML displayCtrl 1) lbAdd format["    %1 - (%2)", _gang_area_name, _gang_name];
+			};
+		};
+	};} forEach gangareas;
+	
+	(_DFML displayCtrl 1) lbAdd _trennlinie;
+	(_DFML displayCtrl 1) lbAdd "B A N K:";
+	(_DFML displayCtrl 1) lbAdd (format ["Est. total funds in the main bank safe's: $%1", strM(robpoolsafe1 + robpoolsafe2 + robpoolsafe3)]);
 
 	if(!local_useBankPossible)then{(_DFML displayCtrl 1) lbAdd (format ["Bank lockout time remaining: %1 seconds.", round rblock])};
 
-	(_DFML displayCtrl 1)	lbAdd _trennlinie;
-	(_DFML displayCtrl 1)	lbAdd (format ["W O R K P L A C E S"]);
+	(_DFML displayCtrl 1) lbAdd _trennlinie;
+	(_DFML displayCtrl 1) lbAdd (format ["W O R K P L A C E S"]);
 	
-		for [{_i=0}, {_i < (count BuyAbleBuildingsArray)}, {_i=_i+1}] do {
-			if ( ((BuyAbleBuildingsArray select _i) select 0) in BuildingsOwnerArray ) then {
-				(_DFML displayCtrl 1)	lbAdd (format ["%1", ((BuyAbleBuildingsArray select _i) select 1)]);
-			};
+	for [{_i=0}, {_i < (count BuyAbleBuildingsArray)}, {_i=_i+1}] do {
+		if ( ((BuyAbleBuildingsArray select _i) select 0) in BuildingsOwnerArray ) then {
+			(_DFML displayCtrl 1)	lbAdd (format ["%1", ((BuyAbleBuildingsArray select _i) select 1)]);
 		};
+	};
 		
-	(_DFML displayCtrl 1)	lbAdd _trennlinie;
-
-	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_laws";
+	(_DFML displayCtrl 1) lbAdd _trennlinie;
+	(_DFML displayCtrl 1) lbAdd localize "STRS_statdialog_laws";
+	
 	_i = 0;
 	{
 		if (not(_x == "")) then {
 			_i = _i + 1;
 			(_DFML displayCtrl 1)	lbAdd (format ["%1: %2", _i, _x]);
 		};
-	}
-	forEach LawsArray;
-	(_DFML displayCtrl 1)	lbAdd _trennlinie;
-	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_taxes";
+	} forEach LawsArray;
+	
+	(_DFML displayCtrl 1) lbAdd _trennlinie;
+	(_DFML displayCtrl 1) lbAdd localize "STRS_statdialog_taxes";
+	
 	{
 		if ((_x select 2) > 0) then {
-			(_DFML displayCtrl 1)	lbAdd format["%1: %2", (_x select 1), (_x select 2)];
+			(_DFML displayCtrl 1) lbAdd format["%1: %2", (_x select 1), (_x select 2)];
 		};
-	}
-	foreach INV_ItemTypeArray;
-	(_DFML displayCtrl 1)	lbAdd format["Transfer: %1", bank_tax];
+	} foreach INV_ItemTypeArray;
+	(_DFML displayCtrl 1) lbAdd format["Transfer: %1", bank_tax];
 
-	(_DFML displayCtrl 1)	lbAdd _trennlinie;
-	(_DFML displayCtrl 1)	lbAdd "F O O D  S T O C K S:";
+	(_DFML displayCtrl 1) lbAdd _trennlinie;
+	(_DFML displayCtrl 1) lbAdd "F O O D  S T O C K S:";
 
 	_stock = ["boar", (shop1 call INV_getshopnum)] call INV_GetStock;
 	_stock = _stock + (["boar", (shop2 call INV_GetShopNum)] call INV_GetStock);
@@ -518,43 +558,7 @@ if (_art == "impound") then {
 	buttonSetAction [2, "[lbData [1, (lbCurSel 1)],""buy""] call A_SCRIPT_IMPOUND;"];
 };
 
-if (_art == "gangmenu") then {
-	if (!(createDialog "gang_menu")) exitWith {hint "Dialog Error!";};
-	private "_i";
-	for [{_i=0}, {_i < (count gangsarray)}, {_i=_i+1}] do {
-		_gangarray = gangsarray select _i;
-		_index = lbAdd [202, format ["%1 - Memberlist: %2", (_gangarray select 0), (_gangarray select 1)]];
-		lbSetData [202, _index, format ["%1", (_gangarray select 0)]];
-	};
-};
 
-if (_art == "gildenverwaltung") then {
-	if(!gangleader)exitwith{player groupchat "you are not the gang leader!"};
-
-	closedialog 0;
-	if (!(createDialog "gilde_verwaltung")) exitWith {hint "Dialog Error!";};
-
-	_members = [];
-	private "_i";
-	for [{_i=0}, {_i < (count gangsarray)}, {_i=_i+1}] do {
-		if ((name player) in ((gangsarray select _i) select 1)) exitWith {_members = ((gangsarray select _i) select 1)};
-	};
-
-	_index = lbAdd [201, localize "STRS_hints_ja"];
-	lbSetData [201, _index, "true"];
-	_index = lbAdd [201, localize "STRS_hints_nein"];
-	lbSetData [201, _index, "false"];
-
-	private["_i"];
-	_i = 0;
-	while { _i < (count _members) } do {
-		_member = (_members select _i);
-		_obj = if(not([_obj] call player_civilian)) then {"notingame"} else { _obj };
-		_index = lbAdd [102, (format ["%1 (%2)", _member, _obj])];
-		lbSetData [102, _index, (format ["%1", _obj])];
-		_i = _i + 1;
-	};
-};
 
 if (_art == "pmc_whitelist") then {
 	if (not(ischief)) exitWith { player groupChat "Cannot access PMC whitelist: You are not the police chief";};

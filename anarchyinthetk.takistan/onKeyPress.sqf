@@ -289,8 +289,8 @@ keyboard_switch_normal_handler = {
 keyboard_gangs_handler = {
 	if(!INV_shortcuts) exitWith {false};
 	if(dialog) exitWith {closeDialog 0; false};
-	if (not(isciv) || isins || isopf) exitWith {false};
-	[0,0,0,["gangmenu"]] execVM "maindialogs.sqf";
+	if (not(isciv)) exitWith {false};
+	[player] call interact_gang_menu;
 	true
 };
 
