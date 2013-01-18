@@ -2307,7 +2307,7 @@ interact_gang_join = {
 	};
 	
 	player groupChat format["%1-%2, you have joined gang %3", _player, (name _player), _gang_name];
-	[_gang_id, _player] call gang_add_member;
+	format['["%1", %2] call gang_add_member;', _gang_id, _player] call broadcast;
 };
 
 interact_gang_leave = {
@@ -2324,7 +2324,7 @@ interact_gang_leave = {
 	
 	private["_gang_id"];
 	_gang_id = _gang select gang_id;
-	[_gang_id, _player_uid] call gang_remove_member;
+	format['["%1", "%2"] call gang_remove_member;', _gang_id, _player_uid] call broadcast;
 	player groupChat format["%1-%2, you have left gang %3", _player, (name _player), (_gang select gang_name)];
 };
 
@@ -2565,7 +2565,7 @@ interact_gang_kick = { _this spawn {
 	
 	player groupChat format["%1-%2, you have kicked %3-%4 from your gang!", _player, (name _player), _member, (name _member)];
 	
-	[_gang_id, _member_uid] call gang_remove_member;
+	format['["%1", "%2"] call gang_remove_member;', _gang_id, _member_uid] call broadcast;
 	sleep 1;  //sleep a second to give enought time for the changes to take effect
 	
 	private["_message"];
@@ -2612,7 +2612,7 @@ interact_gang_make_leader = { _this spawn {
 	
 	player groupChat format["%1-%2, you have made %3-%4 the leader of your gang!", _player, (name _player), _member, (name _member)];
 	
-	[_gang_id, _member_uid] call gang_make_leader;
+	format['["%1", "%2"] call gang_make_leader;', _gang_id, _member_uid] call broadcast;
 	sleep 1;  //sleep a second to give enought time for the changes to take effect
 	
 	private["_message"];

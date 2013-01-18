@@ -255,6 +255,7 @@ gang_player_disconnected = {
 
 gang_update_leader = {
 	if (not(isServer)) exitWith {};
+	
 	player groupChat format["gang_update_leader %1", _this];
 	private["_gang_id"];
 	_gang_id = _this select 0;
@@ -275,10 +276,13 @@ gang_update_leader = {
 	_member_uids = _gang select gang_members;
 	_group = _gang select gang_group;
 	
+	player groupChat format["making %1 leader of %2", _leader, _group];
+		
 	_members = [_member_uids] call gangs_uids_2_players;
 	_members joinSilent _group;
 	_group selectLeader _leader;
 };
+
 
 gang_player_uid = {
 	private["_player"];
@@ -293,10 +297,13 @@ gang_player_uid = {
 	_player_name = (name _player);
 	_player_uid  = (getPlayerUID _player);
 	
-	private["_first_letter"];
-	_first_letter = toString [(toArray _player_name) select 0];
+	private["_values", "_first_letter", "_last_letter"];
+	_values = toArray _player_name;
+	_first_letter = toString [_values select 0];
+	_middle_letter = toString [_values select (floor(count(_values) / 2))];
+	_last_letter = toString [_values select (count(_values) - 1)];
 	
-	_gang_player_uid = format["%1_%2", _player_uid, _first_letter];
+	_gang_player_uid = format["%1_%2%3%4", _player_uid, _first_letter, _middle_letter, _last_letter];
 	_player setVariable ["gang_player_uid", _gang_player_uid, true];
 	
 	(_gang_player_uid)
@@ -679,12 +686,11 @@ gang_create = {
 	private["_gang","_gang_id", "_gang_group"];
 	_gang = [];
 	_gang_id = [_player] call gang_generate_id;
+	
 	private["_side"];
 	_side = [_player] call player_side;
-	
-	_gang_group = createGroup _side;
-	diag_log format["Created group %1, on side %2, for gang %3", _gang_group, _side, _name];
-	
+	_gang_group = [_side, nil] call gang_recreate_group;
+		
 	[_player] joinSilent _gang_group;
 	
 	_gang set [gang_id, _gang_id];
@@ -696,7 +702,31 @@ gang_create = {
 	[_gang] call gangs_update_list;
 };
 
+gang_recreate_group = {
+	private["_side", "_group"];
+	_side = _this select 0;
+	_group = _this select 1;
+	if (isNil "_side") exitWith {grpNull};
+	if (typeName _side != "SIDE") exitWith {grpNull};
+	
+	private["_original_group"];
+	_original_group = _group;
+	
+	_group = if (isNil "_group") then {createGroup _side} else {_group};
+	_group = if (typeName _group != "GROUP") then {createGroup _side} else {_group};
+	
+	if (str(_original_group) != str(_group)) then {
+		private["_str"];
+		_str = format["created new group %1(%2)", _group, _side];
+		diag_log _str;
+		player groupChat _str;
+	};
+	
+	(_group)
+};
+
 gang_add_member = {
+	if (not(isServer)) exitWith {};
 	private["_gang_id", "_player"];
 	_gang_id = _this select 0;
 	_player = _this select 1;
@@ -710,14 +740,18 @@ gang_add_member = {
 	[_player, (group _player)] call player_set_saved_group;
 	_player_uid = [_player] call gang_player_uid;
 	
-	private["_members"];
+	private["_members", "_group"];
+	_group = _gang select gang_group;
 	_members = _gang select gang_members;
 	_members = _members + [_player_uid];
 	_gang set [gang_members, _members];
 	[_gang] call gangs_update_list;
-	format['["%1"] call gang_update_leader;', _gang_id] call broadcast;
+	[_player]  joinSilent _group;
+	
+	if (count(_members) == 1) then {
+		[_gang_id] call gang_update_leader;
+	};
 };
-
 
 gang_restore_member_group = {
 	private["_member_uid"];
@@ -727,14 +761,19 @@ gang_restore_member_group = {
 	_member = [_member_uid] call player_lookup_gang_uid;
 	if (isNil "_member") exitWith {};
 	
+	private["_side"];
+	_side = [_member] call player_side;
+	
 	_group = [_member] call player_get_saved_group;
-	if (isNil "_group") exitWith {};
+	//recreate the group if it does not exist
+	_group = [_side, _group] call gang_recreate_group;
 	
 	[_member] joinSilent _group;
 	_group selectLeader _member;
 };
 
 gang_remove_member = {
+	if (not(isServer)) exitWith {};
 	private["_gang_id", "_member_uid"];
 	_gang_id = _this select 0;
 	_member_uid = _this select 1;
@@ -744,6 +783,9 @@ gang_remove_member = {
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
 	if (isNil "_gang") exitWith {};
+	
+	private["_leader_uid"];
+	_leader_uid = [_gang_id] call gang_leader_uid;
 	
 	private["_members"];
 	_members = _gang select gang_members;
@@ -756,11 +798,15 @@ gang_remove_member = {
 	};
 	
 	[_gang] call gangs_update_list;
-	format['["%1"] call gang_update_leader;', _gang_id] call broadcast;
+	if (_leader_uid == _member_uid) then {
+		[_gang_id] call gang_update_leader;
+	};
 	[_member_uid] call gang_restore_member_group;
 };
 
-gang_make_leader = {
+gang_make_leader = { 
+	if (not(isServer)) exitWith {};
+	
 	private["_gang_id", "_member_uid"];
 	_gang_id = _this select 0;
 	_member_uid = _this select 1;
@@ -777,7 +823,7 @@ gang_make_leader = {
 	_members = [_member_uid] + _members;
 	_gang set[gang_members, _members];
 	[_gang] call gangs_update_list;
-	format['["%1"] call gang_update_leader;', _gang_id] call broadcast;
+	[_gang_id] call gang_update_leader;
 };
 
 
