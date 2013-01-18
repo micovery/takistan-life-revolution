@@ -609,7 +609,6 @@ stats_compile_entry = {
 	_value = (call compile _value) select 0;
 	
 	[_object, _name, _value] call stats_init_entry;
-	[_object, _name] call stats_update_variables_list;
 };
 
 
@@ -639,6 +638,8 @@ stats_init_entry = {
 	else {
 		_object setVariable [_variable, _value, true];
 	};
+	
+	[_object, _variable] call stats_update_variables_list;
 };
 
 
