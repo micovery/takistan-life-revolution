@@ -338,7 +338,7 @@ stats_server_player_disconnected = {
 	private["_player"]; 
 	_player = [_name] call player_lookup_name;
 	
-	diag_log format["%1,%2,%3 - Disconnected!", _player, _name];
+	diag_log format["%1,%2,%3 - Disconnected!", _player, _name, _uid];
 	
 	[_player] call player_save_side_gear;
 	[_player] call player_save_side_inventory;
