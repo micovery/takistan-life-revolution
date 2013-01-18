@@ -55,7 +55,7 @@ if ( ((_unit distance (getmarkerpos "respawn_guerrila")) < 100) ) exitwith {
 // STUN EFFECTS
 ///////////////
 
-if ((_magazine == "15Rnd_9x19_M9SD") && ([_weapon] call isPistol_class)) then {
+if ((_magazine == "15Rnd_9x19_M9SD") && ((_weapon == "M9") || (_weapon == "M9SD"))) then {
 		[1, _unit] execVM "Awesome\Scripts\Stun.sqf"; 		
 	};
 

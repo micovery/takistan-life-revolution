@@ -973,35 +973,30 @@ vehicle_load = {
 	private["_player"];
 	_player = player;
 	
+	[_player, "vehicles_list"] call stats_update_variables_list;
 	["vehicles_name_list", []] call stats_init_variable;
 
 	private["_vehicle_names"];
 	_vehicle_names = vehicles_name_list;
 	if (isNil "_vehicle_names") exitWith {};
 	if (typeName _vehicle_names != "ARRAY") exitWith {};
+	private["_vehicle", "_vehicle_name"];
+	{
+		_vehicle_name = _x;
+		_vehicle = missionNamespace getVariable _vehicle_name;
+		if (isNil "_vehicle") exitWith {};
+		[_player, _vehicle] call vehicle_add;
+	} foreach _vehicle_names;
+		
 	
-	private["_i", "_count"];
-	_i = 0;
-	_count = count _vehicle_names;
-	while {_i < _count } do {
-		if (true) then {
-			private["_vehicle", "_vehicle_name"];
-			_vehicle_name = _vehicle_names select _i;
-			_vehicle = missionNamespace getVariable _vehicle_name;
-			if (isNil "_vehicle") exitWith {};
-			[_player, _vehicle] call vehicle_add;
-		};
-		_i = _i + 1;
-	};
 };
 
 vehicle_add = {
 	private["_player", "_vehicle"];
 	_player = _this select 0;
-	_vehicle = _this select 1;
+	_vehicle = _this select 1;		
 	if (not([_player] call player_human)) exitWith {false};
-	if (not([_vehicle] call vehicle_exists)) exitWith {false};
-	
+	if (not([_vehicle] call vehicle_exists)) exitWith {false};	
 	private["_vehicles"];
 	_vehicles  = [_player] call vehicle_list;
 	if (_vehicle in _vehicles) exitWith {};

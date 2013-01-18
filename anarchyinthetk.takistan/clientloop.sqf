@@ -176,11 +176,12 @@ check_inventory = {
 
 cop_stun_gun_modify = {
 	if (!iscop) exitWith {};
-	if (isNil "weaponsloaded") exitWith {};
-	if (not(weaponsloaded)) exitWith {};
+	//if (isNil "weaponsloaded") exitWith {};
+	//if (not(weaponsloaded)) exitWith {};
+	if((player ammo (currentWeapon player)) <= 0) exitWith {};
 	if (not(alive player)) exitWith {};
 	
-	if (([currentWeapon player] call isPistol_class) && ((currentMagazine player) == ("15Rnd_9x19_M9SD"))) then {	
+	if ((((currentWeapon player) == "M9" || (currentWeapon player) == "M9SD")) && ((currentMagazine player) == ("15Rnd_9x19_M9SD"))) then {	
 		_magazines = magazines player;
 		_magazines_count = {_x == "15Rnd_9x19_M9SD"} count (_magazines);
 		_ammo = player ammo (currentWeapon player);

@@ -583,7 +583,9 @@ stats_copy_variables = {
 		_variable_name = _x;
 		_variable_value = _old_player getVariable _variable_name;
 		_new_player setVariable [_variable_name, _variable_value, true];
-	} forEach _variables_list
+	} forEach _variables_list;
+	
+	[_new_player, _variables_list] call stats_set_variables_list;
 };
 
 

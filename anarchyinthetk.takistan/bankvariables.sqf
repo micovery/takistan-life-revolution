@@ -45,7 +45,7 @@ else { if (_uid in donators4) then {
 };};};};
 
 if (isNil "bankaccount") then {
-    [player, startmoneh] call bank_set_value;
+	["bankaccount", ([startmoneh] call encode_number)] call stats_init_variable;
 };
 
 shopflagarray            = [shop1,shop2,shop3,shop4];
