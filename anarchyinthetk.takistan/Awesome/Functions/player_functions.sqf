@@ -74,6 +74,7 @@ player_has_license = {
 	if (not([_player] call player_human)) exitWith {false};
 	if (isNil "_license") exitWith {false};
 	if (typeName _license != "STRING") exitWith {false};
+	if (_license == "") exitWith {true};
 	
 	private["_licenses"];
 	_licenses = [_player, "INV_LicenseOwner"] call player_get_array;
