@@ -176,8 +176,6 @@ check_inventory = {
 
 cop_stun_gun_modify = {
 	if (!iscop) exitWith {};
-	//if (isNil "weaponsloaded") exitWith {};
-	//if (not(weaponsloaded)) exitWith {};
 	if((player ammo (currentWeapon player)) <= 0) exitWith {};
 	if (not(alive player)) exitWith {};
 	
