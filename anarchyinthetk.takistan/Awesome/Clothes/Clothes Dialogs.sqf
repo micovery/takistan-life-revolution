@@ -1,11 +1,15 @@
-_group 		= group player;
-_side		= playerSide;
-_fac		= faction player;
+private["_group", "_side", "_fac"];
+
+_group = group player;
+_side = playerSide;
+_fac = faction player;
 
 C_shopnum 		= ((_this select 3) select 0);
 C_shoparray		= Clothing_Shops select C_shopnum;
 C_ShopList		= [];
 C_ShopList		= C_shoparray select 1;
+
+private["_shopaside", "_shopabool", "_shopalic"];
 _shopaside		= C_shoparray select 2;
 _shopabool		= C_shoparray select 3;
 _shopalic		= C_shoparray select 4;
@@ -18,26 +22,28 @@ if (iscop) then { C_tstorage = C_storage_west; };
 if (isopf) then { C_tstorage = C_storage_east; };
 if (isins) then { C_tstorage = C_storage_guer; };
 
+private["_exit", "_haslic"];
 
 _exit = false;
 _haslic = true;
 
 if (C_Side != _shopaside) then {
-		player groupchat format["This shop is not for your side: %1", C_Side];
-		_exit = true;
-	};
+	player groupchat format["This shop is not for your side: %1", C_Side];
+	_exit = true;
+};
 
-for [{_i = 0}, {_i < count _shopalic}, {_i = _i + 1}] do
-	{
-		_license = (_shopalic select _i);
-		_haslic_i = _license call INV_HasLicense;
-		
-		if (!(_haslic_i)) then {
-				player groupchat format ['You require the license: %1',(_license call INV_GetLicenseName)];
-				_haslic = false;
-			};
-		
+private["_i"];
+_i = 0;
+while { _i < (count _shopalic) } do {
+	_license = (_shopalic select _i);
+	_haslic_i = _license call INV_HasLicense;
+	
+	if (not(_haslic_i)) then {
+		player groupchat format ['You require the license: %1',(_license call INV_GetLicenseName)];
+		_haslic = false;
 	};
+	_i = _i + 1;
+};
 
 if (!(_haslic)) exitwith {};
 if (_exit) exitwith {};

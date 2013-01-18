@@ -49,6 +49,9 @@ civilian_salary_handout = {
 		player groupChat format[localize "STRS_moneh_paycheckdead"];
 	};
 	
+	private["_player"];
+	_player = player;
+	
 	private["_income", "_activecount"];
 	_income = add_civmoney;
 	
@@ -67,38 +70,11 @@ civilian_salary_handout = {
 		_income = _income + _workplacepaycheck;
 	};
 
-	private["_c", "_gang_name", "_gang_active_members"];
-	_gang_name	= "None";
-	_c = 0;
-	while { _c < (count gangsarray) } do {
-		private["_cgang_array", "_cgang_name", "_cgang_members"];
-		_cgang_array = gangsarray select _c;
-		_cgang_name  = _cgang_array select 0;
-		_cgang_members = _cgang_array select 1;
-
-		if((name player) in _cgang_members)then {
-			_gang_name = _cgang_name;
-			private["_j"];
-			_j = 0;
-			while { _j < (count _cgang_members) } do {
-				private["_cgang_member_name", "_cgang_member"];
-				_cgang_member_name = (_cgang_members select _j);
-				_cgang_member = [_cgang_member_name] call player_lookup_name;
-				if ([_cgang_member] call player_civilian) then {
-					_gang_active_members = _gang_active_members + 1;
-				};
-				_j = _j + 1;
-			};
-		};
-		_c = _c + 1;
-	};
-
-	if(_gang_name != "None" && _gang_active_members > 0) then {
-		private["_extra", "_control"];
-		_extra = ( gangincome / _gang_active_members);
-		_income = if (gangarea1 getvariable "control" == _gang_name) then { _income + _extra } else  {_income};
-		_income = if (gangarea2 getvariable "control" == _gang_name) then { _income + _extra } else  {_income};
-		_income = if (gangarea3 getvariable "control" == _gang_name) then { _income + _extra } else  {_income};
+	private["_gang_income"];
+	_gang_income = [_player] call gangs_calculate_income;
+	if (_gang_income > 0) then {
+		player groupChat format["%1-%2, because you are in a gang with that controls gang areas, you get extra $%3 income", _player, (name _player), strM(_gang_income)];
+		_income = _income + _gang_income;
 	};
 
 	timeinworkplace = 0;

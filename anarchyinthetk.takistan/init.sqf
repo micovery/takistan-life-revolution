@@ -39,8 +39,6 @@ if (isServer) then {
 	["server"] execVM "bombs.sqf";
 };
 
-
-
 _h = [] execVM "Awesome\Functions\interaction.sqf";
 waitUntil{scriptDone _h};
 
@@ -104,7 +102,7 @@ waitUntil{scriptDone  _h};
 _h = [] execVM "Awesome\Functions\money_functions.sqf"; 
 waitUntil{scriptDone _h};
 
-_h = [] execVM "Awesome\Functions\gangfunctions.sqf";
+_h = [] execVM "Awesome\Functions\gang_functions.sqf";
 waitUntil{scriptDone _h};
 
 // Starts up Awesome scripts
@@ -129,7 +127,7 @@ if(isClient) then {
 	server globalChat "Loading - Please Wait";
 	[] execVM "Awesome\Functions\holster.sqf";
 	[] execVM "clientloop.sqf";
-	[0,0,0,["clientloop"]] execVM "gangs.sqf";
+	[] spawn gangs_loop;
 	[] execVM "respawn.sqf";
 	[] execVM "petrolactions.sqf";
 	[] execVM "nametags.sqf";
@@ -145,14 +143,12 @@ if(isClient) then {
 	player addEventHandler ["handleDamage", {_this execVM "Awesome\EH\EH_handledamage.sqf"}];
 	player addEventHandler ["WeaponAssembled", {_this execVM "Awesome\EH\EH_weaponassembled.sqf"}];
 	[] execVM "onKeyPress.sqf";
-
 };
 
 if (isServer) then {
 	//[60,180,true] execVM "cly_removedead.sqf";
 	[0, 0, 0, ["serverloop"]] execVM "mayorserverloop.sqf";
 	[0, 0, 0, ["serverloop"]] execVM "chiefserverloop.sqf";
-	[] execVM "gangsserverloop.sqf";
 	[] execVM "druguse.sqf";
 	[] execVM "drugreplenish.sqf";
 	[] execVM "robpool.sqf";

@@ -455,12 +455,7 @@ INV_GetItemTaxPrice= {
 
 // Check if Player Owns Licence
 INV_HasLicense = {
-	if ( (_this == "") or (_this in INV_LicenseOwner) ) then {
-		true
-	}
-	else {
-		false
-	};
+	([player, _this] call player_has_license)
 };
 
 
@@ -535,22 +530,23 @@ INV_GetShopArray = {
 
 // Get shop number
 INV_GetShopNum = {
-	private ["_item", "_shopnum"];
-	_item = _this;
-	_shopnum = [];
-	if ((typeName _item) == "OBJECT") then {
-		private["_i"];
-		_i = 0;
-		while { _i < (count INV_ItemShops) } do {
-			private["_citem"];
-			_citem = ((INV_ItemShops select _i) select 0);
-			if (_citem == _item) then {
-				_shopnum = _i;
-			};
-			_i = _i + 1;
+	private ["_object"];
+	_object = _this;
+	
+	if ((typeName _object) != "OBJECT") exitWith {nil};
+	
+	private["_shop_id", "_i"];
+	_shop_id = nil;
+	_i = 0;
+	while { _i < (count INV_ItemShops) } do {
+		private["_cobject"];
+		_cobject = ((INV_ItemShops select _i) select 0);
+		if (_cobject == _object) exitWith {
+			_shop_id = _i;
 		};
+		_i = _i + 1;
 	};
-	_shopnum
+	_shop_id
 };
 
 // Get shopitem number
@@ -647,23 +643,6 @@ INV_HasItem = {
 		} foreach _item;
 	};
 	_return
-};
-
-INV_MyGang = {
-	_mygang  = "";
-	private["_i"];
-	_i = 0;
-	while { _i < (count gangsarray) } do {
-		private["_gangarray", "_gang", "_members"];
-		_gangarray = gangsarray select _i;
-		_gang = _gangarray select 0;
-		_members = _gangarray select 1;
-		if((name player) in _members) then {
-			_mygang = _gang
-		};
-		_i = _i + 1;
-	};
-	_mygang
 };
 
 

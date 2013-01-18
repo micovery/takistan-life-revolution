@@ -7,8 +7,6 @@ _role = player;
 //====================================== HQ BOMB ======================================================
 action1 =	_role addaction ["Defuse Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;if(!alive player)exitwith{};bombactive=false;publicvariable "bombactive";"hint ""The bomb has been defused!"";server globalchat ""The bomb has been defused!"";playsound ""fanfare"";" call broadcast;',1,false,true,"","player distance HQ <= 5 and iscop and bombactive and !planting"];
 action2 =	_role addaction ["Plant Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;publicvariable "planting";player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;publicvariable "planting";if(!alive player)exitwith{};bombactive=true;publicvariable "bombactive";',1,false,true,"","player distance HQ <= 5 and !bombactive and !planting and isciv"];
-//==================================== GANG MENU ======================================================
-//action3 =	_role addaction ["Gang Menu","maindialogs.sqf",["gangmenu"],1,false,true,"","player distance rathaus <= 3 and isciv"];
 //====================================== BANK ROB =====================================================
 action4 =	_role addaction ["Rob safe","bankrob.sqf", ["ausrauben", safe1],1,false,true,"","player distance safe1 <= 3 and isciv"];
 action5 =	_role addaction ["Rob safe","bankrob.sqf", ["ausrauben", safe2],1,false,true,"","player distance safe2 <= 3 and isciv"];
@@ -132,19 +130,37 @@ storage4 = _role addaction ["Private storage","noscript.sqf",'[player] call inte
 //========================================= BAIL ======================================================
 action51 = _role addaction [format ["Pay Bail", slave_cost],"maindialogs.sqf", ["bail"],1,false,true,"","player distance bailflag <= 5 and isciv"];
 //===================================== ITEM PROCESS ==================================================
-action52 = _role addaction ["Process Diamond rock","itemprocess.sqf",["Diamond rock", "Diamondring", 12, "diamond"],1,false,true,"","player distance Diamond_1 <= 5 and isciv"];
-action53 = _role addaction ["Process Oil","itemprocess.sqf",["Oil", "OilBarrel", 10, "oil"],1,false,true,"","player distance Oil_1 <= 5 and isciv"];
-action54 = _role addaction ["Make Glass","itemprocess.sqf",["Sand", "Glass", 2, "glassblowing"],1,false,true,"","player distance Glassblower <= 5 and isciv"];
-//action54 = _role addaction ["Process Wheat","itemprocess.sqf",["getreide", "Bread", 2, "Baker"],1,false,true,"","player distance Bakery_1 <= 5 and isciv"];
-//ga1
-action55 = _role addaction ["Process LSD","itemprocess.sqf",["Unprocessed_LSD", "lsd", 5, "lsd ga1"],1,false,true,"","_control = gangarea1 getvariable ""control"";!isnil ""_control"" and player distance gangarea1 <= 5 and (_control == (call INV_MyGang))"];
-action56 = _role addaction ["Process Cocaine","itemprocess.sqf",["Unprocessed_Cocaine", "cocaine", 5, "cocaine ga1"],1,false,true,"","_control = gangarea1 getvariable ""control"";!isnil ""_control"" and player distance gangarea1 <= 5 and (_control == (call INV_MyGang))"];
-//ga2
-action57 = _role addaction ["Process LSD","itemprocess.sqf",["Unprocessed_LSD", "lsd", 5, "lsd ga2"],1,false,true,"","_control = gangarea2 getvariable ""control"";!isnil ""_control"" and player distance gangarea2 <= 5 and (_control == (call INV_MyGang))"];
-action58 = _role addaction ["Process Heroin","itemprocess.sqf",["Unprocessed_Heroin", "heroin", 5, "heroin ga2"],1,false,true,"","_control = gangarea2 getvariable ""control"";!isnil ""_control"" and player distance gangarea2 <= 5 and (_control == (call INV_MyGang))"];
-//ga3
-action59 = _role addaction ["Process Heroin","itemprocess.sqf",["Unprocessed_Heroin", "heroin", 5, "heroin ga3"],1,false,true,"","_control = gangarea3 getvariable ""control"";!isnil ""_control"" and player distance gangarea3 <= 5 and (_control == (call INV_MyGang))"];
-action60 = _role addaction ["Process Marijuana","itemprocess.sqf",["Unprocessed_Marijuana", "marijuana", 5, "marijuana ga3"],1,false,true,"","_control = gangarea3 getvariable ""control"";!isnil ""_control"" and player distance gangarea3 <= 5 and (_control == (call INV_MyGang))"];
+action52 = _role addAction 
+[
+	"Process Diamond rock", "noscript.sqf", '[player, "Diamond rock", "Diamondring", 12] call interact_item_process;', 1, false, true, "",
+	'((player distance Diamond_1) <= 5) && isciv && ([player, "diamond"] call player_has_license)'
+];
+
+action53 = _role addAction 
+[
+	"Process Oil", "noscript.sqf", '[player, "Oil", "OilBarrel", 10] call interact_item_process;', 1, false, true, "", 
+	'((player distance Oil_1) <= 5) && isciv && ([player, "oil"] call player_has_license)'
+];
+
+
+action54 = _role addAction
+[
+	"Make Glass", "noscript.sqf", '[player, "Sand", "Glass", 2] call interact_item_process;', 1 , false, true, "", 
+	'((player distance Glassblower) <= 5) && isciv && ([player, "glassblowing"] call player_has_license)'
+];
+
+//action54 = _role addaction 
+//[
+//		"Process Wheat", "noscript.sqf", '[player, "getreide", "Bread", 2] call interact_item_process;', 1, false, true, "", 
+//		'((player distance Bakery_1) <= 5) && isciv && ([player, "Baker"] call player_has_license)'
+//];
+
+//action55 =  nil;
+//action56 =  nil;
+//action57 =  nil;
+//action58 =  nil;
+//action59 = nil;
+//action60 = nil;
 //======================================== WORKERS =====================================================
 //_role addaction [format ["Hire a worker ($%1)", huren_cost],"worker.sqf", ["holen"],1,false,true,"","(player distance workplace_getjobflag_1 <= 5 or player distance workplace_getjobflag_2 <= 5 or player distance workplace_getjobflag_3 <= 5) and isciv"];
 //======================================= WORKPLACE ====================================================
@@ -161,33 +177,20 @@ action69 = _role addaction [localize "STRS_addaction_trunk_check","noscript.sqf"
 action70 = _role addaction ["Impound vehicle","noscript.sqf",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);[_vcl, "impound"] call A_SCRIPT_IMPOUND;',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and ([_vcl] call INV_IsPlayerVehicle) and iscop'];
 action71 = _role addaction ["Pull out","noscript.sqf",'(nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0) execVM "pullout.sqf";',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and count (crew _vcl) > 0 and ([_vcl] call INV_IsPlayerVehicle) and (call INV_IsArmed)'];
 action72 = _role addaction [localize "STRS_addAction_vehicleinfo","noscript.sqf",'(nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0) call A_SCRIPT_VEHINFO;',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and ([_vcl] call INV_IsPlayerVehicle)'];
-//======================================== GANG FLAGS ===================================================
-action73 = _role addaction ["Neutralise flag","gangflags.sqf",[gangarea1, "neutralise"],1,false,true,"",'_control = gangarea1 getvariable "control";if(isnil "_control")then{_control = ""};player distance gangarea1 <= 8 and _control != (call INV_MyGang) and _control != "" and gangmember and !pickingup'];
-action74 = _role addaction ["Neutralise flag","gangflags.sqf",[gangarea2, "neutralise"],1,false,true,"",'_control = gangarea2 getvariable "control";if(isnil "_control")then{_control = ""};player distance gangarea2 <= 8 and _control != (call INV_MyGang) and _control != "" and gangmember and !pickingup'];
-action75 = _role addaction ["Neutralise flag","gangflags.sqf",[gangarea3, "neutralise"],1,false,true,"",'_control = gangarea3 getvariable "control";if(isnil "_control")then{_control = ""};player distance gangarea3 <= 8 and _control != (call INV_MyGang) and _control != "" and gangmember and !pickingup'];
-action76 = _role addaction ["Capture flag","gangflags.sqf",[gangarea1, "capture"],1,false,true,"",'_control = gangarea1 getvariable "control";player distance gangarea1 <= 10 and isnil "_control" and gangmember and !pickingup'];
-action77 = _role addaction ["Capture flag","gangflags.sqf",[gangarea2, "capture"],1,false,true,"",'_control = gangarea2 getvariable "control";player distance gangarea2 <= 10 and isnil "_control" and gangmember and !pickingup'];
-action78 = _role addaction ["Capture flag","gangflags.sqf",[gangarea3, "capture"],1,false,true,"",'_control = gangarea3 getvariable "control";player distance gangarea3 <= 10 and isnil "_control" and gangmember and !pickingup'];
+//action73 = nil;
+//action74 = nil;
+//action75 = nil;
+//action76 = nil;
+//action77 = nil;
+//action78 = nil;
 //======================================== SHOP EXPORT ==================================================
 action79 = _role addaction ["Shop 1 export","noscript.sqf","[(shop1 call INV_GetShopNum)] call shop_open_dialog;",1,false,true,"","player distance shop1export <= 3"];
 action80 = _role addaction ["Shop 2 export","noscript.sqf","[(shop2 call INV_GetShopNum)] call shop_open_dialog;",1,false,true,"","player distance shop2export <= 3"];
 action81 = _role addaction ["Shop 3 export","noscript.sqf","[(shop3 call INV_GetShopNum)] call shop_open_dialog;",1,false,true,"","player distance shop3export <= 3"];
 action82 = _role addaction ["Shop 4 export","noscript.sqf","[(shop4 call INV_GetShopNum)] call shop_open_dialog;",1,false,true,"","player distance shop4export <= 3"];
-//======================================= GANG GUNSHOPS ==================================================
-action83 = _role addaction ["Gang Shop", "noscript.sqf", 
-                            "[(gangarea1 call INV_GetShopNum)-3] call shop_open_dialog;", 
-			    1, false,true,"",
-			    "_control = gangarea1 getvariable ""control"";!isnil ""_control"" and player distance gangarea1 <= 5 and (_control == (call INV_MyGang))"];
-							
-action84 = _role addaction ["Gang Shop", "noscript.sqf", 
-                            "[(gangarea2 call INV_GetShopNum)-3] call shop_open_dialog;", 
-			    1, false,true,"",
-			    "_control = gangarea2 getvariable ""control"";!isnil ""_control"" and player distance gangarea2 <= 5 and (_control == (call INV_MyGang))"];
-							
-action85 = _role addaction ["Gang Shop", "noscript.sqf", 
-                            "[(gangarea3 call INV_GetShopNum)-3] call shop_open_dialog;", 
-			    1, false,true,"",
-			    "_control = gangarea3 getvariable ""control"";!isnil ""_control"" and player distance gangarea3 <= 5 and (_control == (call INV_MyGang))"];
+//action83 = nil; 							
+//action84 = nil;	
+//action85 = nil;
 //===================================== Gas station Robbing===============================================
 gsshop1 = fuelshop1 addaction ["Rob Gas Station 1", "noscript.sqf", '[player, 1] call player_rob_station', 1, false, true, ""," not(iscop) && station1money >= 10000"];
 gsshop2 = fuelshop2 addaction ["Rob Gas Station 2", "noscript.sqf", '[player, 2] call player_rob_station', 1, false, true, ""," not(iscop) && station2money >= 10000"];
