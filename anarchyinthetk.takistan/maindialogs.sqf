@@ -165,11 +165,11 @@ if (_art == "spielerliste") then {
 		else {
 			private["_gang_id"];
 			_gang_id = [_gang_area] call gang_area_get_control;
-			player groupChat format["_gang_id = %1", _gang_id];
+			//player groupChat format["_gang_id = %1", _gang_id];
 			
 			private["_gang"];
 			_gang = [_gang_id] call gangs_lookup_id;
-			player groupChat format["_gang = %1", _gang];
+			//player groupChat format["_gang = %1", _gang];
 			
 			if (isNil "_gang") then {
 				(_DFML displayCtrl 1) lbAdd format["    %1 - (Abandoned)", _gang_area_name];
