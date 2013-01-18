@@ -980,12 +980,14 @@ vehicle_load = {
 	_vehicle_names = vehicles_name_list;
 	if (isNil "_vehicle_names") exitWith {};
 	if (typeName _vehicle_names != "ARRAY") exitWith {};
+	
 	private["_vehicle", "_vehicle_name"];
 	{
 		_vehicle_name = _x;
 		_vehicle = missionNamespace getVariable _vehicle_name;
-		if (isNil "_vehicle") exitWith {};
-		[_player, _vehicle] call vehicle_add;
+		if (not(isNil "_vehicle")) exitWith {
+			[_player, _vehicle] call vehicle_add;
+		};
 	} foreach _vehicle_names;
 		
 	
@@ -996,7 +998,8 @@ vehicle_add = {
 	_player = _this select 0;
 	_vehicle = _this select 1;		
 	if (not([_player] call player_human)) exitWith {false};
-	if (not([_vehicle] call vehicle_exists)) exitWith {false};	
+	if (not([_vehicle] call vehicle_exists)) exitWith {false};
+	
 	private["_vehicles"];
 	_vehicles  = [_player] call vehicle_list;
 	if (_vehicle in _vehicles) exitWith {};
