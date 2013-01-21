@@ -1,3 +1,14 @@
+
+broadcast_side_msg = {
+private ["_msg1","_msg2"];
+_msg1 = _this select 0;
+_msg2 = _this select 1;
+
+if(_msg1 =="")  exitWith {};
+if( [player] call player_cop) then { player sidechat format [ "%1",_msg1];}
+ else { if(_msg2!="") then{ player sidechat format [ "%1",_msg2];}; };  
+};
+
 broadcast_make_key = {
 	private["_id"];
 	_id = _this select 0;
