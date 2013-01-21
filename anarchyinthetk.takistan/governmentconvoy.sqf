@@ -1,4 +1,7 @@
-
+#define Spawn_convoy   1
+#define Driver_dead    2
+#define Damaged_convoy 3
+#define Cop_escort     4
 
 // Convoy ideia by Eddie Vedder for the Chernarus life Revivved mission, code rewrite and improvement by a old beggar working for food :P
 private ["_counter","_counter2","_added","_sidewon","_array","_spawn","_pos","_radius","_markerobj","_markername","_convvehicle","_oldpos","_leader","_target","_convoyArray"];
@@ -14,11 +17,11 @@ _added = false;
 _sidewon = "Neither";	
 
 //waits for respawn
-//sleep (convoyrespawntime*54);
+sleep (convoyrespawntime*54);
 
 "hint ""Rumors suggest about a convoy leaving in a few minutes."";" call broadcast;
 
-//sleep (convoyrespawntime*6);
+sleep (convoyrespawntime*6);
 
 //Gets position to spawn
 _array  = [[convspawn1, 10], [convspawn2, 10], [convspawn3, 10], [convspawn4, 10], [convspawn5, 10]];
@@ -83,7 +86,7 @@ govconvoygroup setbehaviour "AWARE";
 govconvoygroup setCombatMode "RED";
 sleep 2;
 
-format['["All units, supply truck has entered North Takistan. Defend it against bandits and terrorists, and escort it to base!","Villagers rumors indicates a valuable North Government truck somewhere in north of our country!!"] call broadcast_side_msg;'] call broadcast;
+format['[Spawn_convoy] call convoy_side_msg;'] call broadcast;
 
 
 //start mission loop
@@ -134,7 +137,7 @@ while { true } do
 		     _x doWatch getPos convoytruck;
 			};
 		   } foreach units govconvoygroup;	
-		 format['["The governemnt convoy driver is dead. Get in his truck and drive it to North Gov base!!","The government convoy driver is dead. Steal North Gov paycheck before reinforcements arrives!!"] call broadcast_side_msg;'] call broadcast;
+		 format['[Driver_dead] call convoy_side_msg;'] call broadcast;
 	    };
 	   };
 	
@@ -151,7 +154,7 @@ while { true } do
 		  //_x action ["eject", convoytruck];
 		  _x doWatch getPos convoytruck;
 		} foreach units govconvoygroup;		
-		format['["All units, governemnt convoy is heavily damaged!! Move to truck position and protect a 50m perimeter!!",""] call broadcast_side_msg;'] call broadcast;				
+		format['[Damaged_convoy] call convoy_side_msg;'] call broadcast;				
 	 };
 		
 	if((damage convoytruck > 0.2) and !(isnull (driver convoytruck))) then 
@@ -174,9 +177,10 @@ while { true } do
 	if (_counter >30) then {_counter = 0;};
 	
 	if (convoytruck distance copbase1 < 150) exitwith 
-		{   
-		"if ([player] call player_cop) then {[player, govconvoybonus] call bank_transaction; player sidechat format[""you received $%1 for the successfully escorting the convoy"", govconvoybonus];};" call broadcast;
-		_sidewon = "Cops";
+		{  
+				
+		 format['[Cop_escort] call convoy_side_msg;'] call broadcast;
+		 _sidewon = "Cops";
 		};
 				
 	if (_counter2 >= 900) exitwith

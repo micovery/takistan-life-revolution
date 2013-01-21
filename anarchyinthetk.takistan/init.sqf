@@ -143,6 +143,7 @@ if(isClient) then {
 	player addEventHandler ["handleDamage", {_this execVM "Awesome\EH\EH_handledamage.sqf"}];
 	player addEventHandler ["WeaponAssembled", {_this execVM "Awesome\EH\EH_weaponassembled.sqf"}];
 	[] execVM "onKeyPress.sqf";
+	[] execVM "govconvoy_functions.sqf"; 
 };
 
 if (isServer) then {
