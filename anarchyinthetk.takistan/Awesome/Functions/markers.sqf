@@ -76,7 +76,30 @@ marker_side_init = {
 };
 
 
+marker_loop_draw = {
+	if (not([player] call camera_get_map_open)) exitWith {};
+	private["_local_marker"];
+	//player groupChat format["marking %1", _this];
+	_local_marker = _this select 0;
+	if (isNil "_local_marker") exitWith {};
+	
+	private["_player_variable_name", "_player_variable"];
+	_player_variable_name = _local_marker;
+	_player_variable = missionNamespace getVariable _player_variable_name;
+
+	if (not([_player_variable] call player_exists)) exitWith {
+		_local_marker setMarkerAlphaLocal 0;
+	};
+	
+	private["_location"];
+	_location = getPos _player_variable;
+	_local_marker setMarkerAlphaLocal 1;
+	_local_marker setMarkerPosLocal [(_location select 0), (_location select 1)];
+	_local_marker setMarkerTextLocal (format["%1-%2", _player_variable, (name _player_variable)]);
+};
+
 marker_side_loop_draw = {
+	if (not(visibleMap)) exitWith {};
 	private["_local_marker"];
 	//player groupChat format["marking %1", _this];
 	_local_marker = _this select 0;
@@ -126,8 +149,16 @@ marker_side_loop = {
 	private["_marker_loop_i"];
 	_marker_loop_i = 0;
 	while {true} do {
+		private["_player"];
+		_player = player;
+	
 		{ 
-			[_x] call marker_side_loop_draw; 
+			if ([_player] call camera_enabled) then {
+				[_x] call marker_loop_draw;
+			}
+			else {
+				[_x] call marker_side_loop_draw; 
+			};
 		} forEach marker_side_array;
 		_marker_loop_i = _marker_loop_i + 1;
 		sleep 1;

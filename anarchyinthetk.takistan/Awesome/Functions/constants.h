@@ -19,3 +19,8 @@
 #define FIELD_BACKGROUND {1, 1, 1, 0.1}
 #define DISABLED_BUTTON_BACKGROUND {1, 0, 0, 0.4}
 #define DISABLED_BUTTON_TEXT {1, 1, 1, 1}
+
+#define admin_player_list_id 2006
+#define admin_input_field_id 2007
+#define admin_actions_list_id 2008
+#define admin_activate_button_id 2009

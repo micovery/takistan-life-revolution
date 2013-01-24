@@ -22,8 +22,6 @@ class CfgSounds  {
 	#include "sounds.hpp"
 };
 
-
-
 #include "Awesome\Dialogs\Essentials\RscDefines.hpp"
 #include "Awesome\Dialogs\Essentials\DialogColorConstants.hpp"
 #include "Awesome\Dialogs\Essentials\DialogColorScheme.hpp"
@@ -62,10 +60,6 @@ class CfgSounds  {
 #include "civmenu.hpp"
 
 #include "plantclass.hpp"
-
-//#include "CodePad.hpp"
-
-#include "gcam_component.hpp"
 
 #include "adminconsoldesc.hpp"
 

@@ -47,7 +47,6 @@ if (_art == "getajob_hostage") then {
 	//creating VIP
 	liafu = true;
 	_group = createGroup east;
-//	[format["%1 (%2, %3, %4) - hostage: group created %5",  round(time), player, (name player), (getPlayerUID player), _group]] call l4a;
 	hostage1 = _group createUnit ["Functionary1_EP1", _pos, [], _radius, "FORM"];
 	hostage1 setvehicleinit 'hostage1 = this;this setVehicleVarName "hostage1";';
 

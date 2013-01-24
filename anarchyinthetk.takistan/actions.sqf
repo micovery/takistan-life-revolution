@@ -111,8 +111,6 @@ action44 = _role addaction ["Elect a President","maindialogs.sqf",["wahlen"],1,f
 //===================================== MAYOR ACTIONS =================================================
 action45 = _role addaction ["Change the Law","maindialogs.sqf",["gesetz"],1,false,true,"","player distance rathaus <= 3 and isMayor"];
 action46 = _role addaction ["Change taxes","maindialogs.sqf",["steuern"],1,false,true,"","player distance rathaus <= 3 and isMayor"];
-//===================================== CONVOY CASH ===================================================
-_role addaction ["Steal Police Payroll","noscript.sqf",'convoyhascash=false; publicvariable "convoyhascash"; _cash = (playersNumber west)*15000; [player, "money", _cash] call INV_AddInventoryItem; player groupchat format["You stole $%1!", _cash];',1,false,true,"","_driver = driver convoytruck; player distance convoytruck <= 7 and convoyhascash and !([player] call player_cop) and (!alive _driver or isnull _driver)"];
 //===================================== BUY HIDEOUT ===================================================
 //_role addaction [format["Buy Hideout ($%1)", hideoutcost],"noscript.sqf",'if( [player, "money"] call INV_GetItemAmount < hideoutcost)exitwith{player groupchat "not enough money"};[player, "money", -hideoutcost] call INV_AddInventoryItem;[player, "hideout", 1] call INV_AddInventoryItem;player groupchat format["you bought a hideout for $%1", hideoutcost];',1,false,true,"","player distance rathaus <= 3 and isciv"];
 //===================================== BUY INSURANCE ===================================================
@@ -149,14 +147,14 @@ action54 = _role addAction
 	'((player distance Glassblower) <= 5) && isciv && ([player, "glassblowing"] call player_has_license)'
 ];
 
-//action54 = _role addaction 
+//action55 = _role addaction 
 //[
 //		"Process Wheat", "noscript.sqf", '[player, "getreide", "Bread", 2] call interact_item_process;', 1, false, true, "", 
 //		'((player distance Bakery_1) <= 5) && isciv && ([player, "Baker"] call player_has_license)'
 //];
 
-//action55 =  nil;
-//action56 =  nil;
+//===================================== CONVOY CASH ===================================================
+action56 = _role addAction ["Steal police payroll","noscript.sqf",'convoy_cash=false; publicvariable "convoy_cash"; _cash = (playersNumber west)* govconvoybonus; [player, "money", _cash] call INV_AddInventoryItem; [player, "(convoy-heist)", _cash] call player_update_warrants;  player groupchat format["You stole $%1!", _cash];',1,false,true,"","_driver = driver convoy_truck; (player distance convoy_truck) <= 7 && convoy_cash && not([player] call player_cop) && (not(alive _driver) || (isNull _driver))"];
 //action57 =  nil;
 //action58 =  nil;
 //action59 = nil;

@@ -99,9 +99,12 @@ name_tags_head_screen = {
 name_tags_draw = {
 	//player groupChat format["name_tags_draw %1", _this];
 	
-	private["_player", "_target"];
+	private["_player", "_target", "_camera"];
 	_player = _this select 0;
-	_target = _this select 1;
+	_camera = _player getVariable "camera";
+	_target = if (isNil "_camera") then {cursorTarget} else {call camera_target};
+	
+	
 	if (not([_player] call player_human)) exitWith {false};
 	if (isNil "_target") exitWith {false};
 	if (typeName _target != "OBJECT") exitWith {false};
@@ -112,10 +115,9 @@ name_tags_draw = {
 	private["_control"];
 	_control = call name_tags_control;
 
-	private["_target", "_distance", "_is_near", "_is_far"];
-	_target = cursorTarget;
-	_distance = player distance _target;
-	
+	private["_target", "_distance", "_is_near", "_is_far"];;
+	_distance = if (isNil "_camera") then {_player distance _target} else {_camera distance _target};
+
 	
 	if (([_target] call object_atm) && _distance < 3) exitWith {
 		private["_center_pos"];
@@ -203,6 +205,7 @@ name_tags_draw = {
 
 	false
 };
+
 
 
 name_3d_tags_draw = {
@@ -324,12 +327,9 @@ name_tags_control = {
 onEachFrameHack = {
 	//player groupChat format["onEachFrameHack %1", _this];
 	[player, ([player] call player_side)] call name_3d_tags_draw;
-	
-	
-	if (not([player, cursorTarget] call name_tags_draw)) then {
+	if (not([player] call name_tags_draw)) then {
 		(call name_tags_control) ctrlShow false;
 	};
-	
 };
 
 //loop for making list of units in your own side 

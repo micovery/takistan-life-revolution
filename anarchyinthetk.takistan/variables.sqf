@@ -210,7 +210,6 @@ patrolmoneyperkm        = 5.0;  // 1 would be equal to $7,000 for 1KM
 //=========government convoy=============
 govconvoybonus          = 20000;
 convoyrespawntime       = 30;  //reset to 30 after testing
-moneyintruck            = true; //dont change
 
 //===== Gas station robbing
 maxstationmoney         = 35000;
