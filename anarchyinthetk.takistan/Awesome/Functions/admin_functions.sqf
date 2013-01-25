@@ -9,7 +9,7 @@ logAdmin = {
 	private["_player"];
 	_player = player;
 	
-	_text = format["ADMIN (%1, %2): ", (name _player), (getPlayerUID _player)] + _text;
+	_text = (format["ADMIN (%1, %2): ", (name _player), (getPlayerUID _player)] + _text + toString [13,10]);
 	[_text] call logThis;
 };
 
