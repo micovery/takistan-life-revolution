@@ -298,8 +298,8 @@ keyboard_admin_menu_handler = {
 	if(!INV_shortcuts) exitWith {false};
 	if(dialog) exitWith {closeDialog 0; false};
 	if (!isAdmin) exitWith {false};
-	[player] execVM "adminconsolfill.sqf";
-	createDialog "Main";
+	
+	[player] call interact_admin_menu;
 	true
 };
 
@@ -501,6 +501,7 @@ KeyUp_handler = {
 
 lookingAround = false;
 KeyDown_handler = {
+	//player groupChat format["KeyDown_handler %1", _this];
 	private["_handled"];
 	_handled = false;
 	

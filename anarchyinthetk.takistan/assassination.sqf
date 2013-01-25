@@ -52,7 +52,6 @@ if (_art == "getajob_assassin") then {
 
 	//creating VIP
 	_group = createGroup east;
-	//[format["%1 (%2, %3, %4) - assasination: group created %5",  round(time), player, (name player), (getPlayerUID player), _group]] call l4a;
 
 	VIPtarget = _group createUnit ["Functionary1_EP1", _pos, [], _radius, "FORM"];
 	VIPtarget setvehicleinit 'VIPtarget = this;this setVehicleVarName "VIPtarget";';

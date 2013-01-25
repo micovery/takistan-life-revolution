@@ -30,10 +30,12 @@ waitUntil{scriptDone _h};
 _h = [] execVM "Awesome\Functions\trunk_functions.sqf"; 
 waitUntil{scriptDone _h};
 
+
 if (isServer) then {
 	[] execVM "Awesome\Server\Server_Loop.sqf";
 	[] spawn A_WBL_F_INIT_S;
 };
+
 
 if(isClient) then {
 	[] execVM "Awesome\Scripts\communications.sqf";

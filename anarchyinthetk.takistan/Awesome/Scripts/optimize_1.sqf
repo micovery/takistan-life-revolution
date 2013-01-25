@@ -5,9 +5,7 @@ A_SCRIPT_LISTS =
 	"vehiclecheck",
 	"impound",
 	"pullout",
-	"vehinfo",
-	"adminmenuitems",
-	"camera"
+	"vehinfo"
 ];
 
 {

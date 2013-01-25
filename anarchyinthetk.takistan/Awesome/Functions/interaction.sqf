@@ -2740,4 +2740,39 @@ interact_item_process = {
 	player groupChat format["%1-%2, you porcessed %3 %4 into %5 %6", _player, (name _player), _input_amount_used, _input_item_name, _output_amount, _output_item_name];
 };
 
+interact_admin_menu = {
+	private["_player"];
+	_player = _this select 0;
+	
+	if (not([_player] call player_exists)) exitWith {};
+	
+	if (not(createDialog "AdminMenu")) exitWith {
+		player groupChat format["ERROR: could create admin dialog"];
+	};
+	
+	[admin_player_list_id] call DialogAllPlayersList;
+	
+	private["_actions"];
+	_actions = call admin_actions_list;
+	
+	{
+		private["_text", "_code", "_index"];
+		_text = _x select 0;
+		_code = _x select 1;
+		_index = lbAdd [admin_actions_list_id, _text];
+		lbSetData [admin_actions_list_id, _index, str(_code)];
+	} forEach _actions;
+	
+
+	buttonSetAction [admin_activate_button_id, format[
+	' 
+		[
+			%1, 
+			(lbData[admin_actions_list_id, lbCurSel admin_actions_list_id]), 
+			(ctrlText admin_input_field_id), 
+			(missionNamespace getVariable (lbData [admin_player_list_id, lbCurSel admin_player_list_id]))
+		] call admin_activate_command;
+	', _player]]; 
+};
+
 interaction_functions_defined = true;
