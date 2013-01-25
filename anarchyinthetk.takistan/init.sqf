@@ -7,10 +7,8 @@ sleep 0.5;
 _h = [] execVM "Awesome\Functions\encodingfunctions.sqf";
 waitUntil{scriptDone _h};
 
-if (isServer) then {
-	_h = [] execVM "Awesome\MyStats\persist.sqf";
-	waitUntil{scriptDone _h};
-};
+_h = [] execVM "Awesome\MyStats\persist.sqf";
+waitUntil{scriptDone _h};
 
 _h = [] execVM "Awesome\Functions\time_functions.sqf";
 waitUntil{scriptDone _h};

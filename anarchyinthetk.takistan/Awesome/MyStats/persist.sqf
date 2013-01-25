@@ -1,5 +1,3 @@
-
-
 invoke_java_method = {
 	if (isNil "_this") exitWith{""};
 	if (typeName _this != "ARRAY") exitWith {""};
@@ -35,7 +33,7 @@ invoke_java_method = {
 	_method_str = "<M>" + _method + "</M>";
 	_invoke_str = "<MI>" + _method_str + _argument_str + "</MI>";
 	
-	//diag_log  _invoke_str;
+	//diag_log _invoke_str;
 	private["_result"];
 	_result = "jni" callExtension _invoke_str;
 	
@@ -107,7 +105,6 @@ removePlayerVariable = {
 	([_result] call parseResult)
 };
 
-
 getPlayerVariablesCount = {
 	private["_uid"];
 	
@@ -157,7 +154,6 @@ getAllPlayerVariables = {
 	_result
 };
 
-
 wipePlayerVariables = {
 	private["_uid"];
 	
@@ -175,7 +171,6 @@ wipeAllPlayerVariables = {
 	_result = ["wipeAllPlayerVariables"] call invoke_java_method;
 	([_result] call parseResult)
 };
-
 
 unloadPlayerVariables = {
 	private["_uid"];
@@ -201,7 +196,6 @@ reloadPlayerVariables = {
 	([_result] call parseResult)
 };
 
-
 getenv = {
 	private["_key"];
 	
@@ -215,7 +209,6 @@ getenv = {
 	if (typeName _result != "STRING") exitWith {""};
 	_result
 };
-
 
 setLocation = {
 	private["_location"];
@@ -231,11 +224,8 @@ setLocation = {
 	_result
 };
 
-
-
-
-
 logThis_request_receive = {
+	diag_log format["logThis_request_receive %1", _this];
 	private["_variable", "_request"];
 	_variable = _this select 0;
 	_request = _this select 1;
@@ -257,12 +247,12 @@ logThis_request_receive = {
 
 logThis_setup = {
 	if (not(isServer)) exitWith {};
-	//player groupChat format["logThis_setup %1", _this];
+	diag_log format["logThis_setup %1", _this];
+	
 	logThis_request_buffer =  " ";
 	publicVariableServer "logThis_request_buffer";
 	"logThis_request_buffer" addPublicVariableEventHandler { _this call logThis_request_receive;};
 };
-
 
 logThis = {
 	private["_text"];
@@ -275,7 +265,7 @@ logThis = {
 		["", logThis_request_buffer] call logThis_request_receive;
 	}
 	else {
-		publicVariable "logThis_request_buffer";
+		publicVariableServer "logThis_request_buffer";
 	};
 };
 
