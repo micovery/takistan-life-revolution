@@ -793,6 +793,12 @@ camera_create = {
 	[_player] call camera_map_close;
 	[_player, 0] call camera_set_velocity;
 	[_player, 1] call camera_set_max_velocity;
+	
+	//hook for disabling camera when player dies
+	[] spawn { 
+		waitUntil {not(alive player)};
+		[player] call camera_destroy;
+	};
 	_camera
 };
 
