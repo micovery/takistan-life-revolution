@@ -207,7 +207,7 @@ camera_update_map = {
 	_key = _this select 1;
 	_shift = _this select 2;
 	
-	if (not(_key in ((actionKeys "ShowMap") + [DIK_ESCAPE]))) exitWith {};
+	if (not(_key in (actionKeys "ShowMap"))) exitWith {};
 	
 	if (not([_player] call camera_get_map_open)) then {
 		[_player] call camera_map_open;
@@ -335,7 +335,7 @@ camera_set_position = {
 		_camera setPos _position;
 	}
 	else {
-		_camera attachTo [_target, _position];
+		_camera attachTo [(vehicle _target), _position];
 	};
 };
 
@@ -526,7 +526,7 @@ camera_update_nightvision = {
 
 camera_target = {
 	private["_objects"];
-	_objects = nearestObjects [(screenToWorld [(safezoneX + 0.5 * safezoneW),(safezoneY + 0.5 * safezoneH)]), ["Man"], 2];
+	_objects = nearestObjects [(screenToWorld [(safezoneX + 0.5 * safezoneW),(safezoneY + 0.5 * safezoneH)]), ["LandVehicle", "Man"], 2];
 	if (count _objects == 0) exitWith {nil};
 	(_objects select 0)
 };
@@ -541,7 +541,7 @@ camera_enabled = {
 };
 
 camera_keyDownHandler = {
-	player groupChat format["camera_keyDownHandler = %1", _this];
+	//player groupChat format["camera_keyDownHandler = %1", _this];
 	private["_player"];
 	_player = player;
 
@@ -647,7 +647,7 @@ camera_heading2vectors = {
 };
 
 camera_vectorDir2heading = {
-	player groupChat format["camera_vectorDir2heading %1", _this];
+	//player groupChat format["camera_vectorDir2heading %1", _this];
 	private["_vectorDir"];
 	_vectorDir = _this select 0;
 	
@@ -666,7 +666,7 @@ camera_vectorDir2heading = {
 	private["_heading"];
 	_heading = [_direction, _angle, 0];
 	
-	player groupChat format["_convert = %1", _heading];
+	//player groupChat format["_convert = %1", _heading];
 	_heading	
 };
 
