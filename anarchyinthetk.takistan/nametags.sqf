@@ -59,8 +59,11 @@ name_tags_head_position = {
 	_distance = player distance _target;
 	
 
-	private["_pos", "_pos_x", "_pos_y", "_pos_z"];
-	_pos = (_target selectionPosition "neck");
+	private["_pos", "_pos_x", "_pos_y", "_pos_z", "_part"];
+	
+	_part = if ((vehicle _target) == _target) then {"neck" } else {"engine"};
+	_pos = (_target selectionPosition _part);
+	
 	_pos_x = (_pos select 0);
 	_pos_y = (_pos select 1);
 	_pos_z = (_pos select 2) + 0.2;
@@ -84,7 +87,7 @@ name_tags_head_screen = {
 	if (isNil "_target") exitWith {_center};
 	if (typeName _target != "OBJECT") exitWith {_center};
 	if (isNull _target) exitWith {_center};
-	if (not(_target isKindOf "Man")) exitWith {_center;};
+	if (not(_target isKindOf "Man" || _target isKindOf "LandVehicle")) exitWith {_center;};
 	
 	private["_pos2D"];
 	_pos2D = ([_target] call name_tags_head_position);
@@ -99,9 +102,12 @@ name_tags_head_screen = {
 name_tags_draw = {
 	//player groupChat format["name_tags_draw %1", _this];
 	
-	private["_player", "_target"];
+	private["_player", "_target", "_camera"];
 	_player = _this select 0;
-	_target = _this select 1;
+	_camera = _player getVariable "camera";
+	_target = if (isNil "_camera") then {cursorTarget} else {call camera_target};
+	
+	
 	if (not([_player] call player_human)) exitWith {false};
 	if (isNil "_target") exitWith {false};
 	if (typeName _target != "OBJECT") exitWith {false};
@@ -109,13 +115,18 @@ name_tags_draw = {
 	if (not(INV_shortcuts)) exitWith {false};
 	if (visibleMap) exitWith {false};
 	
+	
+	//don't draw tags while being inside a vehicle 
+	private["_inside_vehicle"];
+	_inside_vehicle = not((vehicle _player) == _player);
+	if (_inside_vehicle) exitWith {false};
+	
 	private["_control"];
 	_control = call name_tags_control;
 
-	private["_target", "_distance", "_is_near", "_is_far"];
-	_target = cursorTarget;
-	_distance = player distance _target;
-	
+	private["_target", "_distance", "_is_near", "_is_far"];;
+	_distance = if (isNil "_camera") then {_player distance _target} else {_camera distance _target};
+
 	
 	if (([_target] call object_atm) && _distance < 3) exitWith {
 		private["_center_pos"];
@@ -151,10 +162,11 @@ name_tags_draw = {
 		_owner = ([player, _target] call vehicle_owner);
 		_inside_vehicle = ([player, (vehicle player)] call mounted_player_inside);
 		_is_box = _target isKindOf "LocalBasicWeaponsBox";
-		
+		private["_handled"];
+		_handled = false;
 		if (_distance < 5 && not(_inside_vehicle) && not(_is_box)) then {
 			
-			private["_handled"];
+			
 			if (_owner && not(locked _target)) exitWith {
 				_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#00ff00'>Enter (E)</t><br /><t size='1.2' font='Zeppelin33Italic' color='#ffffff'>Trunk (T)</t>"];
 				_handled = true;
@@ -172,7 +184,7 @@ name_tags_draw = {
 		};
 		
 		private["_center_pos"];
-		_center_pos = call name_tags_center_screen;
+		_center_pos = if (_target isKindOf "LandVehicle") then {  [_target] call name_tags_head_screen;} else { call name_tags_center_screen};
 		_control ctrlSetPosition _center_pos;
 		_control ctrlShow true;
 		_control ctrlCommit 0;
@@ -203,7 +215,6 @@ name_tags_draw = {
 
 	false
 };
-
 
 name_3d_tags_draw = {
 	private["_player", "_side"];
@@ -324,12 +335,9 @@ name_tags_control = {
 onEachFrameHack = {
 	//player groupChat format["onEachFrameHack %1", _this];
 	[player, ([player] call player_side)] call name_3d_tags_draw;
-	
-	
-	if (not([player, cursorTarget] call name_tags_draw)) then {
+	if (not([player] call name_tags_draw)) then {
 		(call name_tags_control) ctrlShow false;
 	};
-	
 };
 
 //loop for making list of units in your own side 

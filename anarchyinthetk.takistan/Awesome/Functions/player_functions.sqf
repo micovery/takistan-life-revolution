@@ -2495,7 +2495,7 @@ player_despawn = { _this spawn {
 	};
 
 	//diag_log format["player_despawn deleting %1", _unit];
-	_unit setPos [-1,-1,-1];
+	//_unit setPos [-1,-1,-1];
 	
 	if (isServer) then {
 		sleep 5;

@@ -105,12 +105,16 @@ waitUntil{scriptDone _h};
 _h = [] execVM "Awesome\Functions\gang_functions.sqf";
 waitUntil{scriptDone _h};
 
+_h = [] execVM "Awesome\Functions\convoy_functions.sqf";
+waitUntil{scriptDone _h};
+
 // Starts up Awesome scripts
 _h = [] execVM "Awesome\init.sqf";
 waitUntil{scriptDone _h};
 
 _h = [] execVM "setPitchBank.sqf";
 waitUntil {scriptDone _h};
+
 
 publicvariable "station1robbed";
 publicvariable "station2robbed";
@@ -143,11 +147,11 @@ if(isClient) then {
 	player addEventHandler ["handleDamage", {_this execVM "Awesome\EH\EH_handledamage.sqf"}];
 	player addEventHandler ["WeaponAssembled", {_this execVM "Awesome\EH\EH_weaponassembled.sqf"}];
 	[] execVM "onKeyPress.sqf";
-	[] execVM "govconvoy_functions.sqf"; 
+	[] ExecVM "Awesome\Functions\camera_functions.sqf";
+	[] ExecVM "Awesome\Functions\admin_functions.sqf";
 };
 
 if (isServer) then {
-	//[60,180,true] execVM "cly_removedead.sqf";
 	[0, 0, 0, ["serverloop"]] execVM "mayorserverloop.sqf";
 	[0, 0, 0, ["serverloop"]] execVM "chiefserverloop.sqf";
 	[] execVM "druguse.sqf";
@@ -155,7 +159,6 @@ if (isServer) then {
 	[] execVM "robpool.sqf";
 	[] execVM "Awesome\Scripts\hunting.sqf";
 	[] execVM "setObjectPitches.sqf";
-	[] execVM "governmentconvoy.sqf";
 
 //=======================rob gas station init and variables================
 	[] execVM "stationrobloop.sqf";

@@ -231,18 +231,52 @@ setLocation = {
 	_result
 };
 
-logThis = {
+
+
+
+
+logThis_request_receive = {
+	private["_variable", "_request"];
+	_variable = _this select 0;
+	_request = _this select 1;
+
+	if (isNil "_request") exitWith {};
+	if (typeName _request != "ARRAY") exitWith {};
+
 	private["_text"];
-	
-	_text = _this select 0;
-	if (isNil "_text") exitWith{[]};
-	if (typeName _text != "STRING") exitWith {[]};
+	_text = _request select 0;
+	if (isNil "_text") exitWith{};
+	if (typeName _text != "STRING") exitWith {};
 	
 	private["_result"];
 	_result = ["logThis", _text] call invoke_java_method;
 	if (isNil "_result") exitWith { "" };
 	if (typeName _result != "STRING") exitWith {""};
 	_result
+};
+
+logThis_setup = {
+	if (not(isServer)) exitWith {};
+	//player groupChat format["logThis_setup %1", _this];
+	logThis_request_buffer =  " ";
+	publicVariableServer "logThis_request_buffer";
+	"logThis_request_buffer" addPublicVariableEventHandler { _this call logThis_request_receive;};
+};
+
+
+logThis = {
+	private["_text"];
+	_text = _this select 0;
+	if (isNil "_text") exitWith{[]};
+	if (typeName _text != "STRING") exitWith {[]};
+
+	logThis_request_buffer = [_text];
+	if (isServer) then {
+		["", logThis_request_buffer] call logThis_request_receive;
+	}
+	else {
+		publicVariable "logThis_request_buffer";
+	};
 };
 
 logError = {
@@ -274,3 +308,5 @@ logInfo = {
 	_text = "INFO: " + _text + toString[13,10];
 	[_text] call logThis;
 };
+
+[] call logThis_setup;
