@@ -154,18 +154,19 @@ convoy_create_units = {
 	_convoy_group setBehaviour "AWARE";
 	_convoy_group setCombatMode "RED";
 	
-	[2] call isleep;
+	sleep 2;
 	_convoy_group
 };
 
 convoy_mission_loop = {
+	//format["convoy_mission_loop %1", _this] call convoy_debug;
 	while {not(convoy_complete)} do {
 		 _this call convoy_mission_iteration;
 		convoy_running_time = convoy_running_time + 1;
-		[1] call isleep;
+		sleep 1;
 	};
-	if (convoy_complete) exitWith {};
 
+	if (convoy_complete) exitWith {};
 	_this spawn convoy_mission_loop;
 };
 
@@ -366,7 +367,7 @@ convoy_get_current_state = {
 };
 
 calculate_half_waypoint = {
-	//player groupChat format["calculate_half_waypoint %1", _this];
+	//format["calculate_half_waypoint %1", _this] call convoy_debug;
 	private["_point_a", "_point_b"];
 	_point_a = _this select 0;
 	_point_b = _this select 1;
@@ -375,7 +376,8 @@ calculate_half_waypoint = {
 };
 
 convoy_mission_check_position = {
-	//player groupChat format["convoy_mission_check_position %1", _this];
+	//format["convoy_mission_check_position %1", _this] call convoy_debug;
+	
 	private["_truck", "_group", "_destination"];
 	_truck = _this select 0;
 	_group = _this select 1;
@@ -390,26 +392,27 @@ convoy_mission_check_position = {
 	
 	_prev_state = [_truck] call convoy_get_state;
 	_cur_state = [_truck, _time] call convoy_get_current_state;
-	//player groupChat format["_prev_state = %1, _cur_state = %2", ([_prev_state] call convoy_state2str), ([_cur_state] call convoy_state2str)];
-	
+
 	if (_prev_state == UNKNOWN && _cur_state == INITIAL) then {
 		//send initial move command
+		//format["sending initial move command", _dst_pos] call convoy_debug;
 		(driver _truck) commandMove _dst_pos;
 		_truck setVariable ["next_pos", _dst_pos];
 	}
 	else { if ( (_prev_state == INITIAL && _cur_state == STUCK) ||
 				(_prev_state == MOVING && _cur_state == STUCK) ||
 				(_prev_state == STUCK && _cur_state == STUCK && (_time % 20) == 0)) then {
-		
 		//calculate the halfway point between the current, and the next position
 		private["_next_pos", "_half_pos"];
 		_next_pos = _truck getVariable "next_pos";
 		_half_pos = [_cur_pos, _next_pos] call calculate_half_waypoint;
+		//format["sending half-way move command %1", _half_pos] call convoy_debug;
 		_truck setVariable ["next_pos", _half_pos, true];
 		(driver _truck) commandMove _half_pos;
 	}
 	else { if ((_prev_state == STUCK && _cur_state == MOVING)) then {
 		//reset the waypoint for the final destination
+		//format["sending reset move command %1", _dst_pos] call convoy_debug;
 		_truck setVariable ["next_pos", _dst_pos];
 		(driver _truck) commandMove _dst_pos;
 	};};};
@@ -419,7 +422,7 @@ convoy_mission_check_position = {
 };
 
 convoy_mission_iteration = {
-	//player groupChat format["convoy_mission_iteration %1", _this];
+	//format["convoy_mission_iteration %1, %2", _this, convoy_running_time] call convoy_debug;
 	private["_convoy_truck", "_convoy_group", "_convoy_marker", "_destination"];
 	
 	_convoy_truck = _this select 0;
@@ -451,12 +454,17 @@ convoy_side2string = {
 	"Neither"
 };
 
-convoy_loop = {
+convoy_debug = {
+	diag_log _this;
+};
 
+convoy_loop = {
+	//format["convoy_loop %1", _this] call convoy_debug;
+	
 	//waits for respawn
-	//[(convoyrespawntime * 54)] call isleep;
+	sleep (convoyrespawntime * 54);
 	"hint ""There are rumors that a government convoy is leaving in a few minutes."";" call broadcast;
-	//[(convoyrespawntime * 6)] call isleep;
+	sleep (convoyrespawntime * 6);
 
 	//Gets position to spawn
 	private["_spawn", "_location"];
@@ -468,7 +476,7 @@ convoy_loop = {
 	_convoy_marker = [_location] call convoy_create_marker;
 	_convoy_group = [_convoy_truck, _location] call convoy_create_units;
 	
-	format['[Spawn_convoy] call convoy_side_msg;'] call broadcast;
+	format[[Spawn_convoy] call convoy_side_msg;'] call broadcast;
 
 	//init convoy globals
 	convoy_complete = false;
@@ -489,7 +497,7 @@ convoy_loop = {
 	_message = format["%1 side won the goverment convoy mission. Next truck leaves in %2 minutes", _side_str, convoyrespawntime];
 	format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	
-	[10] call isleep;
+	sleep 10;
 	
 	//cleanup the convoy items
 	{deleteVehicle _x;} foreach units _convoy_group;
@@ -501,6 +509,7 @@ convoy_loop = {
 };
 
 if (isServer) then {
+	
 	[] spawn convoy_loop;
 };
 
