@@ -159,7 +159,7 @@ convoy_create_units = {
 };
 
 convoy_mission_loop = {
-	//format["convoy_mission_loop %1", _this] call convoy_debug;
+	format["convoy_mission_loop %1", _this] call convoy_debug;
 	while {not(convoy_complete)} do {
 		 _this call convoy_mission_iteration;
 		convoy_running_time = convoy_running_time + 1;
@@ -395,7 +395,7 @@ convoy_mission_check_position = {
 
 	if (_prev_state == UNKNOWN && _cur_state == INITIAL) then {
 		//send initial move command
-		//format["sending initial move command", _dst_pos] call convoy_debug;
+		format["sending initial move command %1", _dst_pos] call convoy_debug;
 		(driver _truck) commandMove _dst_pos;
 		_truck setVariable ["next_pos", _dst_pos];
 	}
@@ -406,13 +406,13 @@ convoy_mission_check_position = {
 		private["_next_pos", "_half_pos"];
 		_next_pos = _truck getVariable "next_pos";
 		_half_pos = [_cur_pos, _next_pos] call calculate_half_waypoint;
-		//format["sending half-way move command %1", _half_pos] call convoy_debug;
+		format["sending half-way move command %1", _half_pos] call convoy_debug;
 		_truck setVariable ["next_pos", _half_pos, true];
 		(driver _truck) commandMove _half_pos;
 	}
 	else { if ((_prev_state == STUCK && _cur_state == MOVING)) then {
 		//reset the waypoint for the final destination
-		//format["sending reset move command %1", _dst_pos] call convoy_debug;
+		format["sending reset move command %1", _dst_pos] call convoy_debug;
 		_truck setVariable ["next_pos", _dst_pos];
 		(driver _truck) commandMove _dst_pos;
 	};};};
@@ -454,17 +454,20 @@ convoy_side2string = {
 	"Neither"
 };
 
+
 convoy_debug = {
-	diag_log _this;
+	diag_log format["%1", _this];
 };
 
+
 convoy_loop = {
-	//format["convoy_loop %1", _this] call convoy_debug;
+	format["convoy_loop %1", _this] call convoy_debug;
 	
-	//waits for respawn
-	sleep (convoyrespawntime * 54);
-	"hint ""There are rumors that a government convoy is leaving in a few minutes."";" call broadcast;
-	sleep (convoyrespawntime * 6);
+	sleep (convoyrespawntime * 3);
+	private["_message"];
+	_message = "There are rumors that a government convoy is leaving in a few minutes.";
+	format["hint toString(%1);", toArray(_message)] call broadcast;
+	sleep (convoyrespawntime * 3);
 
 	//Gets position to spawn
 	private["_spawn", "_location"];
@@ -476,7 +479,7 @@ convoy_loop = {
 	_convoy_marker = [_location] call convoy_create_marker;
 	_convoy_group = [_convoy_truck, _location] call convoy_create_units;
 	
-	format[[Spawn_convoy] call convoy_side_msg;'] call broadcast;
+	format['[Spawn_convoy] call convoy_side_msg;'] call broadcast;
 
 	//init convoy globals
 	convoy_complete = false;
@@ -505,11 +508,13 @@ convoy_loop = {
 	deleteGroup _convoy_group;
 	deleteMarker _convoy_marker;
 	
+	//waits for respawn
+	sleep (convoyrespawntime * 54);
+	
 	[] spawn convoy_loop;
 };
 
 if (isServer) then {
-	
 	[] spawn convoy_loop;
 };
 
