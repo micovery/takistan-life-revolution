@@ -281,7 +281,7 @@ shop_build_sell_list = {
 		
 		_data = [];
 		_data set [shop_sell_item_key, _item];
-		_data set [shop_sell_item_price, _price];
+		_data set [shop_sell_item_price, ([_price] call encode_number)];
 		_data set [shop_sell_item_index, _i];
 		_data set [shop_sell_item_label, _label];
 		_data set [shop_sell_item_shop_id, _shop_id];
@@ -355,7 +355,7 @@ shop_build_buy_list  =  {
 		
 		_data = [];
 		_data set [shop_buy_item_key, _item];
-		_data set [shop_buy_item_price, _price];
+		_data set [shop_buy_item_price, [_price] call encode_number];
 		_data set [shop_buy_item_index, _i];
 		_data set [shop_buy_item_label, _label];
 		_data set [shop_buy_item_shop_id, _shop_id];
@@ -546,7 +546,7 @@ shop_buy_item_validate_data = {
 	
 	_shop_id  = _data select shop_buy_item_shop_id;
 	_item = _data select shop_buy_item_key;
-	_base_price = _data select shop_buy_item_price;	
+	_base_price = [(_data select shop_buy_item_price)] call decode_number;
 	_infos = _item call INV_GetItemArray;
 	_needsLicense = _data select shop_buy_item_needs_license;
 	_license_1 = _data select shop_buy_item_license_1;
@@ -693,7 +693,7 @@ shop_buy_item_validate_data = {
 		["The item you have selected to buy cannot be put in hands automatically", _quiet] call shop_set_status_message; nil
 	};
 	
-	_data set [shop_buy_item_total_due, _total_price];
+	_data set [shop_buy_item_total_due, [(_total_price)] call encode_number];
 	_data set [shop_buy_item_sales_tax, _sales_tax];
 	_data set [shop_buy_item_market_adjust, _market_adjust];
 	_data set [shop_buy_item_max_stock, _max_stock];
@@ -731,7 +731,7 @@ shop_sell_item_validate_data = {
 	
 	_shop_id  = _data select shop_sell_item_shop_id;
 	_item = _data select shop_sell_item_key;
-	_base_price = _data select shop_sell_item_price;
+	_base_price = [(_data select shop_sell_item_price)] call decode_number;
 	_infos = _item call INV_GetItemArray;
 	_logic = _data select shop_sell_item_logic;
 	_supply = [_item, _shop_id] call INV_GetStock;
@@ -765,7 +765,7 @@ shop_sell_item_validate_data = {
 	_vehicle_count = if (isNil "_vehicle_count") then { 0 } else { _vehicle_count };
 	_vehicle_alive_count = if (_vehicle_count > 0) then { ({((typeOf _x == _class) && (alive _x))} count _vehicles) } else { 0 }; 
 	_vehicle_alive_count = if (isNil "_vehicle_alive_count") then { 0 } else { _vehicle_alive_count };
-	_vehicle_near_count = if (_vehicle_alive_count > 0)  then { ({((typeOf _x == _class) && (alive _x) && ((_x distance _logic) < 50))} count _vehicles) } else { 0 }; 
+	_vehicle_near_count = if (_vehicle_alive_count > 0)  then { ({((typeOf _x == _class) && (alive _x) && ((_x distance player) < 50))} count _vehicles) } else { 0 }; 
 	_vehicle_near_count = if (isNil "_vehicle_near_count") then { 0 } else { _vehicle_near_count };
 	_hasBackpack = if (_isBackpack) then { _class == typeOf(unitBackpack player); } else { false };
 		
@@ -953,7 +953,7 @@ shop_buy_transaction = {
 	if (typeName _data != "ARRAY") exitWith {};
 	private ["_total_due", "_sales_tax"];
 	
-	_total_due = _data select shop_buy_item_total_due;
+	_total_due = [(_data select shop_buy_item_total_due)] call decode_number;
 	_sales_tax = _data select shop_buy_item_sales_tax;
 	
 
@@ -1062,7 +1062,7 @@ shop_sell_item = {
 	_type = _data select shop_sell_item_type;
 	_kind = _data select shop_sell_item_kind;
 	_isDrug = (_kind == "drug");
-	_price = _data select shop_sell_item_price;
+	_price = [(_data select shop_sell_item_price)] call decode_number;
 	_shop_id = _data select shop_sell_item_shop_id;
 	
 	call shop_play_animation;
@@ -1159,6 +1159,7 @@ shop_sell_vehicle = {
 };
 
 shop_get_vehicles_by_class = {
+	//player groupChat format["shop_get_vehicles_by_class %1", _this];
 	private ["_class", "_vehicles", "_vehicle"];
 	
 	_class = _this select 0;
@@ -1173,13 +1174,17 @@ shop_get_vehicles_by_class = {
 	private["_vehicle_list"];
 	
 	_vehicle_list = [player] call vehicle_list;
+	//player groupChat format["_vehicle_list = %1", _vehicle_list];
 
 	{
 		_vehicle = _x;
 		if (true) then {
 			if (isNil "_vehicle") exitWith {};
 			if (not(alive(_vehicle))) exitWith {};
-			if ((player distance _vehicle) > _distance) exitWith {};
+			private["_cdistance"];
+			_cdistance = player distance _vehicle;
+			//player groupChat format["_actual_distance = %1, _check_distance = %2", _cdistance , _distance];
+			if (_cdistance > _distance) exitWith {};
 			if (typeOf _vehicle != _class) exitWith {};
 			_vehicles = _vehicles + [_vehicle];
 		};
@@ -1231,7 +1236,7 @@ shop_buy_item = {
 	if (typeName _data != "ARRAY") exitWith {};
 	private ["_amount", "_item", "_total_due", "_shop_id", "_item_name"];
 	
-	_total_due = _data select shop_buy_item_total_due;
+	_total_due = [(_data select shop_buy_item_total_due)] call decode_number;
 	_amount = _data select shop_buy_item_amount;
 	_item_name = _data select shop_buy_item_name;
 	_item = _data select shop_buy_item_key;
@@ -1266,7 +1271,7 @@ shop_buy_gear_item = {
 	_item_name = _data select shop_buy_item_name;
 	_class = _data select shop_buy_item_class;
 	_crate = _data select shop_buy_item_crate;
-	_total_due = _data select shop_buy_item_total_due;
+	_total_due = [(_data select shop_buy_item_total_due)] call decode_number;;
 	_type = _data select shop_buy_item_type;
 	_in_hands = _data select shop_buy_item_in_hands;
 	
@@ -1290,7 +1295,7 @@ shop_buy_fort = {
 		private ["_kind", "_total_due", "_item_name", "_class", "_logic", "_sleep_time"];
 		_item_name = _data select shop_buy_item_name;
 		_logic = _data select shop_buy_item_logic;
-		_total_due = _data select shop_buy_item_total_due;
+		_total_due = [(_data select shop_buy_item_total_due)] call decode_number;
 		_kind = _data select shop_buy_item_kind;
 		_class = _data select shop_buy_item_class;
 		_sleep_time = 5;
@@ -1498,7 +1503,7 @@ shop_buy_vehicle = {
 		_item = _data select shop_buy_item_key;
 		_item_name = _data select shop_buy_item_name;
 		_logic = _data select shop_buy_item_logic;
-		_total_due = _data select shop_buy_item_total_due;
+		_total_due = [(_data select shop_buy_item_total_due)] call decode_number;
 		_class = _data select shop_buy_item_class;
 		_sleep_time = 5;
 		
