@@ -21,14 +21,8 @@ if (_item call INV_GetItemDropable) then {
 		player groupChat localize "STRS_inv_inventar_weggeworfen";
 		if(primaryweapon player == "" and secondaryweapon player == "")then{player playmove "AmovPercMstpSnonWnonDnon_AinvPknlMstpSnonWnonDnon"}else{player playmove "AinvPknlMstpSlayWrflDnon"};
 		sleep 1.5;
-		private "_class";
-		_class = [_item] call item2class;
-		
-		_pos = getPosATL player;
-		_object = createVehicle [_class, _pos, [], 0, "NONE"];
 		liafu = true;
-		_object setposASL getposASL player;
-		_object setvariable ["droparray", [([_amount] call encode_number), _item], true];
+		[player, _item, _amount] call player_drop_item;
 	}
 	else {
 		player groupChat localize "STRS_inv_inventar_drop_zuwenig";

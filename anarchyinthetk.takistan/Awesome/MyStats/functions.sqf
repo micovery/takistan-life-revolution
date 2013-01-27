@@ -247,7 +247,7 @@ stats_get_player_uid = {
 	
 	private["_faction"];
 	_faction = [_player] call stats_get_faction;
-	_uid = if (stats_use_factions) then { _uid + " " + _faction } else { _uid};
+	_uid = if (stats_use_factions) then { _uid + "_" + _faction } else {_uid};
 	_player setVariable ["stats_uid", _uid, true];
 	_uid	
 };

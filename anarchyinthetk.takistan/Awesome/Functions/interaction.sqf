@@ -2775,4 +2775,88 @@ interact_admin_menu = {
 	', _player]]; 
 };
 
+interact_play_pickup_animation = {
+	private["_animation"];
+	sleep 1;
+	_animation = if((primaryWeapon player) == "" && (secondaryWeapon player) == "") then{ "AmovPercMstpSnonWnonDnon_AinvPknlMstpSnonWnonDnon"} else { "AinvPknlMstpSlayWrflDnon"};
+	player playMove _animation;
+	sleep 1;
+};
+
+interact_pickup_object = { _this spawn {
+	[] call interact_play_pickup_animation;
+	
+	private["_player", "_object"];
+	_player = _this select 0;
+	_object = _this select 1;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_object") exitWith {};
+	if (typeName _object != "OBJECT") exitWith {};
+	
+	interact_pickup_object_active = if (isNil "interact_pickup_object_active") then {false} else {interact_pickup_object_active};
+	if (interact_pickup_object_active) then {
+		player groupChat format["ERROR: You are already picking-up an object"];
+	};
+	interact_pickup_object_active = true;
+	
+	private["_item", "_amount"];
+	_item = _object getVariable "item";
+	_amount = _object getVariable "amount";
+	_amount = [_amount] call decode_number;
+	
+	private["_remaining"];
+	_remaining = [_player, _item, _amount] call interact_pickup_item;
+	
+	if (isNil "_remaining") exitWith {
+		interact_pickup_object_active = false;
+	};
+	
+	if (_remaining <= 0) exitWith {
+		deleteVehicle _object;
+		interact_pickup_object_active = false;
+	};
+	
+	_remaining = [_remaining] call encode_number;
+	_object setVariable ["amount", _remaining];
+	interact_pickup_object_active = false;
+};};
+
+
+interact_pickup_item = {
+	private["_player", "_item", "_amount"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+	
+	if (not([_player] call player_human)) exitWith {nil};
+	if (isNil "_item")exitWith {nil};
+	if (isNil "_amount") exitWith {nil};
+	
+	if (typeName _item != "STRING") exitWith {nil};
+	if (typeName _amount != "SCALAR") exitWith {nil};
+	
+	private["_item_info", "_item_name", "_item_weight", "_own_weight", "_total_weight"];
+	_item_info = _item call INV_GetItemArray;
+	_item_name = _item_info call INV_GetItemName;
+	_item_weight = (_item_info call INV_GetItemTypeKg);
+	_own_weight = call INV_GetOwnWeight;
+	_total_weight = _item_weight * _amount;
+	
+	private["_pickup_amount"];
+	_pickup_amount = floor((INV_CarryingCapacity - _own_weight) / _item_weight);
+	_pickup_amount = (_pickup_amount) min (_amount);
+	
+	if (_pickup_amount <= 0) exitWith {
+		player groupChat format["Max weight reached, you cannot pick-up any more items"];
+	};
+	
+	[_player, _item, _pickup_amount, ([player] call player_inventory_name)] call INV_CreateItem;
+	player groupchat format["You picked up %1 %2", _pickup_amount, _item_name];
+	
+	(_amount - _pickup_amount)
+};
+
+
+
 interaction_functions_defined = true;

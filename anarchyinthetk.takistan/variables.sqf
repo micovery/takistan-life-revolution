@@ -41,7 +41,6 @@ fvspam                   = false;
 maxfacworkers            = 50;
 maxfacworkers2           = 41;
 firingcaptive            = false;
-pickingup                = false;
 lockpickchance           = 30;
 planting                 = false;
 drugstockinc             = 900;
