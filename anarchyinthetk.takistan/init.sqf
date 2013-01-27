@@ -106,13 +106,15 @@ waitUntil{scriptDone _h};
 _h = [] execVM "Awesome\Functions\convoy_functions.sqf";
 waitUntil{scriptDone _h};
 
+_h = [] execVM "Awesome\Functions\factory_functions.sqf";
+waitUntil{scriptDone _h};
+
 // Starts up Awesome scripts
 _h = [] execVM "Awesome\init.sqf";
 waitUntil{scriptDone _h};
 
 _h = [] execVM "setPitchBank.sqf";
 waitUntil {scriptDone _h};
-
 
 publicvariable "station1robbed";
 publicvariable "station2robbed";
@@ -123,7 +125,6 @@ publicvariable "station6robbed";
 publicvariable "station7robbed";
 publicvariable "station8robbed";
 publicvariable "station9robbed";
-
 
 if(isClient) then {
 	server globalChat "Loading - Please Wait";
@@ -139,7 +140,6 @@ if(isClient) then {
 	[] execVM "motd.sqf";
 	[] ExecVM "Awesome\MountedSlots\functions.sqf";
 	["client"] execVM "bombs.sqf";
-	[] execVM "Awesome\Functions\factory_functions.sqf";
 
 	player addEventHandler ["fired", {_this execVM "Awesome\EH\EH_fired.sqf"}];
 	player addEventHandler ["handleDamage", {_this execVM "Awesome\EH\EH_handledamage.sqf"}];
@@ -180,7 +180,6 @@ if (isServer) then {
 	publicvariable "station9money";
 };
 
-
 // Define Variables
 
 gcrsrope1 = "none";
@@ -213,10 +212,3 @@ gcrsplayerveharray = [];
 
 //// Start the Drop Cargo Script
 execVM "BTK\Cargo Drop\Start.sqf";
-
-
-
-
-
-
-

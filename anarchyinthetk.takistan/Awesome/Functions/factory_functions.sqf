@@ -5,7 +5,6 @@ if (not(isNil "factory_functions_defined")) exitWith {};
 
 factory_globals = {
 	private["_weaponfactory"];
-
 	_weaponfactory=
 	[
 		"GPS",
@@ -310,20 +309,8 @@ factory_globals = {
 		"EPlatinumring"
 	];
 
+	private["_furnace"];
 	_furnace = ["steel"];
-
-	["vehiclequeue", []] call stats_init_variable;
-	["aircraftqueue", []] call stats_init_variable;
-	["tvehiclequeue", []] call stats_init_variable;
-	["weaponqueue", []] call stats_init_variable;
-	["itemqueue", []] call stats_init_variable;
-	["avehiclequeue", []] call stats_init_variable;
-	["tavehiclequeue", []] call stats_init_variable;
-	["alcoholfactoryqueue", []] call stats_init_variable;
-	["terrorfactoryitemsqueue", []] call stats_init_variable;
-	["diamondqueue", []] call stats_init_variable;
-	["furnacequeue", []] call stats_init_variable;
-
 
 	factory_object = 0;
 	factory_id = 1;
@@ -341,10 +328,8 @@ factory_globals = {
 		[ Aircraftfactory, "factory2", "Aircraft Factory", dummyobj, airfacspawn, _aircraft_factory, 8000000, "AircraftFactory1", "aircraftqueue"],
 		[ ItemFabrik_1, "factory3", "General Factory", igunbox,dummyobj, _itemfactory, 650000, "Fabrikablage3", "itemqueue"],
 		[ weaponfactory, "factory4", "Weapon Factory", wfgunbox,dummyobj, _weaponfactory, 10000000, "Fabrikablage4", "weaponqueue"],
-		//[terrorshop2,"factory5","Terror Factory",dummyobj,tfacspawn,_terrorfactory,300000,"Fabrikablage5", "tvehiclequeue"],
 		[ tairshop, "factory6", "Terrorist Vehicle Factory", dummyobj,tairspawn, _tairfactory, 20000000, "Fabrikablage6", "tavehiclequeue"],
 		[ alcoholfactory, "factory7", "Alcohol Factory", dummyobj, dummyobj, _alcoholfactory, 1000000, "Fabrikablage7", "alcoholfactoryqueue"] ,
-		//[terrorfactoryitems, "factory8", "Terror item factory", tgunbox,dummyobj, _terrorfactoryitems, 600000, "Fabrikablage8", "terrorfactoryitemsqueue"]
 		[ ringfactory, "factory9", "Ring Factory", dummyobj, dummyobj, _ringfactory, 2500000, "Fabrikablage9", "diamondqueue"],
 		[ Furnace, "factory10","Furnace", dummyobj, dummyobj, _furnace, 1500000, "Fabrikablage10","furnacequeue"]
 	];
@@ -360,11 +345,18 @@ factory_init = {
 	if (isNil "_factory_id") exitWith {};
 	if (typeName _factory_id != "STRING") exitWith {};
 	
-	private["_factory", "_queue_name", "_items"];
+	private["_factory"];
 	_factory = [_factory_id] call factory_lookup_id;
 	if (isNil "_factory") exitWith {};
 	
+	//initialize the factory queue
+	private["_queue_name"];
 	_queue_name = _factory select factory_queue;
+	[_queue_name, []] call stats_init_variable;
+	
+	
+	//initialize the factory items
+	private["_items"];
 	_items = _factory select factory_items;
 	
 	private["_workers_name", "_workers"];
@@ -385,7 +377,6 @@ factory_init = {
 		missionNamespace setVariable [_prod_name, 0];
 	} forEach _items;
 	
-	
 	private["_queue"];
 	_queue = missionNamespace getVariable _queue_name;
 	{
@@ -396,6 +387,20 @@ factory_init = {
 		_pend = _pend + 1;
 		missionNamespace setVariable [_pend_name, _pend]; 
 	} forEach _queue;
+};
+
+factory_save_storage = {
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_exists)) exitWith {};
+	
+	{
+		private["_factory", "_storage_name", "_storage"];
+		_factory = _x;
+		_storage_name = _factory select factory_storage;
+		_storage = [_player, _storage_name] call player_get_array;
+		[_player, _storage_name, _storage, false] call player_set_array_checked;
+	} forEach all_factories;
 };
 
 factory_calculate_production_cost = {
@@ -1431,8 +1436,6 @@ factory_buy = {
 };
 
 factory_setup = {
-	call factory_globals;
-	
 	{
 		private["_factory", "_factory_id"];
 		_factory = _x;
@@ -1443,6 +1446,9 @@ factory_setup = {
 	} forEach all_factories;
 };
 
-call factory_setup;
+[] call factory_globals;
+if (isClient) then {
+	call factory_setup;
+};
 
 factory_functions_defined = true;

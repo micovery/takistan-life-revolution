@@ -1632,8 +1632,6 @@ player_save_side_inventory = {
 	private["_inventory_name"];
 	_inventory_name = [_player] call player_inventory_name;
 	_inventory = [_player] call player_get_inventory;
-
-	//diag_log format["_inventory = %1", _inventory];
 	[_player, _inventory_name, _inventory, false] call player_set_array_checked;
 };
 
@@ -1709,6 +1707,17 @@ object_storage_name = {
 	};
 	
 	([_object] call vehicle_storage_name)
+};
+
+player_save_private_storage = {
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_exists)) exitWith {};
+	
+	private["_storage_name", "_storage"];
+	_storage_name = "private_storage";
+	_storage = [_player, _storage_name] call player_get_array;
+	[_player, _storage_name, _storage, false] call player_set_array_checked;
 };
 
 player_exit_vehicle = {
