@@ -2836,23 +2836,28 @@ interact_pickup_item = {
 	if (typeName _item != "STRING") exitWith {nil};
 	if (typeName _amount != "SCALAR") exitWith {nil};
 	
-	private["_item_info", "_item_name", "_item_weight", "_own_weight", "_total_weight"];
+	private["_item_info", "_item_name", "_item_weight", "_own_weight", "_item_total_weight", "_available_weight"];
 	_item_info = _item call INV_GetItemArray;
 	_item_name = _item_info call INV_GetItemName;
 	_item_weight = (_item_info call INV_GetItemTypeKg);
 	_own_weight = call INV_GetOwnWeight;
-	_total_weight = _item_weight * _amount;
+	_item_total_weight = _item_weight * _amount;
+	_available_weight = INV_CarryingCapacity - _own_weight;
 	
 	private["_pickup_amount"];
-	_pickup_amount = floor((INV_CarryingCapacity - _own_weight) / _item_weight);
-	_pickup_amount = (_pickup_amount) min (_amount);
+	_pickup_amount = _amount;
 	
-	if (_pickup_amount <= 0) exitWith {
-		player groupChat format["Max weight reached, you cannot pick-up any more items"];
+	if ((_available_weight < _item_total_weight) && _item_weight > 0) then {
+		_pickup_amount = floor(_available_weight / _item_weight);
+		if (_pickup_amount <= 0) then {
+			player groupChat format["Max weight reached, you cannot pick-up any more items"];
+		};
 	};
 	
+	if (_pickup_amount <= 0) exitWith {};
+
 	[_player, _item, _pickup_amount, ([player] call player_inventory_name)] call INV_CreateItem;
-	player groupchat format["You picked up %1 %2", _pickup_amount, _item_name];
+	player groupchat format["You picked up %1 %2", strM(_pickup_amount), _item_name];
 	
 	(_amount - _pickup_amount)
 };
