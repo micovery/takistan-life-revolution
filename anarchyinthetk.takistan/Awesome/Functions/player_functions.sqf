@@ -2640,6 +2640,7 @@ player_drop_item = {
 	if (isNil "_amount") exitWith {};
 	if (typeName _item != "STRING") exitWith {};
 	if (typeName _amount != "SCALAR") exitWith {};
+	if (_item == "keychain") exitWith {};
 	
 	private["_class", "_object"];
 	_class = [_item] call item2class;
@@ -2654,7 +2655,7 @@ player_drop_item = {
 	_object setVariable ["item", _item, true];
 	_object setVariable ["amount", ([_amount] call encode_number), true];
 	private["_object_name"];
-	_object_name = format["%1_%2_%3", _class, (getPlayerUID _player), round(time)];
+	_object_name = format["%1_%2_%3_%4", _class, (getPlayerUID _player), round(time), round(random(time))];
 	_object setVehicleInit format[
 	'
 		liafu = true;

@@ -1,1 +1,0 @@
-[player] call interact_keychain_menu;

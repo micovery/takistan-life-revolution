@@ -20,6 +20,7 @@ INV_Heal = {
 };
 
 INV_AddInventoryItem = {
+	//player groupChat format["INV_AddInventoryItem %1", _this];
 	private ["_object", "_item", "_amount", "_info"];
 	_object = _this select 0;
 	_item  = _this select 1;
@@ -147,6 +148,7 @@ INV_GetItemAmount = {
 
 // Change Amount of Items
 INV_SetStorageAmount = {
+	//player groupChat format["INV_SetStorageAmount %1", _this];
 	private ["_object", "_Itemname", "_number", "_Arrayname"];
 	_object = _this select 0;
 	_Itemname  = _this select 1;
@@ -182,6 +184,7 @@ INV_SetStorageAmount = {
 
 // Change Amount of Items
 INV_SetItemAmount = {
+	//player groupChat format["INV_SetItemAmount %1", _this];
 	private["_object", "_item", "_number"];
 	_object = _this select 0;
 	_item = _this select 1;

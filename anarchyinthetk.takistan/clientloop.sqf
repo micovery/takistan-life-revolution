@@ -148,14 +148,6 @@ compare_array = {
 };
 
 
-check_mobile = {
-	private["_player"];
-	_player = player;
-	if (([_player, "handy"] call INV_GetItemAmount) == 1) exitWith {};	
-	[_player, "handy", 1] call INV_SetItemAmount;
-	[_player, "mobile", true] call player_set_bool;
-};
-
 check_keychain = {
 	private["_player"];
 	_player = player;
@@ -169,7 +161,6 @@ check_inventory = {
 	private["_player"];
 	_player = player;
 	
-	call check_mobile;
 	call check_keychain;
 };
 
@@ -419,6 +410,7 @@ check_droppable_items = {
 	//player groupChat format["check_droppable_items %1", _this];
 	private["_player"];
 	_player = player;
+	if (not(alive _player)) exitWith {};
 	
 	private["_current_object"];
 	_current_object = _player getVariable "current_object";
@@ -426,6 +418,7 @@ check_droppable_items = {
 	
 	private["_objects", "_near_object"];
 	_objects = nearestObjects [getPos _player, droppableitems, 5];
+	//player groupChat format["_objects = %1", _objects];
 	_near_object = if (count _objects == 0) then {objNull} else {_objects select 0};
 	
 	if (isNull _current_object && isNull _near_object) exitWith {};
@@ -441,8 +434,8 @@ check_droppable_items = {
 		if (not(isNil "_action_id")) then {
 			_player removeAction _action_id;
 			_player setVariable ["current_action", nil];
+			//player groupChat format["REMOVED: _action_id = %1, _object = %2", _action_id, _current_object];
 		};
-		
 		_player setVariable ["current_object", nil];
 	};
 	
@@ -453,11 +446,6 @@ check_droppable_items = {
 	
 	//add the action for the new object
 	if (not(isNull _near_object)) then {
-		private["_near_players", "_near_players_count"];
-		_near_players = [_near_object, 3] call players_object_near;
-		_near_players_count = (count _near_players);
-		if (not(_near_players_count < 2)) exitWith {};
-		
 		private["_distance"];
 		_distance = _near_object distance _player;
 		if (not(_distance < 3)) exitWith {};
@@ -472,7 +460,11 @@ check_droppable_items = {
 		_name = (_item call INV_GetItemName);
 		
 		private["_action_id"];
-		_action_id = _player addAction [format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", format["((%1 distance %2) < 3)", _player, _near_object]];
+		_action_id = _player addAction [
+			format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", 
+			format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", 
+			format['(((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
+		];
 
 		//player groupChat format["ADDED: _action_id = %1, _object = %2", _action_id, _near_object];
 		_player setVariable ["current_object", _near_object];

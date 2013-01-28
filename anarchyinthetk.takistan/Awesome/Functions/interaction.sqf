@@ -547,8 +547,6 @@ interact_warrants_menu = { _this spawn {
 	lbSetCurSel [11, 0];
 };};
 
-
-
 interact_mobile_receive = {
 	private["_player", "_sender", "_text"];
 
@@ -591,11 +589,9 @@ interact_mobile_send = {
 		player groupChat format["Cannot send the text message. It is longer than %1 characters.", _max_size];
 	};
 
-	
 	private["_money", "_cost"];
 	_money  = [player, 'money'] call INV_GetItemAmount;
 	_cost = INV_smscost;
-	
 	
 	if (_money < _cost) exitWith {
 		player groupChat format["Text messages cost %1, you do not have enough money on you.", strM(INV_smscost)];
@@ -603,12 +599,11 @@ interact_mobile_send = {
 	
 	[_player, 'money', -(_cost)] call INV_AddInventoryItem;
 	
-	if (not([_target, "mobile"] call player_get_bool)) exitWith {
+	if (not(([_target, "handy"] call INV_GetItemAmount) > 0)) exitWith {
 		player groupChat format["%1-%2 does not have a mobile phone, your text message bounced", _target, (name _target)];
 	};
 
 	player groupChat format["You sent a text message to %1-%2 for $%3", _target, (name _target), strM(_cost)];
-	
 	
 	private["_message"];
 	_message = format["%1", _text];
@@ -622,7 +617,6 @@ interact_mobile_use = {
 	ctrlSetText [4, format["Cost: $%1", INV_smscost]];
 	buttonSetAction [3, '[player, (missionNamespace getVariable (lbData [2, lbCurSel 2])), (ctrlText 1)] call interact_mobile_send; closedialog 0;'];
 };
-
 
 interact_deposit_receive = {
 	private["_player", "_sender", "_amount"];
@@ -2892,7 +2886,7 @@ interact_item_pickup = {
 
 interact_item_drop = {_this spawn {
 	//player groupChat format["interact_item_drop %1", _this];
-	[] call interact_play_pickup_animation;
+	
 	private["_player", "_item", "_amount"];
 	_player = _this select 0;
 	_item = _this select 1;
@@ -2905,6 +2899,14 @@ interact_item_drop = {_this spawn {
 	if (typeName _amount != "SCALAR") exitWith {};
 	
 	if (_amount <= 0) exitWith {};
+	
+	private["_inside_vehicle"];
+	_inside_vehicle = ((vehicle player) != player);
+	if (_inside_vehicle) exitWith {
+		player groupChat format["You cannot drop items while inside a vehicle"];
+	};
+	
+	[] call interact_play_pickup_animation;
 	
 	if (_amount > ([_player, _item] call INV_GetItemAmount)) exitWith {
 		player groupChat format["You do not have that many items to drop"];
@@ -2921,11 +2923,27 @@ interact_item_drop = {_this spawn {
 	if (not(_item call INV_GetItemDropable)) exitWith {
 		player groupChat format["You are not allowed to drop this object"];
 	};
-
-	[_player, _item, -(_amount)] call INV_AddInventoryItem;
-	[_player, _item, _amount] call player_drop_item;
-	player groupChat format["You dropped %1 %2(s)", strM(_amount), (_item call INV_GetItemName)];
+	
+	if (_item == "keychain") then {
+		//special processing for keys
+		private["_vehicles"];
+		_vehicles = [_player] call vehicle_list;
+				
+		private["_vehicle"];
+		_vehicle = [_vehicles] call interact_select_vehicle_wait;
+		if (isNil "_vehicle") exitWith {};
+		
+		[_player, _vehicle] call vehicle_remove;
+		player groupChat format["You dropped the key for %1", _vehicle];
+	}
+	else {
+		//regular processing for other items
+		[_player, _item, -(_amount)] call INV_AddInventoryItem;
+		[_player, _item, _amount] call player_drop_item;
+		player groupChat format["You dropped %1 %2(s)", strM(_amount), (_item call INV_GetItemName)];
+	};
 };};
+
 
 
 interact_item_use = {
@@ -2971,8 +2989,6 @@ interact_inventory_actions_allowed = {
 
 interact_item_give = { _this spawn {
 	//player groupChat format["interact_item_give %1", _this];
-	[] call interact_play_pickup_animation;
-	player groupChat format["interact_item_give %1", _this];
 	private["_player", "_item", "_amount", "_target"];
 	_player = _this select 0;
 	_item = _this select 1;
@@ -2986,6 +3002,10 @@ interact_item_give = { _this spawn {
 	if (typeName _amount != "SCALAR") exitWith {};
 	if (not([_target] call player_human)) exitWith {};
 	if (_amount <= 0) exitWith {};
+	
+	if (not(_item == "keychain")) then {
+		[] call interact_play_pickup_animation;
+	};
 
 	if (_amount > ([_player, _item] call INV_GetItemAmount)) exitWith {
 		player groupChat format["You do not have that many items to give"];
@@ -3127,30 +3147,6 @@ interact_select_vehicle_wait = {
 	interact_selected_vehicle = nil;
 	_vehicle
 };
-
-interact_keychain_menu = { _this spawn {
-	//player groupChat format["interact_keychain_menu %1", _this];
-	private["_player"];
-	_player = _this select 0;
-	if (not([_player] call player_human)) exitWith {};
-	
-    if (not(createDialog "keychain_menu")) exitWith { 
-		player groupChat format["ERROR: could not create keychain_menu dialog"];
-	};
-
-    private["_vehicles"];
-    _vehicles = [player] call vehicle_list;
-    {
-        if (not(isnull _x)) then {
-			private["_index"];
-            _index = lbAdd [1, format ["%1 (%2)", typeOf _x, _x]];
-            lbSetData [1, _index, format ["%1", _x]];
-        };
-    } forEach _vehicles;
-
-    buttonSetAction [4, "[player, (missionNamespace getVariable (lbData[1, (lbCurSel 1)]))] call interact_keychain_drop; closedialog 0;"];
-};};
-
 
 interact_keychain_drop = {
 	//player groupChat format["interact_keychain_drop %1", _this];

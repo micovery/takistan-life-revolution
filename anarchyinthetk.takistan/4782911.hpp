@@ -1,52 +1,5 @@
 #include "Awesome\Functions\constants.h"
 
-class keychain_menu {
-    idd = -1;
-    movingEnable = true;
-	
-    controlsBackground[] = {
-        background
-    };
-	
-    objects[] = {};
-
-    controls[] = {
-        vehicle_list, cancel, drop_key_button, dummybutton
-    };
-
-    class background : RscBackground {
-        x = 0.34; y = 0.11;
-        w = 0.33; h = 0.81;
-    };
-
-    class vehicle_list : RscListBox {
-        idc = 1;
-        x = 0.35; y = 0.14;
-        w = 0.31; h = 0.54;
-        style = ST_CENTER;
-    };
-
-    class cancel : RscButton {
-        idc = 3;
-        x = 0.35; y = 0.80;
-        w = 0.31; h = 0.04;
-        text = "Cancel";
-        action = "closedialog 0";
-    };
-
-    class drop_key_button : RscButton {
-        idc = 4;
-        x = 0.35; y = 0.86;
-        w = 0.31; h = 0.04;
-        text = "Drop Key";
-    };
-
-    class dummybutton : RscDummy {
-        idc = 1013;
-    };
-};
-
-
 class vehiclesList {
 	idd = vehiclesList_idd;
 	movingEnable = true;
@@ -92,12 +45,6 @@ class vehiclesList {
 		action = "closedialog 0";
 	};
 };
-
-
-
-
-
-
 
 class handydialog{
     idd = -1;
