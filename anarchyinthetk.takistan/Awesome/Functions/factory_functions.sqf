@@ -164,6 +164,7 @@ factory_globals = {
 	_vehiclefactory=
 	[
 		"Tractor",
+		"tractorOld",
 		"TowingTractor",
 		"ATV_CZ_EP1",
 		"MMT_Civ",
