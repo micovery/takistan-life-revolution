@@ -2777,8 +2777,8 @@ interact_play_pickup_animation = {
 	sleep 1;
 };
 
+interact_object_pickup_active = false;
 interact_object_pickup = { _this spawn {
-	interact_object_pickup_active = if (isNil "interact_object_pickup_active") then {false} else {interact_object_pickup_active};
 	if (interact_object_pickup_active) exitWith {
 		player groupChat format["ERROR: You are already picking-up an object"];
 	};
@@ -3011,8 +3011,14 @@ interact_item_give = { _this spawn {
 		player groupChat format["You do not have that many items to give"];
 	};
 	
-	if (not(([_target, _item, _amount] call player_inventory_space) > 0)) exitWith {
+	private["_space_available"];
+	_space_available = [_target, _item, _amount] call player_inventory_space;
+	if (_space_available == 0) exitWith {
 		player groupChat format["The target player does not have enough inventory space to receive the items"];
+	};
+	
+	if (_amount > _space_available) then {
+		_amount = _space_available;
 	};
 	
 	if (not([_player] call interact_inventory_actions_allowed)) then {
@@ -3049,14 +3055,14 @@ interact_item_give = { _this spawn {
 		_vehicle = [_vehicles] call interact_select_vehicle_wait;
 		if (isNil "_vehicle") exitWith {};
 		
-		player groupChat format["You gave %1-%2 a copy of the key for %2", _target, (name _target), _vehicle];
-		format['[%1, %2, %3] call interact_keychain_give_receive;', _player, _target, _vehicle] call broadcast;
+		player groupChat format["You gave %1-%2 a copy of the key for %3", _target, (name _target), _vehicle];
+		format["[%1, %2, %3] call interact_keychain_give_receive;", _player, _target, _vehicle] call broadcast;
 	}
 	else {
 		//generic processing for all other items
 		[_player, _item, -(_amount)] call INV_AddInventoryItem;
 		player groupChat format["You gave %1-%2 %3 units of %4", _target, (name _target), strN(_amount), _item_name];
-		format['[%1, %2, "%3", %4] call interact_item_give_receive;', _player, _target, _item, strN(_amount)] call broadcast;
+		format["[%1, %2, ""%3"", %4] call interact_item_give_receive;", _player, _target, _item, strN(_amount)] call broadcast;
 	};
 };};
 
