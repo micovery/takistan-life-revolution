@@ -1,5 +1,3 @@
-// "Function-Call" Script.
-// invActions.sqf
 
 INV_Heal = {
 	if(_this == player) exitWith {
@@ -277,8 +275,14 @@ INV_GetStorageWeight = {
 
 // Get Current Weight
 INV_GetOwnWeight = {
-	private["_player", "_inventory_name"];
-	_player = player;
+	([player] call INV_PlayerWeight)	
+};
+
+INV_PlayerWeight = {
+	private["_player"];
+	_player = _this select 0;
+	
+	private["_inventory_name"];
 	_inventory_name = [_player] call object_storage_name;
 	([_player, _inventory_name] call INV_GetStorageWeight)	
 };

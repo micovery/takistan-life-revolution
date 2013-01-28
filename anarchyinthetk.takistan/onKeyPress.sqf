@@ -53,22 +53,33 @@ keyboard_tlr_keys_handler = {
 };
 
 keyboard_lock_unlock_handler = {
-	if(!INV_shortcuts) exitWith { false };
-	private["_vcls", "_vcl"];
-	_vcls = nearestobjects [getpos player, ["LandVehicle", "Air", "ship"], 25];
-	_vcl = _vcls select 0;
+	if(not(INV_shortcuts)) exitWith { false };
+	private["_vehicles"];
+	_vehicles = nearestObjects [getpos player, ["LandVehicle", "Air", "ship"], 10];
+	if (not((count _vehicles ) > 0)) exitWith {};
 	
-	if (vehicle player != player) then {
-		_vcl = vehicle player;
-	};
+	private["_player"];
+	_player = player;
 	
-	if (not([player, _vcl] call vehicle_owner)) exitWith {
-		player groupchat "You do not have the keys to this vehicle.";
+	private["_vehicle"];
+	_vehicle = _vehicles select 0;
+	
+	private["_inside_vehicle"];
+	_inside_vehicle = ((vehicle _player) != _player);
+	_vehicle = if (_inside_vehicle) then {(vehicle player)} else {_vehicle};
+	
+	if (not([_player, _vehicle] call vehicle_owner)) exitWith {
+		player groupchat "You do not have the keys to this vehicle";
 		true
 	};
 	
-	["schluessel", _vcl, 0] execVM "keys.sqf";
-	true;
+	private["_state"];
+	_state = [_vehicle] call vehicle_toggle_lock;
+	private["_message"];
+	_message = if (_state) then {"Vehicle locked"} else {"Vehicle unlocked"};
+	player groupChat _message;
+		
+	true
 };
 
 keyboard_trunk_handler = {

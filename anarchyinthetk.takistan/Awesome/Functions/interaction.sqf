@@ -881,16 +881,16 @@ interact_inventory_menu = {
 			private["_player_name"];
 			_player_name = (name _player_variable);
 			_index = lbAdd [99, format ["%1 - (%2)", _player_variable_name, _player_name]];
-			lbSetData [99, _index, format["%1", _c]];
+			lbSetData [99, _index, format["%1", _player_variable_name]];
 		};
 		_c = _c + 1;
 	};
 
 	lbSetCurSel [99, 0];
 	lbSetCurSel [1, 0];
-	buttonSetAction [3,format["[""use"",  lbData [1, (lbCurSel 1)], ctrlText 501, lbData [99, (lbCurSel 99)]] execVM ""INVactions.sqf""; closedialog 0;"] ];
-	buttonSetAction [4,format["[""drop"", lbData [1, (lbCurSel 1)], ctrlText 501, lbData [99, (lbCurSel 99)]] execVM ""INVactions.sqf""; closedialog 0;"] ];
-	buttonSetAction [246,format["[""give"", lbData [1, (lbCurSel 1)], ctrlText 501, lbData [99, (lbCurSel 99)]] execVM ""INVactions.sqf""; closedialog 0;"] ];
+	buttonSetAction [3, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_use; closedialog 0;"]];
+	buttonSetAction [4, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_drop; closedialog 0;"]];
+	buttonSetAction [246, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number), (missionNamespace getVariable (lbData [99, (lbCurSel 99)]))] call interact_item_give; closedialog 0;"]];
 
 	while {ctrlVisible 1001} do {
 		_item   = lbData [1, (lbCurSel 1)];
@@ -2667,7 +2667,7 @@ interact_gang_toggle_open = {
 
 interact_gang_open = {
 	private["_player", "_open"];
-	player groupChat format["interact_gang_open %1", _this];
+	//player groupChat format["interact_gang_open %1", _this];
 	_player = _this select 0;
 	_open = _this select 1;
 	if (not([_player] call player_human)) exitWith {};
@@ -2783,7 +2783,7 @@ interact_play_pickup_animation = {
 	sleep 1;
 };
 
-interact_pickup_object = { _this spawn {
+interact_object_pickup = { _this spawn {
 	[] call interact_play_pickup_animation;
 	
 	private["_player", "_object"];
@@ -2794,11 +2794,11 @@ interact_pickup_object = { _this spawn {
 	if (isNil "_object") exitWith {};
 	if (typeName _object != "OBJECT") exitWith {};
 	
-	interact_pickup_object_active = if (isNil "interact_pickup_object_active") then {false} else {interact_pickup_object_active};
-	if (interact_pickup_object_active) then {
+	interact_object_pickup_active = if (isNil "interact_object_pickup_active") then {false} else {interact_object_pickup_active};
+	if (interact_object_pickup_active) then {
 		player groupChat format["ERROR: You are already picking-up an object"];
 	};
-	interact_pickup_object_active = true;
+	interact_object_pickup_active = true;
 	
 	private["_item", "_amount"];
 	_item = _object getVariable "item";
@@ -2806,24 +2806,58 @@ interact_pickup_object = { _this spawn {
 	_amount = [_amount] call decode_number;
 	
 	private["_remaining"];
-	_remaining = [_player, _item, _amount] call interact_pickup_item;
+	_remaining = [_player, _item, _amount] call interact_item_pickup;
 	
 	if (isNil "_remaining") exitWith {
-		interact_pickup_object_active = false;
+		interact_object_pickup_active = false;
 	};
 	
 	if (_remaining <= 0) exitWith {
 		deleteVehicle _object;
-		interact_pickup_object_active = false;
+		interact_object_pickup_active = false;
 	};
 	
 	_remaining = [_remaining] call encode_number;
 	_object setVariable ["amount", _remaining];
-	interact_pickup_object_active = false;
+	interact_object_pickup_active = false;
 };};
 
+player_inventory_space = {
+	//player groupChat format["player_inventory_space %1", _this];
+	private["_player", "_item", "_amount"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+	
+	if (not([_player] call player_human)) exitWith {0};
+	if (isNil "_item") exitWith {0};
+	if (isNil "_amount") exitWith {0};
+	if (typeName _item != "STRING") exitWith {0};
+	if (typeName _amount != "SCALAR") exitWith {0};
+	
+	if (_amount <= 0) then {0};
+	
+	
+	private["_item_info","_item_weight", "_player_weight", "_item_total_weight", "_available_weight"];
+	_item_info = _item call INV_GetItemArray;
+	_item_weight = (_item_info call INV_GetItemTypeKg);
+	_player_weight = [_player] call INV_PlayerWeight;
+	_item_total_weight = _item_weight * _amount;
+	_available_weight = INV_CarryingCapacity - _player_weight;
 
-interact_pickup_item = {
+	private["_pickup_amount"];
+	_pickup_amount = _amount;
+	
+	if ((_available_weight < _item_total_weight) && _item_weight > 0) then {
+		_pickup_amount = floor(_available_weight / _item_weight);
+	};
+	
+	//player groupChat format["_amount = %1, _pickup_amount = %2", _amount, _pickup_amount];
+	(_pickup_amount)
+};
+
+
+interact_item_pickup = {
 	private["_player", "_item", "_amount"];
 	_player = _this select 0;
 	_item = _this select 1;
@@ -2836,32 +2870,298 @@ interact_pickup_item = {
 	if (typeName _item != "STRING") exitWith {nil};
 	if (typeName _amount != "SCALAR") exitWith {nil};
 	
-	private["_item_info", "_item_name", "_item_weight", "_own_weight", "_item_total_weight", "_available_weight"];
-	_item_info = _item call INV_GetItemArray;
-	_item_name = _item_info call INV_GetItemName;
-	_item_weight = (_item_info call INV_GetItemTypeKg);
-	_own_weight = call INV_GetOwnWeight;
-	_item_total_weight = _item_weight * _amount;
-	_available_weight = INV_CarryingCapacity - _own_weight;
+	if (_amount <= 0) exitWith {nil};
 	
 	private["_pickup_amount"];
-	_pickup_amount = _amount;
+	_pickup_amount = [_player, _item, _amount] call player_inventory_space;
 	
-	if ((_available_weight < _item_total_weight) && _item_weight > 0) then {
-		_pickup_amount = floor(_available_weight / _item_weight);
-		if (_pickup_amount <= 0) then {
-			player groupChat format["Max weight reached, you cannot pick-up any more items"];
-		};
+	if (_pickup_amount <= 0) exitWith {
+		player groupChat "Max weight reached, you cannot pick-up any more items";
+		nil
 	};
-	
-	if (_pickup_amount <= 0) exitWith {};
 
 	[_player, _item, _pickup_amount, ([player] call player_inventory_name)] call INV_CreateItem;
+	
+	private["_item_name"];
+	_item_name = (_item call INV_GetItemName);
 	player groupchat format["You picked up %1 %2", strM(_pickup_amount), _item_name];
 	
 	(_amount - _pickup_amount)
 };
 
 
+interact_item_drop = {_this spawn {
+	//player groupChat format["interact_item_drop %1", _this];
+	[] call interact_play_pickup_animation;
+	private["_player", "_item", "_amount"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_item") exitWith {};
+	if (isNil "_amount") exitWith {};
+	if (typeName _item != "STRING") exitWith {};
+	if (typeName _amount != "SCALAR") exitWith {};
+	
+	if (_amount <= 0) exitWith {};
+	
+	if (_amount > ([_player, _item] call INV_GetItemAmount)) exitWith {
+		player groupChat format["You do not have that many items to drop"];
+	};
+	
+	if (not([_player] call interact_inventory_actions_allowed)) then {
+		player groupChat "You cannot use your inventory now";
+	};
+	
+	if(not(isNull (nearestobjects[getPos _player, droppableitems, 1] select 0))) exitWith {
+		player groupChat "You cannot drop items on top of each other. move and try again.";
+	};
+	
+	if (not(_item call INV_GetItemDropable)) exitWith {
+		player groupChat format["You are not allowed to drop this object"];
+	};
+
+	[_player, _item, -(_amount)] call INV_AddInventoryItem;
+	[_player, _item, _amount] call player_drop_item;
+	player groupChat format["You dropped %1 %2(s)", strM(_amount), (_item call INV_GetItemName)];
+};};
+
+
+interact_item_use = {
+	//player groupChat format["interact_item_use %1", _this];
+	private["_player", "_item", "_amount"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_item") exitWith {};
+	if (isNil "_amount") exitWith {};
+	if (typeName _item != "STRING") exitWith {};
+	if (typeName _amount != "SCALAR") exitWith {};
+	if (_amount <= 0) exitWith {};
+	
+	if (_amount > ([_player, _item] call INV_GetItemAmount)) exitWith {
+		player groupChat format["You do not have that many items to use"];
+	};
+	
+	if (not([_player] call interact_inventory_actions_allowed)) then {
+		player groupChat "You cannot use your inventory now";
+	};
+	
+	private["_script"];
+	_script = _item call INV_GetItemFilename;
+	_script = if (isNil "_script") then {""} else { _script };
+	_script = if (typeName _script != "STRING") then { "" } else {_script};
+	
+	if (_script == "") exitWith {
+		player groupChat "You cannot use this item";
+	};
+	
+	//player groupChat format["_item = %1, _amount = %2, _script = %3", _item, _amount, _script];
+	["use", _item, _amount, []] execVM _script;
+};
+
+interact_inventory_actions_allowed = {
+	private["_player"];
+	_player = _this select 0;
+	(not([_player] call player_vulnerable))
+};
+
+interact_item_give = { _this spawn {
+	//player groupChat format["interact_item_give %1", _this];
+	[] call interact_play_pickup_animation;
+	player groupChat format["interact_item_give %1", _this];
+	private["_player", "_item", "_amount", "_target"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+	_target = _this select 3;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_item") exitWith {};
+	if (isNil "_amount") exitWith {};
+	if (typeName _item != "STRING") exitWith {};
+	if (typeName _amount != "SCALAR") exitWith {};
+	if (not([_target] call player_human)) exitWith {};
+	if (_amount <= 0) exitWith {};
+
+	if (_amount > ([_player, _item] call INV_GetItemAmount)) exitWith {
+		player groupChat format["You do not have that many items to give"];
+	};
+	
+	if (not(([_target, _item, _amount] call player_inventory_space) > 0)) exitWith {
+		player groupChat format["The target player does not have enough inventory space to receive the items"];
+	};
+	
+	if (not([_player] call interact_inventory_actions_allowed)) then {
+		player groupChat "You cannot use your inventory now";
+	};
+	
+	if (not(_item call INV_GetItemGiveable)) exitWith {
+		player groupChat format["You are not allowed to give this type of item to other players"];
+	};
+	
+	if (_player == _target) exitWith {
+		player groupChat format["You cannot give an item to yourself"];
+	};
+	
+	private["_item_name"];
+	_item_name = (_item call INV_GetItemName);
+
+	private["_near_players", "_minimum_distance"];
+	_minimum_distance = 20;
+	_near_players = nearestObjects [getPos _player, ["LandVehicle", "Air", "Man"], _minimum_distance];
+
+	if (not(_target in _near_players) and (_player distance _target > _minimum_distance)) exitWith {
+		player groupChat format["You have to be within at least %1 meters from the selected player", _minimum_distance];
+	};
+	
+	if (_item == "keychain") then {
+		//special processing for keys
+		private["_vehicles"];
+		_vehicles = [_player] call vehicle_list;
+		
+		//player groupChat format["_vehicles = %1", _vehicles];
+		
+		private["_vehicle"];
+		_vehicle = [_vehicles] call interact_select_vehicle_wait;
+		if (isNil "_vehicle") exitWith {};
+		
+		player groupChat format["You gave %1-%2 a copy of the key for %2", _target, (name _target), _vehicle];
+		format['[%1, %2, %3] call interact_keychain_give_receive;', _player, _target, _vehicle] call broadcast;
+	}
+	else {
+		//generic processing for all other items
+		[_player, _item, -(_amount)] call INV_AddInventoryItem;
+		player groupChat format["You gave %1-%2 %3 units of %4", _target, (name _target), strN(_amount), _item_name];
+		format['[%1, %2, "%3", %4] call interact_item_give_receive;', _player, _target, _item, strN(_amount)] call broadcast;
+	};
+};};
+
+interact_keychain_give_receive = {_this spawn {
+	//player groupChat format["interact_keychain_give_receive %1", _this];
+	private["_player", "_target", "_vehicle"];
+	_player = _this select 0;
+	_target = _this select 1;
+	_vehicle = _this select 2;
+
+	if (not([_player] call player_human)) exitWith {};
+	if (not([_target] call player_human)) exitWith {};
+	if (not([_vehicle] call vehicle_exists)) exitWith {};
+	
+	if (_target != player) exitWith {};
+	
+	[_target, _vehicle] call vehicle_add;
+	player groupChat format["%1-%2, you received the key for %3 from %4-%5", _target, (name _target), _vehicle, _player, (name _player)];
+};};
+
+interact_item_give_receive = { _this spawn {
+	//player groupChat format["interact_item_give_receive %1", _this];
+	private["_player", "_target", "_item", "_amount"];
+	_player = _this select 0;
+	_target = _this select 1;
+	_item = _this select 2;
+	_amount = _this select 3;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (not([_target] call player_human)) exitWith {};
+	if (_target != player) exitWith {};
+	if (isNil "_item") exitWith {};
+	if (isNil "_amount") exitWith {};
+	if (typeName _item != "STRING") exitWith {};
+	if (typeName _amount != "SCALAR") exitWith {};
+	if (_amount < 0) exitWith {};
+	
+	[] call interact_play_pickup_animation;
+	
+	private["_item_name"];
+	_item_name = (_item call INV_GetItemName);
+	
+	[_target, _item, (_amount)] call INV_AddInventoryItem;
+	player groupChat format["%1-%2 gave you %3 units of %4", (_player), (name _player), strN(_amount), _item_name];
+};};
+
+interact_select_vehicle = {
+	private["_index", "_data", "_data_str"];
+	_index = lbCurSel vehiclesList_list_idc;
+	_index = if (isNil "_index") then { -1 } else { _index };
+	if (_index < 0) exitWith { nil };
+	_data_str =  lbData[vehiclesList_list_idc, _index];
+	_data = (call compile _data_str);
+	interact_selected_vehicle = _data;
+	closeDialog vehiclesList_idd;
+	_data
+};
+
+interact_select_vehicle_wait = {
+	//player groupChat format["interact_select_vehicle_wait %1", _this];
+	disableSerialization;
+	private["_vehicles", "_dialog"];
+	_vehicles = _this select 0;
+	
+	if (isNil "_vehicles") exitWith { nil };
+	if (typeName _vehicles != "ARRAY") exitWith { nil };
+	
+	if (!(createDialog "vehiclesList")) exitWith {hint "Dialog Error!"};
+	
+	buttonSetAction [vehiclesList_select_button_idc,  "call interact_select_vehicle;"];
+	private["_i", "_count"];
+	_count = count _vehicles;
+	_i = 0;
+	interact_selected_vehicle = nil;
+	while { _i < _count } do {
+		private["_index", "_vehicle", "_vehicle_str"];
+		_vehicle = _vehicles select _i;
+		_vehicle_str = format["%1", _vehicle];
+		_index = lbAdd [vehiclesList_list_idc, _vehicle_str];
+		lbSetData [vehiclesList_list_idc, _index, _vehicle_str];
+		_i = _i + 1;
+	};
+	
+	lbSetCurSel [vehiclesList_list_idc, 0];
+	waitUntil { _dialog = findDisplay vehiclesList_idd; isNull _dialog };
+	
+	_vehicle = interact_selected_vehicle;
+	interact_selected_vehicle = nil;
+	_vehicle
+};
+
+interact_keychain_menu = { _this spawn {
+	//player groupChat format["interact_keychain_menu %1", _this];
+	private["_player"];
+	_player = _this select 0;
+	if (not([_player] call player_human)) exitWith {};
+	
+    if (not(createDialog "keychain_menu")) exitWith { 
+		player groupChat format["ERROR: could not create keychain_menu dialog"];
+	};
+
+    private["_vehicles"];
+    _vehicles = [player] call vehicle_list;
+    {
+        if (not(isnull _x)) then {
+			private["_index"];
+            _index = lbAdd [1, format ["%1 (%2)", typeOf _x, _x]];
+            lbSetData [1, _index, format ["%1", _x]];
+        };
+    } forEach _vehicles;
+
+    buttonSetAction [4, "[player, (missionNamespace getVariable (lbData[1, (lbCurSel 1)]))] call interact_keychain_drop; closedialog 0;"];
+};};
+
+
+interact_keychain_drop = {
+	//player groupChat format["interact_keychain_drop %1", _this];
+	private["_player", "_vehicle"];
+	_player = _this select 0;
+	_vehicle = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (not([_vehicle] call vehicle_exists)) exitWith {};
+	
+    [_player, _vehicle] call vehicle_remove;
+    player groupChat format["You dropped the key for %1", _vehicle];
+};
 
 interaction_functions_defined = true;

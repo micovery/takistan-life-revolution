@@ -731,7 +731,7 @@ player_prison_strip = {
 	if (stolencash > 0) then {
 		[_player, stolencash] call player_lose_money;
 		private["_message"];
-		_message = format["%1-%2 was a bank robber, and has been charded $%3!", _player, (name _player), stolencash];
+		_message = format["%1-%2 was a bank robber, and has been charged $%3!", _player, (name _player), stolencash];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	};
 	stolencash = 0;

@@ -472,7 +472,7 @@ check_droppable_items = {
 		_name = (_item call INV_GetItemName);
 		
 		private["_action_id"];
-		_action_id = _player addAction [format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", format['[%1, %2] call interact_pickup_object', _player, _near_object], 1, false, true, "", format["((%1 distance %2) < 3)", _player, _near_object]];
+		_action_id = _player addAction [format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", format["((%1 distance %2) < 3)", _player, _near_object]];
 
 		//player groupChat format["ADDED: _action_id = %1, _object = %2", _action_id, _near_object];
 		_player setVariable ["current_object", _near_object];
