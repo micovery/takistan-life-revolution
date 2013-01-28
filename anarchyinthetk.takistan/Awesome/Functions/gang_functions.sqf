@@ -290,30 +290,8 @@ gang_update_leader = {
 	
 };
 
-
 gang_player_uid = {
-	private["_player"];
-	_player = _this select 0;
-	if (not([_player] call player_exists)) exitWith {""};
-	
-	private["_gang_player_uid"];
-	_gang_player_uid = _player getVariable "gang_player_uid";
-	if (not(isNil "_gang_player_uid")) exitWith {_gang_player_uid};
-	
-	private["_player_name", "_player_uid"];
-	_player_name = (name _player);
-	_player_uid  = (getPlayerUID _player);
-	
-	private["_values", "_first_letter", "_last_letter"];
-	_values = toArray _player_name;
-	_first_letter = toString [_values select 0];
-	_middle_letter = toString [_values select (floor(count(_values) / 2))];
-	_last_letter = toString [_values select (count(_values) - 1)];
-	
-	_gang_player_uid = format["%1_%2%3%4", _player_uid, _first_letter, _middle_letter, _last_letter];
-	_player setVariable ["gang_player_uid", _gang_player_uid, true];
-	
-	(_gang_player_uid)
+	(_this call stats_get_player_uid)
 };
 
 gang_schedule_deletion = { _this spawn {

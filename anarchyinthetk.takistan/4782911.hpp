@@ -1,63 +1,51 @@
-class schluessel {
-    idd = -1;
-    movingEnable = true;
+#include "Awesome\Functions\constants.h"
+
+class vehiclesList {
+	idd = vehiclesList_idd;
+	movingEnable = true;
+	controlsBackground[] = {background, frame};
+	objects[] = { };
+	controls[] = {  
+		selectButton, cancelButton,
+		selectVehicle_list
+	 };
+				 
+	class selectVehicle_list : RscListBox {
+		idc = vehiclesList_list_idc;
+		x = 0.44; y = -0.0905;
+		w = 0.418; h = 0.36;
+	};
 	
-    controlsBackground[] = {
-        background
-    };
+	class frame : SBgFrame {
+		moving = 1;
+		x = 0.42; y = -0.13;
+		w = 0.4607; h = 0.50;
+		text = "Vehicles";
+	};
 	
-    objects[] = { };
+	class background: RscBackground {
+		moving = 1;
+		x = 0.42; y = -0.13;
+		w = 0.4607; h = 0.50;
+	};
+	
+	class selectButton : RscButton {
+		idc = vehiclesList_select_button_idc;
+		x = 0.44; y = 0.3;
+		w = 0.20; h = 0.04;
+		text = "Select";
+		colorBackgroundDisabled[] = DISABLED_BUTTON_BACKGROUND;
+		colorDisabled[] = DISABLED_BUTTON_TEXT;
+	};
 
-    controls[] = {
-        schluesselliste, submit, submit2, cancel, button_wegwerfen, dummybutton
-    };
-
-    class background : RscBackground {
-        x = 0.34; y = 0.11;
-        w = 0.33; h = 0.81;
-    };
-
-    class schluesselliste : RscListBox {
-        idc = 1;
-        x = 0.35; y = 0.14;
-        w = 0.31; h = 0.54;
-        style = ST_CENTER;
-    };
-
-    class submit : RscButton {
-        idc = 2;
-        x = 0.35; y = 0.70;
-        w = 0.31; h = 0.04;
-        text = $STRD_inv_description_inventar_use;
-    };
-
-    class submit2 : RscButton {
-        idc = 5;
-        x = 0.35; y = 0.75;
-        w = 0.31; h = 0.04;
-        text = $STRD_inv_description_inventar_schluessel_uebergabe;
-    };
-
-    class cancel : RscButton {
-        idc = 3;
-        x = 0.35; y = 0.80;
-        w = 0.31; h = 0.04;
-        text = $STRD_description_cancel;
-        action = "closedialog 0";
-    };
-
-    class button_wegwerfen : RscButton {
-        idc = 4;
-        x = 0.35; y = 0.86;
-        w = 0.31; h = 0.04;
-        text = $STRD_inv_description_inventar_drop;
-    };
-
-    class dummybutton : RscDummy {
-        idc = 1013;
-    };
-    
+	class cancelButton : RscButton {
+		x = 0.6605; y = 0.3;
+		w = 0.20; h = 0.04;
+		text = "Cancel";
+		action = "closedialog 0";
+	};
 };
+
 class handydialog{
     idd = -1;
     movingEnable = true;

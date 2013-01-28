@@ -38,7 +38,6 @@ class ShopVehicles {
 	controls[] = {  
 					selectButton, cancelButton,
 					selectVehicle_list
-					
 				 };
 				 
 	class selectVehicle_list : RscListBox {

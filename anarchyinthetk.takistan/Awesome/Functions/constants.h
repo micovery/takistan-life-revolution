@@ -24,3 +24,7 @@
 #define admin_input_field_id 2007
 #define admin_actions_list_id 2008
 #define admin_activate_button_id 2009
+
+#define vehiclesList_idd 4021
+#define vehiclesList_list_idc 4022
+#define vehiclesList_select_button_idc 4023

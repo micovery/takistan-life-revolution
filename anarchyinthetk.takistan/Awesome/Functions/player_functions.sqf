@@ -731,7 +731,7 @@ player_prison_strip = {
 	if (stolencash > 0) then {
 		[_player, stolencash] call player_lose_money;
 		private["_message"];
-		_message = format["%1-%2 was a bank robber, and has been charded $%3!", _player, (name _player), stolencash];
+		_message = format["%1-%2 was a bank robber, and has been charged $%3!", _player, (name _player), stolencash];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	};
 	stolencash = 0;
@@ -1109,7 +1109,7 @@ player_lookup_gang_uid = {
 		if (_unit_gang_uid == _player_gang_uid) then {
 			_player = _unit;
 		};
-	} forEach allUnits;
+	} forEach playableUnits;
 	
 	(_player)
 };
@@ -2630,6 +2630,40 @@ player_intro_text = {_this spawn {
 	
 };};
 
+player_drop_item = {
+	private["_player", "_item", "_amount"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_item") exitWith {};
+	if (isNil "_amount") exitWith {};
+	if (typeName _item != "STRING") exitWith {};
+	if (typeName _amount != "SCALAR") exitWith {};
+	if (_item == "keychain") exitWith {};
+	
+	private["_class", "_object"];
+	_class = [_item] call item2class;
+	if (isNil "_class") exitWith {};
+	
+	_object = _class createVehicle (position _player);
+	
+	if (alive _player) then {
+		_object setposASL getposASL _player;
+	};
+	
+	_object setVariable ["item", _item, true];
+	_object setVariable ["amount", ([_amount] call encode_number), true];
+	private["_object_name"];
+	_object_name = format["%1_%2_%3_%4", _class, (getPlayerUID _player), round(time), round(random(time))];
+	_object setVehicleInit format[
+	'
+		liafu = true;
+		%1 = this;
+		this setVehicleVarName "%1";
+	', _object_name];
+	processInitCommands;
+};
 
 player_drop_inventory = {
 	private["_player"];
@@ -2641,9 +2675,7 @@ player_drop_inventory = {
 		_amount = ([player, "money"] call INV_GetItemAmount);
 		if (_amount <= 0) exitWith {};
 		
-		private["_object"];
-		_object = "EvMoney" createVehicle (position player);
-		_object setVariable ["droparray", [([_amount] call encode_number), "money"], true];
+		[_player, "money", _amount] call player_drop_item;
 		[_player, "money", -(_amount)] call INV_AddInventoryItem;
 	}
 	else {
@@ -2658,10 +2690,7 @@ player_drop_inventory = {
 			_amount = ([player, _item] call INV_GetItemAmount);
 
 			if (_amount > 0 and (_item call INV_GetItemDropable)) then {
-				private["_class", "_object"];
-				_class = [_item] call item2class;
-				_object = _class createvehicle position player;
-				_object setVariable ["droparray", [([_amount] call encode_number), _item], true];
+				[_player, _item, _amount] call player_drop_item;
 			};
 			_i = _i + 1;
 		};

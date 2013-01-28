@@ -148,14 +148,6 @@ compare_array = {
 };
 
 
-check_mobile = {
-	private["_player"];
-	_player = player;
-	if (([_player, "handy"] call INV_GetItemAmount) == 1) exitWith {};	
-	[_player, "handy", 1] call INV_SetItemAmount;
-	[_player, "mobile", true] call player_set_bool;
-};
-
 check_keychain = {
 	private["_player"];
 	_player = player;
@@ -169,7 +161,6 @@ check_inventory = {
 	private["_player"];
 	_player = player;
 	
-	call check_mobile;
 	call check_keychain;
 };
 
@@ -402,7 +393,6 @@ check_smoke_grenade = {
 	player setVariable ["gasmask", _mask, true];
 	if (_mask) exitWith {};
 	
-	
 	[] spawn {
 		private ["_fadeInTime", "_fadeOutTime"];
 		_fadeInTime   = 1;
@@ -414,65 +404,71 @@ check_smoke_grenade = {
 		sleep _fadeInTime;
 		player setVariable ["flashed", false, true];
 	};
-		
 };
 
-iactionarr = [];
-
 check_droppable_items = {
-	private["_objects"];
-
-	_objects = nearestobjects [getpos player, droppableitems, 5];
+	//player groupChat format["check_droppable_items %1", _this];
+	private["_player"];
+	_player = player;
+	if (not(alive _player)) exitWith {};
 	
-	{
-		private ["_exit", "_i", "_array", "_object"];
-		_exit = false;
-		_object = _x;
+	private["_current_object"];
+	_current_object = _player getVariable "current_object";
+	_current_object = if (isNil "_current_object") then {objNull} else {_current_object};
+	
+	private["_objects", "_near_object"];
+	_objects = nearestObjects [getPos _player, droppableitems, 5];
+	//player groupChat format["_objects = %1", _objects];
+	_near_object = if (count _objects == 0) then {objNull} else {_objects select 0};
+	
+	if (isNull _current_object && isNull _near_object) exitWith {};
+	
+	//remove the action for the previous object
+	if (not(isNull _current_object)) then {
+		private["_distance"];
+		_distance = _current_object distance _player;
+		if (_distance < 3) exitWith {};
 		
-		for "_i" from 0 to (count iactionarr) do {
-			_array = iactionarr select _i;
-			if(_object in _array) exitWith{ 
-				_exit = true;
-			};
+		private["_action_id"];
+		_action_id = _player getVariable "current_action";
+		if (not(isNil "_action_id")) then {
+			_player removeAction _action_id;
+			_player setVariable ["current_action", nil];
+			//player groupChat format["REMOVED: _action_id = %1, _object = %2", _action_id, _current_object];
 		};
+		_player setVariable ["current_object", nil];
+	};
+	
+	_current_object = _player getVariable "current_object";
+	_current_object = if (isNil "_current_object") then {objNull} else {_current_object};
+	
+	if (not(isNull(_current_object))) exitWith {};
+	
+	//add the action for the new object
+	if (not(isNull _near_object)) then {
+		private["_distance"];
+		_distance = _near_object distance _player;
+		if (not(_distance < 3)) exitWith {};
 
-		if(_exit) exitWith {};
+		private["_amount", "_item"];
+		_amount = _near_object getVariable "amount";
+		_item = _near_object getVariable "item";
+		if (isNil "_amount" || isNil "_item") exitWith {};
 		
-		private["_near_players", "_near_players_count"];
-		_near_players = [_object, 3] call players_object_near;
-		_near_players_count = (count _near_players);
-		//player groupChat format["_near_players = %1", _near_players];
+		private["_name"];
+		_amount = [_amount] call decode_number;
+		_name = (_item call INV_GetItemName);
 		
-		if (((_object distance player) < 3) && (_near_players_count < 2)) then {
-			private["_amount", "_item", "_infos", "_name", "_action"];
-			_array	= _object getvariable "droparray";
-			if(isNil "_array") exitWith {};
-			
-			_amount	= [_array select 0] call decode_number;
-			_item 	= _array select 1;
-			_infos	= _item call INV_GetItemArray;
-			_name	= _infos call INV_GetItemName;
-			
-			_action = player addaction [format["Pickup %1 (%2)", _name, _amount], "pickup.sqf", [_object, _item, ([_amount] call encode_number)]];
-			iactionarr = iactionarr + [[_object, _action]];
-		};	
-	} foreach _objects;
+		private["_action_id"];
+		_action_id = _player addAction [
+			format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", 
+			format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", 
+			format['not(interact_object_pickup_active) && (((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
+		];
 
-	for [{_i=0}, {_i < (count iactionarr)}, {_i=_i+1}] do {
-		private["_object", "_action", "_variable"];
-		_array	= iactionarr select _i;
-		_object    = _array select 0;
-		_action = _array select 1;
-		_variable	= _object getvariable "droparray";
-
-		private["_near_players", "_near_players_count"];
-		_near_players = [_object, 3] call players_object_near;
-		_near_players_count = (count _near_players);
-		if(isnull _object or _object distance player > 2 or (isnil "_variable") || _near_players_count > 1) then {	
-			player removeAction _action;
-			iactionarr set [_i, 0];
-			iactionarr = iactionarr - [0];
-		};
+		//player groupChat format["ADDED: _action_id = %1, _object = %2", _action_id, _near_object];
+		_player setVariable ["current_object", _near_object];
+		_player setVariable ["current_action", _action_id];
 	};
 };
 
@@ -499,8 +495,6 @@ check_restrains = {
 		};
 	};};};
 };
-
-
 
 check_respawn_time = {
 	if (not(alive player)) exitWith {};

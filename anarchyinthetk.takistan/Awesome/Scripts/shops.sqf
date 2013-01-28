@@ -137,6 +137,7 @@ _cs =
 _ts = 
 	[
 		["Tractor", 5, 50],
+		["tractorOld", 5, 50],
 		["Ikarus", 5, 20],
 		["Ikarus_TK_CIV_EP1", 5, 20],
 		["Ural_TK_CIV_EP1", 5, 20],
