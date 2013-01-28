@@ -19,6 +19,7 @@ R3F_LOG_CFG_remorqueurs = R3F_LOG_CFG_remorqueurs +
 [
 	"TowingTractor",
 	"Tractor",
+	"tractorOld",
 	"Kamaz_Base",
 	"MTVR",
 	"GRAD_Base",
@@ -78,6 +79,7 @@ R3F_LOG_CFG_objets_heliportables = R3F_LOG_CFG_objets_heliportables +
 	"SkodaBase",
 	"TowingTractor",
 	"Tractor",
+	"tractorOld",
 	"Kamaz_Base",
 	"MTVR",
 	"GRAD_Base",
@@ -155,6 +157,7 @@ R3F_LOG_CFG_transporteurs = R3F_LOG_CFG_transporteurs +
 	["SkodaBase", 10],
 	["TowingTractor", 5],
 	["Tractor", 5],
+	["tractorOld", 5],
 	["KamazRefuel", 10],
 	["Kamaz", 50],
 	["Kamaz_Base", 35],

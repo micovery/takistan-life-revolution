@@ -41,7 +41,6 @@ fvspam                   = false;
 maxfacworkers            = 50;
 maxfacworkers2           = 41;
 firingcaptive            = false;
-pickingup                = false;
 lockpickchance           = 30;
 planting                 = false;
 drugstockinc             = 900;
@@ -261,12 +260,7 @@ coppatrolarray  =
     getmarkerpos "patrolpoint13"
 ];
 
-
-
-
-
 if (iscop) then {
-    [player, 'handy', 1] call INV_SetItemAmount;
     RadioTextMsg_1 = "Put your fucking hands up!";
     RadioTextMsg_2 = "Pull over and stay in your vehicle!";
     RadioTextMsg_3 = "Drop your weapon and put your hands on your head!";
@@ -287,20 +281,16 @@ publicarbeiterarctionarray = [];
 
 private["_i"];
 
-
 robpoolsafe1           = 0; 
 robpoolsafe2           = 0;
 robpoolsafe3           = 0;
 deadtimebonus          = 0.001;
-
 
 ["arrested", false] call stats_init_variable;
 ["deadtimes", 0] call stats_init_variable;
 ["copskilled", 0] call stats_init_variable;
 ["civskilled", 0] call stats_init_variable;
 ["arrestsmade", 0] call stats_init_variable;
-
-
 
 selfkilled               = 0;
 killstrafe               = 20000;
@@ -318,7 +308,6 @@ LawsArray              = [
 	"_______________(empty)__________________",  
 	"_______________(empty)__________________"
 ];
-
 
 isMayor                  = false;
 WahlArray                = [];
@@ -343,7 +332,6 @@ while { _i < (count playerstringarray) } do {
 	WahlArrayc = WahlArrayc + [ [] ];
 	_i = _i + 1;
 };
-
 
 atmscriptrunning = 0;
 shopactivescript = 0;

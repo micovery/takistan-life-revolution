@@ -906,6 +906,19 @@ vehicle_lockpick = {
 	};
 };
 
+vehicle_toggle_lock = {
+	private["_vehicle"];
+	_vehicle = _this select 0;
+	if (not([_vehicle] call vehicle_exists)) exitWith {};
+
+	private["_state"];
+	_state = locked _vehicle;
+	_state = not(_state);
+	format["%1 lock %2", _vehicle, _state] call broadcast;
+	
+	_state
+};
+
 vehicle_owner = {
 	private["_player", "_vehicle"];
 	_player = _this select 0;
@@ -1036,6 +1049,7 @@ vehicle_list = {
 	_vehicles = if (typeName _vehicles != "ARRAY") then {[]} else {_vehicles};
 	_vehicles
 };
+
 
 
 call vehicle_load;
