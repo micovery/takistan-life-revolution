@@ -2778,6 +2778,12 @@ interact_play_pickup_animation = {
 };
 
 interact_object_pickup = { _this spawn {
+	interact_object_pickup_active = if (isNil "interact_object_pickup_active") then {false} else {interact_object_pickup_active};
+	if (interact_object_pickup_active) exitWith {
+		player groupChat format["ERROR: You are already picking-up an object"];
+	};
+	interact_object_pickup_active = true;
+	
 	[] call interact_play_pickup_animation;
 	
 	private["_player", "_object"];
@@ -2787,12 +2793,6 @@ interact_object_pickup = { _this spawn {
 	if (not([_player] call player_human)) exitWith {};
 	if (isNil "_object") exitWith {};
 	if (typeName _object != "OBJECT") exitWith {};
-	
-	interact_object_pickup_active = if (isNil "interact_object_pickup_active") then {false} else {interact_object_pickup_active};
-	if (interact_object_pickup_active) then {
-		player groupChat format["ERROR: You are already picking-up an object"];
-	};
-	interact_object_pickup_active = true;
 	
 	private["_item", "_amount"];
 	_item = _object getVariable "item";
@@ -2812,7 +2812,7 @@ interact_object_pickup = { _this spawn {
 	};
 	
 	_remaining = [_remaining] call encode_number;
-	_object setVariable ["amount", _remaining];
+	_object setVariable ["amount", _remaining, true];
 	interact_object_pickup_active = false;
 };};
 

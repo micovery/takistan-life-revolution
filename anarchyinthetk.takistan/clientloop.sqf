@@ -463,7 +463,7 @@ check_droppable_items = {
 		_action_id = _player addAction [
 			format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", 
 			format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", 
-			format['(((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
+			format['not(interact_object_pickup_active) && (((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
 		];
 
 		//player groupChat format["ADDED: _action_id = %1, _object = %2", _action_id, _near_object];
