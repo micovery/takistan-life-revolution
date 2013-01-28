@@ -330,7 +330,7 @@ factory_globals = {
 		[ weaponfactory, "factory4", "Weapon Factory", wfgunbox,dummyobj, _weaponfactory, 10000000, "Fabrikablage4", "weaponqueue"],
 		[ tairshop, "factory6", "Terrorist Vehicle Factory", dummyobj,tairspawn, _tairfactory, 20000000, "Fabrikablage6", "tavehiclequeue"],
 		[ alcoholfactory, "factory7", "Alcohol Factory", dummyobj, dummyobj, _alcoholfactory, 1000000, "Fabrikablage7", "alcoholfactoryqueue"] ,
-		[ ringfactory, "factory9", "Ring Factory", dummyobj, dummyobj, _ringfactory, 2500000, "Fabrikablage9", "diamondqueue"],
+		//[ ringfactory, "factory9", "Ring Factory", dummyobj, dummyobj, _ringfactory, 2500000, "Fabrikablage9", "diamondqueue"],
 		[ Furnace, "factory10","Furnace", dummyobj, dummyobj, _furnace, 1500000, "Fabrikablage10","furnacequeue"]
 	];
 };

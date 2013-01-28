@@ -1615,7 +1615,7 @@ class Mission
 					leader=1;
 					skill=0.60000002;
 					text="ringfactory";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move"";";
+					init="this hideObject true; this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1]; this disableAI ""move"";";
 				};
 			};
 		};
