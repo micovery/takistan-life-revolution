@@ -738,6 +738,7 @@ shop_sell_item_validate_data = {
 	_max_stock = [_item, _shop_id] call INV_GetMaxStock;
 	_isOilBarrel = (_item == "OilBarrel");
 	
+	
 
 	
 	_type = _infos call INV_GetItemType;
@@ -752,7 +753,7 @@ shop_sell_item_validate_data = {
 	
 	_weapons = (weapons player);
 	_magazines = (magazines player);
-	_vehicles = [player] call vehicle_list;
+	_vehicles = [player, _class, _item, 50] call shop_get_vehicles_by_class_item;
 	
 	_weapon_count = if (_isWeapon) then { ({_x == _class} count _weapons ) } else { 0 };
 	_weapon_count = if (isNil "_weapon_count") then { 0 } else { _weapon_count };
@@ -761,12 +762,12 @@ shop_sell_item_validate_data = {
 	_magazine_count = if (isNil "_magazine_count") then { 0 } else { _magazine_count };
 	_item_count = if (_isItem) then { ([player, _item] call INV_GetItemAmount) } else { 0 };
 	_item_count = if (isNil "_item_count") then { 0 } else { _item_count };
-	_vehicle_count = if (_isVehicle) then { ({ (typeOf _x == _class) } count _vehicles) } else { 0 };
-	_vehicle_count = if (isNil "_vehicle_count") then { 0 } else { _vehicle_count };
-	_vehicle_alive_count = if (_vehicle_count > 0) then { ({((typeOf _x == _class) && (alive _x))} count _vehicles) } else { 0 }; 
+	_vehicle_count = if (_isVehicle) then { count (_vehicles) } else { 0 };
+	_vehicle_count = if (isNil "_vehicle_count") then {0} else {_vehicle_count};
+	_vehicle_alive_count = if (_vehicle_count > 0) then {({alive _x} count _vehicles)} else { 0 }; 
 	_vehicle_alive_count = if (isNil "_vehicle_alive_count") then { 0 } else { _vehicle_alive_count };
-	_vehicle_near_count = if (_vehicle_alive_count > 0)  then { ({((typeOf _x == _class) && (alive _x) && ((_x distance player) < 50))} count _vehicles) } else { 0 }; 
-	_vehicle_near_count = if (isNil "_vehicle_near_count") then { 0 } else { _vehicle_near_count };
+	_vehicle_near_count = if (_vehicle_alive_count > 0)  then {({((alive _x) && ((_x distance player) < 50))} count _vehicles) } else { 0 }; 
+	_vehicle_near_count = if (isNil "_vehicle_near_count") then {0} else {_vehicle_near_count};
 	_hasBackpack = if (_isBackpack) then { _class == typeOf(unitBackpack player); } else { false };
 		
 	_tax = _type call INV_GetObjectTax;
@@ -896,6 +897,7 @@ shop_sell_item_validate_data = {
 	
 	_data
 };
+
 
 shop_set_status_message = {
 	_text = _this select 0;
@@ -1131,15 +1133,16 @@ shop_sell_vehicle = {
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
 	
-	private ["_class", "_total_return", "_class", "_item_name", "_i", "_amount", "_type", "_vehicles", "_vehicle"];
+	private ["_class", "_item", "_total_return", "_class", "_item_name", "_i", "_amount", "_type", "_vehicles", "_vehicle"];
 	
+	_item = _data select shop_sell_item_key;
 	_item_name = _data select shop_sell_item_name;
 	_class = _data select shop_sell_item_class;
 	_total_return = _data select shop_sell_item_total_return;
 	_amount = _data select shop_sell_item_amount;
 	_type = _data select shop_sell_item_type;
 	
-	_vehicles = [_class, 50] call shop_get_vehicles_by_class;
+	_vehicles = [player, _class, _item, 50] call shop_get_vehicles_by_class_item;
 	_vehicles_count = (count _vehicles);
 	_vehicle = nil;
 	if  (_vehicles_count == 0) exitWith { false };
@@ -1158,40 +1161,58 @@ shop_sell_vehicle = {
 	true
 };
 
-shop_get_vehicles_by_class = {
-	//player groupChat format["shop_get_vehicles_by_class %1", _this];
-	private ["_class", "_vehicles", "_vehicle"];
+shop_get_vehicles_by_class_item = {
+	//player groupChat format["shop_get_vehicles_by_class_item %1", _this];
+	private ["_player", "_class", "_item", "_distance"];
 	
-	_class = _this select 0;
-	_distance = _this select 1;
+	_player = _this select 0;
+	_class = _this select 1;
+	_item = _this select 2;
+	_distance = _this select 3;
 	
+	if (not([_player] call player_exists)) exitWith {[]};
 	if (isNil "_class") exitWith { [] };
 	if (typeName _class != "STRING") exitWith { [] };
+	if (isNil "_item") exitWith {[]};
+	if (typeName _item != "STRING") exitWith {[]};
 	if (isNil "_distance") exitWith { [] };
 	if (typeName _distance != "SCALAR") exitWith { [] };
 	
+	private["_vehicles"];
 	_vehicles = [];
 	private["_vehicle_list"];
 	
-	_vehicle_list = [player] call vehicle_list;
+	_vehicle_list = [_player] call vehicle_list;
 	//player groupChat format["_vehicle_list = %1", _vehicle_list];
 
+	private["_vehicle"];
+	
 	{
 		_vehicle = _x;
 		if (true) then {
 			if (isNil "_vehicle") exitWith {};
 			if (not(alive(_vehicle))) exitWith {};
 			private["_cdistance"];
-			_cdistance = player distance _vehicle;
+			_cdistance = _player distance _vehicle;
 			//player groupChat format["_actual_distance = %1, _check_distance = %2", _cdistance , _distance];
 			if (_cdistance > _distance) exitWith {};
 			if (typeOf _vehicle != _class) exitWith {};
+			
+			private["_citem"];
+			_citem = [_vehicle, "item_name"] call vehicle_get_string;
+			//player groupChat format["_citem = %1", _citem];
+			if (_citem != _item) exitWith {};
+			
 			_vehicles = _vehicles + [_vehicle];
 		};
 	} foreach _vehicle_list;
 	
 	_vehicles
+
+	
 };
+
+
 
 shop_sell_gear = {	
 	private ["_data"];
@@ -1776,6 +1797,7 @@ shop_get_oil_barrel_supply = {
 	_supply = _max_stock - _demand;
 	_supply
 };
+
 
 [INV_ItemShops] spawn shop_setup;
 shop_functions_defined = true;
