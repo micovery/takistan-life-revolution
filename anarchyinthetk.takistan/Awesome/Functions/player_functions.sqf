@@ -2641,6 +2641,7 @@ player_drop_item = {
 	if (typeName _item != "STRING") exitWith {};
 	if (typeName _amount != "SCALAR") exitWith {};
 	if (_item == "keychain") exitWith {};
+	if (_item == "handy") exitWith {};
 	
 	private["_class", "_object"];
 	_class = [_item] call item2class;
