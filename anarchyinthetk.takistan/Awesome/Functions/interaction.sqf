@@ -1105,7 +1105,7 @@ interact_rob_inventory_receive = {
 	
 	private["_amount"];
 	_amount = (floor(random _money));
-	[_target, "money", -(_amount)] call INV_AddInventoryItem;
+	
 	
 	if (stolenfromtimeractive || (_money <= 0) || (_amount <= 0)) exitwith {
 		[_player, format["(failed-armed-robbery, %1-%2)", _target, (name _target)], 20000] call player_update_warrants;
@@ -1114,7 +1114,7 @@ interact_rob_inventory_receive = {
 		_message = format["%1-%2 attemted to rob %3-%4 but failed", _player, (name _player), _target, (name _target)];
 		format['hint toString(%1);', toArray(_message)] call broadcast;
 	};
-	
+	[_target, "money", -(_amount)] call INV_AddInventoryItem;
 	format['[%1, %2, %3] call interact_rob_inventory_response;', _player, _target, _amount] call broadcast;
 	[_player, format["(armed-robbery, %1-%2)", _target, (name _target)], _amount] call player_update_warrants;
 	
