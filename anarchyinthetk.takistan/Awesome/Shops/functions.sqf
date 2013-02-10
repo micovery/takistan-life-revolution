@@ -1466,6 +1466,7 @@ shop_drug_search = {
 	
 	if(count _list == 0) exitWith {
 		player groupchat "No drugs found";
+		shop_busy=false;
 	};
 	
 	{
@@ -1475,7 +1476,7 @@ shop_drug_search = {
 			_uid = _data select shop_drug_list_player_uid;
 			_profit = _data select shop_drug_list_profit;
 			_player =  [_uid] call player_lookup_uid;
-			if (isNil "_player") exitWith {};
+			if (isNil "_player") exitWith {shop_busy=false;};
 			
 			player groupChat format["This civilian bought $%1 worth of drugs from %2-%3!", strM(_profit), _player, (name _player)];
 			
