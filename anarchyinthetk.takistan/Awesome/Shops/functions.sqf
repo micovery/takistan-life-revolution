@@ -1455,6 +1455,8 @@ shop_get_player_by_uid = {
 };
 
 shop_drug_search = {
+	waituntil{!shop_busy};
+	shop_busy=true;
 	private["_shop_id", "_list"];
 	_shop_id = _this select 0;
 	
@@ -1485,7 +1487,7 @@ shop_drug_search = {
 	} foreach _list;
 	
 	_list = [];
-
+	shop_busy=false;
 	[_shop_id, _list] call shop_set_drug_list;
 };
 

@@ -17,9 +17,11 @@ _Tear_gas =
 {
 	_pos = _this select 0;
 	_timenow = time;
-	_array = [];
+	_array = [];	
+	
 	while{time < (_timenow + 10) || (!(isnull _pos))}do
 		{
+		  if(!gasmask) then {
 			sleep 1;
 			if(!(isnull _pos))then
 				{
@@ -48,7 +50,8 @@ _Tear_gas =
 						
 						};
 				};
-		};
+			};
+		};	
 };
 
 
