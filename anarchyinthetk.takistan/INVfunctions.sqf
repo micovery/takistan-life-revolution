@@ -327,22 +327,28 @@ INV_RemoveIllegalStorage = {
 
 // Remove Illegal Items
 INV_RemoveIllegal = {
-	private["_object","_inv"];
-	_object = _this select 0;	
-	_inv=[_object] call player_get_inventory;
-	 {	   
-	   if((_x call INV_GetItemIsIllegal)) then {
-			[_object,_x select 0,0] call INV_SetItemAmount;
+	private["_object", "_inv"];
+	_object = _this select 0;
+	
+	_inv = [_object] call player_get_inventory;
+
+	{
+		private["_item_entry", "_item"];
+		_item_entry = _x;
+		_item = _item_entry select 0;
+		if((_item call INV_GetItemIsIllegal)) then {
+			[_object, _item, 0] call INV_SetItemAmount;
 		};
-	 } foreach _inv;	 
+	} foreach _inv;	 
 	
 	{
-	 if(!(_x == "Laserdesignator" || _x =="Binocular_Vector" || _x =="NVGoggles"  || _x =="Binocular" || _x =="itemmap" || _x =="itemgps" ||
-	 _x =="itemradio" || _x =="ItemCompass" || _x =="ItemWatch") ) then {
-	  _object removeweapon _x;
-	 };
-	} foreach weapons _object;	
-	{ _object removemagazines _x;} foreach magazines player;	
+		if (!(_x == "Laserdesignator" || _x =="Binocular_Vector" || _x =="NVGoggles"  || _x =="Binocular" || _x =="itemmap" || _x =="itemgps" ||
+			_x =="itemradio" || _x =="ItemCompass" || _x =="ItemWatch") ) then {
+			_object removeweapon _x;
+		};
+	} foreach weapons _object;
+	
+	{ _object removemagazines _x;} foreach magazines _object;	
 };
 
 
@@ -670,7 +676,7 @@ INV_GetItemMaterials = { ((_this call INV_GetItemArray) select 8) };
 INV_GetItemGiveable = { ((_this call INV_GetItemArray) select 5) select 0 };
 INV_GetItemDropable = { ((_this call INV_GetItemArray) select 5) select 1 };
 INV_GetItemLooseable = { ((_this call INV_GetItemArray) select 5) select 2 };
-INV_GetItemIsIllegal = { {if((_x select 0)== (_this select 0)) exitwith {(_x select 5) select 3;}} foreach INV_AllItemsArray;};
+INV_GetItemIsIllegal = { ((_this call INV_GetItemArray) select 5) select 3 };
 INV_GetItemFilename = { ((_this call INV_GetItemArray) select 5) select 4 };
 
 //player groupChat "Done definining INV_Functions!";
