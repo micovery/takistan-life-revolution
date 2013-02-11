@@ -333,12 +333,14 @@ INV_RemoveIllegal = {
 	_inv = [_object] call player_get_inventory;
 
 	{
-		private["_item_entry", "_item"];
+		private["_item_entry", "_item", "_infos", "_isItem"];
 		_item_entry = _x;
 		_item = _item_entry select 0;
-		if((_item call INV_GetItemIsIllegal)) then {
+		_infos = _item call INV_GetItemArray;
+		_isItem = ((_infos call INV_GetItemType) == "Item");
+		if (_isItem) then { if (_item call INV_GetItemIsIllegal) then {
 			[_object, _item, 0] call INV_SetItemAmount;
-		};
+		};};
 	} foreach _inv;	 
 	
 	{
