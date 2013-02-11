@@ -181,14 +181,15 @@ backup_ins_weapons      =
     "ItemWatch",
     "AK_47_S"
 ];
+
 backup_ins_magazines    =
 [
-    "30Rnd_545x39_AK",
-    "30Rnd_545x39_AK",
-    "30Rnd_545x39_AK",
-    "30Rnd_545x39_AK",
-    "30Rnd_545x39_AK",
-    "30Rnd_545x39_AK",
+    "30Rnd_762x39_AK47",
+    "30Rnd_762x39_AK47",
+    "30Rnd_762x39_AK47",
+    "30Rnd_762x39_AK47",
+    "30Rnd_762x39_AK47",
+    "30Rnd_762x39_AK47",
     "HandGrenade_East",
     "HandGrenade_East"
 ];
