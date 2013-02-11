@@ -73,6 +73,8 @@ player_lose_factory_money = {
 
 		if (_amount <= 0) exitWith {_amount = 0;};
 	} foreach all_factories;
+	
+	[_player] call factory_save_storage;
 	_amount
 };
 
@@ -85,6 +87,7 @@ player_lose_private_storage_money =  {
 	if (typeName _lost_amount != "SCALAR") exitWith {};
 
 	[_player, "money", -(_lost_amount), "private_storage"] call INV_AddItemStorage;
+	[_player] call player_save_private_storage;
 };
 
 player_lose_inventory_money =  {
