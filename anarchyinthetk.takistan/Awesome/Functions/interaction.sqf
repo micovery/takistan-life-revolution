@@ -3013,7 +3013,7 @@ interact_item_give = { _this spawn {
 	
 	private["_space_available"];
 	_space_available = [_target, _item, _amount] call player_inventory_space;
-	if (_space_available == 0) exitWith {
+	if (_space_available <= 0) exitWith {
 		player groupChat format["The target player does not have enough inventory space to receive the items"];
 	};
 	
@@ -3164,6 +3164,52 @@ interact_keychain_drop = {
 	
     [_player, _vehicle] call vehicle_remove;
     player groupChat format["You dropped the key for %1", _vehicle];
+};
+
+interact_buy_insurance = {
+	private["_player"];
+	_player = _this select 0;
+	([_player, "bankversicherung"] call interact_buy_item)
+};
+
+interact_buy_item_active = false;
+interact_buy_item = {
+	private["_player", "_item"];
+	_player = _this select 0;
+	_item = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_item") exitWith {};
+	if (typeName _item != "STRING") exitWith {};
+	
+	if (interact_buy_item_active) exitWith {
+		player groupChat format["ERROR: You are already buying an item"];
+	};
+	interact_buy_item_active = true;
+	
+	private["_player_money", "_item_cost", "_item_name", "_infos"];
+	_infos = _item call INV_GetItemArray;
+	_item_cost = _infos call INV_GetItemBuyCost;
+	_item_name = _infos call INV_GetItemName;
+	_player_money = [_player, "money"] call INV_GetItemAmount;
+	
+	if (_player_money < _item_cost) exitWith {
+		player groupChat format["%1-%2, you do not have enough money to buy %3", (_player), (name _player), _item_name];
+		interact_buy_item_active = false;
+	}; 
+	
+	private["_space_available"];
+	_space_available = [_player, _item, 1] call player_inventory_space;
+	if (_space_available <= 0) exitWith {
+		player groupChat format["%1-%2, you do not have enough space in your inventory for %3",  (_player), (name _player), (_item_name)];
+		interact_buy_item_active = false;
+	}; 
+
+	[_player, "money", -(_item_cost)] call INV_AddInventoryItem;
+	[_player, _item, 1] call INV_AddInventoryItem;
+	player groupChat format["%1-%2, you bought one %3 for $%4", (_player), (name _player), _item_name, _item_cost];
+	sleep 3;
+	
+	interact_buy_item_active = false
 };
 
 interaction_functions_defined = true;
