@@ -1459,7 +1459,9 @@ interact_recruit_ai_receive = {
 	
 	reload _unit;
 	_unit addMPEventHandler ["MPKilled", { _this call player_handle_mpkilled }];
+	format['[%1, %2] call interact_recruit_ai_complete;', _player, _unit] call broadcast;
 };
+
 
 interact_recruit_ai = { _this spawn {
 	private["_player"];
@@ -1495,6 +1497,16 @@ interact_recruit_ai = { _this spawn {
 	interact_recruit_ai_busy = false;
 };};
 
+interact_recruit_ai_complete = {
+	private["_player", "_unit"];
+	_player = _this select 0;
+	_unit = _this select 1;
+	if (not([_player] call player_human)) exitWith {};
+	if (not([_unit] call player_exists)) exitWith {};
+	if (_player != player) exitWith {};
+	
+	[_unit] joinSilent (group _player);
+};
 
 interact_stranded_check = { 
 	private["_player"];
