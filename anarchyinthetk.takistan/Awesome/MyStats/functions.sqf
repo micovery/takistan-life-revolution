@@ -336,15 +336,15 @@ stats_server_player_disconnected = {
 	private["_player"]; 
 	_player = [_name] call player_lookup_name;
 	
-	diag_log format["%1,%2,%3 - disconnected!", _player, _name, _uid];
+	diag_log format["%1,%2,%3 - disconnected saving start", _player, _name, _uid];
 	[_player] call player_save_side_gear;
 	[_player] call player_save_side_inventory;
 	[_player] call player_save_side_position;
 	[_player] call player_save_side_damage;
 	[_player] call player_save_side_vehicle;
-	[_player] call player_save_private_storage;
 	[_player] call gang_player_disconnected;
-	[_player] call factory_save_storage;
+	diag_log format["%1,%2,%3 - disconnected saving end", _player, _name, _uid];
+	
 
 	private["_vehicle"];
 	_vehicle = (vehicle _player);
