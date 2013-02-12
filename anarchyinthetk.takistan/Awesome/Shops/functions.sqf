@@ -1011,11 +1011,18 @@ shop_buy = {
 	call shop_update_buy_item;
 };
 
-shop_sell = {
-[] spawn {
+shop_sell_active = false; 
+shop_sell = { [] spawn {
+	if (shop_sell_active) exitWith {
+		player groupChat format["ERROR: shop_sell already active"];
+	};
+	shop_sell_active = true;
+	
 	private["_data"];
 	_data = call shop_update_sell_item;
-	if (isNil "_data") exitWith {};
+	if (isNil "_data") exitWith {
+		shop_sell_active = false;
+	};
 
 	ctrlEnable [sellButton_idc, false];
 
@@ -1044,9 +1051,9 @@ shop_sell = {
 		[_data] call shop_sell_transaction;
 	};
 	call shop_update_sell_item;
-};
-
-};
+	
+	shop_sell_active = false;
+};};
 
 shop_sell_item = {
 	private ["_data"];
@@ -1132,6 +1139,8 @@ shop_sell_vehicle = {
 	
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
+	private["_player"];
+	_player = player;
 	
 	private ["_class", "_item", "_total_return", "_class", "_item_name", "_i", "_amount", "_type", "_vehicles", "_vehicle"];
 	
@@ -1142,7 +1151,7 @@ shop_sell_vehicle = {
 	_amount = _data select shop_sell_item_amount;
 	_type = _data select shop_sell_item_type;
 	
-	_vehicles = [player, _class, _item, 50] call shop_get_vehicles_by_class_item;
+	_vehicles = [_player, _class, _item, 50] call shop_get_vehicles_by_class_item;
 	_vehicles_count = (count _vehicles);
 	_vehicle = nil;
 	if  (_vehicles_count == 0) exitWith { false };
@@ -1153,10 +1162,28 @@ shop_sell_vehicle = {
 		_vehicle = _vehicles select 0;
 	};
 	
+	[_player, _vehicle] call vehicle_remove;
 	if (isNil "_vehicle") exitWith { false };
-				
+
+	
+	private["_uid"];
+	_uid = getPlayerUID _player;
+	
+	_vehicle setVariable ["uid_sold", _uid, true];
+	player groupChat format["Vehicle being sold, please wait 5 seconds"];
+	closeDialog 0;
+	sleep 5;
+	private["_uid_sold"];
+	_uid_sold = _vehicle getVariable "uid_sold";
+	_uid_sold = if (isNil "_uid_sold") then {""} else {_uid_sold};
+	_uid_sold = if (typeName _uid_sold != "STRING") then {""} else {_uid_sold};
+	
+	if (_uid_sold != _uid || isNil "_vehicle") exitWith {
+		player groupChat format["ERROR: Someone already sold this vehicle"];
+		false
+	};
+	
 	player groupChat format["You sold the vehicle for $%1.", strM(_total_return)];
-	[player, _vehicle] call vehicle_remove;
 	deleteVehicle _vehicle;
 	true
 };
