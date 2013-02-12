@@ -440,6 +440,11 @@ KeyUp_handler = {
 		not(_key in (call keyboard_get_stunned_allowed_keys))
 	};
 	
+	//Fix for exploit using cross-arms animation, that allows players to glitch through walls
+	if ((animationState player) == "shaftoe_c0briefing_otazky_loop6") then {
+		player setPosATL (player getVariable "animation_position");
+	};
+	
 	private["_inVehicle"];
 	_inVehicle = ((vehicle player) != player);
 	
@@ -527,9 +532,13 @@ KeyDown_handler = {
 		lookingAround = true;
 	};
 	
-	
 	if ((call keyboard_stunned_check) || (call keyboard_restrained_check)) exitWith {
 		not(_key in (call keyboard_get_stunned_allowed_keys))
+	};
+	
+	//Fix for exploit using cross-arms animation, that allows players to glitch through walls
+	if ((animationState player) == "shaftoe_c0briefing_otazky_loop6") then {
+		player setPosATL (player getVariable "animation_position");
 	};
 	
 	private["_inVehicle", "_isDriver"];
