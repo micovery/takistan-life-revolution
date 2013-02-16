@@ -856,10 +856,10 @@ vehicle_unflip = {
 	};
 };
 
-vehicle_lockpick = {
-	private["_incarpark"];
+vehicle_lockpick = {	
+	private["_incarpark","_item"];
+	_item   = _this select 0;	
 	_incarpark = false;
-
 	_vehicle  = [10] call INV_LocateClosestVehicle;
 			
 	if (isNil "_vehicle") exitWith {
@@ -870,7 +870,7 @@ vehicle_lockpick = {
 		player groupChat "You already own this vehicle.";
 	};
 	player groupChat format["lockpicking %1", _vehicle];
-
+	[player, _item, -1] call INV_AddInventoryItem;
 	format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 
 	{
@@ -918,6 +918,21 @@ vehicle_toggle_lock = {
 	
 	_state
 };
+
+vehicle_owner = {
+	private["_player", "_vehicle"];
+	_player = _this select 0;
+	_vehicle = _this select 1;
+	if (not([_player] call player_human)) exitWith{false};
+	if (not([_vehicle] call vehicle_exists)) exitWith {false};
+	
+	private["_vehicles"];
+	_vehicles = [player] call vehicle_list;
+	(_vehicle in _vehicles)
+
+};
+
+
 
 vehicle_owner = {
 	private["_player", "_vehicle"];
