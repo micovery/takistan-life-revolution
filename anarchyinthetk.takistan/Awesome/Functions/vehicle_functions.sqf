@@ -932,23 +932,6 @@ vehicle_owner = {
 
 };
 
-
-
-vehicle_owner = {
-	private["_player", "_vehicle"];
-	_player = _this select 0;
-	_vehicle = _this select 1;
-	if (not([_player] call player_human)) exitWith{false};
-	if (not([_vehicle] call vehicle_exists)) exitWith {false};
-	
-	private["_vehicles"];
-	_vehicles = [player] call vehicle_list;
-	(_vehicle in _vehicles)
-
-};
-
-
-
 vehicle_is_player_owner = {
 	private["_vehicle"];
 	
