@@ -1244,7 +1244,7 @@ INV_AllItemsArray = [
 ["steel",						["Item", 		"ressource"],["steel", "Steel"], 								[5000, 900],		[3, ""],[true,true,true, false, "useresource.sqf"],"Steel Bars", localize "STRS_item_farmitem_info", [["iron", 5]] ],
 ["schwarzpulver",				["Item", 		"ressource"],["schwarzpulver", "Black Powder"],					[100, 50],			[1, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_schwarzpulver",localize "STRS_item_farmitem_info", [["kohle", 1],["schwefel", 1]]],
 ["schwefel", 					["Item", 		"ressource"],["schwefel", "Sulfur"],							[100, 50],			[0.5, ""],[true,true,true, false, "useresource.sqf"], localize "STRS_item_schwefel",localize "STRS_item_farmitem_info", []],
-["kohle",						["Item", 		"ressource"],["kohle", "Coal"],									[120, 50],			[0.5, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_kohle",localize "STRS_item_farmitem_info", [["holz", 1]]],
+["coal",						["Item", 		"ressource"],["coal", "Coal"],									[120, 50],			[0.5, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_kohle",localize "STRS_item_farmitem_info", [["holz", 1]]],
 ["Diamond rock",				["Item", 		"ressource"],["Diamond rock", "Diamond Rock"],					[1600, 600],			[3, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_Diamond",localize "STRS_item_farmitem_info", []],
 ["Rubies",						["Item", 		"ressource"],["Rubies", "Rubies"],								[1000, 350],			[3, ""], [true, true, true,false,"useresource.sqf"],"Rubies",localize "STRS_item_farmitem_info", []],
 ["Platinum",					["Item", 		"ressource"],["Platinum", "Platinum"],							[4000, 1600],		[3, ""], [true, true, true,false,"useresource.sqf"],"Platinum",localize "STRS_item_farmitem_info", []],
@@ -1324,8 +1324,17 @@ _n = count AllLifeMissionObjects;
 	_n = _n + 1;
 } forEach INV_AllItemsArray;
 
+// Taxes vars
+{
+	if(isnil _x) then
+	{
+		call compile format ["%1=5",_x];
+	};
+	call compile format [publicvariable "%1", _x];	
+} foreach ["itemtax","vehicletax","magazinetax","weapontax"];
 
-INV_ItemTypeArray = [ ["Item", "Item", 5], ["Vehicle", "Vehicle",5], ["Magazine","Magazine",5], ["Weapon","Weapon",5]];
+INV_ItemTypeArray = [ ["Item", "Item", itemtax], ["Vehicle", "Vehicle",vehicletax], ["Magazine","Magazine",vehicletax], ["Weapon","Weapon",weapontax]];
+
 
 
 

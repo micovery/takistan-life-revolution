@@ -405,23 +405,20 @@ interact_president_change_laws = {
 };
 
 
-interact_president_change_taxes = {
-	private["_item", "_mag", "_weap", "_vcl", "_bank"];
-	
-	_item = _this select 0;
-	_mag  = _this select 1;
-	_weap = _this select 2;
-	_vcl  = _this select 3;
-	_bank = _this select 4;
-	
-	format ["
-		(INV_ItemTypeArray select 0) set [2, %1];
-		(INV_ItemTypeArray select 1) set [2, %2];
-		(INV_ItemTypeArray select 2) set [2, %3];
-		(INV_ItemTypeArray select 3) set [2, %4];
-		bank_tax = %5;
-		hint ""The President has changed the tax rates!"";
-	", _item, _vcl, _mag, _weap, _bank] call broadcast;
+interact_president_change_taxes = {	
+	itemtax = _this select 0;
+	vehicletax = _this select 1;
+	magazinetax = _this select 2;
+	weapontax  = _this select 3;
+	bank_tax = _this select 4;	
+	publicVariable   "itemtax";
+	publicVariable   "vehicletax";
+	publicVariable   "magazinetax";
+	publicVariable   "weapontax";
+	publicVariable   "bank_tax";
+	// Redefinition of array uses fewer chars than using array set 
+	"INV_ItemTypeArray = [ [""Item"", ""Item"", itemtax], [""Vehicle"", ""Vehicle"",vehicletax], [""Magazine"",""Magazine"",vehicletax], [""Weapon"",""Weapon"",weapontax]];
+	hint ""The President has changed the tax rates!"";" call broadcast;
 };
 
 civilian_camera_cost_per_second = 1000000;

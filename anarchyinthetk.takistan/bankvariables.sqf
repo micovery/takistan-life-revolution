@@ -16,7 +16,10 @@ stolencash                   = 0;
 Maxbankrobpercentlost        = 0.05;
 MaxbankrobpercentlostA       = 0.10;
 MaxbankrobpercentlostB       = 0.20;
+if(isnil "bank_tax") then{
 bank_tax                     = 5;
+};
+publicVariable   "bank_tax";
 zinsen_prozent               = 1;
 zinsen_dauer                 = 1200;
 robenable                    = true;
