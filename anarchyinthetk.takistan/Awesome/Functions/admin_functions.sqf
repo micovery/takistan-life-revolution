@@ -16,13 +16,6 @@ logAdmin = {
 admin_actions_list = {
 	([
 		["------ Admin Commands ------", {}],
-		["Create poll (use input field)", {
-			private["_text"];
-			_text = _this select 2;
-			player groupChat format["Creating poll!"];
-			[parseText(_text)] call admin_create_poll;
-		}],
-				
 		["Camera (Toggle)", {
 			[] call camera_toggle;
 		}],
