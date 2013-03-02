@@ -502,17 +502,19 @@ if (_art == "steuern") then {
 	lbClear (_DFML displayCtrl 1);
 	
 	sliderSetSpeed [12, 1, 5];
-	sliderSetRange [12, 0, 30];
+	sliderSetRange [12, 1, 25];
 	sliderSetPosition [12,((INV_ItemTypeArray select 0) select 2)];
-	sliderSetSpeed [22, 1, 5];		sliderSetRange [22, 1, 30];
+	sliderSetSpeed [22, 1, 5];		
+	sliderSetRange [22, 1, 30];
 	sliderSetPosition [22,((INV_ItemTypeArray select 1) select 2)];
-	sliderSetSpeed [32, 1, 5];				sliderSetRange [32, 1, 30];
+	sliderSetSpeed [32, 1, 5];				
+	sliderSetRange [32, 1, 25];
 	sliderSetPosition [32,((INV_ItemTypeArray select 2) select 2)];
 	sliderSetSpeed [42, 1, 5];
-	sliderSetRange [42, 0, 30];
+	sliderSetRange [42, 1, 25];
 	sliderSetPosition [42,((INV_ItemTypeArray select 3) select 2)];
 	sliderSetSpeed [52, 1, 5];
-	sliderSetRange [52, 0, 30];
+	sliderSetRange [52, 1, 25];
 	sliderSetPosition [52,bank_tax];
 	while {ctrlVisible 1032} do {
 		ctrlSetText [11, format[localize "STRS_dialogandere_steuerdialog_itemsteuer", strN((round(sliderPosition 12)))]];
