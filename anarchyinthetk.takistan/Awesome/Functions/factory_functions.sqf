@@ -223,7 +223,7 @@ factory_globals = {
 		"MV22",
 		"BAF_Merlin_HC3_D",
 		"Mi17_Civilian",
-		"C130J_US_EP1",
+		"C130J",
 		"An2_1_TK_CIV_EP1",
 		"An2_2_TK_CIV_EP1",
 		"L39"
