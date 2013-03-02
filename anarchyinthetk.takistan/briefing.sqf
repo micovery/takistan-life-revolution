@@ -104,7 +104,7 @@ Address: tlr.ts3dns.com<br/>
 Port: (Default)
 Passwork: (No Password)
 <br/>
-Official Website: http://TLR.enjin.com<br/>
+Official Website: http://www.takistanliferevolution.com<br/>
 Join the forums, make suggestions and voice complaints!<br/>
 <br/>
 <br/>
@@ -138,7 +138,7 @@ Please report bugs to admins!<br/>
 <br/>
 If you require help please visit the forums or join teamspeak 3.
 <br/>
-Website: http://TLR.enjin.com<br/>
+Website: http://www.takistanliferevolution.com<br/>
 Teamspeak 3: tlr.ts3dns.com<br/>
 <br/>
 We look forward to hearing from you!<br/>
@@ -507,7 +507,7 @@ player createDiaryRecord ["donations",
 [
 "Donations",
 "
-Donate at http://tlr.enjin.com for extra starting money! More donator rewards coming soon, special shops and private houses!<br/>
+Donate at http://www.takistanliferevolution.com for extra starting money! More donator rewards coming soon, special shops and private houses!<br/>
 <br/>
 "
 ]
