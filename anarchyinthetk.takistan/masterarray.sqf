@@ -1324,17 +1324,26 @@ _n = count AllLifeMissionObjects;
 	_n = _n + 1;
 } forEach INV_AllItemsArray;
 
-// Taxes vars
+
+item_setup_taxes = {
 {
-	if(isnil _x) then
+	if((_this select 0)) then 
+	{	   
+		call compile format ["%1=%2",_x,(_this select 1) select _forEachIndex];		
+	}
+	else
 	{
-		call compile format ["%1=5",_x];
+		if(isnil _x) then
+		{
+		   	call compile format ["%1=5",_x];
+		};		
 	};
 	call compile format [publicvariable "%1", _x];	
 } foreach ["itemtax","vehicletax","magazinetax","weapontax"];
 
-INV_ItemTypeArray = [ ["Item", "Item", itemtax], ["Vehicle", "Vehicle",vehicletax], ["Magazine","Magazine",vehicletax], ["Weapon","Weapon",weapontax]];
-
+INV_ItemTypeArray = [ ["Item", "Item", itemtax], ["Vehicle", "Vehicle",vehicletax], ["Magazine","Magazine",magazinetax], ["Weapon","Weapon",weapontax]];
+};
+[false] call item_setup_taxes;
 
 
 

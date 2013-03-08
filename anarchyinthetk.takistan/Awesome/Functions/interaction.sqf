@@ -410,14 +410,9 @@ interact_president_change_taxes = {
 	vehicletax = _this select 1;
 	magazinetax = _this select 2;
 	weapontax  = _this select 3;
-	bank_tax = _this select 4;	
-	publicVariable   "itemtax";
-	publicVariable   "vehicletax";
-	publicVariable   "magazinetax";
-	publicVariable   "weapontax";
-	publicVariable   "bank_tax";
-	// Redefinition of array uses fewer chars than using array set 
-	"INV_ItemTypeArray = [ [""Item"", ""Item"", itemtax], [""Vehicle"", ""Vehicle"",vehicletax], [""Magazine"",""Magazine"",vehicletax], [""Weapon"",""Weapon"",weapontax]];
+	bank_tax = _this select 4;
+	publicVariable   "bank_tax";	
+	"[true,[""itemtax"",""vehicletax"",""magazinetax"",""weapontax""]] call item_setup_taxes;
 	hint ""The President has changed the tax rates!"";" call broadcast;
 };
 
