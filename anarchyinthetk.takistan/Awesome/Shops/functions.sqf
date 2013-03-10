@@ -579,6 +579,7 @@ shop_buy_item_validate_data = {
 	_amount = if (_amount_str == "") then { 0 } else {[_amount_str] call parse_number };
 	_amount = if (_amount < 0 ) then { ctrlSetText [itemsToBuy_box_idc, "1"]; 1 } else {_amount};
 	_amount = if (_amount > 100) then { ctrlSetText [itemsToBuy_box_idc, "100"]; 100 } else { _amount };
+	_amount = round _amount;
 	
 	_status_message = "";
 	_buyButton_state = true;
@@ -782,6 +783,7 @@ shop_sell_item_validate_data = {
 	_amount = if (_amount_str == "") then { 0 } else {[_amount_str] call parse_number };
 	_amount = if (_amount < 0 ) then { ctrlSetText [itemsToSell_box_idc, "1"]; 1 } else {_amount};
 	_amount = if (_amount > 100) then { ctrlSetText [itemsToSell_box_idc, "100"]; 100 } else { _amount };
+	_amount = round _amount;
 	
 	if (_amount <= 0) exitWith {
 		["You have entered an invalid amount of items to sell", _quiet] call shop_set_status_message; nil
