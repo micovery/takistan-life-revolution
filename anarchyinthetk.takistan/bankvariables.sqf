@@ -25,16 +25,23 @@ zinsen_dauer                 = 1200;
 robenable                    = true;
 
 if (isServer) then {
-	_h = call compile preprocessFile "server\donators.sqf";
-	private["_timeout"];
-	_timeout = time + 2;
-	waitUntil{(scriptDone _h) || (time > _timeout)};
-	server setVariable ["donators0", donators0, true];
-	server setVariable ["donators1", donators1, true];
-	server setVariable ["donators2", donators2, true];
-	server setVariable ["donators3", donators3, true];
-	server setVariable ["donators4", donators4, true];
+
+	private["_file"];
+	_file = "server\donators.sqf";
+	
+	if (_file != "") then {
+		call compile preProcessFileLineNumbers _file;
+	};
+	for[{_i = 0}, {_i <= 4}, {_i = _i + 1}] do {
+		_var = format["donators%1", _i];
+		server setVariable [_var, missionNamespace getVariable [_var, []]];
+	};
+	server setVariable ["DONATOR_LOAD", true, true];
+
 } else {
+	private["_timeout"];
+	_timeout = time + 5;
+	waitUntil {(server getVariable ["DONATOR_LOAD", false]) || (time > _timeout)};
 	donators0     = server getVariable "donators0";
 	donators1     = server getVariable "donators1";
 	donators2     = server getVariable "donators2";
