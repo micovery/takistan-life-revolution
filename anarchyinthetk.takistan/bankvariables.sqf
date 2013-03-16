@@ -24,11 +24,24 @@ zinsen_prozent               = 1;
 zinsen_dauer                 = 1200;
 robenable                    = true;
 
-donators1     = ["32114118","11864902","11872198","3478662","36557446","26082630","11060102","48390213","38996486","68448198","50452678","55164870","4022278","27321414","19960774","3289670","75077446","27514246","21532166","6028038","17781638","73708486","73764294","26213190","93001990","5803968"];
-donators2     = ["71662278","51369350","6095040","34373126","10154566"];
-donators3     = ["11124934","10006086","12071430"];
-donators4     = ["24943814","72681222"];
-
+if (isServer) then {
+	_h = call compile preprocessFile "server\donators.sqf";
+	private["_timeout"];
+	_timeout = time + 2;
+	waitUntil{(scriptDone _h) || (time > _timeout)};
+	server setVariable ["donators0", donators0, true];
+	server setVariable ["donators1", donators1, true];
+	server setVariable ["donators2", donators2, true];
+	server setVariable ["donators3", donators3, true];
+	server setVariable ["donators4", donators4, true];
+} else {
+	donators0     = server getVariable "donators0";
+	donators1     = server getVariable "donators1";
+	donators2     = server getVariable "donators2";
+	donators3     = server getVariable "donators3";
+	donators4     = server getVariable "donators4";
+};
+	
 private["_uid"];
 _uid = getPlayerUID player;
 
