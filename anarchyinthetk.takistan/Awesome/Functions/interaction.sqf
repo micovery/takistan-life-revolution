@@ -2970,33 +2970,35 @@ interact_item_give = { _this spawn {
 		player groupChat format["You have to be within at least %1 meters from the selected player", _minimum_distance];
 	};
 	
-	// Ask the reciver for accepting the transfer
-	_target setVariable["item_transfer_accepted", 0, true];
-	_item_transfer_accepted = 0;
-	sleep 0.5;
-	_timeout = serverTime + 15;
+	if ((_item call INV_GetItemIsIllegal) and (isCop)) then {
+		// Ask the reciver for accepting the transfer
+		_target setVariable["item_transfer_accepted", 0, true];
+		_item_transfer_accepted = 0;
+		sleep 0.5;
+		_timeout = serverTime + 15;
 	
 	
-	format["[%1, %2, %3, %4, %5] spawn interact_item_recive_dialogue;", _target, toArray(_item_name), _amount, _timeout, _player] call broadcast;
+		format["[%1, %2, %3, %4, %5] spawn interact_item_recive_dialogue;", _target, toArray(_item_name), _amount, _timeout, _player] call broadcast;
 	
-	// Wait for response
-	while {_item_transfer_accepted == 0} do {
-		//Leave "while" on timeout
-		if (_timeout < serverTime) exitWith{};
-		_item_transfer_accepted = _target getVariable "item_transfer_accepted";
-	};
+		// Wait for response
+		while {_item_transfer_accepted == 0} do {
+			//Leave "while" on timeout
+			if (_timeout < serverTime) exitWith{};
+			_item_transfer_accepted = _target getVariable "item_transfer_accepted";
+		};
 	
-	//No response (eq timeout)
-	if (_timeout < serverTime) exitWith{
-		player groupChat format["%1-%2 didn't respond when asking him to recive %3 %4s", _target, (name _target), _amount, _item];
-	};
-	//Check the response
-	//Security check
-	if (typeName _item_transfer_accepted != "SCALAR") exitWith {player groupChat "ERROR: Type error at item_transfer_accepted";};
-	//player groupchat format["%1", (_item_transfer_accepted)];
+		//No response (eq timeout)
+		if (_timeout < serverTime) exitWith{
+			player groupChat format["%1-%2 didn't respond when asking him to recive %3 %4s", _target, (name _target), _amount, _item];
+		};
+		//Check the response
+		//Security check
+		if (typeName _item_transfer_accepted != "SCALAR") exitWith {player groupChat "ERROR: Type error at item_transfer_accepted";};
+		//player groupchat format["%1", (_item_transfer_accepted)];
 	
-	if (_item_transfer_accepted == 2) exitWith{
-		player groupChat format["%1-%2 didn't accept that item", _target, (name _target)];
+		if (_item_transfer_accepted == 2) exitWith{
+			player groupChat format["%1-%2 didn't accept that item", _target, (name _target)];
+		};
 	};
 	
 	if (not(_item == "keychain")) then {
