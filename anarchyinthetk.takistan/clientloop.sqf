@@ -450,22 +450,33 @@ check_droppable_items = {
 		_distance = _near_object distance _player;
 		if (not(_distance < 3)) exitWith {};
 
-		private["_amount", "_item"];
+		private["_amount", "_item", "_illegal"];
 		_amount = _near_object getVariable "amount";
 		_item = _near_object getVariable "item";
+		
 		if (isNil "_amount" || isNil "_item") exitWith {};
 		
 		private["_name"];
 		_amount = [_amount] call decode_number;
 		_name = (_item call INV_GetItemName);
+		_isIllegal = (_item call INV_GetItemIsIllegal);
 		
 		private["_action_id"];
-		_action_id = _player addAction [
-			format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", 
-			format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", 
-			format['not(interact_object_pickup_active) && (((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
-		];
-
+		if ((isCop) and (_isIllegal)) then {
+			// Copside illegal item. Same global variable on purpose (either is picking something up OR seizing, not both the same time)
+			_action_id = _player addAction [
+				format["Seize %1 (%2)", _name, strM(_amount)], "noscript.sqf", 
+				format['[%1, %2] call interact_object_seize', _player, _near_object], 1, false, true, "", 
+				format['not(interact_object_pickup_active) && (((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
+			];
+		} else {
+			//Not on copside or legal item
+			_action_id = _player addAction [
+				format["Pickup %1 (%2)", _name, strM(_amount)], "noscript.sqf", 
+				format['[%1, %2] call interact_object_pickup', _player, _near_object], 1, false, true, "", 
+				format['not(interact_object_pickup_active) && (((player distance %1) < 3) && (count([%1, 3] call players_object_near) < 2))', _near_object]
+			];
+		};
 		//player groupChat format["ADDED: _action_id = %1, _object = %2", _action_id, _near_object];
 		_player setVariable ["current_object", _near_object];
 		_player setVariable ["current_action", _action_id];
