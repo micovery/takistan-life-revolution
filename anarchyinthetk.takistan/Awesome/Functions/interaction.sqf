@@ -2037,7 +2037,7 @@ interact_factory_storage = {
 
 
 interact_generic_storage = {
-	private["_player", "_storage", "_item", "_amount"];
+	private["_player", "_storage", "_item", "_amount", "_copside"];
 	
 	_player = _this select 0;
 	_storage = _this select 1;
@@ -2090,6 +2090,10 @@ interact_generic_storage = {
 		_valid = true;	
 	}
 	else {
+		if ((isCop) and (_item call INV_GetItemIsIllegal)) exitWith {
+			//Illegal Item as cop
+			player groupChat "You are not allowed to take this illegal item(s)";
+		};
 		//removing items from the storage
 		if (abs(_amount) > _g_items_amount) exitWith {
 			player groupChat format["The storage does not have that many item(s)"];
@@ -2746,6 +2750,44 @@ interact_object_pickup = { _this spawn {
 	interact_object_pickup_active = false;
 };};
 
+interact_object_seize = { _this spawn {
+	if (interact_object_pickup_active) exitWith {
+		player groupChat format["ERROR: You are already picking-up an object"];
+	};
+	interact_object_pickup_active = true;
+	
+	[] call interact_play_pickup_animation;
+	
+	private["_player", "_object"];
+	_player = _this select 0;
+	_object = _this select 1;
+	
+	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_object") exitWith {};
+	if (typeName _object != "OBJECT") exitWith {};
+	
+	private["_item", "_amount"];
+	_item = _object getVariable "item";
+	_amount = _object getVariable "amount";
+	_amount = [_amount] call decode_number;
+	
+	private["_remaining"];
+	_remaining = [_player, _item, _amount] call interact_item_seize;
+	
+	if (isNil "_remaining") exitWith {
+		interact_object_pickup_active = false;
+	};
+	
+	if (_remaining <= 0) exitWith {
+		deleteVehicle _object;
+		interact_object_pickup_active = false;
+	};
+	
+	_remaining = [_remaining] call encode_number;
+	_object setVariable ["amount", _remaining, true];
+	interact_object_pickup_active = false;
+};};
+
 player_inventory_space = {
 	//player groupChat format["player_inventory_space %1", _this];
 	private["_player", "_item", "_amount"];
@@ -2813,6 +2855,37 @@ interact_item_pickup = {
 	(_amount - _pickup_amount)
 };
 
+interact_item_seize = {
+	private["_player", "_item", "_amount", "_price"];
+	_player = _this select 0;
+	_item = _this select 1;
+	_amount = _this select 2;
+		
+	if (not([_player] call player_human)) exitWith {nil};
+	if (isNil "_item")exitWith {nil};
+	if (isNil "_amount") exitWith {nil};
+	_price = (_item call INV_GetItemSellCost);
+	if (isNil "_price") then {
+		_price = 0;
+	};
+
+	if (typeName _item != "STRING") exitWith {nil};
+	if (typeName _amount != "SCALAR") exitWith {nil};
+	if (typeName _price != "SCALAR") exitWith {nil};
+	_price = round(_price * seizemoneyreturn * _amount);
+	//_player groupChat format["%1", _price];
+	
+	if (_amount <= 0) exitWith {nil};
+	//[_player, "money", (_price)] call INV_CreateItem;
+	[_player, "money", (_price)] call INV_AddInventoryItem;
+	
+	private["_item_name"];
+	_item_name = (_item call INV_GetItemName);
+	player groupchat format["You seized %1 %2 and got %3 dollars for it", strM(_amount), _item_name, strM(_price)];
+	//player groupChat format["You seized %1 %2", strM(_amount), _itemName];
+	//server globalChat format["%1-%2 seized %3 %4", _player, (name _player), strM(_amount), _itemName];
+	(0)
+};
 
 interact_item_drop = {_this spawn {
 	//player groupChat format["interact_item_drop %1", _this];
@@ -2919,7 +2992,7 @@ interact_inventory_actions_allowed = {
 
 interact_item_give = { _this spawn {
 	//player groupChat format["interact_item_give %1", _this];
-	private["_player", "_item", "_amount", "_target", "_timeout", "_accepted", "_item_transfer_accepted"];
+	private["_player", "_item", "_amount", "_target"];
 	_player = _this select 0;
 	_item = _this select 1;
 	_amount = _this select 2;
@@ -2970,37 +3043,6 @@ interact_item_give = { _this spawn {
 		player groupChat format["You have to be within at least %1 meters from the selected player", _minimum_distance];
 	};
 	
-	if ((_item call INV_GetItemIsIllegal) and (isCop)) then {
-		// Ask the reciver for accepting the transfer
-		_target setVariable["item_transfer_accepted", 0, true];
-		_item_transfer_accepted = 0;
-		sleep 0.5;
-		_timeout = serverTime + 15;
-	
-	
-		format["[%1, %2, %3, %4, %5] spawn interact_item_recive_dialogue;", _target, toArray(_item_name), _amount, _timeout, _player] call broadcast;
-	
-		// Wait for response
-		while {_item_transfer_accepted == 0} do {
-			//Leave "while" on timeout
-			if (_timeout < serverTime) exitWith{};
-			_item_transfer_accepted = _target getVariable "item_transfer_accepted";
-		};
-	
-		//No response (eq timeout)
-		if (_timeout < serverTime) exitWith{
-			player groupChat format["%1-%2 didn't respond when asking him to recive %3 %4s", _target, (name _target), _amount, _item];
-		};
-		//Check the response
-		//Security check
-		if (typeName _item_transfer_accepted != "SCALAR") exitWith {player groupChat "ERROR: Type error at item_transfer_accepted";};
-		//player groupchat format["%1", (_item_transfer_accepted)];
-	
-		if (_item_transfer_accepted == 2) exitWith{
-			player groupChat format["%1-%2 didn't accept that item", _target, (name _target)];
-		};
-	};
-	
 	if (not(_item == "keychain")) then {
 		[] call interact_play_pickup_animation;
 	};
@@ -3025,36 +3067,6 @@ interact_item_give = { _this spawn {
 		format["[%1, %2, ""%3"", %4] call interact_item_give_receive;", _player, _target, _item, strN(_amount)] call broadcast;
 	};
 };};
-
-interact_item_recive_dialogue = {
-	private["_target", "_item", "_amount", "_timeout", "_sender", "_retval"];
-	_target = _this select 0;
-	_item = toString(_this select 1);
-	_amount = _this select 2;
-	_timeout = _this select 3;
-	_sender = _this select 4;
-	
-	//Type check 1
-	if (not([_target] call player_human)) exitWith {};
-	//Exit on wrong player
-	if (player != _target) exitWith {};
-	
-	//Type check 2
-	if (typeName _item != "STRING") exitWith {player groupChat "ERROR: Type error on interact_item_recive_dialoge _item";};
-	if (typeName _amount != "SCALAR") exitWith {player groupChat "ERROR: Type error on interact_item_recive_dialoge _amount";};
-	if (typeName _timeout != "SCALAR") exitWith {player groupChat "ERROR: Type error on interact_item_recive_dialoge _timeout";};
-	
-	//Open dialogue
-	
-	if (!(createDialog "ja_nein")) exitWith {player groupChat "ERROR: Dialog Error!";};
-	ctrlSetText [1, format["%1-%2 wants to give you %3 %4. Do you agree?", _sender, (name _sender), strM(_amount), _item]];
-	waitUntil{(not(ctrlVisible 1023))};
-	
-	if (serverTime > _timeout) exitWith{player groupChat format["Sorry you answered too late %1-%2 already left", _sender, (name _sender)];};
-	if (response) then { _retval = 1; } else { _retval = 2;};
-	player setVariable ["item_transfer_accepted", _retval, true];
-	
-};
 
 interact_keychain_give_receive = {_this spawn {
 	//player groupChat format["interact_keychain_give_receive %1", _this];
@@ -3092,11 +3104,23 @@ interact_item_give_receive = { _this spawn {
 	
 	[] call interact_play_pickup_animation;
 	
-	private["_item_name"];
+	private["_item_name", "_price"];
 	_item_name = (_item call INV_GetItemName);
-	
-	[_target, _item, (_amount)] call INV_AddInventoryItem;
-	player groupChat format["%1-%2 gave you %3 units of %4", (_player), (name _player), strN(_amount), _item_name];
+	if ((isCop) and (_item call INV_GetItemIsIllegal)) then {
+		//Illegal Item and Cop
+		_price =(_item call INV_GetItemSellCost);
+		if (isNil "_price") then {
+			_price = 0;
+		};
+		if (typeName _price != "SCALAR") exitWith {};
+		
+		_price = round(_price * _amount * seizemoneyreturn);
+		[_target, "money", _price] call INV_CreateItem;
+		player groupChat format["%1-%2 tried to give you %3 units of %4. Because you're a good cop you seized it and got %5 dollars in return", (_player), (name _player), strN(_amount), _item_name, strN(_price)];
+	} else {
+		[_target, _item, (_amount)] call INV_AddInventoryItem;
+		player groupChat format["%1-%2 gave you %3 units of %4", (_player), (name _player), strN(_amount), _item_name];
+	};
 };};
 
 interact_select_vehicle = {
