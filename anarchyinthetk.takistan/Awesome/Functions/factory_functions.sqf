@@ -787,6 +787,7 @@ factory_item_enqueue = {
 	if (typeName _amount != "SCAlAR") exitWith {};
 	
 	if (_amount == 0) exitWith {};
+	_amount = round(_amount);
 	factory_enqueue_active = true;
 	
 	
@@ -870,6 +871,7 @@ factory_item_create = {
 	if (isNil "_amount") exitWith {};
 	if (typeName _amount != "SCAlAR") exitWith {};
 	
+	_amount = round(_amount);
 	if (_amount <= 0) exitWith {};
 
 	private["_factory", "_factory_storage", "_factory_spawn", "_factory_crate"];
@@ -1123,7 +1125,7 @@ factory_validate_enqueue_item = {
 	_amount = if (_amount_str == "") then { 0 } else {[_amount_str] call parse_number };
 	_amount = if (_amount < 0 ) then { ctrlSetText [factory_amount_field_id, "1"]; 1 } else {_amount};
 	_amount = if (_amount > 100) then { ctrlSetText [factory_amount_field_id, "100"]; 100 } else { _amount };
-	
+	_amount = round(_amount);
 	
 	
 	if (_amount == 0) exitWith {
