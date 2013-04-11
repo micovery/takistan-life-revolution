@@ -32,10 +32,13 @@ if (isServer) then {
 	if (_file != "") then {
 		call compile preProcessFileLineNumbers _file;
 	};
-	for[{_i = 0}, {_i <= 4}, {_i = _i + 1}] do {
-		_var = format["donators%1", _i];
-		server setVariable [_var, missionNamespace getVariable [_var, []]];
-	};
+	
+	server setVariable ["donators0", donators0, true];
+	server setVariable ["donators1", donators1, true];
+	server setVariable ["donators2", donators2, true];
+	server setVariable ["donators3", donators3, true];
+	server setVariable ["donators4", donators4, true];
+	sleep 0.5;
 	server setVariable ["DONATOR_LOAD", true, true];
 
 } else {
