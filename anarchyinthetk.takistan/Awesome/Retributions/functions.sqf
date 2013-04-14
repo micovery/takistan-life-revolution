@@ -570,21 +570,34 @@ substr = {
 
 
 criminal_reward = {
-	private["_player", "_bounty"];
+	private["_dp","_player", "_bounty", "_victim", "_victimBankMoney"];
 	
-	_player = _this select 0;
-	_bounty = _this select 1;
+	_dp = _this select 0;
+	_bounty = _dp select dp_victim_bounty;
+	_player = _dp select dp_killer;
+	_victim = _dp select dp_victim;
+	
+	_victimBankMoney = [_victim] call bank_get_value;
 	
 	if (isNil "_player") exitWith {};
 	if (isNil "_bounty") exitWith {};
 	if (typeName _bounty != "SCALAR") exitWith {};
+	if (typeName _victimBankMoney != "SCALAR") exitWith {};
 	
 	if (_player != player) exitWith {};
 	
 	private["_reward"];
 	_reward = floor(_bounty/3);
-	[_player, _reward] call bank_transaction; 
-	player groupChat format["You got 1/3 of the civs bounty totaling $%1", _reward];
+	if (_victimBankMoney < _reward) then {
+		_sendReward = _victimBankMoney;
+		player groupChat format["The victim had a bounty of $%1. Because he doesn't have that much money you got 1/3 of the civs money totaling $%2", _reward, _sendReward];
+	} else {
+		_sendReward = _reward;
+		player groupChat format["You got 1/3 of the civs bounty totaling $%1", _sendReward];
+	};
+	[_player, _sendReward] call bank_transaction; 
+	[_victim, -(_sendReward)] call bank_transaction;
+	
 };
 
 collect_criminal_reward = {
@@ -596,7 +609,7 @@ collect_criminal_reward = {
 	_killer = _dp select dp_killer;
 	
 	if (_bounty <= 0) exitWith {};
-	format["[%1, %2] call criminal_reward;", _killer, _bounty] call broadcast;	
+	format["[%1] call criminal_reward;", _dp] call broadcast;	
 };
 
 faction_reward = {

@@ -136,11 +136,28 @@ interact_arrest_player = {
 
 	[_player, "arrestsmade", 1] call player_update_scalar;
 	
-	private["_bounty"];
+	private["_bounty", "_bankmoney", "_invmoney", "_moneyVictim", "_realBounty"];
 	_bounty = [_victim] call player_get_bounty;
 	if (_bounty > 0) then {
-		player groupChat format["%1-%2 had a bounty of $%3. You got that bounty!", _victim, (name _victim), _bounty];
-		[_player, _bounty] call bank_transaction;
+		_bankmoney = [_victim] call bank_get_value;
+		_invmoney = [_victim, "money"] call INV_GetItemAmount;
+		_moneyVictim = _bankmoney + _invmoney;
+		if (_moneyVictim < _bounty) then {
+			_realBounty = _moneyVictim;
+			_player groupChat format["%1-%2 had a bounty of $%3. Because he only has $%4 you get $%4", _victim, (name _victim), _realBounty];
+		} else {
+			_realBounty = _bounty;
+			_player groupChat format["%1-%2 had a bounty of $%3. You got that bounty!", _victim, (name _victim), _realBounty];
+		};
+		
+		[_player, _realBounty] call bank_transaction;
+		if (_invmoney < _realBounty) then {
+			[_victim, -(_realBounty - _invmoney)] call bank_transaction;
+			_realBounty = _realBounty - _invmoney;
+		};
+		[_victim, "money", -(_realBounty)] call INV_AddInventoryItem;
+		_victim groupChat format["You had a bounty of $%1. Because %2-%3 arrested you you loose $%4", _bounty, _player, (name _player), _realBounty];
+		
 		[_victim, 0] call player_set_bounty;
 	};
 	
