@@ -12,7 +12,7 @@ FreeCamera camCommit 0;
 FreeCamera setVectorUp [(sin 0)*(cos -89),-(sin -89),(cos 0)*(cos -89)];
 waitUntil {camCommitted FreeCamera};
 
-if (!(createDialog "free_cam")) exitWith {hint "Dialog Error!";};
+if (!(createDialog "free_cam")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 
 CAM_FreeCamActive = true;
 

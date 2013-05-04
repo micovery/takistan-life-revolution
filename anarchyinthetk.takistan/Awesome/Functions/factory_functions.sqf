@@ -1276,7 +1276,7 @@ factory_production_menu = { _this spawn {
 	private["_factory"];
 	_factory = [_factory_id] call factory_lookup_id;
 	
-	if (!(createDialog "factory_dialog")) exitWith {hint "Dialog Error!";};
+	if (!(createDialog "factory_dialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
 	
 	disableSerialization;
 	

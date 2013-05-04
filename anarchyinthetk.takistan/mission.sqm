@@ -24225,7 +24225,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			text="test groups";
-			expActiv="groupnumber = count allgroups; hint format[""%1 many groups"" , groupnumber];";
+			expActiv="groupnumber = count allgroups; tlr_hud_array set [(count tlr_hud_array), [format[""%1 many groups"" , groupnumber],(time+5)]];";
 			class Effects
 			{
 			};
@@ -24238,7 +24238,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			text="give cords";
-			expActiv="theplayerpos21 = getpos player; hint format [""%1"",theplayerpos21];";
+			expActiv="theplayerpos21 = getpos player; tlr_hud_array set [(count tlr_hud_array), [format [""%1"",theplayerpos21],(time+5)]];";
 			class Effects
 			{
 			};
@@ -24385,7 +24385,7 @@ class Mission
 			age="UNKNOWN";
 			text="GCRS Force Drop Rope";
 			expCond="(local player && gcrsropedeployed == ""true"" && vehicle player == player) || (local player && gcrsropedeployed == ""true"" && getpos vehicle player select 2 > 100) || (local player && gcrsropedeployed == ""true"" && getpos vehicle player select 2 < 25) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 0 > 5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 1 > 5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 2 > 5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 0 < -5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 1 < -5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 2 < -5)";
-			expActiv="deletevehicle gcrsrope1; deletevehicle gcrsrope2; deletevehicle gcrsrope3; deletevehicle gcrsrope4; deletevehicle gcrsrope5; deletevehicle gcrsrope6; deletevehicle gcrsrope7; deletevehicle gcrsrope8; deletevehicle gcrsrope9; deletevehicle gcrsrope10; deletevehicle gcrsrope11; deletevehicle gcrsrope12; deletevehicle gcrsrope13; deletevehicle gcrsrope14; deletevehicle gcrsrope15; gcrspilotvehicle removeaction gcrsdropropeactionid; gcrsropedeployed = ""false""; hint ""Rapel Rope Dropped"";";
+			expActiv="deletevehicle gcrsrope1; deletevehicle gcrsrope2; deletevehicle gcrsrope3; deletevehicle gcrsrope4; deletevehicle gcrsrope5; deletevehicle gcrsrope6; deletevehicle gcrsrope7; deletevehicle gcrsrope8; deletevehicle gcrsrope9; deletevehicle gcrsrope10; deletevehicle gcrsrope11; deletevehicle gcrsrope12; deletevehicle gcrsrope13; deletevehicle gcrsrope14; deletevehicle gcrsrope15; gcrspilotvehicle removeaction gcrsdropropeactionid; gcrsropedeployed = ""false""; tlr_hud_array set [(count tlr_hud_array), [""Rapel Rope Dropped"",(time+5)]];";
 			class Effects
 			{
 			};
@@ -24416,7 +24416,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			expCond="alive hostage1;";
-			expActiv="hint ""Someone has taken a hostage, Police have 15 minutes to rescue them.. DO NOT PUT THE HOSTAGE INTO A VEHICLE."";";
+			expActiv="tlr_hud_array set [(count tlr_hud_array), [""Someone has taken a hostage, Police have 15 minutes to rescue them.. DO NOT PUT THE HOSTAGE INTO A VEHICLE."",(time+5)]];";
 			class Effects
 			{
 			};

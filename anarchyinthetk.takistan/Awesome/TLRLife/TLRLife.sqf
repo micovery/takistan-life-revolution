@@ -17,11 +17,11 @@ tlr_life_settings = [
 	//Use HUD?
 	true,
 	//Thirst per minute 1 = 100% 0 = 0%
-	0.0025,
+	0.022,
 	//Hunger per minute
-	0.001,
+	0.016,
 	//Tiredness per minute
-	0.0015,
+	0.033,
 	//Lifeloss per minute on empty food 1=instant dead
 	0.01,
 	//Lifelos per minute on empty drinks 1 = instant dead
@@ -103,19 +103,32 @@ tlr_life_init = {
 tlr_life_hud = {
 	if (not(tlr_life_settings select tlr_life_hudd)) exitWith {};
 	//player groupChat "HUD RUNNING";
-	private["_hud", "_life", "_hunger", "_thirst", "_tired"];
+	private["_hud", "_life", "_hunger", "_thirst", "_tired", "_normalHud", "_i"];
 	_life = round((1-(damage player))*1000); //Life in percent - counting down
 	_hunger = round(tlr_life_hunger*1000); //Hunger in percent - counting up
 	_thirst = round(tlr_life_thirst*1000); //Thirst in percent - counting up
 	_tired = round(tlr_life_tiredness*1000); //Tiredness in percent - counting up
-	
+	_i = 0;
+	_normalHud = "";
+	if (typeName (tlr_hud_array select 0) == "ARRAY") then {
+		{
+			//Too old?
+			if (_x select 1 < time) then {
+				tlr_hud_array set[_i, "remove"];
+				tlr_hud_array = tlr_hud_array - ["remove"];
+			} else {
+				_normalHud = format['%1<t color="#FFFFFF" align="left">%2</t><br />',_normalHud, (_x select 0)];
+			};
+			_i = _i + 1;
+		} foreach tlr_hud_array;
+	};
 	_hud = parseText format["
 	<t color='#FFFFFF' align='center'>%1</t><br /><br />
 	<t color='#FF0404' align='left'>Life: %2</t><br />
 	<t color='#18A015' align='left'>Hunger: %3</t><br />
 	<t color='#0083FF' align='left'>Thirst: %4</t><br />
-	<t color='#4c4c4c' align='left'>Sleepy: %5</t><br />
-	", (name player), _life, _hunger, _thirst, _tired];
+	<t color='#4c4c4c' align='left'>Sleepy: %5</t><br /><br />%6
+	", (name player), _life, _hunger, _thirst, _tired, _normalHud];
 	hintSilent _hud;
 };
 
@@ -161,12 +174,7 @@ tlr_life_ftiredness = {
 	//player groupChat "TIREDNESS RUNNING";
 	tlr_life_tiredness = tlr_life_tiredness + ((time -(tlr_life_run_array select 2)) * ((tlr_life_settings select tlr_life_tipm)/60));
 	if (tlr_life_tiredness >= 1) then {
-		private["_life"];
-				//Act life		+	((Time - lastrun)					*  (damage per min / 60)
-				//Act life		+   timediff in sec	* damage per sec
-		_life = (damage player) + ((time -(tlr_life_run_array select 2)) * ((tlr_life_settings select tlr_life_till)/60));
-		player setDamage _life;
-		tlr_life_tiredness = 1;
+		[] spawn tlr_life_fsleep;
 	};
 	tlr_life_run_array set [2, time];
 };
@@ -283,29 +291,37 @@ tlr_life_fsleep = {
 	if (tlr_life_tiredness < 0.1) exitWith {
 		player groupChat "You can't sleep now, you just got up";
 	};
-	//Animation "play dead"
-	player playmove "AinjPpneMstpSnonWrflDnon_rolltoback";
 	//Disabling input
-	disableuserinput true;
+	disableUserInput true;
+	player playmovenow "AinjPpneMstpSnonWrflDnon_rolltoback";
 	//Animation (hit)
 	private["_sleeptime"];
-	_sleeptime = time + (tlr_life_settings select tlr_life_sleep);
+	_sleeptime = time + ((tlr_life_settings select tlr_life_sleep)*tlr_life_tiredness);
+	"dynamicBlur" ppEffectEnable true;
+	"dynamicBlur" ppEffectAdjust [10];
+	"dynamicBlur" ppEffectCommit 0;
+	waitUntil {ppEffectCommitted "dynamicBlur"};
+
 	while {time < _sleeptime} do {
 		if (not(alive player)) exitWith {player groupChat "You got killed while sleeping... Better hide next time";};
 		sleep 1;
 	};
 	//Getting up and Enabeling input again
-	player playmove "";
+	player switchmove "";
 	disableUserInput false;
+	"dynamicBlur" ppEffectEnable true;
+	"dynamicBlur" ppEffectAdjust [0];
+	"dynamicBlur" ppEffectCommit 0;
 	
-	tlr_life_tiredness = 0;
+	
 	if ((tlr_life_settings select tlr_life_sleephealth) > 0) then {
 		private["_life"];
 		_life = damage player;
 		if (alive player) then {
-			player setDamage (_life-(tlr_life_settings select tlr_life_sleephealth));
+			player setDamage (_life-(tlr_life_settings select tlr_life_sleephealth)*tlr_life_tiredness);
 		};
 	};
+	tlr_life_tiredness = 0;
 	player groupChat "You woke up again and feel refreshed";
 };
 

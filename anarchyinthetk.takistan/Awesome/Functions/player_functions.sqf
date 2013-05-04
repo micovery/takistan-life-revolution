@@ -795,7 +795,8 @@ player_prison_loop = { _this spawn {
 			[_player, "jailtimeleft", _time_left] call player_set_scalar;
 		};
 		
-		hintsilent format["Time until release\n%1 seconds\nBail left to pay\n$%2", _time_left, strM(_bail_left)];
+		tlr_hud_array set [(count tlr_hud_array), [format["Time until release\n%1 seconds\nBail left to pay\n$%2", _time_left, strM(_bail_left)],(time+1)]];
+		//hintsilent format["Time until release\n%1 seconds\nBail left to pay\n$%2", _time_left, strM(_bail_left)];
 		//PLAYER DISAPPEARED ...
 		if (isNull(_player)) exitWith { 
 			private["_message"];
@@ -1005,7 +1006,8 @@ player_prison_roe = { _this spawn {
 			[_player, "roeprisontime", _time_left] call player_set_scalar;
 		};
 		
-		hintsilent format["Time until release\n%1 seconds", _time_left];
+		tlr_hud_array set [(count tlr_hud_array), [format["Time until release\n%1", _time_left],(time+1)]];
+		//hintsilent format["Time until release\n%1 seconds", _time_left];
 		
 		//PLAYER DISAPPEARED ...
 		if (isNull(_player)) exitWith { 

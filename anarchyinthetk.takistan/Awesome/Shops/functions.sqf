@@ -1111,7 +1111,7 @@ shop_sell_select_vehicle_wait = {
 	if (isNil "_vehicles") exitWith { nil };
 	if (typeName _vehicles != "ARRAY") exitWith { nil };
 	
-	if (!(createDialog "ShopVehicles")) exitWith {hint "Dialog Error!"};
+	if (!(createDialog "ShopVehicles")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 	
 	buttonSetAction [selectButton_idc,  "call shop_sell_select_vehicle;"];
 	private["_i", "_count"];
@@ -1762,7 +1762,7 @@ shop_open_dialog = {
 		player groupChat format["This shop is not open yet. All shops are now %1%2 open", shop_setup_progress, "%"];
 	};
 	
-	if (!(createDialog "Shops")) exitWith {hint "Dialog Error!"};
+	if (!(createDialog "Shops")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 	[_shop_id] call shop_set_current_shop_id;
 	
 	[_shop_id] spawn shop_update_buy_list;

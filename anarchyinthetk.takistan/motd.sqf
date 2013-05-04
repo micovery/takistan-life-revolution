@@ -1,4 +1,5 @@
-hint "Please read the TLR tabs on map before playing";
+tlr_hud_array set [(count tlr_hud_array), ["Please read the TLR tabs on map before playing",(time+5)]];
+//hint ;
 server globalchat "[MoTD]Welcome to Takistan Life: Revolution!";
 custom_motd = nil;
 while {true} do {
