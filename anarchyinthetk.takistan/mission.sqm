@@ -135,7 +135,7 @@ class Mission
 			side="LOGIC";
 			class Vehicles
 			{
-				items=109;
+				items=110;
 				class Item0
 				{
 					position[]={4257.3008,71.539162,19475.344};
@@ -1447,6 +1447,18 @@ class Mission
 					skill=0.60000002;
 					text="pmcair";
 					init="this allowdamage false;this setpos [6167.3223, 11606.787, 5];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+				};
+				class Item109
+				{
+					position[]={2051.86,1.9199,7610.37};
+					azimut=212.978;
+					special="NONE";
+					side="CIV";
+					vehicle="HouseWife2";
+					skill=0.5;
+					text="pub4";
+					init="this allowdamage false;this setpos[2051.86,7610.37,2.6];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					id=1820;
 				};
 			};
 		};
@@ -21010,7 +21022,7 @@ class Mission
 	};
 	class Markers
 	{
-		items=337;
+		items=338;
 		class Item0
 		{
 			position[]={3198.5229,94.03698,19269.121};
@@ -24155,6 +24167,16 @@ class Mission
 			colorName="ColorOrange";
 			a=0.60000002;
 			b=0.60000002;
+		};
+		class Item337
+		{
+			position[]={1978.34,200.2402,7724.37};
+			name="Liquor_1_2";
+			text="Allhu Snackbar";
+			type="mil_triangle";
+			colorName="ColorOrange";
+			a=0;
+			b=0;
 		};
 	};
 	class Sensors
