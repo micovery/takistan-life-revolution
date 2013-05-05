@@ -94,7 +94,9 @@ tlr_life_init = {
 	if (tlr_life_settings select tlr_life_persistend_life) then {
 		_var = format["life_%1", (side player)];
 		_life = [player, _var] call player_get_scalar;
+		liafu = true;
 		player setDamage _life;
+		liafu = false;
 	};
 	
 	[0] spawn tlr_life_client_loop;
@@ -148,7 +150,9 @@ tlr_life_fhunger = {
 				//Act life		+	((Time - lastrun)					*  (damage per min / 60)
 				//Act life		+   timediff in sec	* damage per sec
 		_life = (damage player) + ((time -(tlr_life_run_array select 0)) * ((tlr_life_settings select tlr_life_hull)/60));
+		liafu = true;
 		player setDamage _life;
+		liafu = false;
 		tlr_life_hunger = 1;
 	};
 	tlr_life_run_array set [0, time];
@@ -163,7 +167,9 @@ tlr_life_fthirst = {
 				//Act life		+	((Time - lastrun)					*  (damage per min / 60)
 				//Act life		+   timediff in sec	* damage per sec
 		_life = (damage player) + ((time -(tlr_life_run_array select 1)) * ((tlr_life_settings select tlr_life_thll)/60));
+		liafu = true;
 		player setDamage _life;
+		liafu = false;
 		tlr_life_thirst = 1;
 	};
 	tlr_life_run_array set [1, time];
@@ -236,7 +242,9 @@ tlr_life_eat = {
 	//Life
 	_life = _life - _restore_health;
 	if (_life < 0) then {_life = 0;};
+	liafu = true;
 	player setDamage _life;
+	liafu = false;
 	
 	player groupChat format["You ate %1 units of %2", _amount, _item_name];
 	
@@ -318,11 +326,15 @@ tlr_life_fsleep = {
 		private["_life"];
 		_life = damage player;
 		if (alive player) then {
+			liafu = true;
 			player setDamage (_life-(tlr_life_settings select tlr_life_sleephealth)*tlr_life_tiredness);
+			liafu = false;
 		};
 	};
-	tlr_life_tiredness = 0;
-	player groupChat "You woke up again and feel refreshed";
+	if (alive player) then {
+		tlr_life_tiredness = 0;
+		player groupChat "You woke up again and feel refreshed";
+	};
 };
 
 tlr_life_client_loop = {
