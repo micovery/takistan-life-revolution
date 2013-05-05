@@ -14,7 +14,8 @@ _fs =
 		["kanister", 20, 40],
 		["kleinesreparaturkit", 20, 40],
 		["reparaturkit", 15, 30],
-		["water", -1, -1]
+		["water", -1, -1],
+		["Bread", 15, 30]
 	];
 
 //Item Shop
@@ -25,7 +26,7 @@ _is =
 		["trout", 20, 40],
 		["walleye", 20, 40], 
 		["bass", 20, 40],
-		["Bread", 10, 20],
+		["Bread", -1, -1],
 		["medikit", 0, 10],
 		["handy", -1, -1],
 		["lighter", -1, -1],
@@ -49,7 +50,7 @@ _pub =
 		["trout", 20, 40],
 		["walleye", 20, 40], 
 		["bass", 20, 40],
-		["Bread", 10, 20]
+		["Bread", -1, -1]
 ];
 	
 //Gun Shop

@@ -17,11 +17,11 @@ tlr_life_settings = [
 	//Use HUD?
 	true,
 	//Thirst per minute 1 = 100% 0 = 0%
-	0.022,
+	0.033,
 	//Hunger per minute
 	0.016,
 	//Tiredness per minute
-	0.033,
+	0.022,
 	//Lifeloss per minute on empty food 1=instant dead
 	0.01,
 	//Lifelos per minute on empty drinks 1 = instant dead
