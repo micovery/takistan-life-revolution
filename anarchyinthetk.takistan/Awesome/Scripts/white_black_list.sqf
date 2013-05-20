@@ -137,7 +137,7 @@ A_WBL_F_DIALOG_INIT = {
 		"_i"
 	];
 
-	if (!(createDialog "white_black_list")) exitWith {hint "Dialog Error!";};
+	if (!(createDialog "white_black_list")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 	
 	disableSerialization;
 	

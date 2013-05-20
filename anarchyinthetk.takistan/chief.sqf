@@ -32,6 +32,6 @@ if (_art == "steuernchief") then {
 	_weap = _this select 3;
 	_vcl  = _this select 4;
 	_bank = _this select 5;
-	format ["(INV_ItemTypeArray select 0) SET [2, %1]; (INV_ItemTypeArray select 1) SET [2, %2]; (INV_ItemTypeArray select 2) SET [2, %3]; (INV_ItemTypeArray select 3) SET [2, %4];bank_tax = %5; hint ""The President has changed the tax rates!"";", _item, _vcl, _mag, _weap, _bank] call broadcast;
+	format ["(INV_ItemTypeArray select 0) SET [2, %1]; (INV_ItemTypeArray select 1) SET [2, %2]; (INV_ItemTypeArray select 2) SET [2, %3]; (INV_ItemTypeArray select 3) SET [2, %4];bank_tax = %5; tlr_hud_array set [(count tlr_hud_array), [""The president has changed the taxrates!"",(time+5)]];", _item, _vcl, _mag, _weap, _bank] call broadcast;
 };
 

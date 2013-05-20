@@ -1,6 +1,6 @@
 _arr = _this select 0;
 if (!(isNil "_arr")) then {_arr = (missionNamespace getVariable _arr);} else {_arr = [];};
-if (!(createDialog "INV_list")) exitWith {hint "Dialog Error!";};
+if (!(createDialog "INV_list")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 lbAdd [1, "Items in the Storage:"];
 lbAdd [1, "---------------------"];
 

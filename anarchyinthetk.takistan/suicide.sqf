@@ -18,7 +18,7 @@ if (_art == "use") then {
 
 	_item   = _this select 1;
 	_anzahl = _this select 2;
-	"hint localize ""STRS_inv_item_selbstmordbombe_globalmsg"";" call broadcast;
+	'tlr_hud_array set [(count tlr_hud_array), [localize ""STRS_inv_item_selbstmordbombe_globalmsg"",(time+5)]];' call broadcast;
 	liafu = true;
 	for [{_i=5}, {_i >= 0}, {_i=_i-1}] do {
 		titletext [format ["Bombcountdown: -->*%1*<--", _i],"plain"];

@@ -42,6 +42,7 @@ if(isClient) then {
 	[] execVM "Awesome\Client\client_loop.sqf";
 	[] execVM "Awesome\Scripts\speedgun.sqf";
 	[] spawn A_WBL_F_INIT_C;
+	[] execVM "Awesome\TLRLife\TLRLife.sqf";
 };
 	
 
