@@ -8,7 +8,7 @@ _moneh  = [player, 'money'] call INV_GetItemAmount;
 
 if (_art == "jailcam") then {
 	_camera = "camera" camCreate [(getPosATL prison_logic select 0)+40,(getPosATL prison_logic select 1),20];
-	if (!(createDialog "MainCamDialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "MainCamDialog")) exitWith {hint "Dialog Error!";};
 	[0,0,0,["camcontrol",_camera,[10,30]]] execVM "copcams.sqf";
 	_camera cameraEffect ["internal", "back"];
 	_camera camSetPos [(getPosATL prison_logic select 0)+40,(getPosATL prison_logic select 1),20];

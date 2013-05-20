@@ -539,7 +539,7 @@ client_loop = {
 		call check_droppable_items;
 		call check_restrains;
 		sleep 0.5;
-		//disableuserinput false;
+		disableuserinput false;
 		_client_loop_i = _client_loop_i + 1;
 	};
 	[] spawn client_loop;

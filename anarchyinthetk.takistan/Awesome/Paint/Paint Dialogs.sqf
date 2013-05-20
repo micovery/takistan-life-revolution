@@ -9,5 +9,20 @@ player groupchat "Styles dropbox: Custom";
 player groupchat "Custom dropbox: Whatever color you want";
 player groupchat "Then select apply and buy!";
 
+hintC "
+For easy Textures select the following options:
+\n
+Top right box: Select a numbered slot for the textures
+\n
+*WARNING SOME VEHICLES DO NOT HAVE TEXTURE SLOTS*
+\n
+Styles dropbox: Custom
+\n
+Custom dropbox: Whatever color you want
+\n
+\n
+Then select apply and buy!
+\n
+";
 
 [_location] call P_Dialog_Full;

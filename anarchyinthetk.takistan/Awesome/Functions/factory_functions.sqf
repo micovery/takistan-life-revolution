@@ -289,6 +289,18 @@ factory_globals = {
 		"An2_TK_EP1"
 	];
 
+	private["_alcoholfactory"];
+	_alcoholfactory = 
+	[
+		"beer",
+		"beer2",
+		"vodka",
+		"smirnoff",
+		"wiskey",
+		"wine",
+		"wine2"
+	];
+
 	private["_ringfactory"];
 	_ringfactory = 
 	[
@@ -298,21 +310,6 @@ factory_globals = {
 		"EPlatinumring"
 	];
 
-	private["_foodfactory"];
-	_foodfactory =
-	[
-		"water",
-		"coffee",
-		"Bread",
-		"beer",
-		"beer2",
-		"vodka",
-		"smirnoff",
-		"wiskey",
-		"wine",
-		"wine2"
-	];
-	
 	private["_furnace"];
 	_furnace = ["steel"];
 
@@ -333,8 +330,7 @@ factory_globals = {
 		[ ItemFabrik_1, "factory3", "General Factory", igunbox,dummyobj, _itemfactory, 650000, "Fabrikablage3", "itemqueue"],
 		[ weaponfactory, "factory4", "Weapon Factory", wfgunbox,dummyobj, _weaponfactory, 10000000, "Fabrikablage4", "weaponqueue"],
 		[ tairshop, "factory6", "Terrorist Vehicle Factory", dummyobj,tairspawn, _tairfactory, 20000000, "Fabrikablage6", "tavehiclequeue"],
-		[ foodfactory, "factory7", "Food Factory", fgunbox, dummyobj, _foodfactory, 500000, "Fabrikablage7", "ffactqueue"],
-		//[ alcoholfactory, "factory7", "Alcohol Factory", dummyobj, dummyobj, _alcoholfactory, 1000000, "Fabrikablage7", "alcoholfactoryqueue"] ,
+		[ alcoholfactory, "factory7", "Alcohol Factory", dummyobj, dummyobj, _alcoholfactory, 1000000, "Fabrikablage7", "alcoholfactoryqueue"] ,
 		//[ ringfactory, "factory9", "Ring Factory", dummyobj, dummyobj, _ringfactory, 2500000, "Fabrikablage9", "diamondqueue"],
 		[ Furnace, "factory10","Furnace", dummyobj, dummyobj, _furnace, 1500000, "Fabrikablage10","furnacequeue"]
 	];
@@ -1280,7 +1276,7 @@ factory_production_menu = { _this spawn {
 	private["_factory"];
 	_factory = [_factory_id] call factory_lookup_id;
 	
-	if (!(createDialog "factory_dialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
+	if (!(createDialog "factory_dialog")) exitWith {hint "Dialog Error!";};
 	
 	disableSerialization;
 	

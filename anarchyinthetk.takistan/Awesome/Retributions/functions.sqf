@@ -1019,19 +1019,19 @@ retributions_main = {
 			[] call open_retributions;
 		};
 		case "compensate": {
-			if (handling_retribution) exitWith { tlr_hud_array set [(count tlr_hud_array), ["Cannot handle compensation request",(time+5)]];};
+			if (handling_retribution) exitWith { hint "Cannot handle compensation request";};
 			handling_retribution = true;
 			[] call compensate_player;
 			handling_retribution = false;
 		};
 		case "punish": {
-			if (handling_retribution) exitWith { tlr_hud_array set [(count tlr_hud_array), ["Cannot handle punish request",(time+5)]];};
+			if (handling_retribution) exitWith { hint "Cannot handle punish request";};
 			handling_retribution = true;
 			[] call punish_player;
 			handling_retribution = false;
 		};
 		case "forgive": {
-			if (handling_retribution) exitWith { tlr_hud_array set [(count tlr_hud_array), ["Cannot handle forgive request",(time+5)]];};
+			if (handling_retribution) exitWith { hint "Cannot handle forgiveness request";};
 			handling_retribution = true;
 			[] call forgive_player;
 			handling_retribution = false;

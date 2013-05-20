@@ -234,12 +234,11 @@ home_info =
     
     if (_home_owner_name == "") then
     {
-		tlr_hud_array set [(count tlr_hud_array), [format["This house is for sale", _home select home_buying_price],(time+5)]];
+        hint format["This house is for sale", _home select home_buying_price];
     }
     else
     {
-		tlr_hud_array set [(count tlr_hud_array), [format["This house belongs to %1", _home_owner_name],(time+5)]];
-        //hint format["This house belongs to %1", _home_owner_name];
+        hint format["This house belongs to %1", _home_owner_name];
     };
 };
 

@@ -1,5 +1,5 @@
 if (!(createDialog "INV_ItemListDialog")) exitWith {
-    tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];
+    hint "Dialog Error!";
 };
 
 _buttonaction = _this select 0;

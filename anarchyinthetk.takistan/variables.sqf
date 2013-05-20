@@ -436,8 +436,6 @@ INV_haswepshop           = 0;
 gunlicensetargets        = [t11,t12,t21,t22,t31,t32,t41,t42,t51,t52,t61,t62,t71,t72,t81,t82,t91,t92,t101,t111,t112,t121,t131,t132,t133,t134,t135];
 ["BuildingsOwnerArray", []] call stats_init_variable;
 
-tlr_hud_array = [];
-
 if(isciv) then {
 BuyAbleBuildingsArray    =
     [

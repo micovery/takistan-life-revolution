@@ -49,16 +49,15 @@ halo_jump = {
 			else {
 				_obj = _near;
 			};	
-			tlr_hud_array set [(count tlr_hud_array), [format["Altitude\n %1 meters\n Grid Reference \n %2\n Horizontal Speed \n %3 \n Vertical Speed\n %4", round(_height),  mapGridPosition _obj,round(speed _obj), round((velocity _obj) select 2)],(time+5)]];
-			//hintSilent format["Altitude\n %1 meters\n Grid Reference \n %2\n Horizontal Speed \n %3 \n Vertical Speed\n %4", round(_height),  mapGridPosition _obj,round(speed _obj), round((velocity _obj) select 2)];
+			
+			hintSilent format["Altitude\n %1 meters\n Grid Reference \n %2\n Horizontal Speed \n %3 \n Vertical Speed\n %4", round(_height),  mapGridPosition _obj,round(speed _obj), round((velocity _obj) select 2)];
 			_height = (getPosATL _unit) select 2;
 		};
 		[_unit] call halo_remove_all_smoke_actions;
 		[_unit] call halo_deactivate_smoke;
 		sleep 3;
 		if (alive _unit) then {
-			tlr_hud_array set [(count tlr_hud_array), ["Sucessful landing",(time+5)]];
-			//hint "Sucessful landing";
+			hint "Sucessful landing";
 			_canim = (animationState player);
 			_anim_list = ["halofreefall_non", "halofreefall_f", "halofreefall_b", "halofreefall_fr", "halofreefall_br", "halofreefall_fl", "halofreefall_bl"];
 			//player groupChat format["_canim = %1", _canim];
@@ -70,8 +69,7 @@ halo_jump = {
 			};
 		} 
 		else {
-			tlr_hud_array set [(count tlr_hud_array), ["Fail landing",(time+5)]];
-			//hint "Fail landing";
+			hint "Fail landing";
 		};	
 	};
 };

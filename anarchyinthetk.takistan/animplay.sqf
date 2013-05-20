@@ -5,7 +5,7 @@ if ((_this select 0) == -1) exitWith {
 };
 
 if (vehicle player != player) exitWith {
-	tlr_hud_array set [(count tlr_hud_array), ["You must be on foot",(time+5)]];
+	hint "You must be on foot"
 };
 
 _animnumber = _this select 0;

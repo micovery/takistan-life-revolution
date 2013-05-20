@@ -15,12 +15,12 @@ interact_human = {
 	civ_player_variable  = _target;
 	
 	if (([_player] call player_cop) && (not([_target] call player_cop) || ischief)) exitWith {
-		if (not(createDialog "civmenu")) exitWith { tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
+		if (not(createDialog "civmenu")) exitWith { hint "Dialog Error!";};
 		true;
 	};
 	
 	if (([_player] call player_civilian) || ([_player] call player_opfor)  || ([_player] call player_insurgent)) exitWith {
-		if (!(createDialog "civinteraktion")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
+		if (!(createDialog "civinteraktion")) exitWith {hint "Dialog Error!";};
 		true
 	};
 	false
@@ -51,20 +51,17 @@ interact_ai = {
 	private["_handled"];
 	if((_target in pmc_shop_list)) exitWith {
 		if (not([_player] call player_civilian)) exitWith {
-			tlr_hud_array set [(count tlr_hud_array), ["You cannot access PMC Shops: Not a civilian",(time+5)]];
-			//hint "You cannot access PMC Shops: Not a civilian";
+			hint "You cannot access PMC Shops: Not a civilian";
 			false
 		};
 
 		if (not([_player] call player_pmc_whitelist)) exitWith {
-			tlr_hud_array set [(count tlr_hud_array), ["You cannot access PMC Shops: Not in whitelist",(time+5)]];
-			//hint "You cannot access PMC Shops: Not in whitelist";
+			hint "You cannot access PMC Shops: Not in whitelist";
 			false
 		};
 
 		if ([_player] call player_pmc_blacklist) exitWith {
-			tlr_hud_array set [(count tlr_hud_array), ["You cannot access PMC Shops: In blacklist",(time+5)]];
-			//hint "You cannot access PMC Shops: In blacklist";
+			hint "You cannot access PMC Shops: In blacklist";
 			false
 		};
 
@@ -91,8 +88,7 @@ interact_atm = {
 	if (not(_target in bankflagarray)) exitWith {false};
 	
 	if(!local_useBankPossible) exitWith {
-		tlr_hud_array set [(count tlr_hud_array), ["The ATM rejected your card",(time+5)]];
-		//hint "The ATM rejected your card";
+		hint "The ATM rejected your card";
 		false
 	};
 	
@@ -422,8 +418,7 @@ interact_president_change_laws = {
 	
 	private["_message"];
 	_message = format["Law #%1 has changed.\n%2", _number, _text];
-	format['tlr_hud_array set [(count tlr_hud_array), ["toString(%1)",(time+5)]];', toArray(_message)] call broadcast;
-	//format['hint toString(%1);', toArray(_message)] call broadcast;
+	format['hint toString(%1);', toArray(_message)] call broadcast;
 };
 
 
@@ -435,13 +430,13 @@ interact_president_change_taxes = {
 	bank_tax = _this select 4;
 	publicVariable   "bank_tax";	
 	"[true,[""itemtax"",""vehicletax"",""magazinetax"",""weapontax""]] call item_setup_taxes;
-	tlr_hud_array set [(count tlr_hud_array), [""The President has changed the tax rates!"",(time+5)]];" call broadcast;
+	hint ""The President has changed the tax rates!"";" call broadcast;
 };
 
 civilian_camera_cost_per_second = 1000000;
 
 interact_civilian_camera_menu = {_this spawn {
-	if (!(createDialog "civcamdialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "civcamdialog")) exitWith {hint "Dialog Error!";};
 	
 	[1] call DialogCivilianPlayersList;
 	lbSetCurSel    [1, 0];
@@ -508,7 +503,7 @@ interact_civilian_camera = {_this spawn {
 	private["_camera"];
 	_camera = "camera" camcreate [_tx, _ty, 15];
 	
-	if (not(createDialog "MainCamDialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (not(createDialog "MainCamDialog")) exitWith {hint "Dialog Error!";};
 	
 	[0,0,0,["camcontrol",_camera,[10,30]]] execVM "copcams.sqf";
 	
@@ -554,7 +549,7 @@ interact_civilian_camera = {_this spawn {
 };};
 
 interact_warrants_menu = { _this spawn {
-	if (!(createDialog "wantedrelease")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "wantedrelease")) exitWith {hint "Dialog Error!";};
 	[1] call DialogNotCopsList;
 	lbSetCurSel [1, 0];
 	[11] call DialogNotCopsList;
@@ -625,7 +620,7 @@ interact_mobile_send = {
 };
 
 interact_mobile_use = {
-	if (!(createDialog "handydialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "handydialog")) exitWith {hint "Dialog Error!";};
 	[2] call DialogAllPlayersList;
 	lbSetCurSel [99, 0];
 	ctrlSetText [4, format["Cost: $%1", INV_smscost]];
@@ -789,7 +784,7 @@ interact_atm_menu = { _this spawn {
 		player groupChat format ["You robbed the bank a few minutes ago. You can not use it for %1 minutes after you robbed it.", strM(local_robbsperre_zeit)];
 	};
 
-	if (!(createDialog "bank")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "bank")) exitWith {hint "Dialog Error!";};
 
 	private["_my_index"];
 
@@ -850,7 +845,7 @@ interact_inventory_menu = {
 	private["_player"];
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {};
-	if (!(createDialog "inventar")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "inventar")) exitWith {hint "Dialog Error!";};
 
 	private["_itemcounter"];
 	_itemcounter = 0;
@@ -1126,8 +1121,7 @@ interact_rob_inventory_receive = {
 		
 		private["_message"];
 		_message = format["%1-%2 attemted to rob %3-%4 but failed", _player, (name _player), _target, (name _target)];
-		format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];', toArray(_message)] call broadcast;
-		//format['hint toString(%1);', toArray(_message)] call broadcast;
+		format['hint toString(%1);', toArray(_message)] call broadcast;
 	};
 	[_target, "money", -(_amount)] call INV_AddInventoryItem;
 	format['[%1, %2, %3] call interact_rob_inventory_response;', _player, _target, _amount] call broadcast;
@@ -1135,8 +1129,7 @@ interact_rob_inventory_receive = {
 	
 	private["_message"];
 	_message = format["%1-%2 stole $%3 from %4-%5", _player, (name _player), strM(_amount), _target, (name _target)];
-	format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];', toArray(_message)] call broadcast;
-	//format['hint toString(%1);', toArray(_message)] call broadcast;
+	format['hint toString(%1);', toArray(_message)] call broadcast;
 	
 	[] spawn {
 		stolenfromtimeractive = true;
@@ -1372,7 +1365,7 @@ interact_ticket_receive = { _this spawn {
 	_amount = round(_amount);
 
 	response = false;
-	if (!(createDialog "ja_nein")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
+	if (!(createDialog "ja_nein")) exitWith {hint "Dialog Error!"};
 	ctrlSetText [1, format["%1-%2 gave you a ticket of $%3. Do you agree to pay?", _player, (name _player), strM(_amount)]];
 	waitUntil{(not(ctrlVisible 1023))};
 	
@@ -1531,7 +1524,7 @@ interact_stranded_check = {
 	if (not([_player] call player_stranded)) exitWith {};
 	
 	response = false;
-	if (!(createDialog "ja_nein")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
+	if (!(createDialog "ja_nein")) exitWith {hint "Dialog Error!";};
 	
 	ctrlSetText [1, format["Hey there, looks like you are stranded. Do you want to quickly respawn? Note that as a penalty, you will lose your gear, and inventory."]];
 	waitUntil{(not(ctrlVisible 1023))};
@@ -1586,7 +1579,7 @@ interact_generic_storage_menu = { _this spawn {
 	if (typeName _right_list_code != "CODE") exitWith {};
 	if (typeName _right_label_code != "CODE") exitWith {};
 	
-	if (!(createDialog "itemkaufdialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
+	if (!(createDialog "itemkaufdialog")) exitWith {hint "Dialog Error!";};
 	disableSerialization;
 
 	private["_display"];
@@ -2369,8 +2362,7 @@ interact_gang_area_neutralise = {
 	
 	private["_message"];
 	_message = format["%1 has been neutralised by %2!", _gang_area, _gang_name];
-	format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];', toArray(_message)] call broadcast;
-	//format['hint toString(%1);', toArray(_message)] call broadcast;
+	format['hint toString(%1);', toArray(_message)] call broadcast;
 };
 
 interact_gang_area_capture = {
@@ -2405,7 +2397,7 @@ interact_gang_area_capture = {
 		
 	private["_message"];
 	_message = format["%1 has been captured by %2!", _gang_area, _gang_name];
-	format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];', toArray(_message)] call broadcast;
+	format['hint toString(%1);', toArray(_message)] call broadcast;
 };
 
 interact_gang_create_menu = {
@@ -3169,7 +3161,7 @@ interact_select_vehicle_wait = {
 	if (isNil "_vehicles") exitWith { nil };
 	if (typeName _vehicles != "ARRAY") exitWith { nil };
 	
-	if (!(createDialog "vehiclesList")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "vehiclesList")) exitWith {hint "Dialog Error!"};
 	
 	buttonSetAction [vehiclesList_select_button_idc,  "call interact_select_vehicle;"];
 	private["_i", "_count"];

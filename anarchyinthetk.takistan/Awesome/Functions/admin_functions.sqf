@@ -145,7 +145,7 @@ admin_activate_command = { _this spawn {
 	_code = compile ( "_this call " + _command);
 	[_player, _target, _text] spawn _code;
 	sleep 1;
-	tlr_hud_array set [(count tlr_hud_array), ["Code activated!",(time+5)]];
+	hint "Code Activated";
 };};
 
 admin_functions_defined = true;

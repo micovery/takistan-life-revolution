@@ -33,7 +33,7 @@ P_Dialog_Full = {
 	
 	_veh = vehicle player;
 
-	if (!(createDialog "Paint_Dialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog error!",(time+5)]];};
+	if (!(createDialog "Paint_Dialog")) exitWith {hint "Dialog Error!";};
 	[] call P_Dialog_Setup;
 	
 	_cam = "Camera" camCreate [0, 0, 0];

@@ -96,11 +96,9 @@ A_LIST_ADMINS	=
 	"15457926", 
 	"11060102",
 	"7547206",
-	"33015174",
 	"9784838",
 	"36557446",
 	"76476806",
-	"34373126",
 	"92317702",
 	"4022278",
 	"37713478",
@@ -137,7 +135,7 @@ A_WBL_F_DIALOG_INIT = {
 		"_i"
 	];
 
-	if (!(createDialog "white_black_list")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "white_black_list")) exitWith {hint "Dialog Error!";};
 	
 	disableSerialization;
 	

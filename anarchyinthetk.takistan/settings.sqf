@@ -3,7 +3,7 @@ _zusatzString = "";
 if ((count _this)>1) then {_zusatzString = _this select 1;};
 
 if (_art == "Einstellungen") then {
-	if (!(createDialog "MainMenu")) exitWith {	tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "MainMenu")) exitWith {hint "Dialog Error!";};
 };
 
 if (_art == "GrafikEinstellungen") then {
@@ -12,7 +12,7 @@ if (_art == "GrafikEinstellungen") then {
 
 if (_art == "TextEinstellungen") then {
 	if (_zusatzString == "oeffnen") then {
-		if (!(createDialog "TextEinstellungenDialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+		if (!(createDialog "TextEinstellungenDialog")) exitWith {hint "Dialog Error!";};
 			
 		for [{_i=1}, {_i <= 4}, {_i=_i+1}] do {
 			call compile format["ctrlSetText[%1, RadioTextMsg_%1];", _i];
@@ -32,17 +32,17 @@ if (_art == "TextEinstellungen") then {
 };
 
 if (_art == "Tutorial") then {
-	if (!(createDialog "TutorialDialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "TutorialDialog")) exitWith {hint "Dialog Error!";};
 	ctrlSetText[1, localize "STRS_mainmenu_MissionTutorial"];
 };
 
 if (_art == "FAQ") then {
-	if (!(createDialog "FAQDialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "FAQDialog")) exitWith {hint "Dialog Error!";};
 	ctrlSetText[1, localize "STRS_mainmenu_FAQ"];
 };
 
 if (_art == "About") then {
-	if (!(createDialog "AboutDialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "AboutDialog")) exitWith {hint "Dialog Error!";};
 	ctrlSetText[1, localize "STRS_mainmenu_AboutThisMission"];
 };
 

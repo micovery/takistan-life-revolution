@@ -14,7 +14,6 @@ player createDiarySubject ["donations","Donations"];
 player createDiarySubject ["credits","TS3, Website and Credits"];
 player createDiarySubject ["origins","History of Life RP Maps"];
 player createDiarySubject ["help","Help and Tips"];
-player createDiarySubject ["Eat_Sleep_Drink","Eating, Drinking and Sleeping"];
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -510,28 +509,6 @@ player createDiaryRecord ["donations",
 "
 Donate at http://www.takistanliferevolution.com for extra starting money! More donator rewards coming soon, special shops and private houses!<br/>
 <br/>
-"
-]
-];
-
-player createDiaryRecord ["Eat_Sleep_Drink",
-[
-"",
-"
-<br/>-Eating, Drinking and Sleeping, what you should know about it...-<br/>
-Like in real life you must eat, drink and sleep now in order to stay alive.<br/>
-<br />
-You can buy food and drinks at the foodmarkets, the export and the gasstations.<br />
-But be careful, their stocks are limited!<br />
-To fill it up again you can produce food and drinks at the food factory next to the glasblower.<br />
-<br />
-Sleeping is added to your scrollmenu. Use the Sleep option to sleep.<br />
-Be careful: While sleeping you can't do anything and you can be killed!<br />
-<br />
-The HUD:<br />
-On the hud you can see your actual hunger, thirst and tiredness.<br />
-As soon as they reach 1000 you'll start loosing life or fall asleep (even while driving / flying).<br />
-Make sure to keep them lower than 1000 at every time!<br />
 "
 ]
 ];

@@ -49,16 +49,16 @@ if (_action == "serverloop") then {
 		};
 
 		if (_MaxPos == -1) then	{
-			'tlr_hud_array set [(count tlr_hud_array), [localize "STRS_regierung_nomajor",(time+5)]];'call broadcast;
+			"hint localize ""STRS_regierung_nomajor"";" call broadcast;
 			_currentMayor = -1;
 		} 
 		else { if (_currentMayor == _MaxPos) then {
-			'tlr_hud_array set [(count tlr_hud_array), [localize "STRS_regierung_majorstays",(time+5)]];' call broadcast;
+			"hint localize ""STRS_regierung_majorstays"";" call broadcast;
 		} 
 		else {
 			_currentMayor = _MaxPos;
 			_MayorString  = (playerstringarray select _currentMayor);
-			format["tlr_hud_array set [(count tlr_hud_array), [format[localize ""STRS_mayor_new"", ""%3"", %2],(time+5)]];]; if ((rolenumber-1) == %1) then {isMayor = true;} else {isMayor = false;};", _MaxPos, _MaxStimmen, _MayorString] call broadcast;
+			format["hint format[localize ""STRS_mayor_new"", ""%3"", %2]; if ((rolenumber-1) == %1) then {isMayor = true;} else {isMayor = false;};", _MaxPos, _MaxStimmen, _MayorString] call broadcast;
 		};};
 
 		MayorNumber = _currentMayor;

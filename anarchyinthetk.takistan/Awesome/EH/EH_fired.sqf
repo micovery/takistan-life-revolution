@@ -27,7 +27,7 @@ if (_unit distance (getmarkerpos "respawn_west") < 100) exitwith {
 		};
 		
 		firestrikes = firestrikes - 1;
-		format['tlr_hud_array set [(count tlr_hud_array), ["WARNING %1: DO NOT FIRE INSIDE THE COPBASE! %2/%3 chances left.", (time+5)]];', name _unit, firestrikes, totalstrikes] call broadcast;
+		format['hint "WARNING %1: DO NOT FIRE INSIDE THE COPBASE! %2/%3 chances left.";', name _unit, firestrikes, totalstrikes] call broadcast;
 		
 	};
 	
@@ -39,7 +39,7 @@ if ( ((_unit distance (getmarkerpos "respawn_civilian")) < 130) ) exitwith {
 		};
 		
 		firestrikes = firestrikes - 1;
-		format['tlr_hud_array set [(count tlr_hud_array), ["WARNING %1: DO NOT FIRE INSIDE THE CIVILIAN SPAWN! %2/%3 chances left.", (time+5)]];', name _unit, firestrikes, totalstrikes] call broadcast;
+		format['hint "WARNING %1: DO NOT FIRE INSIDE THE CIVILIAN SPAWN! %2/%3 chances left.";', name _unit, firestrikes, totalstrikes] call broadcast;
 		
 	};
 

@@ -16,7 +16,7 @@ if(_art == "spawn_remove")then {
 
 	_vcl setpos [(getPosATL impoundarea1 select 0)-(random 50)+(random 50), (getPosATL impoundarea1 select 1)-(random 50)+(random 50), getPosATL impoundarea1 select 2];
 
-	format['tlr_hud_array set [(count tlr_hud_array), ["%1 has been impounded for blocking a spawn",(time+5)]];',_vcl] call broadcast;
+	format['hint format["%1 has been impounded for blocking a spawn",  %1]', _vcl] call broadcast;
 	_vcl setdamage 0;
 	_vcl engineOn false;
 	_vcl setvehiclelock "locked";
@@ -51,9 +51,8 @@ if(_art == "impound")then {
 
 	_vcl setpos [(getPosATL impoundarea1 select 0)-(random 50)+(random 50), (getPosATL impoundarea1 select 1)-(random 50)+(random 50), getPosATL impoundarea1 select 2];
 	player groupChat localize "STRS_inventar_impound_success";
-	
-	format['tlr_hud_array set [(count tlr_hud_array), [localize "STRS_inventar_impound_gesehen", "%1", "(%2)", %3,(time+5)]];', name player, player, _vcl] call broadcast;
-	
+
+	format['hint format[localize "STRS_inventar_impound_gesehen", "%1", "(%2)", %3]', name player, player, _vcl] call broadcast;
 	liafu = true;
 	_vcl setdamage 0;
 	_vcl engineOn false;

@@ -116,10 +116,10 @@ if (_art == "canceljob_search") then {
 };
 
 if (_art == "info") then {
-	if(inf == 0)then{inf=1}else{inf=0;};
+	if(inf == 0)then{inf=1}else{inf=0; hint "";};
 
 	while{inf == 1 and alreadygotaworkplacejob == 2 and alive player} do {
-		tlr_hud_array set [(count tlr_hud_array), [format["Find: %1\nTime taken: %2 seconds\nPay: $%3", searchname, timetaken, cash],(time+5)]];
+		hint format["Find: %1\nTime taken: %2 seconds\nPay: $%3", searchname, timetaken, cash];
 		sleep 1;
 	};
 	inf=0;

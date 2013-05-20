@@ -21,4 +21,4 @@ gcrsropedeployed = "false";
 gcrsplayerveharray = [vehicle player];
 gcrsrapelheloarray = gcrsrapelheloarray - gcrsplayerveharray;
 publicvariable "gcrsrapelheloarray";
-tlr_hud_array set [(count tlr_hud_array), ["Rapel Rope Deployed",(time+5)]];
+hint "Rapel Ropes Dropped";

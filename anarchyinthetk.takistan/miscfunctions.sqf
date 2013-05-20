@@ -195,12 +195,12 @@ Bomb_Vehicle = {
 	};
 
 	if (count _this > 2) then {
-		format ['
+		format ["
 		if ((random 100) < 10) then {
-			tlr_hud_array set [(count tlr_hud_array), [format[localize ""STRS_vehiclebomb_public_explode"", %1],(time+5)]];
+			hint format[localize ""STRS_vehiclebomb_public_explode"", %1];
 			[""Bomb"", %1] spawn Isse_AddCrimeLogEntry;
 		};
-		', player] call broadcast;
+		", player] call broadcast;
 	};
 };
 

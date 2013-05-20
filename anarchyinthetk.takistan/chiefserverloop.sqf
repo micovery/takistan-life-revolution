@@ -50,17 +50,15 @@ if (_art == "serverloop") then {
 		};	
 
 		if (_MaxPos == -1) then {
-			"tlr_hud_array set [(count tlr_hud_array), [localize ""STRS_chief_nomajor"",(time+5)]];" call broadcast
-			_currentchief = -1;
+			"hint localize ""STRS_chief_nomajor"";" call broadcast;_currentchief = -1;
 		} 
 		else { if (_currentchief == _MaxPos) then {
-			"tlr_hud_array set [(count tlr_hud_array), [localize""STRS_chief_majorstays"",(time+5)]];" call broadcast;
+			"hint localize ""STRS_chief_majorstays"";" call broadcast;
 		} 
 		else {
 			_currentchief = _MaxPos;
 			_chiefString  = (playerstringarray select _currentchief);
-			
-			format['tlr_hud_array set [(count tlr_hud_array), ["localize ""STRS_chief_new"", ""%3"", %2",(time+5)]];if ((rolenumber-1) == %1) then {ischief = true;} else {ischief = false;};',_MaxPos, _MaxStimmen, _chiefString] call broadcast
+			format["hint format[localize ""STRS_chief_new"", ""%3"", %2]; if ((rolenumber-1) == %1) then {ischief = true;} else {ischief = false;};", _MaxPos, _MaxStimmen, _chiefString] call broadcast;	
 		};};
 		
 		chiefNumber = _currentchief;

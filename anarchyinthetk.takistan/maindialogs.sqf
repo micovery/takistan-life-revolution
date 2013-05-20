@@ -14,7 +14,7 @@ if ((count _array)>1) then {
 };
 
 if (_art == "bail") then {
-	if (!(createDialog "baildialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "baildialog")) exitWith {hint "Dialog Error!";};
 	sliderSetRange [2, 100, 250000];		sliderSetSpeed [2, 1, 50];
 
 	while {(ctrlVisible 1008)} do {
@@ -27,7 +27,7 @@ if (_art == "bail") then {
 
 if (_art == "spielerliste") then {
 
-	if (!(createDialog "liste_1_button")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
 	_DFML = findDisplay -1;
 	
 	private["_dead_wait_time"];
@@ -329,7 +329,7 @@ if (_art == "spielerliste") then {
 };
 
 if (_art == "inventorycheck") then {
-	if (!(createDialog "liste_1_button")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
 	
 	_DFML = findDisplay -1;
 	
@@ -389,7 +389,7 @@ if (_art == "inventorysteal") then {
 };
 
 if (_art == "gesetz") then {
-	if (!(createDialog "gesetzdialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "gesetzdialog")) exitWith {hint "Dialog Error!";};
 	
 	_DFML = findDisplay -1;
 		
@@ -410,7 +410,7 @@ if (_art == "gesetz") then {
 };
 
 if (_art == "coplog") then {
-	if (!(createDialog "liste_1_button")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
 	
 	_DFML = findDisplay -1;
 	
@@ -450,7 +450,7 @@ if (_art == "coplog") then {
 };
 
 if (_art == "wahlen") then {
-	if (!(createDialog "wahldialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "wahldialog")) exitWith {hint "Dialog Error!";};
 	
 	_DFML = findDisplay -1;
 	
@@ -463,7 +463,7 @@ if (_art == "wahlen") then {
 };
 
 if (_art == "chief") then {
-	if (!(createDialog "chiefdialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "chiefdialog")) exitWith {hint "Dialog Error!";};
 	
 	_DFML = findDisplay -1;
 	
@@ -494,7 +494,7 @@ if (_art == "chief") then {
 };
 
 if (_art == "steuern") then {
-	if (!(createDialog "steuerdialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "steuerdialog")) exitWith {hint "Dialog Error!";};
 	
 	_DFML = findDisplay -1;
 	
@@ -527,19 +527,19 @@ if (_art == "steuern") then {
 };
 
 if (_art == "copmenu") then {
-	if (!(createDialog "CopMenu")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "CopMenu")) exitWith {hint "Dialog Error!"};
 };
 
 if (_art == "copmenulite") then {
-	if (!(createDialog "CopMenuLite")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "CopMenuLite")) exitWith {hint "Dialog Error!"};
 };
 
 if (_art == "distribute") then {
-	if (!(createDialog "distribute")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "distribute")) exitWith {hint "Dialog Error!"};
 };
 
 if (_art == "impound") then {
-	if (!(createDialog "distribute")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
+	if (!(createDialog "distribute")) exitWith {hint "Dialog Error!"};
 	_DFML = findDisplay -1;
 	
 	lbClear 1;
