@@ -56,7 +56,7 @@ tlr_life_sleephealth = 13;
 //3 = Time to save
 
 tlr_life_run_array = [time, time, time, time];
-
+tlr_life_sleeplock = false;
 //Client variables
 //0 = full, 1 = emtpy
 //Starting with full stats
@@ -102,11 +102,25 @@ tlr_life_init = {
 	[0] spawn tlr_life_client_loop;
 };
 
+/*
+tlr_life_get_life = {
+	private["_displayed"];
+	_displayed = 0;
+	{
+		if (not(typeName _x == "ARRAY")) exitWith{_displayed};
+		if (((_x select 1) > _displayed) and ((_x select 0) in ["head_hit", "body", ""])) then {
+			_displayed = (_x select 1);
+		};
+	} foreach tlr_life_damage_array;
+	_displayed
+};
+*/
+
 tlr_life_hud = {
 	if (not(tlr_life_settings select tlr_life_hudd)) exitWith {};
 	//player groupChat "HUD RUNNING";
 	private["_hud", "_life", "_hunger", "_thirst", "_tired", "_normalHud", "_i"];
-	_life = round((1-(damage player))*1000); //Life in percent - counting down
+	//_life = round((0.9-(call tlr_life_get_life))*1111); //Life in percent - counting down
 	_hunger = round(tlr_life_hunger*1000); //Hunger in percent - counting up
 	_thirst = round(tlr_life_thirst*1000); //Thirst in percent - counting up
 	_tired = round(tlr_life_tiredness*1000); //Tiredness in percent - counting up
@@ -126,11 +140,10 @@ tlr_life_hud = {
 	};
 	_hud = parseText format["
 	<t color='#FFFFFF' align='center'>%1</t><br /><br />
-	<t color='#FF0404' align='left'>Life: %2</t><br />
-	<t color='#18A015' align='left'>Hunger: %3</t><br />
-	<t color='#0083FF' align='left'>Thirst: %4</t><br />
-	<t color='#4c4c4c' align='left'>Sleepy: %5</t><br /><br />%6
-	", (name player), _life, _hunger, _thirst, _tired, _normalHud];
+	<t color='#18A015' align='left'>Hunger: %2</t><br />
+	<t color='#0083FF' align='left'>Thirst: %3</t><br />
+	<t color='#4c4c4c' align='left'>Sleepy: %4</t><br /><br />%6
+	", (name player), _hunger, _thirst, _tired, _normalHud];
 	hintSilent _hud;
 };
 
@@ -178,6 +191,7 @@ tlr_life_fthirst = {
 tlr_life_ftiredness = {
 	if (time < (tlr_life_run_array select 2) + 1) exitWith {};
 	//player groupChat "TIREDNESS RUNNING";
+	if (tlr_life_sleeplock) exitWith {};
 	tlr_life_tiredness = tlr_life_tiredness + ((time -(tlr_life_run_array select 2)) * ((tlr_life_settings select tlr_life_tipm)/60));
 	if (tlr_life_tiredness >= 1) then {
 		[] spawn tlr_life_fsleep;
@@ -300,8 +314,11 @@ tlr_life_fsleep = {
 		player groupChat "You can't sleep now, you just got up";
 	};
 	//Disabling input
+	tlr_life_sleeplock = true;
 	disableUserInput true;
-	player playmovenow "AinjPpneMstpSnonWrflDnon_rolltoback";
+	if (vehicle player == player) then {
+		player playmovenow "AinjPpneMstpSnonWrflDnon_rolltoback";
+	};
 	//Animation (hit)
 	private["_sleeptime"];
 	_sleeptime = time + ((tlr_life_settings select tlr_life_sleep)*tlr_life_tiredness);
@@ -315,12 +332,14 @@ tlr_life_fsleep = {
 		sleep 1;
 	};
 	//Getting up and Enabeling input again
-	player switchmove "";
+	if (vehicle player == player) then {
+		player switchmove "";
+	};
 	disableUserInput false;
 	"dynamicBlur" ppEffectEnable true;
 	"dynamicBlur" ppEffectAdjust [0];
 	"dynamicBlur" ppEffectCommit 0;
-	
+	tlr_life_sleeplock = false;
 	
 	if ((tlr_life_settings select tlr_life_sleephealth) > 0) then {
 		private["_life"];
