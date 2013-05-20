@@ -42,13 +42,12 @@ _O0O0 = player;
 if (!(_SelectedTransporterTypeS) && !(_SelectedTransporterTypeM) && !(_SelectedTransporterTypeL) && !(_SelectedTransporterTypeXL)) exitWith {
 
 	//// BTK_Hint - Not supported
-	hint parseText format ["
-		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
+	// 
+	tlr_hud_array set [(count tlr_hud_array), ["<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>This vehicle does not support cargo transports!</t>
-		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	"];
-	
+		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />",(time+5)]];
+
 _Transporter removeAction _Action;
 };
 
@@ -59,12 +58,12 @@ sleep 1;
 if ((_Unit in _Transporter) && !(_Selected == "UnloadCargo")) exitWith {
 
 	//// BTK_Hint - You have to get out
-	hint parseText format ["
-		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
+	
+	tlr_hud_array set [(count tlr_hud_array), ["<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>You have to <t color='#fdd785'>get out</t> to load cargo!</t>
-		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	"];
+		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />",(time+5)]];
+
 
 _Transporter removeAction _Action;
 };
@@ -77,14 +76,13 @@ if (_Selected == "UnloadCargo") exitWith {
 	if (!((getpos _Transporter) select 2 <= 2.1) && ((getpos _Transporter) select 2 <= 50)) exitWith {
 
 		//// BTK_Hint - Flying too low
-		hint parseText format ["
-			<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
+		tlr_hud_array set [(count tlr_hud_array), ["<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 			<t align='left' color='#eaeaea' size='1.0'>You have to fly above <t color='#fdd785'>50m</t> to drop the cargo!</t>
 			<br />
 			<t align='left' color='#eaeaea' size='1.0'>Or hover below <t color='#fdd785'>2m</t> to unload the cargo!</t>
-			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		"];
+			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />",(time+5)]];
+		
 	};
 
 	_Transporter removeAction _Action;
@@ -118,12 +116,11 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeS)) exitWith {
 	if (count _ObjectsInRange < 1) exitWith {
 	
 		//// BTK_Hint - Nothing to load in range
-		hint parseText format ["
-			<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
+		tlr_hud_array set [(count tlr_hud_array), ["			<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 			<t align='left' color='#eaeaea' size='1.0'>Nothing to load in range!<br /><br />Please move the object closer to the transporter.</t>
-			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		"];
+			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />",(time+5)]];
+
 	};
 	
 	//// Else, select the object from list
@@ -136,12 +133,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeS)) exitWith {
 	_ObjectName = getText (configFile >> "CfgVehicles" >> (typeOf _Object) >> "displayName");
 
 	//// BTK_Hint - Loading in...
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'>Loading <t color='#fdd785'>%1</t> into <t color='#fdd785'>%2</t> ...</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	",_ObjectName,_TransporterName];
+	",_ObjectName,_TransporterName],(time+5)]];
+
 
 	//// remove the Action
 	_Transporter removeAction _Action;
@@ -172,12 +170,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeS)) exitWith {
 	_Transporter animate ["ramp_bottom", 0];
 
 	//// BTK_Hint - Loaded
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> loaded.</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	", _ObjectName,_TransporterName];
+	", _ObjectName,_TransporterName],(time+5)]];
+
 
 	//// add unload/drop Action
 	_UnloadAction = _Transporter addAction [("<t color=""#fadfbe"">" + ("Unload cargo") + "</t>"),"BTK\Cargo Drop\Engine.sqf",["UnloadCargo"], 5];
@@ -201,12 +200,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeS)) exitWith {
 		_Object enableSimulation true;
 
 		//// BTK_Hint - Unloading...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Unloading <t color='#fdd785'>%1</t> from <t color='#fdd785'>%2</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Animate ramp
 		sleep 1;
@@ -230,24 +229,25 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeS)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Unloaded
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> unloaded.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 	};
 
 	//// If drop
 	if (DoDrop) then {
 
 		//// BTK_Hint - Dropping...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Dropping <t color='#fdd785'>%1</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Reset variables
 		DoUnload = false;
@@ -285,12 +285,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeS)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Dropped
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> dropped.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Wait until ground reached
 		waitUntil {(getPosATL _Object select 2) < 2};
@@ -322,12 +322,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeM)) exitWith {
 	if (count _ObjectsInRange < 1) exitWith {
 	
 		//// BTK_Hint - Nothing to load in range
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), ["
 			<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 			<t align='left' color='#eaeaea' size='1.0'>Nothing to load in range!<br /><br />Please move the object closer to the transporter.</t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		"];
+		",(time+5)]];
+
 	};
 	
 	//// Else, select the object from list
@@ -340,12 +341,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeM)) exitWith {
 	_ObjectName = getText (configFile >> "CfgVehicles" >> (typeOf _Object) >> "displayName");
 
 	//// BTK_Hint - Loading in...
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'>Loading <t color='#fdd785'>%1</t> into <t color='#fdd785'>%2</t> ...</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	",_ObjectName,_TransporterName];
+	",_ObjectName,_TransporterName],(time+5)]];
+
 
 	//// remove the Action
 	_Transporter removeAction _Action;
@@ -368,12 +370,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeM)) exitWith {
 	_Transporter animate ["ramp_bottom", 0];
 
 	//// BTK_Hint - Loaded
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> loaded.</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	", _ObjectName,_TransporterName];
+	", _ObjectName,_TransporterName],(time+5)]];
 
 	//// add unload/drop Action
 	_UnloadAction = _Transporter addAction [("<t color=""#fadfbe"">" + ("Unload cargo") + "</t>"),"BTK\Cargo Drop\Engine.sqf",["UnloadCargo"], 5];
@@ -396,13 +398,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeM)) exitWith {
 		_Object setVariable ["BTK_CargoDrop_ObjectLoaded", false];
 
 		//// BTK_Hint - Unloading...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Unloading <t color='#fdd785'>%1</t> from <t color='#fdd785'>%2</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
-
+		",_ObjectName,_TransporterName],(time+5)]];
+	
 		//// Animate ramp
 		sleep 1;
 		_Transporter animate ["ramp_top", 1];
@@ -425,24 +427,24 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeM)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Unloaded
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> unloaded.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 	};
 
 	//// If drop
 	if (DoDrop) then {
 
 		//// BTK_Hint - Dropping...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Dropping <t color='#fdd785'>%1</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Reset variables
 		DoUnload = false;
@@ -478,12 +480,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeM)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Dropped
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> dropped.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Wait until ground reached
 		waitUntil {(getPosATL _Object select 2) < 2};
@@ -515,12 +517,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeL)) exitWith {
 	if (count _ObjectsInRange < 1) exitWith {
 	
 		//// BTK_Hint - Nothing to load in range
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), ["
 			<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 			<t align='left' color='#eaeaea' size='1.0'>Nothing to load in range!<br /><br />Please move the object closer to the transporter.</t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		"];
+		",(time+5)]];
+	
 	};
 	
 	//// Else, select the object from list
@@ -533,12 +536,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeL)) exitWith {
 	_ObjectName = getText (configFile >> "CfgVehicles" >> (typeOf _Object) >> "displayName");
 
 	//// BTK_Hint - Loading in...
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'>Loading <t color='#fdd785'>%1</t> into <t color='#fdd785'>%2</t> ...</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	",_ObjectName,_TransporterName];
+	",_ObjectName,_TransporterName],(time+5)]];
+
 
 	//// remove the Action
 	_Transporter removeAction _Action;
@@ -572,12 +576,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeL)) exitWith {
 	_Transporter animate ["ramp_bottom", 0];
 
 	//// BTK_Hint - Loaded
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> loaded.</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	", _ObjectName,_TransporterName];
+	", _ObjectName,_TransporterName];,(time+5)]];
 
 	//// add unload/drop Action
 	_UnloadAction = _Transporter addAction [("<t color=""#fadfbe"">" + ("Unload cargo") + "</t>"),"BTK\Cargo Drop\Engine.sqf",["UnloadCargo"], 5];
@@ -600,12 +604,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeL)) exitWith {
 		_Object setVariable ["BTK_CargoDrop_ObjectLoaded", false];
 
 		//// BTK_Hint - Unloading...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Unloading <t color='#fdd785'>%1</t> from <t color='#fdd785'>%2</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Animate ramp
 		sleep 1;
@@ -629,24 +633,26 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeL)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Unloaded
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> unloaded.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 	};
 
 	//// If drop
 	if (DoDrop) then {
 
 		//// BTK_Hint - Dropping...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Dropping <t color='#fdd785'>%1</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 
 		//// Reset variables
 		DoUnload = false;
@@ -682,12 +688,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeL)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Dropped
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> dropped.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
 
 		//// Wait until ground reached
 		waitUntil {(getPosATL _Object select 2) < 2};
@@ -719,12 +725,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeXL)) exitWith {
 	if (count _ObjectsInRange < 1) exitWith {
 	
 		//// BTK_Hint - Nothing to load in range
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), ["
 			<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 			<t align='left' color='#eaeaea' size='1.0'>Nothing to load in range!<br /><br />Please move the object closer to the transporter.</t>
 			<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		"];
+		",(time+5)]];
+
 	};
 	
 	//// Else, select the object from list
@@ -737,12 +744,12 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeXL)) exitWith {
 	_ObjectName = getText (configFile >> "CfgVehicles" >> (typeOf _Object) >> "displayName");
 
 	//// BTK_Hint - Loading in...
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'>Loading <t color='#fdd785'>%1</t> into <t color='#fdd785'>%2</t> ...</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	",_ObjectName,_TransporterName];
+	",_ObjectName,_TransporterName],(time+5)]];
 
 	//// remove the Action
 	_Transporter removeAction _Action;
@@ -781,12 +788,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeXL)) exitWith {
 	_Transporter animate ["ramp_bottom", 0];
 
 	//// BTK_Hint - Loaded
-	hint parseText format ["
+	tlr_hud_array set [(count tlr_hud_array), [format ["
 	<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 	<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> loaded.</t>
 	<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-	", _ObjectName,_TransporterName];
+	", _ObjectName,_TransporterName],(time+5)]];
+
 
 	//// add unload/drop Action
 	_UnloadAction = _Transporter addAction [("<t color=""#fadfbe"">" + ("Unload cargo") + "</t>"),"BTK\Cargo Drop\Engine.sqf",["UnloadCargo"], 5];
@@ -809,12 +817,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeXL)) exitWith {
 		_Object setVariable ["BTK_CargoDrop_ObjectLoaded", false];
 
 		//// BTK_Hint - Unloading...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Unloading <t color='#fdd785'>%1</t> from <t color='#fdd785'>%2</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 
 		//// Animate ramp
 		sleep 1;
@@ -838,24 +847,26 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeXL)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Unloaded
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> unloaded.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 	};
 
 	//// If drop
 	if (DoDrop) then {
 
 		//// BTK_Hint - Dropping...
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'>Dropping <t color='#fdd785'>%1</t> ...</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 
 		//// Reset variables
 		DoUnload = false;
@@ -891,12 +902,13 @@ if ((_Selected == "LoadCargo") && (_SelectedTransporterTypeXL)) exitWith {
 		_Transporter animate ["ramp_bottom", 0];
 		
 		//// BTK_Hint - Dropped
-		hint parseText format ["
+		tlr_hud_array set [(count tlr_hud_array), [format ["
 		<t align='left' color='#e5b348' size='1.2'><t shadow='1'shadowColor='#000000'>Cargo Drop</t></t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
 		<t align='left' color='#eaeaea' size='1.0'><t color='#fdd785'>%1</t> dropped.</t>
 		<img color='#ffffff' image='BTK\Cargo Drop\Images\img_line_ca.paa' align='left' size='0.79' />
-		",_ObjectName,_TransporterName];
+		",_ObjectName,_TransporterName],(time+5)]];
+
 
 		//// Wait until ground reached
 		waitUntil {(getPosATL _Object select 2) < 2};

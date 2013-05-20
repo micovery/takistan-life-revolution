@@ -135,7 +135,7 @@ class Mission
 			side="LOGIC";
 			class Vehicles
 			{
-				items=109;
+				items=110;
 				class Item0
 				{
 					position[]={4257.3008,71.539162,19475.344};
@@ -1447,6 +1447,18 @@ class Mission
 					skill=0.60000002;
 					text="pmcair";
 					init="this allowdamage false;this setpos [6167.3223, 11606.787, 5];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+				};
+				class Item109
+				{
+					position[]={2051.86,1.9199,7610.37};
+					azimut=212.978;
+					special="NONE";
+					side="CIV";
+					vehicle="HouseWife2";
+					skill=0.5;
+					text="pub4";
+					init="this allowdamage false;this setpos[2051.86,7610.37,2.6];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					id=1820;
 				};
 			};
 		};
@@ -5758,7 +5770,7 @@ class Mission
 	};
 	class Vehicles
 	{
-		items=1486;
+		items=1491;
 		class Item0
 		{
 			position[]={5678.9585,96.308502,8893.3311};
@@ -21007,10 +21019,66 @@ class Mission
 			text="mosquelamp";
 			init="this setpos [5655.2417, 8894.0166, 3];this enableSimulation false;call compile ""[""""light"""", this, 0.04] execvm """"effects.sqf"""";"";";
 		};
+		class Item1486
+		{
+			position[]={3653.82,0,8575.54};
+			azimut=46.4009;
+			id=1820;
+			side="EMPTY";
+			vehicle="Land_Misc_Well_L_EP1";
+			skill=0.60000002;
+			text="WellFoodFactory";
+			init="this allowdamage false;";
+		};
+		class Item1487
+		{
+			position[]={3656.55,0,8578.74};
+			azimut=0;
+			id=1821;
+			side="EMPTY";
+			vehicle="FlagCarrierTakistan_EP1";
+			skill=0.60000002;
+			text="foodfactory";
+			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+		};
+		class Item1488
+		{
+			position[]={3658.29,0,8582.73};
+			azimut=-168.131;
+			id=1822;
+			side="EMPTY";
+			vehicle="Fort_StoneWall_EP1";
+			skill=0.60000002;
+			text="wall1_foodfactory";
+			init="this allowdamage false;";
+		};
+		class Item1489
+		{
+			position[]={3649.3,0,8577.02};
+			azimut=105.552;
+			id=1823;
+			side="EMPTY";
+			vehicle="Fort_StoneWall_EP1";
+			skill=0.60000002;
+			text="wall2_foodfactory";
+			init="this allowdamage false;";
+		};
+		class Item1490
+		{
+			position[]={3657.01,0,8580.1};
+			azimut=16.903;
+			id=1824;
+			side="EMPTY";
+			vehicle="UNBasicAmmunitionBox_EP1";
+			skill=0.60000002;
+			text="fgunbox";
+			init="this allowdamage false; clearMagazineCargo this; clearWeaponCargo this;";
+		};
+		
 	};
 	class Markers
 	{
-		items=337;
+		items=339;
 		class Item0
 		{
 			position[]={3198.5229,94.03698,19269.121};
@@ -24156,6 +24224,26 @@ class Mission
 			a=0.60000002;
 			b=0.60000002;
 		};
+		class Item337
+		{
+			position[]={2051.86,1.9199,7610.37};
+			name="Liquor_1_2";
+			text="Allhu Snackbar";
+			type="mil_triangle";
+			colorName="ColorOrange";
+			a=0;
+			b=0;
+		};
+		class Item338
+		{
+			position[]={3656.55,1000,8578.74};
+			name="Marker_FoodFactory";
+			text="Food Factory";
+			type="mil_triangle";
+			colorName="ColorOrange";
+			a=0;
+			b=0;
+		};
 	};
 	class Sensors
 	{
@@ -24225,7 +24313,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			text="test groups";
-			expActiv="groupnumber = count allgroups; hint format[""%1 many groups"" , groupnumber];";
+			expActiv="groupnumber = count allgroups; tlr_hud_array set [(count tlr_hud_array), [format[""%1 many groups"" , groupnumber],(time+5)]];";
 			class Effects
 			{
 			};
@@ -24238,7 +24326,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			text="give cords";
-			expActiv="theplayerpos21 = getpos player; hint format [""%1"",theplayerpos21];";
+			expActiv="theplayerpos21 = getpos player; tlr_hud_array set [(count tlr_hud_array), [format [""%1"",theplayerpos21],(time+5)]];";
 			class Effects
 			{
 			};
@@ -24385,7 +24473,7 @@ class Mission
 			age="UNKNOWN";
 			text="GCRS Force Drop Rope";
 			expCond="(local player && gcrsropedeployed == ""true"" && vehicle player == player) || (local player && gcrsropedeployed == ""true"" && getpos vehicle player select 2 > 100) || (local player && gcrsropedeployed == ""true"" && getpos vehicle player select 2 < 25) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 0 > 5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 1 > 5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 2 > 5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 0 < -5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 1 < -5) || (local player && gcrsropedeployed == ""true"" && velocity vehicle player select 2 < -5)";
-			expActiv="deletevehicle gcrsrope1; deletevehicle gcrsrope2; deletevehicle gcrsrope3; deletevehicle gcrsrope4; deletevehicle gcrsrope5; deletevehicle gcrsrope6; deletevehicle gcrsrope7; deletevehicle gcrsrope8; deletevehicle gcrsrope9; deletevehicle gcrsrope10; deletevehicle gcrsrope11; deletevehicle gcrsrope12; deletevehicle gcrsrope13; deletevehicle gcrsrope14; deletevehicle gcrsrope15; gcrspilotvehicle removeaction gcrsdropropeactionid; gcrsropedeployed = ""false""; hint ""Rapel Rope Dropped"";";
+			expActiv="deletevehicle gcrsrope1; deletevehicle gcrsrope2; deletevehicle gcrsrope3; deletevehicle gcrsrope4; deletevehicle gcrsrope5; deletevehicle gcrsrope6; deletevehicle gcrsrope7; deletevehicle gcrsrope8; deletevehicle gcrsrope9; deletevehicle gcrsrope10; deletevehicle gcrsrope11; deletevehicle gcrsrope12; deletevehicle gcrsrope13; deletevehicle gcrsrope14; deletevehicle gcrsrope15; gcrspilotvehicle removeaction gcrsdropropeactionid; gcrsropedeployed = ""false""; tlr_hud_array set [(count tlr_hud_array), [""Rapel Rope Dropped"",(time+5)]];";
 			class Effects
 			{
 			};
@@ -24416,7 +24504,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			expCond="alive hostage1;";
-			expActiv="hint ""Someone has taken a hostage, Police have 15 minutes to rescue them.. DO NOT PUT THE HOSTAGE INTO A VEHICLE."";";
+			expActiv="tlr_hud_array set [(count tlr_hud_array), [""Someone has taken a hostage, Police have 15 minutes to rescue them.. DO NOT PUT THE HOSTAGE INTO A VEHICLE."",(time+5)]];";
 			class Effects
 			{
 			};

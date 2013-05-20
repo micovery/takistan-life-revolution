@@ -477,11 +477,11 @@ vehicle_set_modifications = {
 			[_vehicle] call armored_suv_close_minigun;
 		};
 		case "Ka60_PMC": {
-			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring helicopter armament...",(time+5)]]; };
 			_vehicle removeweapon "57mmLauncher";
 		};
 		case "Ka60_GL_PMC": {
-			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring helicopter armament...",(time+5)]]; };
 			_vehicle removeweapon "57mmLauncher";
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
@@ -493,13 +493,13 @@ vehicle_set_modifications = {
 			_vehicle addmagazine "100Rnd_762x51_M240";
 		};
 		case "AH6J_EP1": {
-			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring helicopter armament...",(time+5)]]; };
 			_vehicle removeweapon "FFARLauncher_14";
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
 		case "An2_TK_Cop": {
-			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring plane armament...",(time+5)]];};
 			_vehicle addweapon "M3P";
 			_vehicle addmagazine "250Rnd_127x99_M3P";
 			_vehicle addmagazine "250Rnd_127x99_M3P";
@@ -508,7 +508,7 @@ vehicle_set_modifications = {
 			_vehicle addmagazine "2000Rnd_762x51_M134";
 		};
 		case "An2_TK_EP1": {
-			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring plane armament...",(time+5)]];};
 			_vehicle addweapon "DSHKM";
 			_vehicle addmagazine "150Rnd_127x107_DSHKM";
 			_vehicle addmagazine "150Rnd_127x107_DSHKM";
@@ -522,28 +522,28 @@ vehicle_set_modifications = {
 			_vehicle addmagazine "500Rnd_TwinVickers";
 		};
 		case "L39":{
-			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring plane armament...",(time+5)]];};
 			_vehicle removeweapon "GSh23L_L39";
 			_vehicle removeweapon "57mmLauncher";
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
 		case "L39_UN":{
-			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring plane armament...",(time+5)]];};
 			_vehicle removeweapon "GSh23L_L39";
 			_vehicle removeweapon "57mmLauncher";
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
 		case "L39_TK_EP1": {
-			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring plane armament...",(time+5)]];};
 			_vehicle removeweapon "GSh23L_L39";
 			_vehicle removeweapon "57mmLauncher";
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
 		case "BTR40_MG_TK_INS_EP1": {
-			if(not(_silent)) then { hint "Reconfiguring vehicle armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring vehicle armament...",(time+5)]];};
 			_vehicle removemagazine "50Rnd_127x107_DSHKM";
 			_vehicle removemagazine "50Rnd_127x107_DSHKM";
 			_vehicle removemagazine "50Rnd_127x107_DSHKM";
@@ -555,7 +555,7 @@ vehicle_set_modifications = {
 			_vehicle addmagazine "150Rnd_127x107_DSHKM";
 		};
 		case "Ka137_MG_PMC": {
-			if(not(_silent)) then { hint "Reconfiguring vehicle armament...";};
+			if(not(_silent)) then { tlr_hud_array set [(count tlr_hud_array), ["Reconfiguring vehicle armament...",(time+5)]];};
 			_vehicle removemagazine "200Rnd_762x54_PKT";
 			_vehicle removemagazine "200Rnd_762x54_PKT";
 			_vehicle addmagazine "1500Rnd_762x54_PKT";
@@ -890,7 +890,8 @@ vehicle_lockpick = {
 		if ((_near_cops || _near_civilians || _incarpark) && not(iscop)) then {
 			private["_message"];
 			_message =  format["%1 was seen stealing a vehicle (registration plate: %2)!", player, _vehicle];
-			format['hint (toString(%1));', toArray(_message)] call broadcast;
+			format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];', toArray(_message)] call broadcast;
+			//format['hint (toString(%1));', toArray(_message)] call broadcast;
 			[player, "vehicle theft", 10000] call player_update_warrants;
 		};
 	}
@@ -901,7 +902,8 @@ vehicle_lockpick = {
 			[player, "attempted vehicle theft", 2000] call player_update_warrants;
 			private["_message"];
 			_message = format["%1 was seen attempting to lockpick a vehicle (Registration plate: %2)", player, _vehicle];
-			format['hint (toString(%1));', toArray(_message)] call broadcast;
+			format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];', toArray(_message)] call broadcast;
+			//format['hint (toString(%1));', toArray(_message)] call broadcast;
 		};			
 	};
 };

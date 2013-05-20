@@ -466,7 +466,8 @@ convoy_loop = {
 	sleep (convoyrespawntime * 3);
 	private["_message"];
 	_message = "There are rumors that a government convoy is leaving in a few minutes.";
-	format["hint toString(%1);", toArray(_message)] call broadcast;
+	format['tlr_hud_array set [(count tlr_hud_array), [toString(%1),(time+5)]];',toArray(_message)] call broadcast;
+	//format["hint toString(%1);", toArray(_message)] call broadcast;
 	sleep (convoyrespawntime * 3);
 
 	//Gets position to spawn

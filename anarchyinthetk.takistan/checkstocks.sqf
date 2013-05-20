@@ -4,7 +4,7 @@ _shop = _this select 1;
 
 if (_art == "Start") exitwith
 {
-if (!(createDialog "distribute4")) exitwith {hint "Dialog Error!"};
+if (!(createDialog "distribute4")) exitwith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 ctrlSetText [7, format["Select Factory"]];
 ctrlSetText [3, format["Car Shops"]];
 buttonSetAction [3, format['["VehicleStart"] execVM "checkstocks.sqf";']];
@@ -18,7 +18,7 @@ buttonSetAction [6, format['["Check",9] execVM "checkstocks.sqf";']];
 
 if (_art == "VehicleStart") exitwith
 {
-if (!(createDialog "distribute4")) exitwith {hint "Dialog Error!"};
+if (!(createDialog "distribute4")) exitwith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 ctrlSetText [7, format["Select Shop To Check Stocks"]];
 ctrlSetText [3, format["Car Shop 1"]];
 buttonSetAction [3, format['["Check",13] execVM "checkstocks.sqf";']];
@@ -32,7 +32,7 @@ buttonSetAction [6, format['["Check",17] execVM "checkstocks.sqf";']];
 
 if (_art == "GasStart") exitwith
 {
-if (!(createDialog "distribute4")) exitwith {hint "Dialog Error!"};
+if (!(createDialog "distribute4")) exitwith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 ctrlSetText [7, format["Select Shop To Check Stocks"]];
 ctrlSetText [3, format["Gas Station 1"]];
 buttonSetAction [3, format['["Check",0] execVM "checkstocks.sqf";']];
@@ -46,7 +46,7 @@ buttonSetAction [6, format['["Check",3] execVM "checkstocks.sqf";']];
 
 if (_art == "ShopStart") exitwith
 {
-if (!(createDialog "distribute4")) exitwith {hint "Dialog Error!"};
+if (!(createDialog "distribute4")) exitwith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 ctrlSetText [7, format["Select Shop To Check Stocks"]];
 ctrlSetText [3, format["Shop 1"]];
 buttonSetAction [3, format['["Check",4] execVM "checkstocks.sqf";']];
@@ -61,7 +61,7 @@ buttonSetAction [6, format['["Check",7] execVM "checkstocks.sqf";']];
 if (_art == "Check") Exitwith
 
 {
-if (!(createDialog "CheckDialog")) then {hint "Dialog Error!"};
+if (!(createDialog "CheckDialog")) then {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 
 INV_ActiveShopNumber    = _shop;
 _itemarray   = ((INV_ItemShops select INV_ActiveShopNumber) select 4);

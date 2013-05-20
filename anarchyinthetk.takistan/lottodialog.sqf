@@ -1,4 +1,4 @@
-if (!(createDialog "lotto")) exitWith {hint "Dialog Error!";};
+if (!(createDialog "lotto")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
 _lottoScheine = (_this select 3);
 buttonSetAction [2, "[ lbData[1, (lbCurSel 1)] ] execVM ""lotto.sqf""; closeDialog 0"];
 

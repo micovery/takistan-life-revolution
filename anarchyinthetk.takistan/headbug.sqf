@@ -13,7 +13,7 @@ if( (typeName _restrained == "BOOL") ) then {
 	if( _restrained ) exitwith {};
 };
 
-if(vehicle player != player) exitWith {hint "You must be on foot"};
+if(vehicle player != player) exitWith {tlr_hud_array set [(count tlr_hud_array), ["You must be on foot",(time+5)]];};
 titleCut ["","black faded", 0];
 _pos = position player;
 _dir = direction player;

@@ -23,42 +23,42 @@ _vehiclepos = getpos vehicle player;
 
 if (velocity vehicle player select 0 > 5) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not stationary.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not stationary.",(time+5)]];
 	};
 	
 if (velocity vehicle player select 0 < -5) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not stationary.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not stationary.",(time+5)]];
 	};
 
 if (velocity vehicle player select 1 > 5) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not stationary.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not stationary.",(time+5)]];
 	};
 	
 if (velocity vehicle player select 1 < -5) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not stationary.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not stationary.",(time+5)]];
 	};
 	
 if (velocity vehicle player select 2 > 5) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not stationary.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not stationary.",(time+5)]];
 	};
 
 if (velocity vehicle player select 2 < -5) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not stationary.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not stationary.",(time+5)]];
 	};
 
 if (_vehiclepos select 2 > 100) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not between 25 and 100 feet altitude above the surface below you.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not between 25 and 100 feet altitude above the surface below you.",(time+5)]];
 	};
 
 if (_vehiclepos select 2 < 25) exitWith
 	{
-	hint "Unable to deploy rapel ropes. Your vehicle is not between 25 and 100 feet altitude above the surface below you.";
+	tlr_hud_array set [(count tlr_hud_array), ["Unable to deploy rapel ropes. Your vehicle is not between 25 and 100 feet altitude above the surface below you.",(time+5)]];
 	};
 	
 liafu = true;
@@ -116,7 +116,7 @@ if (_playervehclass == "MH6J_EP1") then
 	gcrsrope15 setFlagTexture "";
 	gcrsrope15 attachto [gcrsrepelvehicle,[-1.25,2,-101]];
 	gcrsropedeployed = "true";
-	hint "Rapel Rope Deployed";
+	tlr_hud_array set [(count tlr_hud_array), ["Rapel Rope Deployed",(time+5)]];
 	};
 
 if (_playervehclass == "UH1H_TK_GUE_EP1") then
@@ -167,7 +167,7 @@ if (_playervehclass == "UH1H_TK_GUE_EP1") then
 	gcrsrope15 setFlagTexture "";
 	gcrsrope15 attachto [gcrsrepelvehicle,[-1.25,-3,-101]];
 	gcrsropedeployed = "true";
-	hint "Rapel Rope Deployed";
+	tlr_hud_array set [(count tlr_hud_array), ["Rapel Rope Deployed",(time+5)]];
 	};
 
 	

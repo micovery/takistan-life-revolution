@@ -57,7 +57,6 @@ ISSE_str_IntToStr = {
 	_str = "";
 
 	if (typeName _this == "STRING") then {
-		hint "Error: Wrong argument in IntToStr function: String";
 		_str = _this;
 	} 
 	else { if (_num >= 10000000) then {

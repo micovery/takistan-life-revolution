@@ -65,21 +65,12 @@ player groupchat "Styles dropbox: Custom";
 player groupchat "Custom dropbox: Whatever color you want";
 player groupchat "Then select apply and buy!";
 
-hintC "
-For easy Textures select the following options:
-\n
-Top right box: Select a numbered slot for the textures
-\n
-*WARNING SOME VEHICLES DO NOT HAVE TEXTURE SLOTS*
-\n
-Styles dropbox: Custom
-\n
-Custom dropbox: Whatever color you want
-\n
-\n
-Then select apply and buy!
-\n
-";
+tlr_hud_array set [(count tlr_hud_array), ["For easy Textures select the following options:",(time+5)]];
+tlr_hud_array set [(count tlr_hud_array), ["Top right box: Select a numbered slot for the textures",(time+5)]];
+tlr_hud_array set [(count tlr_hud_array), ["*WARNING SOME VEHICLES DO NOT HAVE TEXTURE SLOTS*",(time+5)]];
+tlr_hud_array set [(count tlr_hud_array), ["Styles dropbox: Custom",(time+5)]];
+tlr_hud_array set [(count tlr_hud_array), ["Custom dropbox: Whatever color you want",(time+5)]];
+tlr_hud_array set [(count tlr_hud_array), ["Then select apply and buy!",(time+5)]];
 
 if (C_choice == "store") exitwith {
 		C_List = C_ShopList;

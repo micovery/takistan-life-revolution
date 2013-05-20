@@ -50,7 +50,7 @@ if (_art == "getajob_delivery") then {
 			player removeaction deliveryinfoaction;
 			vcl removeaction deliveryinfoaction;
 			player groupChat format[localize "STRS_workplacemission_delivery_finish", strM(workplacejob_deliverymoney)];
-			hint format["Destination: %1\nTime taken: %2 seconds.\nPay: $%3\nDistance remaining: %4m", workplacejob_deliveryname, timetaken, round workplacejob_deliverymoney, (round(workplacejob_deliveryflag Distance player))];
+			tlr_hud_array set [(count tlr_hud_array), [format["Destination: %1\nTime taken: %2 seconds.\nPay: $%3\nDistance remaining: %4m", workplacejob_deliveryname, timetaken, round workplacejob_deliverymoney, (round(workplacejob_deliveryflag Distance player))],(time+1)]];
 			[player, 'money', round workplacejob_deliverymoney] call INV_AddInventoryItem;
 			alreadygotaworkplacejob = 0;
 			workplacemissioninfos = ["", ""];
@@ -59,14 +59,14 @@ if (_art == "getajob_delivery") then {
 		if (vehicle player != player and _a1 == 1) then {
 			vcl = vehicle player;
 			player removeaction deliveryinfoaction;
-			deliveryinfoaction = vcl addAction ["Delivery mission info", "noscript.sqf", 'hint format["Destination: %1\nTime remaining: %2 seconds.\nPay: $%3\nDistance remaining: %4m", workplacejob_deliveryname, round(maxtime - timetaken), round workplacejob_deliverymoney, (round(workplacejob_deliveryflag Distance player))]',1,false,true,"",""];
+			deliveryinfoaction = vcl addAction ["Delivery mission info", "noscript.sqf", 'tlr_hud_array set [(count tlr_hud_array), [format["Destination: %1\nTime remaining: %2 seconds.\nPay: $%3\nDistance remaining: %4m", workplacejob_deliveryname, round(maxtime - timetaken), round workplacejob_deliverymoney, (round(workplacejob_deliveryflag Distance player))],(time+1)]];',1,false,true,"",""];
 
 			_a1 = 0;
 		};
 
 		if (vehicle player == player and _a1 == 0) then {
 			vcl removeaction deliveryinfoaction;
-			deliveryinfoaction = player addAction ["Delivery mission info", "noscript.sqf", 'hint format["Destination: %1\nTime remaining: %2 seconds.\nPay: $%3\nDistance remaining: %4m", workplacejob_deliveryname, round(maxtime - timetaken), round workplacejob_deliverymoney, (round(workplacejob_deliveryflag Distance player))]',1,false,true,"",""];
+			deliveryinfoaction = player addAction ["Delivery mission info", "noscript.sqf", 'tlr_hud_array set [(count tlr_hud_array), [format["Destination: %1\nTime remaining: %2 seconds.\nPay: $%3\nDistance remaining: %4m", workplacejob_deliveryname, round(maxtime - timetaken), round workplacejob_deliverymoney, (round(workplacejob_deliveryflag Distance player))],(time+1)]];',1,false,true,"",""];
 
 			_a1 = 1;
 		};

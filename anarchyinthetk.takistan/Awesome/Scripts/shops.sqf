@@ -4,16 +4,18 @@ shop_list_item = 0;
 shop_list_stock = 1;
 shop_list_stock_max = 2;
 
-["LandRover_MG_TK_EP1", -1, -1],
+//["LandRover_MG_TK_EP1", -1, -1],
 
-//Fishing Shop
+//FuelStation Shop
 //Syphon Refuel kit, Refuel Can, Small Repair Kit, Large Repair Kit
 _fs = 
 	[
 		["Fuelline", 40, 80],
 		["kanister", 20, 40],
 		["kleinesreparaturkit", 20, 40],
-		["reparaturkit", 15, 30]
+		["reparaturkit", 15, 30],
+		["water", 20, 30],
+		["Bread", 15, 30]
 	];
 
 //Item Shop
@@ -41,8 +43,15 @@ _pub =
 		["smirnoff", 10, 100],
 		["wiskey", 10, 100],
 		["wine", 10, 100],
-		["wine2", 10, 100]
-	];
+		["wine2", 10, 100],
+		["water", -1,-1],
+		["coffee", -1, -1],
+		["perch", 20, 40],
+		["trout", 20, 40],
+		["walleye", 20, 40], 
+		["bass", 20, 40],
+		["Bread", 20, 50]
+];
 	
 //Gun Shop
 //Stone, M9, M9Ammo, Colt1911, Colt1911Ammo, Revolver-Silver, Revolver-SilverAmmo, CZ550, CZ550Ammo, LeeEnfield, LeeEnfieldAmmo, Saiga12K, Saiga12KAmmo, Saiga12KAmmo, M16A2, M16A2Ammo, FAL, FALAmmo
@@ -1553,6 +1562,7 @@ INV_ItemShops = [
 		[pub1,"Bar",dummyobj,dummyobj,_pub,_pub,true],
 		[pub2,"Bar",dummyobj,dummyobj,_pub,_pub,true],
 		[pub3,"Bar",dummyobj,dummyobj,_pub,_pub,true],
+		[pub4,"Bar",dummyobj,dummyobj,_pub,_pub,true],
 
 		[gunshop1,"Gun Shop",gunbox1,dummyobj,_gs,_gs,true],
 

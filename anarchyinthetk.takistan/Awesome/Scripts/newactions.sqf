@@ -16,7 +16,7 @@ clear_new_actions =
 
 add_new_action = 
 {
-	if (isNil "_this" || typeName _this != "ARRAY" ) exitWIth { hint "You tried to add an invalid action";};
+	if (isNil "_this" || typeName _this != "ARRAY" ) exitWIth { tlr_hud_array set [(count tlr_hud_array), ["You tried to add an invalid action",(time+5)]];};
 	
 	private ["_target", "_action", "_action_number"];
 	_target = _this select 0;
@@ -24,7 +24,7 @@ add_new_action =
 	
 	
 	_action_number = _target addAction _action;
-	if (isNil "_action_number") exitWith { hint "Could not add action";};
+	if (isNil "_action_number") exitWith { tlr_hud_array set [(count tlr_hud_array), ["Could not add action",(time+5)]];};
 
 	if (isNil "new_actions") then { new_actions = [];};
 	new_actions = new_actions + [[_action_number, _target]];

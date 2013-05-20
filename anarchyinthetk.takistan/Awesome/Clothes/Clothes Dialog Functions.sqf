@@ -5,7 +5,7 @@ C_Dialog_Choice = {
 
 	disableSerialization;
 
-	if (!(createDialog "Option_window_2")) exitWith {hint "Dialog Error!";};
+	if (!(createDialog "Option_window_2")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
 	_DFML = findDisplay 3002;
 
 	(_DFML displayCtrl 1) ctrlSetText format ['Select your choice'];
@@ -59,7 +59,7 @@ C_Dialog_Full = {
 	
 	format["if(player != %1) then { %2 hideObject true; };", player, C_Preview_Unit] call broadcast;
 	
-	if (!(createDialog "Clothes_Dialog")) exitWith {hint "Dialog Error!";};
+	if (!(createDialog "Clothes_Dialog")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];};
 	[] call C_Dialog_Setup;
 	
 	_cam = "Camera" camCreate [0, 0, 0];

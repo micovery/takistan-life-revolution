@@ -294,7 +294,7 @@ if (_art == "use") then {
         
     if (_item == "zeitzuenderbombe") then {
         if (!(createDialog "timebombconfig")) exitWith {
-            hint "Dialog Error!";
+            tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];
         };
         sliderSetRange [1, zeitbombe_mintime, zeitbombe_maxtime];
         sliderSetSpeed [1, 1, 10];
@@ -311,7 +311,7 @@ if (_art == "use") then {
             
     if (_item == "geschwindigkeitsbombe") then {
         if (!(createDialog "speedbombconfig")) exitWith {
-                hint "Dialog Error!";
+                tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];
         };
         
         sliderSetRange [1, speedbomb_minspeed, speedbomb_maxspeed];
@@ -331,7 +331,7 @@ if (_art == "use") then {
     };
             
     if (_item == "fernzuender") then {
-        if (!(createDialog "remotebomb_remote")) exitWith {hint "Dialog Error!";};
+        if (!(createDialog "remotebomb_remote")) exitWith {tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];};
     };
 };
 
@@ -395,7 +395,7 @@ if (_art == "config") then {
             
             if (_art == "timer") exitWith {
                 if (!(createDialog "timebombconfig")) exitWith {
-                    hint "Dialog Error!";
+                    tlr_hud_array set [(count tlr_hud_array), ["Dialog Error!",(time+5)]];
                 };
             
                 _sliderpos = 0;ctrlSetText [4, localize "STRS_inv_item_vehiclebomb_changetimer"];

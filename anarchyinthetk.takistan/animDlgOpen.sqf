@@ -2,7 +2,7 @@
 // animDlgOpen.sqf
 if (!(createDialog "animationsdialog")) exitWith
 {
-	hint "Dialog Error!";
+	tlr_hud_array set [(count tlr_hud_array), ["DialogError",(time+5)]];
 };
 
 {
