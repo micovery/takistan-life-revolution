@@ -1509,7 +1509,7 @@ shop_drug_search = {
 			
 			player groupChat format["This civilian bought $%1 worth of drugs from %2-%3!", strM(_profit), _player, (name _player)];
 			
-			[_player, "(drug-trafficking)", _profit] call player_update_warrants;
+			[_player, "(drug-trafficking)", _profit, 50, false] call player_update_warrants;
 			private["_message"];
 			_message = format["%1-%2 is wanted for trafficking $%3 worth of drugs!", _player, (name _player), strM(_profit)];
 			format['titleText [toString(%1), "PLAIN"];', toArray(_message)] call broadcast;

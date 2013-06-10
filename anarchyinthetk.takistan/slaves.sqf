@@ -79,7 +79,7 @@ if (_art == "slave") exitWith {
 				}
 				else {
 					player groupChat "A slave you owned has been set free! you are now wanted.";
-					[player, "(human-trafficking)", slave_cost] call player_update_warrants;
+					[player, "(human-trafficking)", slave_cost, 150, false] call player_update_warrants;
 				}; 
 				localslave = localslave - 1; 
 				_slavename SETDAMAGE 1; 

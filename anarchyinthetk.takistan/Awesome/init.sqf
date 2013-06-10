@@ -4,6 +4,7 @@ waitUntil {scriptDone _h};
 
 sleep 1;
 
+[] execVM "Awesome\Functions\faction_functions.sqf";
 [] execVM "Awesome\Functions\gear_functions.sqf";
 [] execVM "Awesome\Functions\pos_functions.sqf";
 [] execVM "Awesome\Functions\stun_functions.sqf";

@@ -126,7 +126,7 @@ if (_art == "getajob_assassin") then {
 	"if (iscop) then {player sideChat ""Someone is trying to kill a government VIP. The target has been marked on the map. Rescue the target before its too late!""};" call broadcast;
 
 	player groupchat "The police are on to you and the VIP knows your coming, hurry up!";
-	[player, "(assassin)", 100000] call player_update_warrants;
+	[player, "(assassin)", 100000, -1, false] call player_update_warrants;
 	VIPtarget domove getmarkerpos "policebase";
 	
 	while {true} do {
@@ -164,7 +164,7 @@ if (_art == "getajob_assassin") then {
 			player groupchat "Well done. Target elimated. $200000 has been transfered to your account.";
 			sleep 10;
 			"server globalchat ""The VIP target has been killed!"";" call broadcast;
-			[player, "(vip-assasination)", 100000] call player_update_warrants;
+			[player, "(vip-assasination)", 100000, -1, false] call player_update_warrants;
 			deletevehicle VIPtarget;
 			deletemarker "targetmarker";
 			deletevehicle assveh;

@@ -484,6 +484,7 @@ player_connected_handler = {
 	publicVariable "INV_ItemTypenArray";
 	publicVariable "INV_ItemStocks";
 	publicVariable "INV_ItemMaxStocks";
+	[_uid] call ftf_connected;
 };
 
 if(isServer)then {

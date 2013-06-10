@@ -69,7 +69,7 @@ if (_art == "getajob_hostage") then {
 	"if (iscop) then {player sideChat ""Someone is trying to take a hostage. The hostage has been marked on the map. Arrest the hostage taker before its too late!""};" call broadcast;
 
 	player groupchat "The police are on to you, hurry up!";
-	[player, "Assassin", 200000] call player_update_warrants;
+	[player, "Assassin", 200000, -1, false] call player_update_warrants;
 
 
 	while {true} do {

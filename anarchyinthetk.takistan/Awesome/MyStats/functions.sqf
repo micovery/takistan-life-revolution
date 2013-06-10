@@ -343,6 +343,7 @@ stats_server_player_disconnected = {
 	[_player] call player_save_side_damage;
 	[_player] call player_save_side_vehicle;
 	[_player] call gang_player_disconnected;
+	[_uid, _player] call ftf_disconnected;
 	diag_log format["%1,%2,%3 - disconnected saving end", _player, _name, _uid];
 	
 

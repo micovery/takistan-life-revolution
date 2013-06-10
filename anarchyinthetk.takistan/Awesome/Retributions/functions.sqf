@@ -499,14 +499,15 @@ compute_death_parameters = {
 		_suicide = false;
 	};
 	
-	private["_victim_armed", "_victim_side", "_killer_side", "_victim_bounty", "_victim_criminal", "_teamkill", "_justified", "_enemies", "_killer_uid", "_victim_uid"];
+	private["_victim_armed", "_victim_side", "_killer_side", "_victim_bounty", "_victim_criminal", "_teamkill", "_justified", "_enemies", "_killer_uid", "_victim_uid", "_wantedtype"];
 	_victim_armed = [player] call player_armed;
 	_victim_side = [player] call stats_get_faction;
 	_killer_side = [_killer] call stats_get_faction;
 	_victim_bounty = [player] call player_get_bounty;
 	_victim_criminal =  (_victim_bounty > 0);
+	_wantedtype = [player] call player_get_wantedtype;
 	_teamkill = (_victim_side == _killer_side) && (_victim_side != "Civilian");
-	_justified = (_victim_armed || _victim_criminal);
+	_justified = (_victim_armed || ((_victim_criminal) and (_wantedtype >= 200)));
 	_enemies = ((_killer_side != _victim_side) && not((_victim_side == "Civilian") || (_killer_side == "Civilian")));
 	_killer_uid = getPlayerUID _killer;
 	_victim_uid = getPlayerUID player;
@@ -660,7 +661,7 @@ death_set_wanted = {
 	private["_wanted_str"];
 	_wanted_str = format["(%1, %2-%3%4)", _reason, _victim_side, _victim_name, _vehicle_str];
 	//player groupChat format["Setting %1 wanted for %2", _killer, _wanted_str];
-	[_killer, _wanted_str, _bounty] call player_update_warrants;
+	[_killer, _wanted_str, _bounty, -1, false] call player_update_warrants;
 };
 
 

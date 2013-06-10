@@ -293,7 +293,7 @@ interact_want_player = {
 	_message = format["%1-%2 has been set wanted by %3-%4 for %5", _victim, (name _victim), _player, (name _player), _reason];
 	format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	_reason = _reason + format[" by %1-%2", _player, (name _player)];
-	[_victim, _reason, 0] call player_update_warrants;
+	[_victim, _reason, 0, 1, false] call player_update_warrants;
 };
 
 
@@ -1120,7 +1120,7 @@ interact_rob_inventory_receive = {
 	
 	
 	if (stolenfromtimeractive || (_money <= 0) || (_amount <= 0)) exitwith {
-		[_player, format["(failed-armed-robbery, %1-%2)", _target, (name _target)], 20000] call player_update_warrants;
+		[_player, format["(failed-armed-robbery, %1-%2)", _target, (name _target)], 20000, 50, false] call player_update_warrants;
 		
 		private["_message"];
 		_message = format["%1-%2 attemted to rob %3-%4 but failed", _player, (name _player), _target, (name _target)];
@@ -1128,7 +1128,7 @@ interact_rob_inventory_receive = {
 	};
 	[_target, "money", -(_amount)] call INV_AddInventoryItem;
 	format['[%1, %2, %3] call interact_rob_inventory_response;', _player, _target, _amount] call broadcast;
-	[_player, format["(armed-robbery, %1-%2)", _target, (name _target)], _amount] call player_update_warrants;
+	[_player, format["(armed-robbery, %1-%2)", _target, (name _target)], _amount, 100, false] call player_update_warrants;
 	
 	private["_message"];
 	_message = format["%1-%2 stole $%3 from %4-%5", _player, (name _player), strM(_amount), _target, (name _target)];
@@ -1240,7 +1240,7 @@ interact_drug_search_receive = {
 	};
 	
 	[_target, ([_target] call player_inventory_name), "drug"] call INV_StorageRemoveKindOf;
-	[_target, "(drug-possession)", _drugs_value] call player_update_warrants;
+	[_target, "(drug-possession)", _drugs_value, 50, false] call player_update_warrants;
 	
 	
 	format['[%1, %2, %3] call interact_drug_search_response;', _player, _target, strN(_drugs_value)] call broadcast;
@@ -1476,9 +1476,13 @@ interact_recruit_ai_receive = {
 
 
 interact_recruit_ai = { _this spawn {
-	private["_player"];
+	private["_player", "_price"];
 	_player = _this select 0;
+	_price = _this select 1;
+	
 	if (not([_player] call player_human)) exitWith {};
+	if (isNil "_price") exitWith {};
+	if (typeName _price != "SCALAR") exitWith {};
 	
 	interact_recruit_ai_busy = if (isNil "interact_recruit_ai_busy") then { false } else {interact_recruit_ai_busy};
 	
@@ -1491,7 +1495,7 @@ interact_recruit_ai = { _this spawn {
 	private["_money"];
 	_money = [_player, 'money'] call INV_GetItemAmount;
 
-	if (_money < 200000) exitWith {
+	if (_money < _price) exitWith {
 		player groupChat "Not Enough Money";
 		interact_recruit_ai_busy = false;
 	};
@@ -1501,7 +1505,7 @@ interact_recruit_ai = { _this spawn {
 		interact_recruit_ai_busy = false;
 	};
 
-	[_player, 'money', -(200000)] call INV_AddInventoryItem;
+	[_player, 'money', -(_price)] call INV_AddInventoryItem;
 	player groupChat "Recruiting soldier";
 
 	format['[%1] call interact_recruit_ai_receive;', _player] call broadcast;

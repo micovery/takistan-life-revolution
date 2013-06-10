@@ -194,15 +194,11 @@ name_tags_draw = {
 	if ([_target] call player_human &&  _distance < 25) exitWith {
 		if ([_target, "has_admin_camera"] call player_get_bool) exitWith {};
 	
-		if ([_target] call player_cop) then{ 
-			_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#0000ff'>%1 (%2)</t>", _target, (name _target)];
-		}
-		else { if (([_target] call player_civilian) && ([_target] call player_get_bounty) > 0) then {
-			_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#ff0000'>%1 (%2)</t><br /><t size='1.2' font='Zeppelin33Italic' color='#ff0000'>(Criminal)</t>", _target, (name _target)];
-		}
-		else {
-			_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#ffff00'>%1 (%2)</t>", _target, (name _target)];
-		};};
+		private["_text"];
+		_text = [_target] call name_tags_text;
+		
+		_control ctrlSetStructuredText parseText _text;
+
 		
 		private["_head_pos"];
 		_head_pos = [_target] call name_tags_head_screen;
@@ -214,6 +210,55 @@ name_tags_draw = {
 	};
 
 	false
+};
+
+name_tags_text = {
+	private["_target", "_bountytype", "_colorcode", "_colorcode_value", "_text"];
+	_target = _this select 0;
+	
+	if (isNil "_target") exitWith {};
+	if (not([_target] call player_human)) exitWith {};
+	
+	if (([_target] call player_pmc_whitelist) and ((typeOf _target) in pmc_skin_list) and ([_target] call player_civilian)) then {
+		//PMC in PMC clothes
+		_colorcode = "149107"; //Green
+	} else {
+		//Get colorcodes
+		_bountytype = [_target] call player_get_wantedtype;
+		_colorcode_value = _bountytype - 255;
+		if (_colorcode_value < 0) then {_colorcode_value = _colorcode_value * -1;};
+		_colorcode = format["%1%2%3", "FF", ([_colorcode_value, 2] call int_to_hex), "00"];
+	};
+	_text = format["<t size='1.2' font='Zeppelin33Italic' color='#%1'>%2 (%3)</t>", _colorcode, _target, (name _target)];
+	
+	_text
+	
+};
+
+int_to_hex = {
+	private["_valueD", "_valueH", "_len", "_hexarray","_i"];
+	_valueD = _this select 0;
+	_len = _this select 1;
+	_hexarray = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+	
+	if (isNil "_valueD") then {_valueD = 0;};
+	if (isNil "_len") then {_len = 1;};
+	
+	if (typeName _valueD != "SCALAR") then {_valueD = 0;};
+	if (typeName _len != "SCALAR") then {_len = 1;};
+	
+	_i = 0;
+	_valueH = "";
+	
+	while {(_i < _len)} do {
+		_tmp = _valueD / 16;
+		_valueD = floor _tmp;
+		_tmp = round ((_tmp - _valueD) * 16);
+		_valueH = format["%1%2", _valueH, (_hexarray select _tmp)];
+		_i = _i + 1;
+	};
+	
+	_valueH
 };
 
 name_3d_tags_draw = {

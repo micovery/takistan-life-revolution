@@ -399,14 +399,61 @@ player_get_bounty = {
 };
 
 player_update_warrants = {
-	private["_player", "_reason", "_bounty"];
+	private["_player", "_reason", "_bounty", "_type", "_forced"];
 	_player = _this select 0;
 	_reason = _this select 1;
 	_bounty = _this select 2;
+	_type = _this select 3;
+	_forced = _this select 4;
+	
+	if (isNil "_type") then { _type = 0; };
+	if (typeName _type != "SCALAR") then { _type = 0; };
 	
 	[_player, true] call player_set_wanted;
 	[_player, _reason] call player_update_reason;
 	[_player, _bounty] call player_update_bounty;
+	[_player, _type, _forced] call player_update_wantedtype;
+};
+
+player_update_wantedtype = {
+	private["_player", "_type", "_forced"];
+	_player = _this select 0;
+	_type = _this select 1;
+	_forced = _this select 2;
+	
+	if (isNil "_type") exitWith {};
+	if (typeName _type != "SCALAR") exitWith {};
+	if (isNil "_forced") then {_forced = false;};
+	if (typeName _forced != "BOOL") then {_forced = false;};
+	
+	if (not(_forced)) then {
+		if (_type <= [_player] call player_get_wantedtype) exitWith {};
+	};
+	
+	[_player, _type] call player_set_wantedtype;
+};
+
+player_get_wantedtype = {
+	private["_player"];
+	_player = _this select 0;
+	
+	if (isNil "_player") exitWith {0};
+	
+	([_player, "wantedtype"] call player_get_scalar)
+};
+
+player_set_wantedtype = {
+	private["_player", "_type"];
+	_player = _this select 0;
+	_type = _this select 1;
+	
+	if (isNil "_player") exitWith {};
+	if (isNil "_type") exitWith {};
+	if (not([_player] call player_human)) exitWith {};
+	if (typeName _type != "SCALAR") exitWith {};
+	//Max value
+	if ((_type < 0) or (_type > 255)) then {_type = 255;};
+	[_player, "wantedtype", _type] call player_set_scalar;
 };
 
 player_reset_warrants = {
@@ -415,6 +462,7 @@ player_reset_warrants = {
 	[_player, false] call player_set_wanted;
 	[_player, 0] call player_set_bounty;
 	[_player, []] call player_set_reason;
+	[_player, 0, true] call player_update_wantedtype;
 };
 
 player_armed = {
@@ -661,7 +709,7 @@ player_rob_station = {
 	_money_variable_name = format["station%1money", _station];
 	_money_variable = missionNamespace getVariable _money_variable_name;
 	
-	[_player, "Robbed a gas station", wantedamountforrobbing] call player_update_warrants;
+	[_player, "Robbed a gas station", wantedamountforrobbing, 25, false] call player_update_warrants;
 	format ['server globalChat "Someone robbed gas station %1!";', _station] call broadcast;
 	
 	[_player, 'money', _money_variable] call INV_AddInventoryItem;
@@ -832,7 +880,7 @@ player_prison_loop = { _this spawn {
 			[_player, false] call player_set_arrest;
 			[_player, "jailtimeleft", 0] call player_set_scalar;
 			[_player, 0] call player_set_bail;
-			[_player, "(prison-break)", 20000] call player_update_warrants;
+			[_player, "(prison-break)", 20000, 200, false] call player_update_warrants;
 		};
 		
 		//PLAYER HAS SERVED HIS FULL SENTNECE
