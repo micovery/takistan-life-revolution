@@ -66,7 +66,7 @@ ftf_disconnected = {
 };
 
 ftf_faction_allowed = {
-	private["_player", "_faction", "_playtime", "_uid"];
+	private["_player", "_faction", "_uid"];
 	_player = _this select 0;
 		
 	if (isNil "_player") exitWith {false};
@@ -74,12 +74,14 @@ ftf_faction_allowed = {
 	_uid = getPlayerUID _player;
 	if ((_uid in donators3) or (_uid in donators4) or ((getPlayerUID _player) in A_LIST_ADMINS)) exitWith {true};
 	
-	_playtime = _player getVariable ["playtime", 0];
+	if (isNil "playtime") then (
+		playtime = _player getVariable ["playtime", 0];
+	};
 		
 	if (isCiv) exitWith {true};
-	if ((isOpf) and (_playtime < ftf_opf_playtime)) exitWith {false};
-	if ((isCop) and (_playtime < ftf_cop_playtime)) exitWith {false};
-	if ((isIns) and (_playtime < ftf_ins_playtime)) exitWith {false};	
+	if ((isOpf) and (playtime < ftf_opf_playtime)) exitWith {false};
+	if ((isCop) and (playtime < ftf_cop_playtime)) exitWith {false};
+	if ((isIns) and (playtime < ftf_ins_playtime)) exitWith {false};	
 	
 	true
 	
