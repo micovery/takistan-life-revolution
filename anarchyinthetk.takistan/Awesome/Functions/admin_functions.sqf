@@ -101,7 +101,7 @@ admin_actions_list = {
 			
 			private["_message"];
 			_message = "You are ignoring the required playtime now. Feel free to join blufor, insurent or opfor now.";
-			format['if (player == %1) then {player groupChat toString(%2);};', _target, toArray(_message)];
+			format['if (player == %1) then {player groupChat toString(%2);};', _target, toArray(_message)] call broadcast;
 		}],
 		["Reset time(40m dy, 20m nt)", {
 			player groupChat "Time reset (40-min day, 20-min night), please wait for synchronization to complete";
