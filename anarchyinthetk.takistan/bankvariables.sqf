@@ -50,6 +50,7 @@ if (isServer) then {
 	donators2     = server getVariable "donators2";
 	donators3     = server getVariable "donators3";
 	donators4     = server getVariable "donators4";
+	alldonators   = donators1 + donators2 + donators3 + donators4;
 };
 	
 private["_uid"];

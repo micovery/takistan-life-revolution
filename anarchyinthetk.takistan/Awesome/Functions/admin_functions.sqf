@@ -87,16 +87,21 @@ admin_actions_list = {
 				};
 			', _target] call broadcast;
 		}],
-		["Wipe player stats", {
+		["Set player to ignore required playtime", {
 			private["_player", "_target"];
 			_player = _this select 0;
 			_target = _this select 1;
 			if (not([_target] call player_human)) exitWith {};
 
-			[format["wiped %1-%2 (%3)'s stats", _target, (name _target), (getPlayerUID _target)]] call logAdmin;
+			[format["Set %1-%2 (%3) to ignore playtime", _target, (name _target), (getPlayerUID _target)]] call logAdmin;
 			
-			format['if (isServer) then {["%1"] call stats_server_wipe_player_data;};', _target] call broadcast;
-			player groupChat format["Request to wipe %1's stats sent", (name _target)];
+			[_target, "ignoreFactionPlaytime", true] call player_set_bool;
+			
+			player groupChat format["Player %1(%2) is ignoring the required playtime now", _target, (name _target)];
+			
+			private["_message"];
+			_message = "You are ignoring the required playtime now. Feel free to join blufor, insurent or opfor now.";
+			format['if (player == %1) then {player groupChat toString(%2);};', _target, toArray(_message)];
 		}],
 		["Reset time(40m dy, 20m nt)", {
 			player groupChat "Time reset (40-min day, 20-min night), please wait for synchronization to complete";

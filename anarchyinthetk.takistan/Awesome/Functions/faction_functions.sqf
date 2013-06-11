@@ -3,9 +3,12 @@ if (not(isNil "faction_time_functions_loaded")) exitWith {};
 //Settings (time in sec)
 
 //Variable (side) = time in hours * 3600
-ftf_opf_playtime = 12*3600;
-ftf_cop_playtime = 12*3600;
-ftf_ins_playtime = 12*3600;
+//WARNING: Because of the known time problem the 4.5hr will be
+//~15hr playtime in real time!
+
+ftf_opf_playtime = 4.5*3600;
+ftf_cop_playtime = 4.5*3600;
+ftf_ins_playtime = 4.5*3600;
 
 
 ftf_connected = {
@@ -72,9 +75,14 @@ ftf_faction_allowed = {
 	if (isNil "_player") exitWith {false};
 	if (not([_player] call player_human)) exitWith {false};
 	_uid = getPlayerUID _player;
-	if ((_uid in donators3) or (_uid in donators4) or ((getPlayerUID _player) in A_LIST_ADMINS)) exitWith {true};
+	//Reducing traffic by setting local if loaded
+	if (isNil "ignoreFactionPlaytime") then {
+		ignoreFactionPlaytime = [_player, "ignoreFactionPlaytime"] call player_get_bool;
+	};
 	
-	if (isNil "playtime") then (
+	if ((_uid in alldonators) or ((getPlayerUID _player) in A_LIST_ADMINS) or (ignoreFactionPlaytime)) exitWith {true};
+	
+	if (isNil "playtime") then {
 		playtime = _player getVariable ["playtime", 0];
 	};
 		
