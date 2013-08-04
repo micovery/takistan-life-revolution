@@ -219,7 +219,6 @@ R3F_LOG_CFG_transporteurs = R3F_LOG_CFG_transporteurs +
  */
 R3F_LOG_CFG_objets_transportables = R3F_LOG_CFG_objets_transportables +
 [
-	["Pchela1T", 15],
 	["ATV_Base_EP1", 20],
 	["MMT_base", 1],
 	["Old_bike_base_EP1", 1],
@@ -261,7 +260,14 @@ R3F_LOG_CFG_objets_transportables = R3F_LOG_CFG_objets_transportables +
 	["Land_CamoNetB_NATO",5],
 	["Land_CamoNetB_EAST",5],
 	["Land_CamoNet_NATO",5],
-	["Land_CamoNet_EAST",5]
+	["Land_CamoNet_EAST",5],
+	["StaticSEARCHLight", 5],
+	["StaticMortar", 10],
+	["StaticGrenadeLauncher", 5],
+	["StaticCannon", 20],
+	["StaticAAWeapon", 10],
+	["StaticATWeapon", 10],
+	["StaticMGWeapon", 10]
 ];
 
 
@@ -311,5 +317,12 @@ R3F_LOG_CFG_objets_deplacables = R3F_LOG_CFG_objets_deplacables +
 	"Land_CamoNetB_NATO",
 	"Land_CamoNetB_EAST",
 	"Land_CamoNet_NATO",
-	"Land_CamoNet_EAST"
+	"Land_CamoNet_EAST",
+	"StaticSEARCHLight",
+	"StaticMortar",
+	"StaticGrenadeLauncher",
+	"StaticCannon",
+	"StaticAAWeapon",
+	"StaticATWeapon",
+	"StaticMGWeapon"
 ];

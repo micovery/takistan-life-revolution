@@ -1,0 +1,53 @@
+_PositionArray = [];
+_PostArray = [];
+_LifeTime = 285;
+_Ocpos = [-1000,-1000];
+
+
+#update
+~1
+
+_PosX = (getpos player) select 0;
+_PosY = (getpos player) select 1;
+
+_PosXc = (_PosX / 1000) - ((_PosX / 1000) % 1);
+_PosYc = (_PosY / 1000) - ((_PosY / 1000) % 1);
+
+_cpos = [_PosXc,_PosYc];
+?( ((_cpos select 0) == (_Ocpos select 0)) && ((_cpos select 1) == (_Ocpos select 1))) : goto "wait"
+_Ocpos = _cpos;
+
+_i = -2;
+_io = -2;
+_j = -2;
+_ijmax = 3;
+
+
+#posloop
+_level = 0
+_pos = format ["%1%2",(_PosXc + _i),(_PosYc + _j)]
+? (!(_pos in _PositionArray)): while { _level < 1 } do { [((1000 * (_PosXc + _i)) + 500),((1000 * (_PosYc + _j)) + 500),(0 + _level*5000),0] exec "Awesome\BIS\Clouds\Cloud.sqs"; _level = _level + 1 }; _PositionArray = _PositionArray + [_pos]; _PostArray = _PostArray + [_time]
+_i = _i + 1
+~0.1
+?(_i < _ijmax):goto "posloop"
+_i = _io
+_j = _j + 1
+?(_j < _ijmax):goto "posloop"
+
+_max = count _PositionArray
+_a = 0
+?(_max == 0):goto "wait"
+
+
+#check
+_ctime = (_PostArray select _a)
+?((_ctime + _LifeTime) < _time):_PositionArray = _PositionArray - [(_PositionArray select _a)]; _max = count _PositionArray; _PostArray = _PostArray - [(_PostArray select _a)]
+_a = _a + 1
+?(_a < _max):goto "check"
+
+
+#wait
+~2
+?(_LifeTime < _time): _LifeTime = _time + _LifeTime; _Ocpos = [-1000,-1000]; _a = 0; _max = count _PositionArray; goto "check"
+?(count _PositionArray < 25):_Ocpos = [-1000,-1000]; _PositionArray = []; _PostArray = []
+goto "update"

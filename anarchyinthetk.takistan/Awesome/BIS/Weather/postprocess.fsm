@@ -1,0 +1,184 @@
+/*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, Environment Effects - Post-Process">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"START",0,250,-100.000000,-125.000000,0.000000,-75.000000,0.000000,"START"};
+item1[] = {"True_1",8,218,-100.000000,-50.000000,0.000000,0.000000,0.000000,"True"};
+item2[] = {"Set",2,250,-25.000000,25.000000,75.000000,75.000000,0.000000,"Set"};
+item3[] = {"Delay",4,218,-25.000000,100.000000,75.000000,150.000000,0.000000,"Delay"};
+item4[] = {"End",4,218,50.000000,-50.000000,150.000000,0.000000,0.000000,"End"};
+item5[] = {"END",1,250,50.000000,-125.000000,150.000000,-75.000000,0.000000,"END"};
+item6[] = {"True",8,218,-100.000000,-200.000000,0.000000,-150.000000,1.000000,"True"};
+item7[] = {"END_1",1,4346,-100.000000,-275.000000,0.000000,-225.000000,0.000000,"END"};
+link0[] = {0,1};
+link1[] = {0,6};
+link2[] = {1,2};
+link3[] = {2,3};
+link4[] = {2,4};
+link5[] = {3,2};
+link6[] = {4,5};
+link7[] = {6,7};
+globals[] = {25.000000,1,0,0,16777215,640,480,1,10,6316128,1,-157.010773,140.191772,210.555115,-357.923889,469,911,1};
+window[] = {2,-1,-1,-1,-1,905,175,1435,175,3,487};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "Environment Effects - Post-Process";
+  class States
+  {
+    /*%FSM<STATE "START">*/
+    class START
+    {
+      name = "START";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          priority = 1.000000;
+          to="END_1";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"isServer"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "True_1">*/
+        class True_1
+        {
+          priority = 0.000000;
+          to="Set";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_logic = _this select 0;" \n
+           "_first = true;" \n
+           "" \n
+           "_ppEffect = ppeffectcreate [""colorcorrections"",1549];" \n
+           "_ppEffect ppEffectEnable true;"/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Set">*/
+    class Set
+    {
+      name = "Set";
+      init = /*%FSM<STATEINIT""">*/"_debug = _logic getvariable ""debug"";" \n
+       "_intensity = _logic getvariable ""intensity"";" \n
+       "_delay = _logic getvariable ""delay"";" \n
+       "if (_first) then {_delay = 0;};" \n
+       "" \n
+       "//_intensity = 0.6; // 0.6 is default" \n
+       "_overcast = overcast;" \n
+       "_coefWeather = 0.4 * _overcast;" \n
+       "_coefNight = 0;" \n
+       "_daytime = 0.5 - abs(daytime - 12) / 12; // 0 = night, 1 = day, 0.5 = sunset/sunrise" \n
+       "_coefTime = 0.7 + 0.26 * abs _daytime; // 0.96 is day" \n
+       "_coefBrightness = 0.8 + (_daytime / 5) + (_overcast / 10);" \n
+       "" \n
+       "//--- Night - desaturate" \n
+       "if (_daytime < 0) then {" \n
+       "	_intensity = _intensity + (_intensity * (_daytime));" \n
+       "	_coefNight = abs (_daytime * 1.2);// * (_overcast - 0.5);" \n
+       "	_coefWeather = _coefWeather * (1 - _coefNight);" \n
+       "};" \n
+       "" \n
+       "//--- Color" \n
+       "_tR = 1.0 - _coefWeather - _coefNight;" \n
+       "_tG = _coefTime;" \n
+       "_tB = 0.66 + _coefWeather + _coefNight;" \n
+       "_mean = (_tR + _tG + _tB) / 3;" \n
+       "_mCoef = abs(2 * _daytime) + _coefWeather;" \n
+       "_R = _mean + ((_tR - _mean) * _mCoef);" \n
+       "_G = _mean + ((_tG - _mean) * _mCoef);" \n
+       "_B = _mean + ((_tB - _mean) * _mCoef);" \n
+       "" \n
+       "_ambient = [_R,_G,_B,0.001 + _daytime / 500];" \n
+       "_color = [_R,_G,_B,_intensity];" \n
+       "" \n
+       "//--- Execute" \n
+       "_ppEffect ppEffectAdjust [" \n
+       "	1," \n
+       "	1," \n
+       "	-0.002- _daytime / 250," \n
+       "	_ambient," \n
+       "	_color, // Color" \n
+       "	[_coefBrightness,_coefBrightness,_coefBrightness, 0.0]" \n
+       "];" \n
+       "_ppEffect ppEffectCommit _delay;" \n
+       "_timeNow = time;" \n
+       "" \n
+       "_first = false;" \n
+       "" \n
+       "BIS_WeatherPostprocess_init = true;" \n
+       "" \n
+       "_logic setvariable [""restart"",nil];" \n
+       "" \n
+       "if (_debug) then {" \n
+       "	xxx = [1,1,-0.001 - _daytime / 500,_ambient,_color,[0.95, 0.95, 0.95, 0.0]];" \n
+       "	hintsilent format [""%1\n%2\n%3\n%4\n%5""," \n
+       "		[daytime] call bis_fnc_timetostring," \n
+       "		_coefWeather," \n
+       "		_mCoef," \n
+       "		-0.002 - _daytime / 250," \n
+       "		_color" \n
+       "	];" \n
+       "};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "End">*/
+        class End
+        {
+          priority = 0.000000;
+          to="END";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"isnull _logic"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Delay">*/
+        class Delay
+        {
+          priority = 0.000000;
+          to="Set";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time - _timeNow > _delay && alive player) || !isnil {_logic getvariable ""restart""}"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "END">*/
+    class END
+    {
+      name = "END";
+      init = /*%FSM<STATEINIT""">*/"ppeffectdestroy _ppEffect"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "END_1">*/
+    class END_1
+    {
+      name = "END_1";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="START";
+  finalStates[] =
+  {
+    "END",
+    "END_1",
+  };
+};
+/*%FSM</COMPILE>*/

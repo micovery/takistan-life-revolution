@@ -6,8 +6,6 @@ if (_action == "use") then {
 	_item   = _this select 1;
 	_number = _this select 2;
 	
-	liafu = true;
-	
 	if (_item == "pistol") then {
 		[player] call holster_show_weapon;
 	};

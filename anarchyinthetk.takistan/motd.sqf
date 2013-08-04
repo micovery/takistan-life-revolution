@@ -1,10 +1,13 @@
 hint "Please read the TLR tabs on map before playing";
 server globalchat "[MoTD]Welcome to Takistan Life: Revolution!";
 custom_motd = nil;
-while {true} do {
-	server globalchat "[MoTD] http://www.takistanliferevolution.com";
-	server globalchat "[MoTD] TS3: ts3.takistanliferevolution.com";
-	server globalChat "[MoTD] All Blufor, Opfor, and Independent factions are required to be on TS3";
+while {true} do {	
+	{server globalChat format["[MoTD] %1", _x]} forEach [
+			"http://www.takistanliferevolution.com",
+			"TS3: ts3.takistanliferevolution.com",
+			"All Blufor, Opfor, and Independent factions are required to be on TS3"
+		];
+	
 	if (not(isNil "custom_motd")) then { if (typeName custom_motd == "STRING") then { if (custom_motd != "") then {
 		server globalChat format["[MoTD] %1", custom_motd];
 	};};};

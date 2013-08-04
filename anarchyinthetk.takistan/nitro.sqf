@@ -5,10 +5,12 @@ if (_art == "use") then {
 	_vcl  	= vehicle player;
 	_type	= typeof _vcl;
 
-	if(_vcl getvariable "nitro" == 1)exitwith{player groupchat "this vehicle already has nitro installed"};
+	if((_vcl getvariable ["nitro", 0]) == 1)exitwith{player groupchat "this vehicle already has nitro installed"};
 	if (player == _vcl) exitWith {player groupChat localize "STRS_inv_items_speed_car"};
 	if (!(_vcl iskindof "Car")) exitWith {player groupChat localize "STRS_inv_items_speed_no";};
-
+	if (({_vcl isKindOf _x} count ["BRDM2_Base","BTR90_Base","LAV25_Base","HMMWV_M1151_M2_DES_Base_EP1","StrykerBase_EP1"]
+	) > 0) exitwith {player groupchat "you cannot tune this vehicle"};
+		
 	[player, _item, -1] call INV_AddInventoryItem;
 
 	player groupchat "tuning vehicle...";

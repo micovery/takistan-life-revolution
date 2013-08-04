@@ -113,6 +113,7 @@ name_tags_draw = {
 	if (typeName _target != "OBJECT") exitWith {false};
 	if (isNull _target) exitWith {false};
 	if (not(INV_shortcuts)) exitWith {false};
+	if (player getVariable ["FA_inAgony", false]) exitwith {false};
 	if (visibleMap) exitWith {false};
 	
 	
@@ -168,7 +169,8 @@ name_tags_draw = {
 			
 			
 			if (_owner && not(locked _target)) exitWith {
-				_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#00ff00'>Enter (E)</t><br /><t size='1.2' font='Zeppelin33Italic' color='#ffffff'>Trunk (T)</t>"];
+//				_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#00ff00'>Enter (E)</t><br /><t size='1.2' font='Zeppelin33Italic' color='#ffffff'>Trunk (T)</t>"];
+				_control ctrlSetStructuredText parseText format["<br /><t size='1.2' font='Zeppelin33Italic' color='#ffffff'>Trunk (T)</t>"];
 				_handled = true;
 			};
 			
@@ -178,7 +180,8 @@ name_tags_draw = {
 			};
 		
 			if (not(locked _target)) exitWith {	
-				_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#00ff00'>Enter (E)</t>"];
+//				_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#00ff00'>Enter (E)</t>"];
+				_control ctrlSetStructuredText parseText format["<t size='1.2' font='Zeppelin33Italic' color='#00ff00'>Enter</t>"];
 				_handled = true;
 			};
 		};
@@ -193,12 +196,8 @@ name_tags_draw = {
 	
 	if ([_target] call player_human &&  _distance < 25) exitWith {
 		if ([_target, "has_admin_camera"] call player_get_bool) exitWith {};
-	
-		private["_text"];
-		_text = [_target] call name_tags_text;
 		
-		_control ctrlSetStructuredText parseText _text;
-
+		_control ctrlSetStructuredText parseText ([_target] call name_tags_text);
 		
 		private["_head_pos"];
 		_head_pos = [_target] call name_tags_head_screen;
@@ -218,8 +217,9 @@ name_tags_text = {
 	
 	if (isNil "_target") exitWith {};
 	if (not([_target] call player_human)) exitWith {};
+
 	
-	if (([_target] call player_pmc_whitelist) and ((typeOf _target) in pmc_skin_list) and ([_target] call player_civilian)) then {
+	if (([_target] call player_isPMC) and ([_target] call player_civilian)) then {
 		//PMC in PMC clothes
 		_colorcode = "149107"; //Green
 	} else {
@@ -279,7 +279,7 @@ name_3d_tags_draw = {
 	{
 		if (not(_i < (count name_3d_controls)) ||
 			not(INV_shortcuts)  || [_player] call player_civilian ||
-			not(alive _player) || visibleMap) exitWith {};
+			not(alive _player) || visibleMap || (_player getVariable ["FA_inAgony", false])) exitWith {};
 		
 		if (true) then {
 			private["_control"];

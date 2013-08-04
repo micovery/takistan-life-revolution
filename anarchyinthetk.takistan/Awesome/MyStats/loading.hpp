@@ -24,7 +24,9 @@ class customLoadingScreen {
 	controlsBackground[] = {blackBG};
 	objects[] = { };
 	controls[] = { Title, Progress, ProgressText, ProgressReverse };
-				 
+	
+	onLoad="uiNamespace setVariable ['DFML_LOAD', _this select 0]";
+	
 	class blackBG : RscTextC {
 		
 		x = safezoneX;

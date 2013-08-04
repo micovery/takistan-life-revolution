@@ -25,7 +25,7 @@ M_effect_WP = {
 	]
 	, [], 0, "NONE"];
 
-	createVehicle [M_smoke, 
+/*	createVehicle [M_smoke, 
 	[
 		(_pos_projectile select 0) + 5*cos (_decal_dir+90),
 		(_pos_projectile select 1) + 5*sin (_decal_dir+90),
@@ -40,6 +40,7 @@ M_effect_WP = {
 		0
 	]
 	, [], 0, "NONE"];
+*/
 
 	createVehicle [M_smoke, 
 	[

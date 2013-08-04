@@ -33,6 +33,11 @@ RadioTrigger_5 setTriggerActivation ["ECHO", "NOT PRESENT", true];
 RadioTrigger_5 setTriggerStatements ["this", "[""Einstellungen""] call A_SCRIPT_SETTINGS;", ""];
 5 setRadioMsg "Settings";
 
+RadioTrigger_0 = createTrigger ["EmptyDetector", position player ];
+RadioTrigger_0 setTriggerText "Fix head bug";
+RadioTrigger_0 setTriggerActivation ["JULIET", "PRESENT", true];
+RadioTrigger_0 setTriggerStatements ["this", "fixme = [] execVM ""headbug.sqf""",""];
+
 
 
 

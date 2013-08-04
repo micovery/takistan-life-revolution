@@ -8,7 +8,9 @@ shop_lookup = {
 	private["_shop_id"];
 	_shop_id = _this select 0;
 	_shop_key = [_shop_id] call shop_make_key;
-	if (isNil "_shop_key") exitWith { nil };
+	
+//	if (isNil "_shop_key") exitWith { nil };
+	if ((typeName _shop_key) != "STRING") exitwith {""};
 	
 	_shop_cache = server getVariable _shop_key;
 	_shop_cache
@@ -17,14 +19,14 @@ shop_lookup = {
 shop_make_key = {
 	private ["_shop_id"];
 	_shop_id = _this select 0;
-	if (isNil "_shop_id") exitWith { nil };
-	if (typeName _shop_id != "SCALAR") exitWith { nil };
+	if (isNil "_shop_id") exitWith { 0 };
+	if (typeName _shop_id != "SCALAR") exitWith { 0 };
 	_shop_key = format["shop_id_%1", _shop_id];	
 	_shop_key
 };
 
 shop_close =  {
-	private ["_shop_id", "_shop_cache"];
+	private ["_shop_id", "_shop_cache", "_indicator"];
 	_shop_id = _this select 0;
 	if (isNil "_shop_id") exitWith {};
 	if (typeName _shop_id != "SCALAR") exitWith {};
@@ -32,9 +34,9 @@ shop_close =  {
 	_shop_cache = [_shop_id] call shop_lookup;
 	if (isNil "_shop_cache") exitWith {};
 
-	_indicator = _shop_cache getVariable "indicator";
+	_indicator = _shop_cache getVariable ["indicator", objNull];
 	
-	if (isNil "_indicator") then {
+	if (isNull _indicator) then {
 		private ["_pos", "_indicator", "_model_pos", "_center", "_max_z"];
 		_indicator = "Sign_sphere25cm_EP1" createVehicleLocal [0,0,0];
 		_shop_cache setVariable ["indicator", _indicator];
@@ -402,12 +404,12 @@ shop_update_sell_list =  {
 	[_shop_id] call shop_refresh_sell_cb;
 
 	_i = 0;
-	while { _i < _count && not(isNull(findDisplay shopDialog_idd))} do {
+	while { _i < _count && !(isNull(findDisplay shopDialog_idd))} do {
 		private["_index", "_data", "_valid"];
 		//exit early if the state of the checkbox changes
 		if ([([_shop_id] call shop_get_sell_cb), _hide_items] call BNE ) exitWith {};
 		_data = _items select _i;
-		_valid = if (_hide_items) then { private["_out"]; _out = [_data, true] call shop_sell_item_validate_data; not(isNil("_out")) } else { true };
+		_valid = if (_hide_items) then { private["_out"]; _out = []; _out = [_data, true] call shop_sell_item_validate_data; ((typeName _out) != "STRING") } else { true };
 
 		if (_valid) then {
 			_index = lbAdd [sellItem_list_idc, (_data select shop_sell_item_label)];
@@ -533,7 +535,8 @@ shop_buy_item_validate_data = {
 	private ["_amount_str", "_class", "_logic", "_quiet", "_supply_str"];
 	
 	_data = _this select 0;
-	if (isNil "_data") exitWith {nil};
+//	if (isNil "_data") exitWith {nil};
+	if ((typeName _data) != "ARRAY") exitwith {""};
 	
 	_quiet = if (count _this > 1) then { _this select 1 } else {  false };
 	if (not(_quiet)) then {
@@ -541,7 +544,7 @@ shop_buy_item_validate_data = {
 	};
 	
 	if ((call shop_is_busy)) exitWith {
-		[format["Shop is currently busy, please wait"], _quiet] call shop_set_status_message; nil;
+		[format["Shop is currently busy, please wait"], _quiet] call shop_set_status_message; ""
 	};
 	
 	_shop_id  = _data select shop_buy_item_shop_id;
@@ -585,7 +588,7 @@ shop_buy_item_validate_data = {
 	_buyButton_state = true;
 	
 	if (_amount <= 0) exitWith {
-		["You have entered an invalid amount of items to buy", _quiet] call shop_set_status_message; nil
+		["You have entered an invalid amount of items to buy", _quiet] call shop_set_status_message; ""
 	};
 	
 	_putInHands = [_shop_id] call shop_get_put_gear_cb;
@@ -634,64 +637,67 @@ shop_buy_item_validate_data = {
 	
 	//player groupChat format["_license_1 = %1", _license_1];
 	if (_needsLicense && isciv && not(_license_1 call INV_HasLicense) && not(_license_1 == "")) exitWith {
-		[format["This item requires %1", (_license_1 call INV_GetLicenseName)], _quiet] call shop_set_status_message; nil
+		[format["This item requires %1", (_license_1 call INV_GetLicenseName)], _quiet] call shop_set_status_message; ""
 	};
 	
 	//player groupChat format["_license_2 = %1", _license_2];
 	if (_needsLicense && iscop && not(_license_2 call INV_HasLicense) && not(_license_2 == "")) exitWith {
-		[format["This item requires %1", (_license_2 call INV_GetLicenseName)], _quiet] call shop_set_status_message; nil
+		[format["This item requires %1", (_license_2 call INV_GetLicenseName)], _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isIllegal && iscop) exitWith {
-		["The selected item is illegal, you are not allowed to buy it", _quiet]  call shop_set_status_message; nil
+		["The selected item is illegal, you are not allowed to buy it", _quiet]  call shop_set_status_message; ""
 	};
 	
 	if (_amount > 1 && (_isFort || _isVehicle || _isBackpack)) exitWith {
-		["The item you have selected can only be bought one at a time", _quiet] call shop_set_status_message; nil
+		["The item you have selected can only be bought one at a time", _quiet] call shop_set_status_message; ""
 	};
 	
 	if((_isFort || _isVehicle) && _near_vehicles_count > 0) exitWith {
-		["There is a vehicle blocking the spawn", _quiet] call shop_set_status_message; nil
+		["There is a vehicle blocking the spawn", _quiet] call shop_set_status_message; 
+		#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+		[_near_vehicles, _logic] spawn {SleepWait(60) {if ((_x distance (_this select 1)) <= 3) then {[_x, "spawn_remove"] call A_impound_spawnBlock;};} forEach (_this select 0)};
+		""
 	};
 	
 	if (_limitedStock && _supply == 0) exitWith {
-		["There is no supply for the item you have selected", _quiet] call shop_set_status_message; nil
+		["There is no supply for the item you have selected", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_limitedStock && _amount > _supply) exitWith {
-		["You have entered more than the available supply for this item", _quiet] call shop_set_status_message; nil
+		["You have entered more than the available supply for this item", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_putInHands && _amount > 1) exitWith {
-		["You can only buy one item at a time when using ""Put weapon in hands"" option", _quiet] call shop_set_status_message; nil
+		["You can only buy one item at a time when using ""Put weapon in hands"" option", _quiet] call shop_set_status_message; ""
 	};
 
 	if ((_weight + _playerWeight) > INV_CarryingCapacity) exitWith {
-		["The total weight of the items to buy exceed your carrying capacity", _quiet] call shop_set_status_message; nil;
+		["The total weight of the items to buy exceed your carrying capacity", _quiet] call shop_set_status_message; "";
 	};
 	
 	if (_total_price > _player_money) exitWith {
-		["You do not have enough money to buy this item", _quiet]  call shop_set_status_message; nil
+		["You do not have enough money to buy this item", _quiet]  call shop_set_status_message; ""
 	};
 		
 	if (_putInHands &&  _hasPrimaryWeapon && _isWeapon && _isRifle) exitWith {
-		["You already have a primary weapon in your hands", _quiet] call shop_set_status_message; nil
+		["You already have a primary weapon in your hands", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_putInHands && (_hasSecondaryWeapon || _hasBackpack) && _isWeapon && _isLauncher) exitWith {
-		["Your secondary weapon slot is already filled", _quiet] call shop_set_status_message; nil
+		["Your secondary weapon slot is already filled", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_putInHands && (_hasSecondaryWeapon || _hasBackpack) && _isBackpack) exitWith {
-		["Your secondary weapon slot is already filled", _quiet] call shop_set_status_message; nil
+		["Your secondary weapon slot is already filled", _quiet] call shop_set_status_message; ""
 	};
 		
 	if (_putInHands && _hasPistol && _isWeapon && _isPistol) exitWith {
-		["Your pistol slot is already filled", _quiet] call shop_set_status_message; nil
+		["Your pistol slot is already filled", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_putInHands && not(_isPistol || _isBackpack || _isLauncher || _isRifle)) exitWith {
-		["The item you have selected to buy cannot be put in hands automatically", _quiet] call shop_set_status_message; nil
+		["The item you have selected to buy cannot be put in hands automatically", _quiet] call shop_set_status_message; ""
 	};
 	
 	_data set [shop_buy_item_total_due, [(_total_price)] call encode_number];
@@ -717,7 +723,7 @@ shop_sell_item_validate_data = {
 	
 	
 	_data = _this select 0;
-	if (isNil "_data") exitWith {nil};
+	if (isNil "_data") exitWith {""};
 	
 	_quiet = if (count _this > 1) then { _this select 1; } else { false };
 	if (not(_quiet)) then {
@@ -725,7 +731,7 @@ shop_sell_item_validate_data = {
 	};
 	
 	if ((call shop_is_busy)) exitWith {
-		[format["Shop is currently busy, please wait"], _quiet] call shop_set_status_message; nil;
+		[format["Shop is currently busy, please wait"], _quiet] call shop_set_status_message; "";
 	};
 	
 	_sellableItems = ["Item", "Weapon", "Magazine", "Vehicle", "backpack"];
@@ -786,7 +792,7 @@ shop_sell_item_validate_data = {
 	_amount = round _amount;
 	
 	if (_amount <= 0) exitWith {
-		["You have entered an invalid amount of items to sell", _quiet] call shop_set_status_message; nil
+		["You have entered an invalid amount of items to sell", _quiet] call shop_set_status_message; ""
 	};
 	
 	
@@ -827,62 +833,62 @@ shop_sell_item_validate_data = {
 	};
 	
 	if(not(_type in _sellableItems)) exitWith {
-		["The item you have selected to sell, is not an item that can be sold", _quiet] call shop_set_status_message; nil
+		["The item you have selected to sell, is not an item that can be sold", _quiet] call shop_set_status_message; ""
 	};
 	
 	if(_limitedStock && _demand == 0 && not(_isOilBarrel)) exitWith {
-		["The item you have selected to sell has currently no demand", _quiet] call shop_set_status_message; nil
+		["The item you have selected to sell has currently no demand", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isWeapon && _weapon_count == 0) exitWith {
-		["You do not have the selected weapon to sell", _quiet] call shop_set_status_message; nil
+		["You do not have the selected weapon to sell", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isItem && _item_count == 0) exitWith {
-		["You do not have any of the selected item to sell", _quiet] call shop_set_status_message; nil
+		["You do not have any of the selected item to sell", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isItem && _amount > _item_count) exitWith {
-		["You are trying to sell more than the amount of items you have", _quiet] call shop_set_status_message; nil
+		["You are trying to sell more than the amount of items you have", _quiet] call shop_set_status_message; ""
 	};
 	
 	
 	if (_isMagazine && _magazine_count == 0) exitWith {
-		["You do not have any of the selected magazine/ammunition to sell", _quiet] call shop_set_status_message; nil
+		["You do not have any of the selected magazine/ammunition to sell", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isMagazine && _amount  > _magazine_count) exitWith {
-		["You are trying to sell more than the amount of magazines/ammution you have", _quiet] call shop_set_status_message; nil
+		["You are trying to sell more than the amount of magazines/ammution you have", _quiet] call shop_set_status_message; ""
 	};
 	
 	if(_isVehicle && _vehicle_count == 0) exitWith {
-		["You do not own any vehicles of the selected type to sell", _quiet] call shop_set_status_message; nil
+		["You do not own any vehicles of the selected type to sell", _quiet] call shop_set_status_message; ""
 	};
 	if (_isVehicle && _vehicle_alive_count == 0) exitWith {
-		["You do not own any vehicles of the selected type that are alive", _quiet] call shop_set_status_message; nil
+		["You do not own any vehicles of the selected type that are alive", _quiet] call shop_set_status_message; ""
 	};
 	if (_isVehicle && _vehicle_near_count == 0) exitWith {
-		["You do not own any vehicles of the selected type that are near this shop", _quiet] call shop_set_status_message; nil
+		["You do not own any vehicles of the selected type that are near this shop", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isBackpack && not(_hasBackpack)) exitWith {
-		["You do not have the selected backpack to sell", _quiet] call shop_set_status_message; nil
+		["You do not have the selected backpack to sell", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_amount > 1 && (_isWeapon || _isVehicle || _isBackpack )) exitWith {
-		["The item you have selected can only be sold one at a time", _quiet] call shop_set_status_message; nil
+		["The item you have selected can only be sold one at a time", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isMagazine && _amount > _magazine_count) then {
-		["You are trying to sell more magazines/ammution than the amount you have", _quiet] call shop_set_status_message; nil
+		["You are trying to sell more magazines/ammution than the amount you have", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_limitedStock && _amount > _demand && not(_isOilBarrel)) exitWith {
-		["You are trying to sell more than the current demand for this item", _quiet] call shop_set_status_message; nil
+		["You are trying to sell more than the current demand for this item", _quiet] call shop_set_status_message; ""
 	};
 	
 	if (_isIllegal && iscop) exitWith {
-		 ["The selected item is illegal, you are not allowed to sell it", _quiet]  call shop_set_status_message; nil
+		 ["The selected item is illegal, you are not allowed to sell it", _quiet]  call shop_set_status_message; ""
 	};
 	
 	_data set [shop_sell_item_total_return, _total_price];
@@ -913,8 +919,9 @@ shop_get_buy_item_data = {
 	private["_index", "_data", "_data_str"];
 	_index = lbCurSel buyItem_list_idc;
 	_index = if (isNil "_index") then { -1 } else { _index };
-	if (_index < 0) exitWith { nil };
+	if (_index < 0) exitWith { "" };
 	_data_str =  lbData[buyItem_list_idc, _index];
+	_data = [];
 	_data = (call compile _data_str);
 	_data
 };
@@ -923,17 +930,21 @@ shop_get_sell_item_data = {
 	private["_index", "_data", "_data_str"];
 	_index = lbCurSel sellItem_list_idc;
 	_index = if (isNil "_index") then { -1 } else { _index };
-	if (_index < 0) exitWith { nil };
+	if (_index < 0) exitWith { "" };
 	_data_str =  lbData[sellItem_list_idc, _index];
-	_data = (call compile _data_str);
+	_data = ([] call (compile _data_str));
 	_data
 };
 
 shop_update_buy_item = {
 	private ["_data"];
-	_data = call shop_get_buy_item_data;
+	_data = [];
+	_data = [] call shop_get_buy_item_data;
 	_data = [_data] call shop_buy_item_validate_data;
-	if (isNil "_data") exitWith { nil };
+
+//	if (isNil "_data") exitWith { nil };
+	if ((typeName _data) != "ARRAY") exitwith {""};
+
 	ctrlEnable [buyButton_idc, true];
 	buttonSetAction [buyButton_idc,  "call shop_buy;"];
 	_data
@@ -941,9 +952,12 @@ shop_update_buy_item = {
 
 shop_update_sell_item = {
 	private ["_data"];
-	_data = call shop_get_sell_item_data;
+	_data = [];
+	_data = [] call shop_get_sell_item_data;
+	if ((typeName _data) != "ARRAY") exitwith {""};
 	_data = [_data] call shop_sell_item_validate_data;
-	if (isNil "_data") exitWith { nil };
+//	if (isNil "_data") exitWith { nil };
+	if ((typeName _data) != "ARRAY") exitwith {""};
 	ctrlEnable [sellButton_idc, true];
 	buttonSetAction [sellButton_idc,  "call shop_sell;"];
 	_data
@@ -982,8 +996,11 @@ shop_sell_transaction = {
 
 shop_buy = {
 	private["_data"];
-	_data = call shop_update_buy_item;
-	if (isNil "_data") exitWith {};
+	_data = [];
+	_data = [] call shop_update_buy_item;
+	
+//	if (isNil "_data") exitWith {};
+	if ((typeName _data) != "ARRAY") exitwith {};
 
 	ctrlEnable [buyButton_idc, false];
 	
@@ -1010,7 +1027,7 @@ shop_buy = {
 			[_data, INV_CreatePack] call shop_buy_gear_item;
 		};
 	};
-	call shop_update_buy_item;
+	[] call shop_update_buy_item;
 };
 
 shop_sell_active = false; 
@@ -1021,8 +1038,9 @@ shop_sell = { [] spawn {
 	shop_sell_active = true;
 	
 	private["_data"];
-	_data = call shop_update_sell_item;
-	if (isNil "_data") exitWith {
+	_data = [] call shop_update_sell_item;
+//	if (isNil "_data") exitWith {
+	if ((typeName _data) != "ARRAY") exitwith {
 		shop_sell_active = false;
 	};
 
@@ -1052,7 +1070,7 @@ shop_sell = { [] spawn {
 	if (_sold) then {
 		[_data] call shop_sell_transaction;
 	};
-	call shop_update_sell_item;
+	[] call shop_update_sell_item;
 	
 	shop_sell_active = false;
 };};
@@ -1164,6 +1182,8 @@ shop_sell_vehicle = {
 		_vehicle = _vehicles select 0;
 	};
 	
+	if ((count (crew _vehicle)) > 0) exitwith {player groupchat "Vehicle is not empty"; false};
+	
 	[_player, _vehicle] call vehicle_remove;
 	if (isNil "_vehicle") exitWith { false };
 
@@ -1207,34 +1227,42 @@ shop_get_vehicles_by_class_item = {
 	if (isNil "_distance") exitWith { [] };
 	if (typeName _distance != "SCALAR") exitWith { [] };
 	
-	private["_vehicles"];
-	_vehicles = [];
-	private["_vehicle_list"];
+	private["_vehicles", "_vehicle_list"];
 	
+//	diag_log format['ShopVehicleSellList: Start'];
+	
+	_vehicles = [];
+	_vehicle_list = [];
 	_vehicle_list = [_player] call vehicle_list;
 	//player groupChat format["_vehicle_list = %1", _vehicle_list];
-
+	
+//	diag_log format['ShopVehicleSellList: _vehicle_list - %1', _vehicle_list];
+	
 	private["_vehicle"];
 	
 	{
+	//	diag_log format['ShopVehicleSellList: X-%1', _x];
 		_vehicle = _x;
 		if (true) then {
-			if (isNil "_vehicle") exitWith {};
-			if (not(alive(_vehicle))) exitWith {};
+			if (isNil "_vehicle") exitWith {/*diag_log 'Nil Exit';*/};
+			if (not(alive(_vehicle))) exitWith {/*diag_log 'Not Alive Exit';*/};
 			private["_cdistance"];
 			_cdistance = _player distance _vehicle;
 			//player groupChat format["_actual_distance = %1, _check_distance = %2", _cdistance , _distance];
-			if (_cdistance > _distance) exitWith {};
-			if (typeOf _vehicle != _class) exitWith {};
+			if (_cdistance > _distance) exitWith {/*diag_log 'Distance Exit';*/};
+			if ((typeOf _vehicle) != _class) exitWith {/*diag_log format['Type Exit - %1 - %2', _class, typeOf _vehicle];*/};
 			
 			private["_citem"];
 			_citem = [_vehicle, "item_name"] call vehicle_get_string;
 			//player groupChat format["_citem = %1", _citem];
-			if (_citem != _item) exitWith {};
+			if (_citem != _item) exitWith {/*diag_log format['Item Exit: %1 - %2', _citem, _item];*/};
 			
-			_vehicles = _vehicles + [_vehicle];
+		//	_vehicles = _vehicles + [_vehicle];
+			_vehicles set[(count _vehicles), _vehicle];
 		};
 	} foreach _vehicle_list;
+	
+//	diag_log format['ShopVehicleSellList: _vehicles - %1', _vehicles];
 	
 	_vehicles
 
@@ -1509,7 +1537,7 @@ shop_drug_search = {
 			
 			player groupChat format["This civilian bought $%1 worth of drugs from %2-%3!", strM(_profit), _player, (name _player)];
 			
-			[_player, "(drug-trafficking)", _profit, 50, false] call player_update_warrants;
+			 [_player, "(drug-trafficking)", _profit, 50, false] call player_update_warrants;
 			private["_message"];
 			_message = format["%1-%2 is wanted for trafficking $%3 worth of drugs!", _player, (name _player), strM(_profit)];
 			format['titleText [toString(%1), "PLAIN"];', toArray(_message)] call broadcast;
@@ -1531,12 +1559,12 @@ shop_set_busy = {
 		_timeout = if (typeName _timeout != "SCALAR") then { 0 } else { _timeout };
 		if (shop_busy) exitWith {};
 		shop_busy = true;
-		call shop_update_buy_item;
-		call shop_update_sell_item;
+		[] call shop_update_buy_item;
+		[] call shop_update_sell_item;
 		sleep _timeout;
 		shop_busy = false;
-		call shop_update_buy_item;
-		call shop_update_sell_item;
+		[] call shop_update_buy_item;
+		[] call shop_update_sell_item;
 	};	
 };
 

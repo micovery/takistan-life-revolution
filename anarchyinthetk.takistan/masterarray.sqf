@@ -372,18 +372,18 @@ INV_AllMagazineObjects = [
 //["IR_Strobe_Target",		["Magazine", 	"equipment"],	["IR_Strobe_Target", 		"IR Strobe Target"],		[25000, 		20000], 			[0, 	"pmc_license_journeyman", 		"sobr_training"], 				[], "SmokeShellGreen" call ISSE_Cfg_MagazineInfo, "SmokeShellGreen" call ISSE_Cfg_MagazineInfo, [["kupfer", 1],["schwarzpulver", 1]] ],
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Put
-["TimeBomb", 				["Magazine", 	"explosive"], 	["TimeBomb", 				"Timed Bomb"], 				[750000, 		600000], 		[4, 	"bomb", 						"sobr_training"],							[], "TimeBomb" call ISSE_Cfg_MagazineInfo, "TimeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["PipeBomb",				["Magazine", 	"explosive"],	["PipeBomb", 				"Demolition Charge"],		[1500000, 		1200000], 		[4, 	"bomb", 						"sobr_training"], 				[], "PipeBomb" call ISSE_Cfg_MagazineInfo, "PipeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["Mine",					["Magazine", 	"explosive"],	["Mine", 					"Western Mine"],			[595000, 		476000], 		[4, 	"bomb", 						"sobr_training"], 				[], "PipeBomb" call ISSE_Cfg_MagazineInfo, "PipeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["MineE",					["Magazine", 	"explosive"],	["MineE",	 				"Eastern Mine"],			[495000, 		396000], 		[4, 	"bomb", 						"sobr_training"], 							[], "PipeBomb" call ISSE_Cfg_MagazineInfo, "PipeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["Garbage IED Small",		["Magazine", 	"explosive"],	["BAF_ied_v1", 				"Garbage IED Small"],		[2150000, 		1720000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["Garbage IED Large",		["Magazine", 	"explosive"],	["BAF_ied_v2", 				"Garbage IED Large"],		[2610000, 		2088000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["Ground IED Small",		["Magazine", 	"explosive"],	["BAF_ied_v3", 				"Ground IED Small"],		[2100000, 		1680000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["Ground IED Large",		["Magazine", 	"explosive"],	["BAF_ied_v4", 				"Ground IED Large"],		[2670000, 		2136000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["GarbageIEDSmall_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v1", 				"Garbage IED Small"],		[2165000, 		1732000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["GarbageIEDLarge_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v2", 				"Garbage IED Large"],		[2625000, 		2100000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["GroundIEDSmall_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v3", 				"Ground IED Small"],		[2120000, 		1696000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["GroundIEDLarge_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v4", 				"Ground IED Large"],		[2600000, 		2080000], 		[4, 	"bomb", 						"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["TimeBomb", 				["Magazine", 	"explosive"], 	["TimeBomb", 				"Timed Bomb"], 				[750000, 		600000], 		[4, 	"explosive", 					"sobr_training"],							[], "TimeBomb" call ISSE_Cfg_MagazineInfo, "TimeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["PipeBomb",				["Magazine", 	"explosive"],	["PipeBomb", 				"Demolition Charge"],		[1500000, 		1200000], 		[4, 	"explosive", 					"sobr_training"], 				[], "PipeBomb" call ISSE_Cfg_MagazineInfo, "PipeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["Mine",					["Magazine", 	"explosive"],	["Mine", 					"Western Mine"],			[595000, 		476000], 		[4, 	"explosive", 					"sobr_training"], 				[], "PipeBomb" call ISSE_Cfg_MagazineInfo, "PipeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["MineE",					["Magazine", 	"explosive"],	["MineE",	 				"Eastern Mine"],			[495000, 		396000], 		[4, 	"explosive", 					"sobr_training"], 							[], "PipeBomb" call ISSE_Cfg_MagazineInfo, "PipeBomb" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["Garbage IED Small",		["Magazine", 	"explosive"],	["BAF_ied_v1", 				"Garbage IED Small"],		[2150000, 		1720000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["Garbage IED Large",		["Magazine", 	"explosive"],	["BAF_ied_v2", 				"Garbage IED Large"],		[2610000, 		2088000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["Ground IED Small",		["Magazine", 	"explosive"],	["BAF_ied_v3", 				"Ground IED Small"],		[2100000, 		1680000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["Ground IED Large",		["Magazine", 	"explosive"],	["BAF_ied_v4", 				"Ground IED Large"],		[2670000, 		2136000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["GarbageIEDSmall_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v1", 				"Garbage IED Small"],		[150000, 		50000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["GarbageIEDLarge_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v2", 				"Garbage IED Large"],		[750000, 		250000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["GroundIEDSmall_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v3", 				"Ground IED Small"],		[150000, 		50000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["GroundIEDLarge_PMC",		["Magazine", 	"explosive"],	["PMC_ied_v4", 				"Ground IED Large"],		[750000, 		250000], 		[4, 	"explosive", 					"sobr_training"], 							[], "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, "BAF_ied_v2" call ISSE_Cfg_MagazineInfo, [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // MG Ammo
 ["Rnd_556x45_L110A1",		["Magazine", 	"mg"],			["200Rnd_556x45_L110A1", 	"200Rnd L110A1 Magazine"],	[1200, 			960], 			[1, 	"", 							""], 							[], "8Rnd_127x51_ball_TR" call ISSE_Cfg_MagazineInfo, "8Rnd_127x51_ball_TR" call ISSE_Cfg_MagazineInfo, [["kupfer", 1],["schwarzpulver", 1]] ],
@@ -1142,11 +1142,11 @@ INV_AllItemsArray = [
 ["Mammo_IL",					["Item", 		"carobjects"],["Mammo_IL", "8 Illum Mortar Rounds"],			[25000, 20000],		[10, "", ""], [true, true, true,!(iscop),"Awesome\Scripts\M_ammo.sqf"],"Adds 8 Illumination rounds","Adds 8 Illumination rounds", [["kupfer", 5],["schwarzpulver", 5]] ],
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Bombs
-["fernzuenderbombe",			["Item", 		"bomb"],["fernzuenderbombe", "Remote Bomb"],					[2000000, 1600000],	[10, "bomb", "sobr_training"], [true, true, true,true,"bombs.sqf"],localize "STRS_inv_item_fernbombe",localize "STRS_inv_item_fernbombe_info", [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]]],
-["zeitzuenderbombe",			["Item", 		"bomb"],["zeitzuenderbombe", "Time Bomb"],						[2000000, 1600000],	[10, "bomb", "sobr_training"], [true, true, true,true,"bombs.sqf"],localize "STRS_inv_item_zeitbombe",localize "STRS_inv_item_zeitbombe_info", [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["aktivierungsbombe", 			["Item", 		"bomb"], ["aktivierungsbombe", "Activation Bomb"],				[2000000, 1600000],	[10, "bomb", "sobr_training"],[true,true,true, true, "bombs.sqf"],localize "STRS_inv_item_enginebombe",localize "STRS_inv_item_enginebombe_info",[["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["geschwindigkeitsbombe",		["Item", 		"bomb"], ["geschwindigkeitsbombe", "Speed Bomb"],				[2000000, 1600000],	[10, "bomb", "sobr_training"],[true,true,true, true, "bombs.sqf"],localize "STRS_inv_item_speedbombe",localize "STRS_inv_item_speedbombe_info",[["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
-["selbstmordbombe",				["Item", 		"bomb"],["selbstmordbombe", "Suicide Bomb"],					[2000000, 1600000],	[10, "bomb", "sobr_training"], [true, true, true,true,"suicide.sqf"],localize "STRS_inv_item_selbstmordbombe",localize "STRS_inv_item_selbstmordbombe_info", [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]]],
+["fernzuenderbombe",			["Item", 		"bomb"],["fernzuenderbombe", "Remote Bomb"],					[2000000, 1600000],	[10, "explosive", "sobr_training"], [true, true, true,true,"bombs.sqf"],localize "STRS_inv_item_fernbombe",localize "STRS_inv_item_fernbombe_info", [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]]],
+["zeitzuenderbombe",			["Item", 		"bomb"],["zeitzuenderbombe", "Time Bomb"],						[2000000, 1600000],	[10, "explosive", "sobr_training"], [true, true, true,true,"bombs.sqf"],localize "STRS_inv_item_zeitbombe",localize "STRS_inv_item_zeitbombe_info", [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["aktivierungsbombe", 			["Item", 		"bomb"], ["aktivierungsbombe", "Activation Bomb"],				[2000000, 1600000],	[10, "explosive", "sobr_training"],[true,true,true, true, "bombs.sqf"],localize "STRS_inv_item_enginebombe",localize "STRS_inv_item_enginebombe_info",[["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["geschwindigkeitsbombe",		["Item", 		"bomb"], ["geschwindigkeitsbombe", "Speed Bomb"],				[2000000, 1600000],	[10, "explosive", "sobr_training"],[true,true,true, true, "bombs.sqf"],localize "STRS_inv_item_speedbombe",localize "STRS_inv_item_speedbombe_info",[["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]] ],
+["selbstmordbombe",				["Item", 		"bomb"],["selbstmordbombe", "Suicide Bomb"],					[2000000, 1600000],	[30, "explosive", "sobr_training"], [true, true, true,true,"suicide.sqf"],localize "STRS_inv_item_selbstmordbombe",localize "STRS_inv_item_selbstmordbombe_info", [["kupfer", 20],["schwarzpulver", 22],["ebauteile", 3]]],
 ["fernzuender", 				["Item", 		"bomb"], ["fernzuender", "Remote Control"],						[250000, 200000], 	[1, ""],[true,true,true, true, "bombs.sqf"],localize "STRS_inv_item_fernzuender",localize "STRS_inv_item_zuender_info", [["ebauteile", 2],["plastik", 2]]],
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Service
@@ -1157,7 +1157,6 @@ INV_AllItemsArray = [
 ["reparaturkit",				["Item", 		"service"],["reparaturkit", "Large Repair Kit"],				[7500, 5000],		[10, "engineer", ""],[true,true,true, false, "largerepair.sqf"],localize "STRS_inv_item_repairkit", localize "STRS_inv_item_repairkit_info",[["plastik", 1],["stahl", 2]] ],
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Misc
-//["mobileroadblock",			["Item", 		"misc"],["mobileroadblock","Mobile Roadblock"],					[5000,4000],		[5, 	"", 						"patrol_training"					], 				[true, true, true,false,"mobileroadblock.sqf"],localize "STRS_inv_item_roadblock",localize "STRS_inv_item_roadblock_info", [["plastik", 1]]],
 //["SearchLight_US_EP1",		["Item", 		"misc"],["SearchLight_US_EP1", "Search Light"],					[3000, 2400],		[10, "", "patrol_training"], [true, true, true,false,"createobject.sqf"],"Searchlight",localize "STRS_inv_item__info", [] ],
 //["M2StaticMG_US_EP1",			["Item", 		"misc"],["M2StaticMG_US_EP1", "M2 static"],						[97000, 77600],		[20, "riflelicense", "sobr_training"],[true, true, true,false,"createobject.sqf"], "M2StaticMG_US_EP1" call ISSE_Cfg_Weapons_GetName,"M2StaticMG_US_EP1" call ISSE_Cfg_Weapons_GetDesc,[["stahl", 5], ["kupfer", 1],["plastik", 1]] ],
 //["roadblock",					["Item", 		"misc"],["Land_CncBlock_Stripes", "Roadblock"],					[3000, 2000],		[20, "", "patrol_training"], [true, true, true,false,"createobject.sqf"],localize "STRS_inv_item_roadblock",localize "STRS_inv_item_roadblock_info", [] ],
@@ -1186,9 +1185,9 @@ INV_AllItemsArray = [
 ["Itembag",						["Item", 		"misc"], ["Itembag", "Itembag"],								[500, 400],			[0.5, "", ""], [true, true, true,false,"itembag.sqf"],"itembag","use when near dropped items to delete them", [["plastik", 1]]],
 ["defuser",						["Item", 		"misc"], ["defuser", "Defuser"],								[4000, 3200],		[0, "bomb", "response_training"], [true,true,false, false, "defuser.sqf"], localize "STRS_inv_item_defuser", localize "STRS_inv_item_defuser_info", [["stahl", 1],["ebauteile", 1]]],
 ["bankversicherung", 			["Item", 		"misc"], ["bankversicherung", "Bank Insurance"],				[2500, 2000],		[2, ""],[true,true,false, false, "nouse.sqf"], localize "STRS_item_versicherung", localize "STRS_item_versicherung_info",[]],
-["Shovel", 						["Item", 		"misc"], ["Shovel", "Shovel"],									[800, 640],			[5, "", ""],[true,true,true, false, "mine.sqf"], "Shovel", "Use it in a mining area. Durability: 20 Mining speed: slow",[["holz", 2]] ],
-["Pickaxe", 					["Item", 		"misc"], ["Pickaxe", "Pickaxe"],								[4000, 3200],		[5, "", ""],[true,true,true, false, "mine.sqf"], "Pickaxe", "Use it in a mining area. Durability: 50 Mining speed: average",[ ["holz", 2]] ],
-["JackHammer", 					["Item", 		"misc"], ["JackHammer", "Jack Hammer"],							[45000, 36000],		[20, "engineer", "probator"],[true,true,true, false, "mine.sqf"], "Jack Hammer", "Use it in a mining area. Durability: 100 Mining speed: fast",[["stahl", 1], ["plastik", 1],["ebauteile", 1]] ],
+["Shovel", 						["Item", 		"misc"], ["Shovel", "Shovel"],									[800, 640],			[5, "", ""],[true,true,true, false, "mine.sqf"], "Shovel", "Use it in a mining area. Mining speed: slow. Collection: 1/4",[["holz", 2]] ],
+["Pickaxe", 					["Item", 		"misc"], ["Pickaxe", "Pickaxe"],								[4000, 3200],		[5, "", ""],[true,true,true, false, "mine.sqf"], "Pickaxe", "Use it in a mining area. Mining speed: average. Collection: 1/2",[ ["holz", 2]] ],
+["JackHammer", 					["Item", 		"misc"], ["JackHammer", "Jack Hammer"],							[45000, 36000],		[20, "engineer", "probator"],[true,true,true, false, "mine.sqf"], "Jack Hammer", "Use it in a mining area. Mining speed: fast. Collection: 1/1",[["stahl", 1], ["plastik", 1],["ebauteile", 1]] ],
 //["Spikestrip",				["Item", 		"misc"],["Fort_RazorWire", "Spike Strip"],						[2800, 2000],		[40, "", "probator"], [true, true, true,false, "Spikestrip.sqf"], "Spike Strip", "Use it to pop a tire.",[["stahl", 1], ["plastik", 1],["ebauteile", 1]] ],
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Shop
@@ -1238,7 +1237,7 @@ INV_AllItemsArray = [
 ["getreide", 					["Item", 		"ressource"],["getreide", "Wheat"],								[400, 150],			[0.5, ""],[true,true,true, false, "food.sqf"], localize "STRS_inv_item_getreide", localize "STRS_inv_item_nahrung_info", []],
 ["holz",						["Item", 		"ressource"],["holz", "Wood"],									[50, 15],			[0.5, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_holz",localize "STRS_item_farmitem_info", [] ],
 ["iron",						["Item", 		"ressource"],["iron", "Iron"], 									[1600, 600],		[3, ""],[true,true,true, false, "useresource.sqf"],"Iron",localize "STRS_item_farmitem_info", []],
-["mineraloel",					["Item", 		"ressource"],["mineraloel", "Mineral Oil"],						[100, 50],			[1, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_mineraloel",localize "STRS_item_farmitem_info", [[iron,2]]],
+["mineraloel",					["Item", 		"ressource"],["mineraloel", "Mineral Oil"],						[100, 50],			[1, ""], [true, true, true,false,"useresource.sqf"],localize "STRS_item_mineraloel",localize "STRS_item_farmitem_info", [["iron",2]]],
 ["ebauteile",	 				["Item", 		"ressource"],["ebauteile", "Electronic Components"],			[100, 50],			[2.5, ""],[true,true,true, false, "useresource.sqf"], localize "STRS_item_ebauteile",localize "STRS_item_farmitem_info", [["silizium", 1],["kupfer", 2],["erdoel", 2]] ],
 ["silizium", 					["Item", 		"ressource"],["silizium", "Silicon"], 							[50, 20],			[0.5, ""],[true,true,true, false, "useresource.sqf"], localize "STRS_item_silizium",localize "STRS_item_farmitem_info", []],
 ["copper",						["Item", 		"ressource"],["Copper", "Copper"],								[800, 300],		[3, ""],[true,true,true, false, "useresource.sqf"], localize "STRS_item_kupfer",localize "STRS_item_farmitem_info", []],
@@ -1327,23 +1326,16 @@ _n = count AllLifeMissionObjects;
 
 
 item_setup_taxes = {
-{
-	if((_this select 0)) then 
-	{	   
-		call compile format ["%1=%2",_x,(_this select 1) select _forEachIndex];		
-	}
-	else
-	{
-		if(isnil _x) then
 		{
-		   	call compile format ["%1=5",_x];
-		};		
+			if( !(_this select 0) ) then  {	   
+					if(isnil _x) then{
+							missionNamespace setVariable [_x, 5];
+						};		
+				};
+		} foreach ["itemtax","vehicletax","magazinetax","weapontax"];
+		INV_ItemTypeArray = [ ["Item", "Item", itemtax], ["Vehicle", "Vehicle",vehicletax], ["Magazine","Magazine",magazinetax], ["Weapon","Weapon",weapontax]];
 	};
-	call compile format [publicvariable "%1", _x];	
-} foreach ["itemtax","vehicletax","magazinetax","weapontax"];
-
-INV_ItemTypeArray = [ ["Item", "Item", itemtax], ["Vehicle", "Vehicle",vehicletax], ["Magazine","Magazine",magazinetax], ["Weapon","Weapon",weapontax]];
-};
+	
 [false] call item_setup_taxes;
 
 

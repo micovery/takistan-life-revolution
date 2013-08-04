@@ -1,0 +1,106 @@
+_x = _this select 0
+_y = _this select 1
+_z = _this select 2
+_type = _this select 3
+
+~1
+
+_color = ([[0.95,0.95,0.95],[0.95,0.95,0.95],[0.75,0.75,0.75],[0.715,0.719,0.793],[0.5,0.5,0.5]] select _type)
+_opa0 = _color + [0]
+_opa1 = _color + [0.4]
+_colord = ([[0.75,0.75,0.75],[0.75,0.75,0.75],[0.5,0.5,0.5],[0.434,0.438,0.504],[0.25,0.25,0.25]] select _type)
+_opad0 = _colord + [0]
+_opad1 = _colord + [0.5]
+_color = [_opa0,_opa1,_opa1,_opa1,_opa1,_opa1,_opa1,_opa1,_opa1,_opa1,_opa0]
+_colord = [_opad0,_opad1,_opad1,_opad1,_opad1,_opad1,_opad1,_opad1,_opad1,_opad1,_opad0]
+
+
+_densi = ([[2,1], [1,0.7], [10,0.8], [3,1], [1,0.45]] select _type)
+_d_overall = _densi select 0
+_d_cloud = _densi select 1
+
+
+
+_shape = ([[[250,30],[1,5],30,250], [[400,300],[1,3],100,300], [[200,20],[1,1],55,400], [[400,35],[2,5],35,250], [[500,25],[1,2],10,250]] select _type)
+_a = ((_shape select 0) select 0)
+_h = ((_shape select 0) select 1)
+
+_peakheight = _shape select 2
+_flyheight = _shape select 3
+
+
+; ----------------------------------------
+
+_cloud = 0
+#cloud
+_peaks = random (((_shape select 1) select 1) - ((_shape select 1) select 0)) + ((_shape select 1) select 0)
+_cx = _x + (500 - (random 1000))
+_cy = _y + (500 - (random 1000))
+_cz = (_flyheight + (25 - (random 50))) + _z
+
+_amou = ((_a^2 * _h) * (_d_cloud/200000))
+_drop = 0
+
+#cloudparticles
+~0.01
+_crx = _cx + ((_a/2) - (random _a))
+_cry = _cy + ((_a/2) - (random _a))
+_crz = _cz + (random _h)
+drop ["\ca\data\cl_basic", "", "Billboard", 10, 330, [_crx,_cry,_crz], [0,0,0], 0.1, 1.275, 1, 1, [150 + (random 75)], _color, [0,0], 0, 0, "", "",""]
+_drop = _drop + 1
+if (_drop < _amou) then { goto "cloudparticles" }
+
+
+
+_tcolor = _color
+_th = _h
+_tcz = _cz
+_color = _colord
+_h = 10
+_cz = _cz - 25
+
+_amou = ((_a^2 * _h) * (_d_cloud/200000))
+_drop = 0
+
+_script = ""
+
+
+#cloudparticlesdark
+~0.01
+_crx = _cx + ((_a/2) - (random _a))
+_cry = _cy + ((_a/2) - (random _a))
+_crz = _cz + (random _h)
+drop ["\ca\data\cl_basic", "", "Billboard", (20 + random 20), 330, [_crx,_cry,_crz], [0,0,0], 0.1, 1.275, 1, 1, [150 + (random 75)], _color, [0,0], 0, 0, _script, "",""]
+_drop = _drop + 1
+if (_drop < _amou) then { goto "cloudparticlesdark" }
+
+
+_color = _tcolor
+_cz = _tcz
+_h = _th
+
+if (_peaks < 1) then {goto "nopeak"}
+_peak = 1
+#newpeak
+_px = _cx + ( ((_a/2) - (_a/10)) - (random ((_a - (_a/10)))) )
+_py = _cy + ( ((_a/2) - (_a/10)) - (random ((_a - (_a/10)))) )
+_pz = _cz + (2 * _h)
+_amou = ((50^2 * _peakheight) * (_d_cloud/20000))
+_drop = 0
+
+#cloudpeak
+_crx = _px + (25 - (random 50))
+_cry = _py + (25 - (random 50))
+_crz = _pz + (random _peakheight)
+drop ["\ca\data\cl_basic", "", "Billboard", 10, 330, [_crx,_cry,_crz], [0,0,0], 0.1, 1.275, 1, 1, [50 + (random 25)], _color, [0,0], 0, 0, "", "",""]
+_drop = _drop + 1
+if (_drop < _amou) then { goto "cloudpeak" }
+
+_peak = _peak + 1
+if (_peak < _peaks) then {goto "newpeak"}
+
+#nopeak
+
+_cloud = _cloud + 1
+if (_cloud < _d_overall) then {goto "cloud"}
+exit

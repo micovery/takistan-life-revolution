@@ -9,6 +9,7 @@ SpeedGun_loop = {
 	private["_vehicle", "_bool", "_target", "_string", "_speed", "_speedS"];
 
 	if (not(iscop)) exitWith {};
+	SG_ON = false;
 	
 	while {true} do {
 		if (SG_ON && iscop && INV_shortcuts) then {

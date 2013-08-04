@@ -1,0 +1,300 @@
+/*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, afkCheck">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"__3",8,218,193.515244,-612.782715,283.515198,-562.782715,0.000000,""};
+item1[] = {"Check_for_AFK_",2,250,192.726837,-723.356323,302.653625,-692.032166,0.000000,"Check for AFK?"};
+item2[] = {"Wait",2,250,-12.584307,-730.799133,75.329842,-679.814941,0.000000,"Wait"};
+item3[] = {"_",8,218,-11.653139,-803.661377,78.346947,-753.661377,-1.000000,""};
+item4[] = {"_",8,218,89.871147,-729.510132,179.871185,-679.510132,-1.000000,""};
+item5[] = {"Check",2,250,312.162994,-658.892517,404.225800,-596.712524,0.000000,"Check"};
+item6[] = {"Start",0,250,-12.798527,-862.202148,77.201401,-812.202148,0.000000,"Start"};
+item7[] = {"__1",8,218,319.208679,-730.745178,409.208771,-680.745178,-1.000000,""};
+item8[] = {"_",8,218,91.402084,-673.268616,181.402054,-623.268616,0.000000,""};
+item9[] = {"Return",2,250,-6.424744,-602.171997,70.210106,-563.539856,0.000000,"Return"};
+item10[] = {"_",8,218,-12.624630,-671.216980,77.375465,-621.216980,-1.000000,""};
+item11[] = {"__2",8,218,250.612122,-582.427185,340.612244,-532.427490,1.000000,""};
+item12[] = {"__1",8,218,345.333466,-581.474731,435.333588,-531.474426,2.000000,""};
+item13[] = {"_",8,4314,441.820007,-583.521729,531.820618,-533.521484,3.000000,""};
+item14[] = {"__4",8,218,140.817642,-644.596191,230.817734,-594.596191,-1.000000,""};
+item15[] = {"AFK_Time_1",2,250,257.918640,-513.409302,333.718536,-485.109985,0.000000,"AFK Time 1"};
+item16[] = {"_",8,218,252.338623,-463.436432,342.338562,-413.436432,-1.000000,""};
+item17[] = {"AFK_Time_2",2,250,342.082794,-513.143188,417.882690,-484.843842,0.000000,"AFK Time 2"};
+item18[] = {"AFK_Time_3",2,250,429.239166,-511.237061,505.039124,-482.937775,0.000000,"AFK Time 3"};
+link0[] = {0,9};
+link1[] = {1,7};
+link2[] = {1,8};
+link3[] = {2,4};
+link4[] = {3,2};
+link5[] = {4,1};
+link6[] = {5,0};
+link7[] = {5,11};
+link8[] = {5,12};
+link9[] = {5,13};
+link10[] = {5,14};
+link11[] = {6,3};
+link12[] = {7,5};
+link13[] = {8,9};
+link14[] = {9,10};
+link15[] = {10,2};
+link16[] = {11,15};
+link17[] = {12,17};
+link18[] = {13,18};
+link19[] = {14,9};
+link20[] = {15,16};
+link21[] = {16,9};
+link22[] = {17,16};
+link23[] = {18,16};
+globals[] = {0.000000,0,0,0,0,640,480,1,207,6316128,1,-126.228348,680.971436,-122.831367,-991.023621,847,911,1};
+window[] = {2,-1,-1,-1,-1,1139,200,1385,200,3,865};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "afkCheck";
+  class States
+  {
+    /*%FSM<STATE "Check_for_AFK_">*/
+    class Check_for_AFK_
+    {
+      name = "Check_for_AFK_";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="Return";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"isAdmin || (!stats_functions_defined) || !(missionNamespace getVariable [""player_rejoin_camera_complete"", false])"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__1">*/
+        class __1
+        {
+          priority = -1.000000;
+          to="Check";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Wait">*/
+    class Wait
+    {
+      name = "Wait";
+      init = /*%FSM<STATEINIT""">*/"_wait = time + 30;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = -1.000000;
+          to="Check_for_AFK_";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _wait"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Check">*/
+    class Check
+    {
+      name = "Check";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 3.000000;
+          to="AFK_Time_3";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time - afkTime) > _time3"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__1">*/
+        class __1
+        {
+          priority = 2.000000;
+          to="AFK_Time_2";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time - afkTime) > _time2"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__2">*/
+        class __2
+        {
+          priority = 1.000000;
+          to="AFK_Time_1";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time - afkTime) > _time1"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__3">*/
+        class __3
+        {
+          priority = 0.000000;
+          to="Return";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"([(getPosATL player), _lasPos, _lasD] call _moveCheck)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_lasPos = getPosATL player; afkTime = time;"/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__4">*/
+        class __4
+        {
+          priority = -1.000000;
+          to="Return";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Start">*/
+    class Start
+    {
+      name = "Start";
+      init = /*%FSM<STATEINIT""">*/"private[" \n
+       "		""_timeC"", ""_timeM1"", ""_timeM2"", ""_timeM3"", " \n
+       "		""_lasPos"", ""_wait"", ""_moveCheck""" \n
+       "	];" \n
+       "" \n
+       "afkTime = time;" \n
+       "_timeC = 0;" \n
+       "" \n
+       "_lasPos = [0,0,0];" \n
+       "_lasD = 5;" \n
+       "_wait = 0;" \n
+       "" \n
+       "" \n
+       "_timeM1 = 5 * 60;" \n
+       "_timeM2 = 10 * 60;" \n
+       "_timeM3 = 15 * 60;" \n
+       "" \n
+       "" \n
+       "" \n
+       "_moveCheck = {(((_this select 0) distance (_this select 1)) > (_this select 2))};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = -1.000000;
+          to="Wait";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Return">*/
+    class Return
+    {
+      name = "Return";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = -1.000000;
+          to="Wait";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "AFK_Time_1">*/
+    class AFK_Time_1
+    {
+      name = "AFK_Time_1";
+      init = /*%FSM<STATEINIT""">*/"player groupChat format[""You have been AFK for %1 Seconds"", _timeM1];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = -1.000000;
+          to="Return";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "AFK_Time_2">*/
+    class AFK_Time_2
+    {
+      name = "AFK_Time_2";
+      init = /*%FSM<STATEINIT""">*/"player groupChat format[""You have been AFK for %1 Seconds"", _timeM2];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = -1.000000;
+          to="Return";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "AFK_Time_3">*/
+    class AFK_Time_3
+    {
+      name = "AFK_Time_3";
+      init = /*%FSM<STATEINIT""">*/"player groupChat format[""You have been AFK for %1 Seconds"", _timeM3];" \n
+       "" \n
+       "[] call PlayerAFKKick;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = -1.000000;
+          to="Return";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="Start";
+  finalStates[] =
+  {
+  };
+};
+/*%FSM</COMPILE>*/

@@ -134,7 +134,7 @@ mounted_lookup_class = {
 	if (typeName _class != "STRING") exitWith {};
 	
 	private["_entry"];
-	_entry = nil;
+	_entry = "";
 	
 	{
 		private["_centry", "_cclass", "_cslot_name", "_clots"];
@@ -155,13 +155,14 @@ mounted_lookup_class_slot = {
 	
 	private["_entry"];
 	_entry = [_class] call mounted_lookup_class;
-	if (isNil "_entry") exitWith {nil};
+//	if (isNil "_entry") exitWith {nil};
+	if ((typeName _entry) != "ARRAY") exitwith {};
 	
 	if (isNil "_slot_id") exitWith {};
 	if (typeName _slot_id != "STRING") exitWith {};
 	
 	private["_slot_entry"];
-	_slot_entry = nil;
+	_slot_entry = "";
 	
 	{
 		private["_cslot_entry", "_cslot_name"];
@@ -182,7 +183,8 @@ mounted_get_occupants = {
 	_class = (typeOf _vehicle);
 	private["_entry"];
 	_entry = [_class] call mounted_lookup_class;
-	if (isNil "_entry") exitWith {[]};
+//	if (isNil "_entry") exitWith {[]};
+	if ((typeName _entry) != "ARRAY") exitwith {[]};
 	
 	private["_occupants"];
 	_occupants = [];
@@ -192,9 +194,11 @@ mounted_get_occupants = {
 		_slot = _x;
 		_slod_id = _slot select mounted_slot_id;
 		_occupant = [_vehicle, _slod_id] call mounted_get_slot_occupant;
-		if (not(isNil "_occupant")) then {
-			_occupants = _occupants + [_occupant];
-		};
+		if (!(isNil "_occupant")) then {
+				if (!(isNull _occupant)) then {
+						_occupants = _occupants + [_occupant];
+					};
+			};
 	} forEach (_entry select mounted_slots);
 	
 	_occupants
@@ -228,7 +232,8 @@ mounted_slot_wait = {
 			private["_class", "_slot_entry"];
 			_class = typeOf _vehicle;
 			_slot_entry = [_class, _slot_id] call mounted_lookup_class_slot;
-			if (not(isNil "_slot_entry")) then {
+		//	if (not(isNil "_slot_entry")) then {
+			if ((typeName _slot_entry) != "ARRAY") then {
 				private["_exit"];
 				_exit = (_slot_entry select mounted_slot_exit) select mounted_slot_exit_data;
 				[_player, _vehicle, _exit] call mounted_attach;
@@ -257,7 +262,8 @@ mounted_board_slot = {
 	_class = typeOf _vehicle;
 	
 	_slot_entry = [_class, _slot_id] call mounted_lookup_class_slot;
-	if (isNil "_slot_entry") exitWith {nil};
+//	if (isNil "_slot_entry") exitWith {};
+	if ((typeName _slot_entry) != "ARRAY") exitwith {};
 	
 	private["_offset", "_heading", "_blocked_actions", "_blocked_keys", "_default_action"];
 	_offset = ((_slot_entry select mounted_slot_offset) select mounted_slot_offset_data);
@@ -316,12 +322,13 @@ mounted_get_slot_occupant = {
 	if (isNil "_vehicle") exitWith {nil};
 	
 	private["_occupant"];
-	_occupant = _vehicle getVariable _slot_id;
-	if (typeName _occupant == "OBJECT") then {
-		_occupant = if (isNull _occupant) then { nil } else { _occupant };
-	};
+	_occupant = objNull;
+	_occupant = _vehicle getVariable [_slot_id, objNull];
+//	if (typeName _occupant == "OBJECT") then {
+//		_occupant = if (isNull _occupant) then { nil } else { _occupant };
+//	};
 	
-	_occupant
+	if (isNull _occupant) then {objNull}else{_occupant}
 };
 
 mounted_set_slot_occupant = {
@@ -362,16 +369,7 @@ mounted_player_inside = {
 };
 
 mounted_player_get_vehicle = {
-	private["_player"];
-	_player = _this select 0;
-	
-	private["_vehicle"];
-	_vehicle = _player getVariable "mountedVehicle";
-
-	if (typeName _vehicle == "OBJECT") then {
-		_vehicle = if (isNull _vehicle) then { nil } else { _vehicle };
-	};
-	_vehicle
+	(_this select 0) getVariable ["mountedVehicle", objNull]
 };
 
 mounted_slot_open = {
@@ -381,9 +379,10 @@ mounted_slot_open = {
 	_slot_id = _this select 1;
 	
 	private["_slot_occupant", "_result"];
+	_slot_occupant = objNull;
 	_slot_occupant = [_vehicle, _slot_id] call mounted_get_slot_occupant;
 	//player groupChat format["_slot_occupant = %1", _slot_occupant];
-	_result = (isNil "_slot_occupant");
+	_result = (isNull _slot_occupant);
 	_result
 };
 
@@ -406,8 +405,8 @@ mounted_add_actions = {
 	
 	private["_entry"];
 	_entry = [_class] call mounted_lookup_class;
-	if (isNil "_entry") exitWith {};
-	
+//	if (isNil "_entry") exitWith {};
+	if ((typeName _entry) != "ARRAY") exitwith {};
 	
 	private ["_has_mounted_actions"];
 	private["_actions_variable"];

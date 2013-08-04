@@ -1,28 +1,3 @@
-liafu = true;
-
-reveal = {
-	private["_objs"];
-	_objs = nearestobjects[getpos player, ["man", "allvehicles"], 300];
-	{_x reveal _this;_x dotarget _this;} foreach _objs;
-};
-
-bash = {
-	private["_damage"];
-	_damage = damage player;
-	[player, 10, 0] call setPitchBank;
-	sleep 0.01;
-	[player, -5, 0] call setPitchBank;
-
-	"dynamicBlur" ppEffectEnable true;
-	"dynamicBlur" ppEffectAdjust [10];
-	"dynamicBlur" ppEffectCommit 0;
-	waitUntil {ppEffectCommitted "dynamicBlur"};
-	"dynamicBlur" ppEffectEnable true;
-	"dynamicBlur" ppEffectAdjust [0];
-	"dynamicBlur" ppEffectCommit (0.4 + _damage);
-	waitUntil {ppEffectCommitted "dynamicBlur"};
-};
-
 parse_number = {
 	private ["_number"];
 	_number = _this select 0;
@@ -75,9 +50,9 @@ DialogPlayerList = {
 		private["_player_variable_name", "_player_variable"];
 		
 		_player_variable_name = playerstringarray select _c;
-		_player_variable = missionNamespace getVariable _player_variable_name;
+		_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 		
-		if (true) then {
+		if (!isNull _player_variable) then {
 			if (not([_player_variable] call player_exists)) exitWith {};
 			private["_is_civ", "_is_cop", "_is_ins", "_is_opf"];
 			_is_civ = [_player_variable] call player_civilian;
@@ -173,7 +148,8 @@ Isse_AddCrimeLogEntry = {
 			_logtext = format["Illegal PMC"];
 		};
 	};
-	CopLog = CopLog + [ [_logplayer, _logtext, _logdate, _logtime] ];
+//	CopLog = CopLog + [ [_logplayer, _logtext, _logdate, _logtime] ];
+	CopLog set[count CopLog, [_logplayer, _logtext, _logdate, _logtime]];
 };
 
 Bomb_Vehicle = {
@@ -320,6 +296,43 @@ strstr = {
 	_matches 
 };
 
+
+Tear_gas = {
+		private["_projectile", "_ammo", "_Bpos", "_array", "_timenow"];
+		
+		_projectile = _this select 0;
+		_ammo = _this select 1;
+		
+		if ((typeName _projectile) != "OBJECT") exitwith {};
+		if (isNull _projectile) exitwith {};
+		
+		_Bpos = [0,0,0];
+		while {(speed _projectile) > 0} do {
+				_Bpos = getPosATL _projectile;
+			};
+		
+		_timenow = time;
+		_array = [];	
+		
+		while{(time < (_timenow + 10)) || (!(isnull _projectile))}do {
+				if(!gasmask) then {
+						sleep 1;
+						if(!(isnull _projectile))then{
+								if(count(nearestObjects [_Bpos, ["Man"], 10]) > 0)then{
+										{
+											_x setVariable ["flashed",true, true];
+											_array set [count _array,_x];
+										} foreach nearestObjects [_Bpos, ["Man"], 10];			
+									}else{			
+										{
+											_x setVariable ["flashed",false, true];	
+										}foreach _array;				
+										_array = [];
+									};
+							};
+					};
+			};	
+	};
 
 
 call buildings_protect;

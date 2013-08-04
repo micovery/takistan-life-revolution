@@ -1,0 +1,119 @@
+/*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, vehicle_loop">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"START",0,250,-200.000000,-300.000000,-100.000000,-250.000000,0.000000,"START"};
+item1[] = {"True",8,218,-200.000000,-225.000000,-100.000000,-175.000000,0.000000,"True"};
+item2[] = {"Time_Check",4,218,-25.000000,-250.000000,75.000000,-200.000000,1.000000,"Time-Check"};
+item3[] = {"True",8,218,100.000000,-175.000000,200.000000,-125.000000,1.000000,"True"};
+item4[] = {"Main",2,4346,-25.000000,-175.000000,75.000000,-125.000000,0.000000,"Main"};
+item5[] = {"Pass",2,250,100.000000,-225.000000,150.000000,-200.000000,0.000000,"Pass"};
+link0[] = {0,1};
+link1[] = {1,4};
+link2[] = {2,4};
+link3[] = {3,5};
+link4[] = {4,3};
+link5[] = {5,2};
+globals[] = {25.000000,1,0,0,16777215,640,480,1,19,6316128,1,-515.331238,618.791016,229.254959,-500.911407,1415,911,1};
+window[] = {2,-1,-1,-1,-1,755,25,1285,25,3,1433};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "vehicle_loop";
+  class States
+  {
+    /*%FSM<STATE "START">*/
+    class START
+    {
+      name = "START";
+      init = /*%FSM<STATEINIT""">*/"private[" \n
+       "		""_checkTime"", ""_vehicleArray"", ""_timeWait""" \n
+       "	];" \n
+       "" \n
+       "diag_log format['SERVER VEHICLE LOOP: Start - 1'];" \n
+       "" \n
+       "_checkTime = vehicle_clean_checkTime;" \n
+       "_vehicleArray= [];" \n
+       "_timeWait = time;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          priority = 0.000000;
+          to="Main";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"diag_log format['SERVER VEHICLE LOOP: Start - 2'];"/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Main">*/
+    class Main
+    {
+      name = "Main";
+      init = /*%FSM<STATEINIT""">*/"diag_log format['SERVER VEHICLE LOOP: Main Loop Start - %1', time];" \n
+       "" \n
+       "_vehicleArray = [] call vehicle_clean_getArray;" \n
+       "" \n
+       "{" \n
+       "	if !(isNull _x) then {" \n
+       "			if (alive _x) then {" \n
+       "					if ( (_x getVariable [""created"", -1]) > -1) then {" \n
+       "							[_x] call vehicle_clean_check;" \n
+       "						};" \n
+       "				};" \n
+       "		};" \n
+       "} forEach _vehicleArray;" \n
+       "" \n
+       "" \n
+       "_timeWait = time + vehicle_clean_checkTime;" \n
+       "" \n
+       "diag_log format['SERVER VEHICLE LOOP: Main Loop End - %1', time];" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          priority = 1.000000;
+          to="Pass";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Pass">*/
+    class Pass
+    {
+      name = "Pass";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Time_Check">*/
+        class Time_Check
+        {
+          priority = 1.000000;
+          to="Main";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _timeWait"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="START";
+  finalStates[] =
+  {
+  };
+};
+/*%FSM</COMPILE>*/

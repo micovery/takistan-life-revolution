@@ -64,6 +64,9 @@ if (player in (crew _unit)) then {
 	player groupchat format["SHOT TYPE: %1		ELEVATION: %2		AZIMUT: %3", M_Round  , M_Elevation, M_Azimut];
 };
 
+
+_unit setWeaponReloadingTime [_unit,currentWeapon _unit, 10];
+
 ///////////////
 // Round Effects
 ///////////////

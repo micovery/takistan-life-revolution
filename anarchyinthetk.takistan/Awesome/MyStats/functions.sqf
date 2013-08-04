@@ -77,16 +77,25 @@ stats_load_request_send = {
 	};
 	
 	//wait for the response
-	private["_data"];
+	private["_data", "_complete"];
 	
 	_data = [];
-	private["_complete"];
 	_complete =  false;
+
 	while {true} do {  
-		_data = server getVariable _response_variable;
+		
+/*		_data = server getVariable _response_variable;
 		_complete = true;
 		_complete = if (isNil "_data") then {false} else {_complete};
 		_complete = if (typeName _data != "ARRAY") then {false} else { _complete };
+*/
+		if !(isNil {server getVariable _response_variable}) then {
+				if ( (typeName (server getVariable _response_variable)) == "ARRAY" ) then {
+						_data = server getVariable _response_variable;
+						_complete = true;
+					};
+			};
+		
 		if (_complete) exitWith {};
 		uiSleep 0.1;
 	};
@@ -349,10 +358,18 @@ stats_server_player_disconnected = {
 
 	private["_vehicle"];
 	_vehicle = (vehicle _player);
-	if (not(_vehicle == _player)) then {
-		[_vehicle] call vehicle_save_stats;
-		[_vehicle] call vehicle_start_track;
-	};
+//	diag_log 'checking player in vehicle';
+	if (_vehicle != _player) then {
+//			diag_log format['Checking vehicle in keylist: %1', _player];
+//			diag_log format['VEHICLE LIST - %1 - %2', _player, ([_player] call vehicle_list)];
+			if ( _vehicle in  ([_player] call vehicle_list)) then {
+//					diag_log 'vehicle in keylist';
+					[_vehicle] call vehicle_save_stats;
+					[_vehicle] call vehicle_start_track;
+				}else{
+//					diag_log format['%1 - %2 - vehicle not in vehicles_list', _player, _vehicle];
+				};
+		};
 		
 	private["_stats_uid"];
 	_stats_uid =  [_player] call stats_get_uid;
@@ -366,8 +383,10 @@ stats_load_core_libraries = {
 	_h = [] execVM "Awesome\Functions\vehicle_functions.sqf";
 	waitUntil {scriptDone _h};
 	
-	_h = [] execVM "Awesome\Functions\player_functions.sqf";
-	waitUntil {scriptDone _h};
+//	_h = [] execVM "Awesome\Functions\player_functions.sqf";
+//	waitUntil {scriptDone _h};
+	[] call player_save_side_gear_setup;
+	[] call player_init_arrays;
 	
 	_h = [] execVM "Awesome\Clothes\Clothes.sqf";
 	waitUntil {scriptDone _h};
@@ -576,14 +595,32 @@ stats_copy_variables = {
 	if (typeName _new_player != "OBJECT") exitWith {};
 	
 	private["_variables_list"];
+	_variables_list = [];
 	_variables_list = [_old_player] call stats_get_variables_list;
-
+	
+	diag_log format["StatsCopy: Starting"];
+	
 	{
 		private["_variable_name", "_variable_value"];
 		_variable_name = _x;
-		_variable_value = _old_player getVariable _variable_name;
-		_new_player setVariable [_variable_name, _variable_value, true];
+//		_variable_value = _old_player getVariable _variable_name;
+//		_new_player setVariable [_variable_name, _variable_value, true];
+
+//		diag_log format["StatsCopy: %1", _variable_name];
+		
+		if (isNil{_old_player getVariable _variable_name}) then {
+//				diag_log "Value nil";
+			}else{
+//				diag_log "Value exists";
+				_variable_value = _old_player getVariable _variable_name;
+				_new_player setVariable [_variable_name, _variable_value, true];
+			};
+		
+//		diag_log "";
 	} forEach _variables_list;
+	
+	
+//	diag_log format["StatsCopy: Ending"];
 	
 	[_new_player, _variables_list] call stats_set_variables_list;
 };
@@ -667,8 +704,10 @@ stats_client_update_loading_title = {
 	if (isNil "_title") exitWith {};
 	if (typeName _title != "STRING") exitWith {};
 	
-	startLoadingScreen[_title , "customLoadingScreen"];
-	[stats_loading_progress] call stats_client_update_loading_progress;
+//	startLoadingScreen[_title , "customLoadingScreen"];
+//	[stats_loading_progress] call stats_client_update_loading_progress;
+	
+	((uiNamespace getVariable 'DFML_LOAD') displayCtrl loadingTitle_idc) ctrlSetText _title;
 };
 
 
@@ -731,7 +770,8 @@ stats_client_setup = {
 	call stats_client_start_loading;
 	["Waiting for server initialization ... "] call stats_client_update_loading_title;
 	[0.2] call stats_client_update_loading_progress;
-	call stats_client_server_setup_wait;
+	[] call stats_client_server_setup_wait;
+	[] call music_play_random;
 	uiSleep 1;
 	
 	["Waiting for player uid ... "] call stats_client_update_loading_title;

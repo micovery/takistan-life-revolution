@@ -1,0 +1,320 @@
+/*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, FPS manager">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"START",0,250,-100.000000,-300.000000,0.000000,-250.000000,0.000000,"START"};
+item1[] = {"Sites_init_done",4,218,-100.000000,-225.000000,0.000000,-175.000000,0.000000,"Sites" \n "init done"};
+item2[] = {"hide_distant_obj",2,4346,-100.000000,-150.000000,0.000000,-100.000000,0.000000,"hide" \n "distant objects"};
+item3[] = {"moved_far_enough",4,218,-150.000000,-75.000000,-50.000000,-25.000000,0.000000,"moved far" \n "enough"};
+item4[] = {"setPos_d",4,218,-100.000000,-50.000000,0.000000,0.000000,0.000000,"setPos'd"};
+item5[] = {"rescan_new_objec",4,218,-50.000000,-75.000000,50.000000,-25.000000,0.000000,"rescan new" \n "objects"};
+item6[] = {"scan_for_new_obj",2,250,50.000000,-75.000000,150.000000,-25.000000,0.000000,"scan for" \n "new objects"};
+item7[] = {"always",8,218,50.000000,-150.000000,150.000000,-100.000000,0.000000,"always"};
+link0[] = {0,1};
+link1[] = {1,2};
+link2[] = {2,3};
+link3[] = {2,4};
+link4[] = {2,5};
+link5[] = {3,2};
+link6[] = {4,2};
+link7[] = {5,6};
+link8[] = {6,7};
+link9[] = {7,2};
+globals[] = {25.000000,1,0,0,16777215,640,480,1,181,6316128,1,-287.601563,345.370575,212.252686,-454.380402,865,911,1};
+window[] = {2,-1,-1,-1,-1,755,25,1285,25,3,883};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "FPS manager";
+  class States
+  {
+    /*%FSM<STATE "START">*/
+    class START
+    {
+      name = "START";
+      init = /*%FSM<STATEINIT""">*/"private[" \n
+       "		""_afterStartCheck"", ""_missionObjs"", ""_toHide"", ""_t"", ""_t2"", ""_virtualSpeed"", ""_cacheDist""," \n
+       "		""_addArray"", ""_subArray"", ""_grabMissionObjs"", " \n
+       "		""_freezeDist"", ""_arrayHide"", ""_arrayShow"", ""_checkFor"", ""_oldPersistent""" \n
+       "	];" \n
+       "" \n
+       "BIS_fps_rescanNewObjects = FALSE;" \n
+       "" \n
+       "_afterStartCheck = FALSE;" \n
+       "_missionObjs = [];" \n
+       "_checkFor = [];" \n
+       "_toHide = [];" \n
+       "_hidden = [];" \n
+       "_oldPersistent = [];" \n
+       "_t = time;" \n
+       "_t2 = time;" \n
+       "_virtualSpeed = 15;" \n
+       "_cachedist = 1500;" \n
+       "" \n
+       "if (isNil ""BIS_persistent"") then {BIS_persistent = []};" \n
+       "" \n
+       "" \n
+       "_addArray = {" \n
+       "		private[""_C"", ""_array1"", ""_array2""];" \n
+       "		" \n
+       "		_array1 = _this select 0;" \n
+       "		_array2 = _this select 1;" \n
+       "		" \n
+       "		_C = count _array1;" \n
+       "		if ((typeName _array2) == ""ARRAY"") then {" \n
+       "				{" \n
+       "					_array1 set[_C, _x];" \n
+       "					_C = _C + 1;" \n
+       "				} forEach _array2;" \n
+       "			}else{" \n
+       "				_array1 set[_C, _array2];" \n
+       "			};" \n
+       "		" \n
+       "" \n
+       "		_array1" \n
+       "	};" \n
+       "" \n
+       "_subArray = {" \n
+       "		private[""_array1"", ""_array2"", ""_array3"", ""_C""];" \n
+       "" \n
+       "		_array1 = _this select 0;" \n
+       "		_array2 = _this select 1;" \n
+       "		_array3 = [];		" \n
+       "		" \n
+       "		_C = 0;" \n
+       "		if ((typeName _array2) == ""ARRAY"") then {" \n
+       "				{" \n
+       "					if  !(_x in _array2) then {" \n
+       "							_array3 set[_C, _x];" \n
+       "							_C = _C + 1;" \n
+       "						};" \n
+       "				} forEach _array1;" \n
+       "			}else{" \n
+       "				" \n
+       "			};" \n
+       "" \n
+       "		_array3" \n
+       "	};" \n
+       "" \n
+       "_grabMissionObjs = {" \n
+       "		private[""_ret"", ""_checkArray"", ""_veh"", ""_A1"", ""_A2"", ""_A3"", ""_N1"", ""_N2""];" \n
+       "" \n
+       "		_ret = [];" \n
+       "		" \n
+       "		_checkArray = [(units player), BIS_persistent] call _addArray;" \n
+       "" \n
+       "		{" \n
+       "			if ((typeOf _x) != """") then {" \n
+       "					if (!(_x isKindOf ""Logic"")) then {" \n
+       "							if (!(_x in _checkArray)) then {" \n
+       "" \n
+       "									_ret = [_ret, _x] call _addArray;" \n
+       "" \n
+       "									_veh = vehicle _x;" \n
+       "									if (_veh != _x) then {" \n
+       "											if (!(_veh in _ret)) then {" \n
+       "													_ret = [_ret, _veh] call _addArray;" \n
+       "												};" \n
+       "										};" \n
+       "								};" \n
+       "						};" \n
+       "				};" \n
+       "" \n
+       "		} forEach allunits;" \n
+       "" \n
+       "" \n
+       "		_A1 = [];" \n
+       "		_N1 = 0;" \n
+       "" \n
+       "		_A2 = [];" \n
+       "		_N2 = 0;" \n
+       "" \n
+       "		_A3 = [];		" \n
+       "" \n
+       "		{" \n
+       "			if ((vehicleVarName _x) != """") then {" \n
+       "					if ( !(_x in BIS_persistent)) then {" \n
+       "							_A1 set[_N1, _x];" \n
+       "							_N1 = _N1 + 1;" \n
+       "						};" \n
+       "				};" \n
+       "		} forEach _ret;" \n
+       "" \n
+       "		{" \n
+       "			_veh = vehicle _x;" \n
+       "			if (_veh != _x) then {" \n
+       "					if( !(_veh  in BIS_persistent)) then {" \n
+       "							_A2 set[_N2, _veh];" \n
+       "							_N2 = _N2 + 1;" \n
+       "						};" \n
+       "				};" \n
+       "		} forEach BIS_persistent;" \n
+       "		" \n
+       "		_A3 = [_A1, _A2] call _addArray;" \n
+       "		BIS_persistent = [BIS_persistent, _A3] call _addArray;" \n
+       "" \n
+       "		_ret" \n
+       "	};" \n
+       "" \n
+       "" \n
+       "if (A_PF_DEBUG_ON) then {" \n
+       "		diag_log format[""Fpsman-%1 Initialised..."", time];" \n
+       "	};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Sites_init_done">*/
+        class Sites_init_done
+        {
+          priority = 0.000000;
+          to="hide_distant_obj";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true;"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "hide_distant_obj">*/
+    class hide_distant_obj
+    {
+      name = "hide_distant_obj";
+      init = /*%FSM<STATEINIT""">*/"if ((diag_fps < 10) && (_cachedist > 100)) then {" \n
+       "		_cachedist = (_cachedist - 50);" \n
+       "	};" \n
+       "" \n
+       "if ((diag_fps > 20) && (_cachedist < 1000)) then {" \n
+       "		_cachedist = (_cachedist + 25);" \n
+       "	};" \n
+       "" \n
+       "if ((diag_fps > 30) && (_cachedist < 3000)) then {" \n
+       "		_cachedist = (_cachedist + 50);" \n
+       "	};" \n
+       "" \n
+       "_freezeDist = _cachedist;" \n
+       "_oldPersistent = [_oldPersistent, BIS_persistent] call _addArray;" \n
+       "_t = time;" \n
+       "" \n
+       "GFX_ArmaViewDistance = _cachedist;" \n
+       "setViewDistance _cachedist;" \n
+       "" \n
+       "if ((count _missionObjs) == 0) then {_missionObjs = [] call _grabMissionObjs;};" \n
+       "" \n
+       "if (A_PF_DEBUG_ON) then {" \n
+       "		diag_log format[""FPS Missionobjects: %1"",count _missionObjs];" \n
+       "	};" \n
+       "" \n
+       "_hidden = [_hidden, _toHide] call _addArray;" \n
+       "_toHide = [];" \n
+       "" \n
+       "if (isServer || isDedicated) then {" \n
+       "		_checkFor = playableUnits;" \n
+       "		{_x setVariable [""BIS_FPS_lastPos"", getPosATL (vehicle _x), TRUE]} forEach _checkFor;" \n
+       "	}else{" \n
+       "		_checkFor = [player];" \n
+       "	};" \n
+       "" \n
+       "" \n
+       "{" \n
+       "	_obj = _x;" \n
+       "	if (((count (crew _obj)) == 0) && !((side _obj) in [sideLogic, sideUnknown])) then {" \n
+       "			if ({_obj distance _x < _freezeDist} count _checkFor == 0 && !(_obj in _toHide)) then {" \n
+       "					_toHide = _toHide + [_obj];" \n
+       "				}" \n
+       "		} else {" \n
+       "			if (!(_obj in _toHide) && !((side _obj) in [sideLogic, sideUnknown])) then {" \n
+       "					if ({_obj distance _x < _freezeDist} count _checkFor == 0 && leader _obj == _obj) then {" \n
+       "							{_toHide = _toHide + [_x]; if (!(vehicle _x in _toHide)) then {_toHide = _toHide + [vehicle _x]}} forEach units group _obj;" \n
+       "						}" \n
+       "				}" \n
+       "		}" \n
+       "} forEach _missionObjs;" \n
+       "" \n
+       "" \n
+       "_arrayHide = [];" \n
+       "_arrayShow = [];" \n
+       "" \n
+       "_arrayHide = [_toHide, _hidden] call _subArray;" \n
+       "_arrayShow = [[_hidden, _toHide] call _subArray, BIS_persistent] call _addArray;" \n
+       "" \n
+       "{_x hideObject FALSE; _x enableSimulation TRUE} forEach _arrayShow;" \n
+       "{_x hideObject TRUE; _x enableSimulation FALSE} forEach _arrayHide;" \n
+       "" \n
+       "if (A_PF_DEBUG_ON) then {" \n
+       "		diag_log format[""FPS units to hide: %1"",count _toHide];" \n
+       "		diag_log format[""FPS dynamic cache distance: %1"",_cachedist];" \n
+       "	};" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "setPos_d">*/
+        class setPos_d
+        {
+          priority = 0.000000;
+          to="hide_distant_obj";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"({(vehicle _x) distance (_x getVariable [""BIS_FPS_lastPos"", [0,0,0]]) > (_freezeDist / 4)} count _checkFor) > 0"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "rescan_new_objec">*/
+        class rescan_new_objec
+        {
+          priority = 0.000000;
+          to="scan_for_new_obj";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"BIS_fps_rescanNewObjects || ((count _oldPersistent) != (count BIS_persistent)) || (time > 0 && !_afterStartCheck)" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "moved_far_enough">*/
+        class moved_far_enough
+        {
+          priority = 0.000000;
+          to="hide_distant_obj";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(time > (_t + 10)) &&  (({(vehicle _x) distance (_x getVariable [""BIS_FPS_lastPos"", [0,0,0]]) > (_freezeDist / 4)} count _checkFor) > 0)" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "scan_for_new_obj">*/
+    class scan_for_new_obj
+    {
+      name = "scan_for_new_obj";
+      init = /*%FSM<STATEINIT""">*/"BIS_fps_rescanNewObjects = FALSE;" \n
+       "_afterStartCheck = TRUE;" \n
+       "" \n
+       "_missionObjs = [] call _grabMissionObjs;" \n
+       "" \n
+       "if (A_PF_DEBUG_ON) then {" \n
+       "		diag_log format[""Fpsman-%1 Scanned new objects %2..."", time, count _missionObjs];" \n
+       "	};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "always">*/
+        class always
+        {
+          priority = 0.000000;
+          to="hide_distant_obj";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="START";
+  finalStates[] =
+  {
+  };
+};
+/*%FSM</COMPILE>*/

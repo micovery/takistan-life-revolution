@@ -25,6 +25,15 @@ broadcast = {
 	call compile _code;
 };
 
+broadcast_server = {
+	private["_code"];
+	_code = _this;
+	if (isNil "_code") exitWith {};
+	if (typeName _code != "STRING") exitWith {};
+	missionNamespace setVariable [player_broadcast_buffer, _code];
+	publicVariableServer player_broadcast_buffer;
+};
+
 broadcast_setup = {
 	private["_player_number", "_player_count"];
 	

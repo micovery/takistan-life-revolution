@@ -58,6 +58,11 @@ if (workplacejob_taxi_sperre) exitWith
 workplacejob_taxi_active = true;
 workplacejob_taxi_sperre = true;
 
+private[
+		"_startzahl", "_zielzahl", "_start", "_ziel", "_spielerstart",
+		"_taxizeit", "_civ", "_taxiClient", "_markerobj", "_markername"
+	];
+
 while {true} do {
 
 	_startzahl 		= (floor(random(count workplacejob_taxi_zielarray)));
@@ -79,10 +84,21 @@ while {true} do {
 
 	_taxizeit = time;
 	_civ 	  = civclassarray select round random(count civclassarray - 1);
-	_O0O0 = player;
-
-	call compile format ["'%1' createUnit [[(_start select 0),(_start select 1),0], group civ_logicunit, ""%2taxikunde = this; this setVehicleVarName """"%2taxikunde""""; this disableAI """"MOVE""""; this disableAI """"TARGET"""";""]; [%2taxikunde] join grpNull; liafu = true; processInitCommands;", _civ, player];
-
+	
+	missionnamespace setVariable [format["%1taxikunde", player], objNull];
+	_taxiClient = objNull;
+	
+	_taxiClient = (group server) createUnit [_civ, [(_start select 0),(_start select 1),0], [], 0, "NONE"];   
+	_taxiClient setVehicleInit format['
+			this setVehicleVarName "%2taxikunde";
+			%2taxikunde = this;
+			this disableAI "MOVE";
+			this disableAI "TARGET";
+		', _civ, player];
+	processInitCommands;
+	
+	publicVariable format["%1taxikunde", player];
+	
 	format["workplacejob_taxi_serverarray + [%1, %1taxikunde];", player] call broadcast;
 
 	_markerobj = createMarkerLocal ["taxikundenmarker",[0,0]];
@@ -99,9 +115,9 @@ while {true} do {
 
 		sleep 1;
 		INV_LocalTaxiKunde = player;
-		call compile format["INV_LocalTaxiKunde = %1taxikunde", player];
+		[] call compile format["INV_LocalTaxiKunde = %1taxikunde", player];
 
-		if ((player != (vehicle player)) and (((vehicle player)) distance INV_LocalTaxiKunde < 30) and ((speed ((vehicle player))) < 2) and (not(workplacejob_taxi_kundeactive))) then
+		if ((player != (vehicle player)) and ((((vehicle player)) distance INV_LocalTaxiKunde) < 30) and ((speed ((vehicle player))) < 2) and (not(workplacejob_taxi_kundeactive))) then
 
 			{
 

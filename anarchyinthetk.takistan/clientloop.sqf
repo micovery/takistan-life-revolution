@@ -70,7 +70,7 @@ check_armed_vehicle = {
 		_vehicle = [_player] call mounted_player_get_vehicle;
 	};
 	
-	if (isNil "_vehicle") exitWith {false};
+	if (isNull _vehicle) exitWith {false};
 	
 	//check if the vehicle has a weapon
 	private["_weapon"];
@@ -233,6 +233,7 @@ check_actions = {
 
 
 check_factory_actions = {
+	if (isCop) exitwith{};
 	private["_player"];
 	_player = player;
 	private["_vehicle", "_in_vehicle"];
@@ -241,7 +242,7 @@ check_factory_actions = {
 	
 	private["_factory"];
 	_factory = [_player, 5] call factory_player_near;
-	if (isNil "_factory" || not(INV_shortcuts) || _in_vehicle || not(alive _player)) exitWith {
+	if (((typeName _factory) != "ARRAY") || not(INV_shortcuts) || _in_vehicle || not(alive _player)) exitWith {
 		[_player] call factory_remove_actions;
 	};
 	
@@ -260,7 +261,7 @@ check_gang_area_actions = {
 	
 	private["_gang_area"];
 	_gang_area = [_player, 5] call gang_area_player_near;
-	if (isNil "_gang_area" || not(INV_shortcuts) || _in_vehicle || not(alive _player)) exitWith {
+	if ((isNull _gang_area) || not(INV_shortcuts) || _in_vehicle || not(alive _player)) exitWith {
 		[_player] call gang_area_remove_actions;
 	};
 
@@ -285,10 +286,8 @@ logics_check_warn_distance = 1;
 logics_check_teleport_distance = 2;
 
 logics_checks = [
-	[terrorhideoutlogic, 900, 750],
-	[assassinlogic, 160, 80],
-	[deadcamlogic, 400, 300],
-	[impoundarea1, 400, 100]
+	[impoundarea1, 400, 100],
+	[A_BIS_LOGIC, 1000, 1500]
 ];
 
 check_logics = {
@@ -503,6 +502,10 @@ check_restrains = {
 		if (not([player, 50] call player_near_cops)) then {
 			[player, "restrained", false] call player_set_bool;
 			player groupChat format["You have managed to unrestrain yourself!"];
+			if (player getVariable ["FA_inAgony", false]) then {
+				player playActionNow "agonyStart";
+				player setUnitPos "DOWN";
+			};
 		};
 	};};};
 };
@@ -515,36 +518,50 @@ check_respawn_time = {
 	[player, "extradeadtime", -(_interval)] call player_update_scalar;
 	
 };
+
+check_insideBase = {
+	if (admin_camera_on) exitWith {};
+	{
+		private["_base_check", "_faction_bool", "_trigger_area", "_teleport_height", "_teleport_marker", "_teleport_message"];
+		_base_check = _x;
+		
+		_faction_bool =  missionNamespace getVariable (_base_check select bases_check_faction_bool);
+		_trigger_area = missionNamespace getVariable (_base_check select bases_check_trigger_area);
+		
+		if ((player in (list _trigger_area)) && (_faction_bool)) exitWith {player call FA_fHeal;};
+	} forEach bases_checks;
+};
+
 client_loop = {
 	private ["_client_loop_i"];
 	_client_loop_i = 0; 
 
 	while {_client_loop_i < 5000} do {
 		[player] call check_armed;
-		call check_money;
-		call check_bank;
-		call check_actions;
-		call check_factory_actions;
-		call check_gang_area_actions;
-		call check_inventory;
-		call cop_stun_gun_modify;
-		call check_workplaces;
-		call check_logics;
-		call check_tampering;
-		call check_camera;
-		call check_bases;
-		call check_static_weapons;
-		call check_respawn_time;
-		call check_smoke_grenade;
-		call check_droppable_items;
-		call check_restrains;
+		[] call check_money;
+		[] call check_bank;
+		[] call check_actions;
+		[] call check_factory_actions;
+		[] call check_gang_area_actions;
+		[] call check_inventory;
+		[] call cop_stun_gun_modify;
+		[] call check_workplaces;
+		[] call check_logics;
+		[] call check_camera;
+		[] call check_bases;
+		[] call check_static_weapons;
+		[] call check_respawn_time;
+		[] call check_smoke_grenade;
+		[] call check_droppable_items;
+		[] call check_restrains;
+		[] call check_insideBase;
 		if (not([player] call ftf_faction_allowed)) then {
-			server globalChat "You are not allowed to play this faction yet. Please try again later";
-			disableuserinput true;
-			sleep 5;
-			disableuserinput false;
-			failMission "END1";
-		};
+				server globalChat "You are not allowed to play this faction yet. Please try again later";
+				disableuserinput true;
+				sleep 5;
+				disableuserinput false;
+				failMission "END1";
+			};
 		sleep 0.5;
 		disableuserinput false;
 		_client_loop_i = _client_loop_i + 1;

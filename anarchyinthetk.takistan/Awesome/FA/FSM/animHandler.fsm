@@ -1,0 +1,134 @@
+/*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, animHandler">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"React",0,250,-725.000000,-1450.000000,-625.000000,-1400.000000,0.000000,"React"};
+item1[] = {"stop_healer",2,250,-250.000000,-1350.000000,-150.000000,-1300.000000,0.000000,"stop healer"};
+item2[] = {"Not_local",4,218,-525.000000,-1500.000000,-425.000000,-1450.000000,99.000000,"Not local"};
+item3[] = {"END",1,250,-250.000000,-1525.000000,-150.000000,-1475.000000,0.000000,"END"};
+item4[] = {"_",8,218,-250.000000,-1450.000000,-150.000000,-1400.000000,0.000000,""};
+item5[] = {"_",8,218,-525.000000,-1575.000000,-425.000000,-1525.000000,0.000000,""};
+item6[] = {"not_player",4,218,-525.000000,-1425.000000,-425.000000,-1375.000000,98.000000,"not player"};
+item7[] = {"Animation_state",4,4314,-625.000000,-1350.000000,-300.000000,-1300.000000,1.000000,"Animation state"};
+link0[] = {0,2};
+link1[] = {0,5};
+link2[] = {0,6};
+link3[] = {0,7};
+link4[] = {1,4};
+link5[] = {2,3};
+link6[] = {4,3};
+link7[] = {5,3};
+link8[] = {6,3};
+link9[] = {7,1};
+globals[] = {25.000000,1,0,1,16777215,640,480,2,396,6316128,1,-567.395386,-74.132004,-1027.245728,-1712.758789,644,895,1};
+window[] = {0,-1,-1,-1,-1,936,200,1222,200,1,662};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "animHandler";
+  class States
+  {
+    /*%FSM<STATE "React">*/
+    class React
+    {
+      name = "React";
+      init = /*%FSM<STATEINIT""">*/"private[""_who"", ""_state""];" \n
+       "_who = _this select 0;" \n
+       "_state = _this select 1;" \n
+       "" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Not_local">*/
+        class Not_local
+        {
+          priority = 99.000000;
+          to="END";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(! local _who)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "not_player">*/
+        class not_player
+        {
+          priority = 98.000000;
+          to="END";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"!isPlayer (_who)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Animation_state">*/
+        class Animation_state
+        {
+          priority = 1.000000;
+          to="stop_healer";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_state in [" \n
+           "		""AinvPknlMstpSnonWnonDnon_medicEnd""," \n
+           " 		""AdthPknlMstpSnonWnonDnon_inventory"", " \n
+           "		""AdthPknlMstpSnonWnonDnon_inventoryAgony"", " \n
+           "		""AinvPknlMstpSnonWrflDnon_medicEnd"", " \n
+           "		""AdthPknlMstpSlayWrflDnon_inventory""," \n
+           "	 	""AdthPknlMstpSlayWrflDnon_inventoryAgony""" \n
+           "	]" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="END";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "stop_healer">*/
+    class stop_healer
+    {
+      name = "stop_healer";
+      init = /*%FSM<STATEINIT""">*/"" \n
+       "[objNull, _who,true] call FA_healerStop;" \n
+       "format[""ANIMHANDLER ENDING MEDIC""] call A_FA_DEBUG;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="END";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "END">*/
+    class END
+    {
+      name = "END";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="React";
+  finalStates[] =
+  {
+    "END",
+  };
+};
+/*%FSM</COMPILE>*/

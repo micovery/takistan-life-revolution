@@ -60,6 +60,21 @@ if !(isServer && isDedicated) then
 	R3F_LOG_FNCT_remorqueur_init = compile preprocessFile "Awesome\R3F\R3F_LOG\remorqueur\remorqueur_init.sqf";
 	R3F_LOG_FNCT_transporteur_init = compile preprocessFile "Awesome\R3F\R3F_LOG\transporteur\transporteur_init.sqf";
 	
+	R3F_LOG_FNCT_LOCKCHECK = {
+			private["_player", "_object"];
+			_player = _this select 0;
+			_object = _this select 1;
+			
+			(
+				(!(alive player)) ||
+				(player getVariable ["isstunned", false]) ||
+				(player getVariable ["restrained", false]) ||
+				((player distance _object) > 15) ||
+		//		(player getVariable ["FA_inAgony", false]) ||
+				false
+			)
+		};
+	
 	/** Indique quel est l'objet concerné par les variables d'actions des addAction */
 	R3F_LOG_objet_addAction = objNull;
 	

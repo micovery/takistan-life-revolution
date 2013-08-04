@@ -1,0 +1,474 @@
+/*%FSM<COMPILE "C:\BIS\fsmeditor\scriptedFSM.cfg, Environment Effects - Particle">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"START",0,250,-200.000000,-300.000000,-100.000000,-250.000000,0.000000,"START"};
+item1[] = {"True",8,218,-200.000000,-125.000000,-100.000000,-75.000000,0.000000,"True"};
+item2[] = {"Select",2,250,-200.000000,-50.000000,-100.000000,0.000000,0.000000,"Select"};
+item3[] = {"Delay",4,218,-350.000000,-50.000000,-250.000000,0.000000,1.000000,"Delay"};
+item4[] = {"Snow",4,218,-50.000000,-50.000000,50.000000,0.000000,1.000000,"Snow"};
+item5[] = {"Sand",4,218,75.000000,-50.000000,175.000000,0.000000,1.000000,"Sand"};
+item6[] = {"Snow",2,250,-50.000000,-125.000000,50.000000,-75.000000,0.000000,"Snow"};
+item7[] = {"Sand",2,250,75.000000,-125.000000,175.000000,-75.000000,0.000000,"Sand"};
+item8[] = {"Clouds",4,218,200.000000,-50.000000,300.000000,0.000000,1.000000,"Clouds"};
+item9[] = {"Mist",4,218,325.000000,-50.000000,425.000000,0.000000,1.000000,"Mist"};
+item10[] = {"Clouds",2,4346,200.000000,-125.000000,300.000000,-75.000000,0.000000,"Clouds"};
+item11[] = {"Mist",2,250,325.000000,-125.000000,425.000000,-75.000000,0.000000,"Mist"};
+item12[] = {"Refresh",2,250,-350.000000,-125.000000,-250.000000,-75.000000,0.000000,"Refresh"};
+item13[] = {"Delay_Short",4,218,-350.000000,-200.000000,-250.000000,-150.000000,0.000000,"Delay Short"};
+link0[] = {0,1};
+link1[] = {1,12};
+link2[] = {2,1};
+link3[] = {2,4};
+link4[] = {2,5};
+link5[] = {2,8};
+link6[] = {2,9};
+link7[] = {3,2};
+link8[] = {4,6};
+link9[] = {5,7};
+link10[] = {6,1};
+link11[] = {7,1};
+link12[] = {8,10};
+link13[] = {9,11};
+link14[] = {10,1};
+link15[] = {11,1};
+link16[] = {12,3};
+link17[] = {12,13};
+link18[] = {13,12};
+globals[] = {25.000000,1,0,0,16777215,640,480,1,15,6316128,1,-41.051819,567.960327,607.108521,-370.572510,647,899,1};
+window[] = {2,-1,-1,-1,-1,898,-1112,148,168,3,664};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "Environment Effects - Particle";
+  class States
+  {
+    /*%FSM<STATE "START">*/
+    class START
+    {
+      name = "START";
+      itemno = 0;
+      init = /*%FSM<STATEINIT""">*/"_logic = _this select 0;" \n
+       "_delay = _logic getvariable ""delay"";" \n
+       "_particleEffects = _logic getvariable ""particleEffects"";" \n
+       "" \n
+       "_particleList = [];" \n
+       "" \n
+       "_timeNow = time;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          itemno = 1;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Select">*/
+    class Select
+    {
+      name = "Select";
+      itemno = 2;
+      init = /*%FSM<STATEINIT""">*/"_delay = _logic getvariable ""delay"";" \n
+       "_center = _logic getvariable ""center"";" \n
+       "if (isnull _center) then {_center = cameraon};" \n
+       "_particleEffects = _logic getvariable ""particleEffects"";" \n
+       "_isSnow = 0 in _particleEffects;" \n
+       "_isSand = 1 in _particleEffects;" \n
+       "_isClouds = 2 in _particleEffects;" \n
+       "_isMist = 3 in _particleEffects;" \n
+       "" \n
+       "" \n
+       "_date = date;" \n
+       "_month = _date select 1;" \n
+       "_winter = _month in [11,12,1,2];" \n
+       "_daytime = 0.5 - abs(daytime - 12) / 12; // 0 = night, 1 = day, 0.5 = sunset/sunrise" \n
+       "_alt = position vehicle player select 2;" \n
+       "" \n
+       "//--- Snow" \n
+       "_snow = if (overcast > 0.35 && _winter && isnil ""BIS_FXsnow"" && _isSnow) then {true} else {" \n
+       "	if (!isnil ""BIS_FXsnow"" && (!_isSnow || !(overcast > 0.35 && _winter))) then {" \n
+       "		_particleList = _particleList - [BIS_FXsnow];" \n
+       "		deletevehicle BIS_FXsnow;" \n
+       "		BIS_FXsnow = nil;" \n
+       "		debuglog [""Log: [Envirnoment Effects] OW :End""];" \n
+       "	};" \n
+       "	false;" \n
+       "};" \n
+       "" \n
+       "//--- Sand" \n
+       "_sand = if (abs _daytime >= 0.1 && overcast < 0.5 && !_winter && isnil ""BIS_FXsand"" && _isSand) then {true} else {" \n
+       "	if (!isnil ""BIS_FXsand"" && (!_isSand || !(abs _daytime >= 0.1 && overcast < 0.5 && !_winter))) then {" \n
+       "		BIS_FXsand = nil;" \n
+       "		debuglog [""Log: [Envirnoment Effects] SAND :End""];" \n
+       "	};" \n
+       "	false;" \n
+       "};" \n
+       "" \n
+       "//--- Clouds" \n
+       "_clouds = if (overcast > 0.5 && _alt > 5 &&  isnil ""BIS_FXclouds"" && _isClouds) then {true} else {" \n
+       "	if (!isnil ""BIS_FXclouds"" && (!_isClouds || !( overcast > 0.5 && _alt > 5))) then {" \n
+       "		_particleList = _particleList - [BIS_FXclouds];" \n
+       "		deletevehicle BIS_FXclouds;" \n
+       "		BIS_FXclouds = nil;" \n
+       "		debuglog [""Log: [Envirnoment Effects] CLOUDS :End""];" \n
+       "	};" \n
+       "	false;" \n
+       "};" \n
+       "" \n
+       "//--- Mist" \n
+       "_mist = if (abs _daytime < 0.1 &&  isnil ""BIS_FXmist"" && _isMist) then {true} else {" \n
+       "	if (!isnil ""BIS_FXmist"" && (!_isMist || !(abs _daytime < 0.1))) then {" \n
+       "		_particleList = _particleList - [BIS_FXmist];" \n
+       "		deletevehicle BIS_FXmist;" \n
+       "		BIS_FXmist = nil;" \n
+       "		debuglog [""Log: [Envirnoment Effects] MIST :End""];" \n
+       "	};" \n
+       "	false;" \n
+       "};" \n
+       "" \n
+       "" \n
+       "_timeNow = time;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Snow">*/
+        class Snow
+        {
+          itemno = 4;
+          priority = 1.000000;
+          to="Snow";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_snow"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Sand">*/
+        class Sand
+        {
+          itemno = 5;
+          priority = 1.000000;
+          to="Sand";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_sand"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Clouds">*/
+        class Clouds
+        {
+          itemno = 8;
+          priority = 1.000000;
+          to="Clouds";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_clouds"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Mist">*/
+        class Mist
+        {
+          itemno = 9;
+          priority = 1.000000;
+          to="Mist";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_mist"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          itemno = 1;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Snow">*/
+    class Snow
+    {
+      name = "Snow";
+      itemno = 6;
+      init = /*%FSM<STATEINIT""">*/"_pos = position _center;" \n
+       "_parray = [" \n
+       "/* 00 */		[""\Ca\Data\ParticleEffects\Universal\Universal"", 16, 12, 8, 1]," \n
+       "/* 01 */		""""," \n
+       "/* 02 */		""Billboard""," \n
+       "/* 03 */		1," \n
+       "/* 04 */		4," \n
+       "/* 05 */		[0,0,0]," \n
+       "/* 06 */		[0,0,0]," \n
+       "/* 07 */		1," \n
+       "/* 08 */		0.000001," \n
+       "/* 09 */		0," \n
+       "/* 10 */		1.4," \n
+       "/* 11 */		[0.05,0.05]," \n
+       "/* 12 */		[[1,1,1,1]]," \n
+       "/* 13 */		[0,1]," \n
+       "/* 14 */		0.2," \n
+       "/* 15 */		1.2," \n
+       "/* 16 */		""""," \n
+       "/* 17 */		""""," \n
+       "/* 18 */		"""" // vehicle player" \n
+       "];" \n
+       "BIS_FXsnow = ""#particlesource"" createVehicleLocal _pos;  " \n
+       "BIS_FXsnow setParticleParams _parray;" \n
+       "BIS_FXsnow setParticleRandom [0, [10, 10, 7], [0, 0, 0], 0, 0.01, [0, 0, 0, 0.1], 0, 0];" \n
+       "BIS_FXsnow setParticleCircle [0.0, [0, 0, 0]];" \n
+       "BIS_FXsnow setDropInterval 0.01;" \n
+       "" \n
+       "_particleList = _particleList + [BIS_FXsnow];" \n
+       "" \n
+       "debuglog [""Log: [Envirnoment Effects] SNOW :Start""];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          itemno = 1;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Sand">*/
+    class Sand
+    {
+      name = "Sand";
+      itemno = 7;
+      init = /*%FSM<STATEINIT""">*/"BIS_FXsand = [] spawn {" \n
+       "	while {!isnil ""BIS_FXsand""} do {" \n
+       "		//_ran = ceil random 5;" \n
+       "		//playsound format [""wind_%1"",_ran];" \n
+       "		_obj = _center;" \n
+       "		_pos = position _obj;" \n
+       "" \n
+       "		//--- Dust" \n
+       "		_velocity = [random 10,random 10,-1];" \n
+       "		_color = [1.0, 0.9, 0.8];" \n
+       "		_alpha = 0.02 + random 0.02;" \n
+       "		_ps = ""#particlesource"" createVehicleLocal _pos;  " \n
+       "		_ps setParticleParams [[""\Ca\Data\ParticleEffects\Universal\universal.p3d"", 16, 12, 8], """", ""Billboard"", 1, 3, [0, 0, -6], _velocity, 1, 1.275, 1, 0, [9], [_color + [0], _color + [_alpha], _color + [0]], [1000], 1, 0, """", """", _obj];" \n
+       "		_ps setParticleRandom [3, [30, 30, 0], [0, 0, 0], 1, 0, [0, 0, 0, 0.01], 0, 0];" \n
+       "		_ps setParticleCircle [0.1, [0, 0, 0]];" \n
+       "		_ps setDropInterval 0.01;" \n
+       "" \n
+       "		sleep (random 1);" \n
+       "		deletevehicle _ps;" \n
+       "		_delay = 10 + random 20;" \n
+       "		sleep _delay;" \n
+       "	};" \n
+       "};" \n
+       "" \n
+       "debuglog [""Log: [Envirnoment Effects] SAND :Start""];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          itemno = 1;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Clouds">*/
+    class Clouds
+    {
+      name = "Clouds";
+      itemno = 10;
+      init = /*%FSM<STATEINIT""">*/"_brightness = 0.99;" \n
+       "_pos = position _center;" \n
+       "_parray = [" \n
+       "/* 00 */		[""\Ca\Data\ParticleEffects\Universal\Universal"", 16, 12, 13, 0]," \n
+       "/* 01 */		""""," \n
+       "/* 02 */		""Billboard""," \n
+       "/* 03 */		1," \n
+       "/* 04 */		30," \n
+       "/* 05 */		[0,0,300]," \n
+       "/* 06 */		wind," \n
+       "/* 07 */		0," \n
+       "/* 08 */		1.275," \n
+       "/* 09 */		1," \n
+       "/* 10 */		0," \n
+       "/* 11 */		[100]," \n
+       "/* 12 */		[" \n
+       "					[_brightness,_brightness,_brightness,0]," \n
+       "					[_brightness,_brightness,_brightness,0.2]," \n
+       "					[_brightness,_brightness,_brightness,0.2]," \n
+       "					[_brightness,_brightness,_brightness,0.2]," \n
+       "					[_brightness,_brightness,_brightness,0.2]," \n
+       "					[_brightness,_brightness,_brightness,0]" \n
+       "				]," \n
+       "/* 13 */		[1000]," \n
+       "/* 14 */		0," \n
+       "/* 15 */		0," \n
+       "/* 16 */		""""," \n
+       "/* 17 */		""""," \n
+       "/* 18 */		"""" // vehicle player" \n
+       "];" \n
+       "BIS_FXclouds = ""#particlesource"" createVehicleLocal _pos;  " \n
+       "BIS_FXclouds setParticleParams _parray;" \n
+       "BIS_FXclouds setParticleRandom [0, [800, 800, 50], [0, 0, 0], 0, 1, [0, 0, 0, 0], 0, 1];" \n
+       "BIS_FXclouds setParticleCircle [00, [00, 00, 00]];" \n
+       "BIS_FXclouds setDropInterval .1;" \n
+       "" \n
+       "_particleList = _particleList + [BIS_FXclouds];" \n
+       "" \n
+       "debuglog [""Log: [Envirnoment Effects] CLOUDS :Start""];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          itemno = 1;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Mist">*/
+    class Mist
+    {
+      name = "Mist";
+      itemno = 11;
+      init = /*%FSM<STATEINIT""">*/"_brightness = 0.99;" \n
+       "_pos = position _center;" \n
+       "_parray = [" \n
+       "/* 00 */		[""\Ca\Data\ParticleEffects\Universal\Universal"", 16, 12, 8, 0]," \n
+       "/* 01 */		""""," \n
+       "/* 02 */		""Billboard""," \n
+       "/* 03 */		1," \n
+       "/* 04 */		10," \n
+       "/* 05 */		[0,0,0]," \n
+       "/* 06 */		[random 0.5,random 0.5,0]," \n
+       "/* 07 */		0," \n
+       "/* 08 */		1.275," \n
+       "/* 09 */		1," \n
+       "/* 10 */		0," \n
+       "/* 11 */		[7]," \n
+       "/* 12 */		[" \n
+       "					[_brightness,_brightness,_brightness,0]," \n
+       "					[_brightness,_brightness,_brightness,0.07]," \n
+       "					[_brightness,_brightness,_brightness,0]" \n
+       "				]," \n
+       "/* 13 */		[1000]," \n
+       "/* 14 */		0," \n
+       "/* 15 */		0," \n
+       "/* 16 */		""""," \n
+       "/* 17 */		""""," \n
+       "/* 18 */		"""" // vehicle player" \n
+       "];" \n
+       "BIS_FXmist = ""#particlesource"" createVehicleLocal _pos;  " \n
+       "BIS_FXmist setParticleParams _parray;" \n
+       "BIS_FXmist setParticleRandom [0, [40, 40, 00], [0, 0, 0], 0, 1, [0, 0, 0, 0], 0, 1];" \n
+       "BIS_FXmist setParticleCircle [00, [00, 00, 00]];" \n
+       "BIS_FXmist setDropInterval .1;" \n
+       "" \n
+       "_particleList = _particleList + [BIS_FXmist];" \n
+       "" \n
+       "debuglog [""Log: [Envirnoment Effects] MIST :Start""];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "True">*/
+        class True
+        {
+          itemno = 1;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Refresh">*/
+    class Refresh
+    {
+      name = "Refresh";
+      itemno = 12;
+      init = /*%FSM<STATEINIT""">*/"_center = _logic getvariable ""center"";" \n
+       "if (isnull _center) then {_center = cameraon};" \n
+       "" \n
+       "_ppos = position _center;" \n
+       "_pvel = velocity _center;" \n
+       "{" \n
+       "	_x setpos [" \n
+       "		(_ppos select 0) + (_pvel select 0)," \n
+       "		(_ppos select 1) + (_pvel select 1)," \n
+       "		0" \n
+       "	];" \n
+       "} foreach _particleList;" \n
+       "" \n
+       "aaa = _particleList;;" \n
+       "" \n
+       "_timeNowTemp = time;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Delay">*/
+        class Delay
+        {
+          itemno = 3;
+          priority = 1.000000;
+          to="Select";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time - _timeNow > _delay"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Delay_Short">*/
+        class Delay_Short
+        {
+          itemno = 13;
+          priority = 0.000000;
+          to="Refresh";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time - _timeNowTemp > 1"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="START";
+  finalStates[] =
+  {
+  };
+};
+/*%FSM</COMPILE>*/

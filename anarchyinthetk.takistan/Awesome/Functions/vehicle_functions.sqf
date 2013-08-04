@@ -1,5 +1,6 @@
 if (not(isNil "vehicle_functions_defined")) exitWith {};
 
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 
 // --------- Set variable functions
 vehicle_set_var = {
@@ -100,6 +101,11 @@ vehicle_update_string = {
 	_this call vehicle_set_var;
 };
 
+
+vehicle_check_getFailure = {
+		((_this select 0) == "failure")
+	};
+
 // GET functions
 
 vehicle_get_var = {
@@ -116,6 +122,16 @@ vehicle_get_var = {
 	_variable_value = _vehicle getVariable _variable_name;
 	_variable_value = if(isNil "_variable_value") then { "" } else { _variable_value };
 	_variable_value = if ((typeName _variable_value) != _variable_type) then { "" } else { _variable_value };
+	
+/*	_variable_value = "failure";
+	if !(isNil {_vehicle getVariable _variable_name}) then {
+			_variable_value = _vehicle getVariable _variable_name;
+			if ((typeName _variable_value) != _variable_type) then {
+					_variable_value = "failure";
+				};
+		};
+*/
+	
 	_variable_value
 };
 vehicle_get_string = {
@@ -138,11 +154,9 @@ vehicle_get_scalar = {
 	(_this call vehicle_get_var)
 };
 
-vehicle_despawn = { _this spawn {
+vehicle_despawn = {
 	if (not(isServer)) exitWith {};
 	private["_vehicle", "_delay"];
-	
-	//diag_log format["vehicle_despawn %1", _this];
 	
 	_vehicle = _this select 0;
 	_delay = _this select 1;
@@ -155,12 +169,10 @@ vehicle_despawn = { _this spawn {
 	
 	[_vehicle, "saved_driver_uid", ""] call vehicle_set_string;
 	[_vehicle] call vehicle_stop_track;
-
-	//diag_log format["vehicle_despawn %1, waiting", _this];
-	[_delay] call isleep;
-	//diag_log format["vehicle_despawn %1, deleting", _this];
+	
+	SleepWait(_delay)
 	deleteVehicle _vehicle;	
-};};
+};
 
 vehicle_unload_stats = {
 	private["_vehicle"];
@@ -216,6 +228,7 @@ vehicle_GetIn_handler = {
 	_position = _this select 1;
 	_player = _this select 2;
 	
+	if (isServer) exitwith {_this spawn vehicle_clean_getIn};
 	if (_player != player) exitWith {};
 	
 	if (_position == "driver") then {
@@ -237,6 +250,8 @@ vehicle_GetIn_handler = {
 		
 		
 	};
+	
+	_this spawn A_R_LOOP;
 };
 
 
@@ -247,7 +262,10 @@ vehicle_GetOut_handler = {
 	_position = _this select 1;
 	_player = _this select 2;
 	
+	if (isServer) exitwith {_this spawn vehicle_clean_getOut};
 	if (_player != player) exitWith {};
+	
+	vehicleOut = [_vehicle, _position, _player, time];
 	
 	if (_position == "driver") then {
 		[_player] call player_save_side_vehicle;
@@ -270,6 +288,12 @@ vehicle_GetOut_handler = {
 		
 	};
 };
+
+vehicle_clean_getInTimeV = "time_in";
+vehicle_clean_getOutTimeV = "time_out";
+
+vehicle_clean_getIn = {(_this select 0) setVariable [vehicle_clean_getInTimeV, time, false];};
+vehicle_clean_getOut = {(_this select 0) setVariable [vehicle_clean_getOutTimeV, time, false];};
 
 vehicle_save_gear_request_receive = {
 	/*
@@ -379,6 +403,10 @@ vehicle_save_stats = {
 	[_vehicle, "fuel", _fuel] call vehicle_set_scalar;
 	[_vehicle, "damage", _damage] call vehicle_set_scalar;
 	[_vehicle, "engine_state", _engine_state] call vehicle_set_bool;
+	
+	[_vehicle, "tuning", (_vehicle getVariable ["tuning", 0])] call vehicle_set_scalar;
+	[_vehicle, "nitro", (_vehicle getVariable ["nitro", 0])] call vehicle_set_scalar;
+	
 	[_vehicle] call vehicle_save_gear;
 	[_vehicle] call vehicle_save_storage;
 	[_vehicle, "item_name", ([_vehicle, "item_name"] call vehicle_get_string), false] call vehicle_set_string_checked; 
@@ -405,6 +433,8 @@ vehicle_init_stats = {
 	_engine_state = [_vehicle, "engine_state"] call vehicle_get_bool;
 	_weapons = [_vehicle, "weapons"] call vehicle_get_array;
 	_magazines= [_vehicle, "magazines"] call vehicle_get_array;
+	_speed = _vehicle getVariable ["tuning", 0];
+	_nitro = _vehicle getVariable ["nitro", 0];
 	
 	private["_gear"];
 	_gear = [];
@@ -413,12 +443,16 @@ vehicle_init_stats = {
 	
 	[_vehicle,_gear] call vehicle_set_gear;
 	
+	[_vehicle] call vehicle_load_storage;
+	
 	_vehicle setPosATL _position_atl;
 	_vehicle setVectorDirAndUp [_vector_direction, _vector_up];
 	_vehicle setVelocity _velocity;
 	_vehicle engineOn _engine_state;
 	_vehicle setDamage _damage;
 	_vehicle setFuel _fuel;
+	_vehicle setVariable ["tuning", _speed];
+	_vehicle setVariable ["nitro", _nitro];
 };
 
 vehicle_set_modifications = {
@@ -435,7 +469,10 @@ vehicle_set_modifications = {
 	if (typeName _vehicle != "OBJECT") exitWith {};
 	if (typeName _item != "STRING") exitWith {};
 	if (typeName _silent != "BOOL") exitWith {};
-	_vehicle setVariable ["item_name", _item, true];
+	
+//	diag_log format['vehicle modifications - item_name - %1', _item];
+//	_vehicle setVariable ["item_name", _item, true];
+	[_vehicle, "item_name", _item] call vehicle_set_string;
 	
 	switch (_item) do {
 		case "blank": { };
@@ -592,6 +629,13 @@ vehicle_save_storage = {
 	[_vehicle, _storage_name, _storage_variable, false] call vehicle_set_array_checked;
 };
 
+vehicle_load_storage = {
+	private["_vehicle", "_storageName", "_storageArray"];
+	_vehicle = _this select 0;
+	_storageName = [_vehicle] call vehicle_storage_name;
+	_storageArray = [_vehicle, _storageName] call vehicle_get_array;
+	_vehicle setVariable [_storageName, _storageArray, true];
+};
 
 vehicle_storage_name = {
 	private["_vehicle"];
@@ -627,21 +671,43 @@ vehicle_set_init = {
 		this addEventHandler ["GetOut", { _this spawn vehicle_GetOut_handler}];
 	',_vehicle_name];
 	processInitCommands;
+	
+	missionNamespace setVariable [vehicle_set_init_server, _vehicle_name];
+	publicVariableServer vehicle_set_init_server;
 };
+
+vehicle_set_init_server = "vehicle_server_init_pv";
+vehicle_set_init_server addPublicVariableEventHandler {
+		private["_vehicle"];
+		_vehicle = missionNamespace getVariable (_this select 1);
+		
+		_vehicle addEventHandler ["handleDamage", {_this call EH_handleDamage}];
+		_vehicle addEventHandler ["fired", {_this execVM "Awesome\EH\EH_fired_vehicle.sqf"}];
+		_vehicle addMPEventhandler ["MPKilled", {_this call vehicle_handle_mpkilled}];
+	};
 
 vehicle_generate_name = {
 	private["_restart_count"];
 	_restart_count = server getVariable "restart_count";
-	_vehicle setDir (getDir _logic);
 	_vehicle_name = format["vehicle_%1_%2_%3", player, _restart_count, round(time)];
-	_vehicle_name
+	if ([_vehicle_name] call vehicle_name_exist)then{[] call vehicle_generate_name}else{_vehicle_name};
+};
+
+vehicle_name_exist = {
+	private["_vehicleName"];
+	_vehicleName = _this select 0;
+	
+	if (!isNull (missionNamespace getVariable [_vehicleName, objNull])) exitwith {true};
+	if ((["impound_lot", _vehicleName] call vehicle_storage_contains)) exitWith {true};
+	
+	false
 };
 
 vehicle_handle_mpkilled = { _this spawn {
 	private["_unit", "_killer"];
 	_unit = _this select 0;
 	_killer = _this select 1;
-	[_unit, 60] call vehicle_despawn;
+	[_unit, 60] spawn vehicle_despawn;
 };};
 
 vehicle_create = {
@@ -666,11 +732,9 @@ vehicle_create = {
 		_vehicle setPosATL _position;
 	};
 	
-	_vehicle addEventHandler ["fired", {_this execVM "Awesome\EH\EH_fired_vehicle.sqf"}];
-	_vehicle addMPEventhandler ["MPKilled", {_this call vehicle_handle_mpkilled}];
-	
 	_vehicle setVariable ["isPlayerVehicle", true, true];
-	[player, _vehicle] call vehicle_add;
+	_vehicle setVariable ["created", time, true];
+//	[player, _vehicle] call vehicle_add;
 	
 	_vehicle
 };
@@ -704,6 +768,7 @@ vehicle_recreate = {
 	private["_item_name"];
 	_item_name = [_vehicle, "item_name"] call vehicle_get_string;
 	[_vehicle, _item_name, true] call vehicle_set_modifications;
+	[player, _vehicle] call vehicle_add;
 	(_vehicle)
 };
 
@@ -717,7 +782,7 @@ vehicle_create_shop_extended = {
 	_exact = _this select 3;
 	
 	private["_vehicle_name", "_position"];
-	_vehicle_name = call vehicle_generate_name;
+	_vehicle_name = [] call vehicle_generate_name;
 	_position = getPosATL _logic;
 	
 	private["_vehicle"];
@@ -727,9 +792,15 @@ vehicle_create_shop_extended = {
 		_vehicle setDir (getDir _logic);
 	};
 	
+	if (isCop) then {
+		_vehicle setVariable ["tuning", 2, true];	
+	};
+	
 	//player groupChat format["_vehicle_name = %1,  _vehicle = %2", _vehicle_name, _vehicle];
 	[_vehicle, _vehicle_name] call vehicle_set_init;
 	[_vehicle, _item, false] call vehicle_set_modifications;
+	[player, _vehicle] call vehicle_add;
+	
 	(_vehicle)
 };
 
@@ -837,7 +908,7 @@ vehicle_unflip = {
 	_vcl = (nearestobjects [getpos player, ["LandVehicle"], 10] select 0);
 	//if (_vcl == "") exitwith {player groupchat "No vehicles in range";};
 	if (([player, _vcl] call vehicle_owner)) then {
-		if ((count crew _vcl) > 0) exitWith {player groupChat "The vehicle is not empty!";};
+		if (({(alive _x) && (isPlayer _x)} count crew _vcl) > 0) exitWith {player groupChat "The vehicle is not empty!";};
 
 		player groupChat "Turning your vehicle over, wait 10 seconds within 10meters.";
 		sleep 10;
@@ -865,10 +936,23 @@ vehicle_lockpick = {
 	if (isNil "_vehicle") exitWith {
 		player groupChat "No vehicle close enough";
 	};
-			
+	
 	if (([player, _vehicle] call vehicle_owner)) exitWith {	
 		player groupChat "You already own this vehicle.";
 	};
+	
+	if ((player distance (getMarkerPos "respawn_West")) <= 120) exitwith {
+		player groupChat "You cannot lockpick vehicles in the Cop Base";
+	};
+	
+	if (time < ((_vehicle getVariable ["created", time]) + 60)) exitWith {
+		player groupChat "You cannot lockpick this vehicle yet";
+	};
+			
+	if (({(alive _x)&&(isPlayer _x)} count (crew _vehicle)) > 0) exitwith {
+		player groupChat "You cannot lockpick while people are inside";
+	};
+	
 	player groupChat format["lockpicking %1", _vehicle];
 	[player, _item, -1] call INV_AddInventoryItem;
 	format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
@@ -877,11 +961,14 @@ vehicle_lockpick = {
 		if (_vehicle in (list _x)) then {
 			_incarpark = true;
 		};
-	} forEach INV_VehicleGaragen;	
+	} forEach INV_VehiclePark;	
 
 	private["_near_cops", "_near_civilians"];
 	_near_cops = [player, 40] call player_near_cops;
 	_near_civilians = [player, 40] call player_near_civilians;
+		
+	lockpickAttempt = format["%1 - %2", player, _vehicle];
+	publicVariable "lockpickAttempt";
 		
 	if ((random 100) < lockpickchance) then {
 		[player, _vehicle] call vehicle_add;
@@ -911,13 +998,23 @@ vehicle_toggle_lock = {
 	_vehicle = _this select 0;
 	if (not([_vehicle] call vehicle_exists)) exitWith {};
 
-	private["_state"];
-	_state = locked _vehicle;
-	_state = not(_state);
-	format["%1 lock %2", _vehicle, _state] call broadcast;
+	private["_state", "_stateV"];
+	_state = (locked _vehicle);
+	_stateV = "";
+	_stateV = if(_state)then{"pv_vehUnlock"}else{"pv_vehLock"};
+	
+	missionNamespace setVariable [_stateV, _vehicle];
+	publicVariable _stateV;
+	_vehicle lock !(_state);
 	
 	_state
 };
+
+pv_vehLock = objNull;
+"pv_vehLock" addPublicVariableEventHandler {(_this select 1) lock true;};
+
+pv_vehUnlock = objNull;
+"pv_vehUnlock" addPublicVariableEventHandler {(_this select 1) lock false;};
 
 vehicle_owner = {
 	private["_player", "_vehicle"];
@@ -946,7 +1043,7 @@ vehicle_is_player_owner = {
 
 vehicle_build_string_array = {
 	private["_vehicles", "_vehicles_string_array"];
-	
+	_vehicles = [];
 	_vehicles = [player] call vehicle_list;
 	_vehicles_string_array = [];
 	
@@ -995,8 +1092,9 @@ vehicle_load = {
 	private["_vehicle", "_vehicle_name"];
 	{
 		_vehicle_name = _x;
-		_vehicle = missionNamespace getVariable _vehicle_name;
-		if (not(isNil "_vehicle")) exitWith {
+		_vehicle = missionNamespace getVariable [_vehicle_name, objNull];
+//		if ((not(isNull _vehicle)) || ((["impound_lot", _vehicle_name] call vehicle_storage_contains)) ) exitWith {
+		if (!(isNull _vehicle)) exitwith {
 			[_player, _vehicle] call vehicle_add;
 		};
 	} foreach _vehicle_names;
@@ -1012,12 +1110,45 @@ vehicle_add = {
 	if (not([_vehicle] call vehicle_exists)) exitWith {false};
 	
 	private["_vehicles"];
+	_vehicles = [];
 	_vehicles  = [_player] call vehicle_list;
 	if (_vehicle in _vehicles) exitWith {};
-	_vehicles = _vehicles - [objNull];
+	_vehicles = _vehicles call vehicle_list_removeNull;
 	_vehicles = _vehicles + [_vehicle];
 	_player setVariable ["vehicles_list", _vehicles, true];
-	call vehicle_save;
+	[] call vehicle_save;
+};
+
+vehicle_list_removeNull = {
+	private["_vehicles", "_newList", "_listCount", "_vehicle", "_type"];
+	
+	_vehicles = _this;
+	_newList = [];
+	_listCount = 0;
+	_type = "";
+	
+	{
+		_vehicle = _x;
+		_type = typeName _vehicle;
+		
+/*		if (_type == "STRING") then {
+				if (isNull (missionNamespace getVariable [_vehicle, objNull])) then {
+						if ((["impound_lot", _vehicle] call vehicle_storage_contains)) then {
+								_newList set [_listCount, _vehicle];
+								_listCount = _listCount + 1;
+							};
+					};
+			};
+*/		if (_type == "OBJECT") then {
+				if !(isNull _vehicle) then {
+						_newList set [_listCount, _vehicle];
+						_listCount = _listCount + 1;
+					};
+			};
+			
+	} forEach _vehicles;
+	
+	_newList
 };
 
 vehicle_remove = {
@@ -1030,7 +1161,7 @@ vehicle_remove = {
 	
 	private["_vehicles"];
 	_vehicles  = [_player] call vehicle_list;
-	_vehicles = _vehicles - [objNull];
+	_vehicles = _vehicles call vehicle_list_removeNull;
 	_vehicles = _vehicles - [_vehicle];
 	_player setVariable ["vehicles_list", _vehicles, true];
 	
@@ -1042,12 +1173,235 @@ vehicle_list = {
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {[]};
 	
-	_vehicles =  _player getVariable "vehicles_list";
-	_vehicles = if (isNil "_vehicles") then {[]} else {_vehicles};
-	_vehicles = if (typeName _vehicles != "ARRAY") then {[]} else {_vehicles};
+	_vehicles = [];
+	_vehicles =  _player getVariable ["vehicles_list", []];
+	_vehicles = if ((typeName _vehicles) != "ARRAY") then {[]} else {_vehicles};
+	
+//	diag_log format["VEHICLE LIST CALLED: %1 - %2", _player, _vehicles];
+	
 	_vehicles
 };
 
+
+vehicle_clean_checkTime = 5 * 60;
+vehicle_clean_triggerOn = "trigger_on";
+
+vehicle_clean_time = {
+	private["_vehicle", "_type", "_delay"];
+	_vehicle = _this select 0;
+	_type = typeOf _vehicle;
+	_delay = 5;
+	
+	_delay = if (({_type isKindOf _x} count ["Motorcycle","ATV_Base_EP1"]) > 0) then {_delay - 3}else{_delay};
+	_delay = _delay + (_vehicle getVariable ["tuning", 0]) + (_vehicle getVariable ["nitro", 0]);
+	
+	_delay
+};
+
+vehicle_clean_getArray = {
+	private["_classes", "_vehicleArray", "_aCount", "_classEntities", "_timeStart", "_timeEnd"];
+	
+	_timeStart = diag_tickTime;
+	
+	_classes = ["Car", "Motorcycle", "Tank", "Air", "Ship"];
+	_vehicleArray = [];
+	_aCount = 0;
+	
+	{
+		_classEntities = entities _x;
+		{
+			if !(isNull _x) then {
+					if (alive _x) then {
+							_vehicleArray set[_aCount, _x];
+							_aCount = _aCount + 1;
+						};
+				};
+		} forEach _classEntities;
+	} forEach _classes;
+	
+	_timeEnd = diag_tickTime;
+	
+	diag_log format["VEHICLE CLEAN ARRAY GRAB - %1 Minutes - %2 Grab Time - Count %3", round(time / 60), (_timeEnd - _timeStart), _aCount];
+	
+	_vehicleArray
+};
+
+vehicle_clean_varCheck = {
+	private["_vehicle", "_timeIn", "_timeOut"];
+	
+	_vehicle = _this select 0;
+	
+//	_vehicle setVariable [vehicle_clean_getInTimeV, (_vehicle getVariable [vehicle_clean_getInTimeV, time]), false];
+//	_vehicle setVariable [vehicle_clean_getInTimeV, (_vehicle getVariable [vehicle_clean_getInTimeV, time]), false];
+	
+	_timeIn = 0;
+	_timeOut = 0;
+	
+	if (isNil {_vehicle getVariable vehicle_clean_getInTimeV}) then {
+			_timeIn = time;
+			_vehicle setVariable [vehicle_clean_getInTimeV, _timeIn, false];
+		}else{
+			_timeIn = _vehicle getVariable [vehicle_clean_getInTimeV, _timeIn];
+		};
+	
+	if (isNil {_vehicle getVariable vehicle_clean_getOutTimeV}) then {
+			_timeOut = time;
+			_vehicle setVariable [vehicle_clean_getOutTimeV, _timeOut, false];
+		}else{
+			_timeOut = _vehicle getVariable [vehicle_clean_getOutTimeV, _timeOut];
+		};
+	
+	[_timeIn, _timeOut]
+};
+
+vehicle_clean_check = {
+	private["_vehicle"];
+	
+	_vehicle = _this select 0;
+	
+	if (_vehicle getVariable [vehicle_clean_triggerOn, false])exitwith{};
+	if (({(alive _x)&& (isPlayer _x)} count (crew _vehicle)) != 0)exitwith {};
+	
+	if ([_vehicle] call A_impound_check) exitwith {
+			_this call vehicle_clean_check_impound;
+		};
+	
+	diag_log format['Vehicle Clean Check - %1: Starting', _vehicle];
+	
+	private["_checkAllowed", "_despawnTime", "_times", "_timeIn", "_timeOut", "_timeLast"];
+	
+	_checkAllowed = 0;
+	_despawnTime = 0;
+	_times = [];
+	_timeIn = 0;
+	_timeOut = 0;
+	_timeLast = 0;
+	
+	_checkAllowed = [_vehicle] call vehicle_clean_time;
+	_despawnTime = _checkAllowed * vehicle_clean_checkTime;
+	
+	_times = [_vehicle] call vehicle_clean_varCheck;
+	_timeIn = _times select 0;
+	_timeOut = _times select 1;
+	
+	_timeLast = if (_timeIn > _timeOut) then {_timeIn}else{_timeOut};
+	
+	diag_log format['Vehicle Clean Check - %1: TL - %2, TI - %3, TO - %4', _vehicle, _timeLast, _timeIn, _timeOut];
+	
+	if ( (time - _timeLast) <  _despawnTime) exitwith {
+			diag_log format['Vehicle Clean Check - %1: Time Exit', _vehicle];
+		};
+	
+	diag_log format['Vehicle Clean Check - %1: Cleanup', _vehicle];
+	
+	[_vehicle] call vehicle_clean_cleanUp;
+	
+/*	
+	private["_nearbyHumans"];
+	
+	_nearbyHumans = [];
+	_nearbyHumans = (getPosATL _vehicle) nearEntities ["caManBase", 100];
+	
+	if (({(isPlayer _x) && (alive _x)} count _nearbyHumans) == 0) then {
+			[_vehicle] call vehicle_clean_trigSet;
+		}else{
+			[_vehicle] call vehicle_clean_cleanUp;
+		};
+*/	
+};
+
+vehicle_clean_check_impound = {
+		private["_vehicle", "_impoundtime", "_cleanTime"];
+		
+		_vehicle = _this select 0;
+		_impoundTime = _vehicle getVariable ["impoundTime", 0];
+		_cleanTime = ([_vehicle] call vehicle_clean_time) * 3;
+		
+		if ( (time - _impoundTime) > _cleanTime ) then {
+				deleteVehicle _vehicle;
+			};
+	};
+
+vehicle_clean_cleanUp = {
+	[(_this select 0)] call A_impound_vacant;
+};
+
+vehicle_clean_trigSet = {
+	private["_vehicle", "_trigger"];
+	
+	_vehicle = _this select 0;
+	_vehicle setVariable [vehicle_clean_triggerOn, true, false];
+	
+	_trigger = createTrigger ["EmptyDetector", (getPosATL _vehicle)];
+	_trigger setTriggerArea [100, 100, 0, false];
+	_trigger setTriggerActivation ["ANY", "NOT PRESENT", false];
+	_trigger setTriggerStatements[
+		format["
+			['%1'] call vehicle_clean_trigCheck
+		", _vehicle], 
+		format["['%1', '%2'] call vehicle_clean_trigOn;", _vehicle, _trigger], 
+		""
+	]; 
+};
+
+vehicle_clean_trigCheck = {
+		private["_vehicleString", "_vehicle", "_return"];
+		
+		_vehicleString = _this select 0;
+		_vehicle = missionNamespace getVariable [_vehicleString, objNull];
+		_return = false;
+		
+		if (isNull _vehicle) then {
+				_return = true;
+			}else{
+				if (alive _vehicle) then {
+						_return = true;
+					}else{
+						if (( {(alive _x) && (isPlayer _x)}count (crew _vehicle)) > 0) then {
+								_return = true;
+							}else{
+								private["_nearbyHumans"];
+				
+								_nearbyHumans = [];
+								_nearbyHumans = (getPosATL _vehicle) nearEntities ["caManBase", 100];
+								
+								if (({(isPlayer _x) && (alive _x)} count _nearbyHumans) == 0) then {
+										_return = true;
+									};
+							};
+					};
+			};
+		
+		_return
+	};
+
+vehicle_clean_trigOn = {
+	private["_vehicleString", "_triggerString", "_vehicle", "_trigger"];
+	
+	_vehicleString = _this select 0;
+	_triggerString = _this select 1;
+	
+	_vehicle = missionNamespace getVariable [_vehicleString, objNull];
+	_trigger = missionNamespace getVariable [_triggerString, objNull];
+	
+	if (isNull _vehicle) exitwith {
+			deleteVehicle _trigger;
+		};
+	if (isNull _trigger) exitwith {
+			diag_log format['VEHICLE CLEAN ERROR - %1 - TRIGGER NULL', _vehicle];
+		};
+	
+	if !(alive _vehicle) exitwith {
+			deleteVehicle _trigger;
+		};
+	
+	if (({(isPlayer _x) && (alive _x)} count _nearbyHumans) == 0) then {
+			[_vehicle] call vehicle_clean_cleanUp
+		} else {
+			deleteVehicle _trigger;
+			_vehicle setVariable [vehicle_clean_triggerOn, false, false];
+		};
+};
 
 
 call vehicle_load;

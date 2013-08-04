@@ -66,6 +66,8 @@ if (_art == "spielerliste") then {
 	(_DFML displayCtrl 1)	lbAdd _trennlinie;
 	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_licenselist";
 	
+	private["_i"];
+	
 	for [{_i=0}, {_i < (count INV_Licenses)}, {_i=_i+1}] do {
 		if (((INV_Licenses select _i) select 0) call INV_HasLicense) then
 		{
@@ -184,7 +186,7 @@ if (_art == "spielerliste") then {
 	
 	(_DFML displayCtrl 1) lbAdd _trennlinie;
 	(_DFML displayCtrl 1) lbAdd "B A N K:";
-	(_DFML displayCtrl 1) lbAdd (format ["Est. total funds in the main bank safe's: $%1", strM(robpoolsafe1 + robpoolsafe2 + robpoolsafe3)]);
+//	(_DFML displayCtrl 1) lbAdd (format ["Est. total funds in the main bank safe's: $%1", strM(robpoolsafe1 + robpoolsafe2 + robpoolsafe3)]);
 
 	if(!local_useBankPossible)then{(_DFML displayCtrl 1) lbAdd (format ["Bank lockout time remaining: %1 seconds.", round rblock])};
 
@@ -278,10 +280,11 @@ if (_art == "spielerliste") then {
 
 	private ["_i"];
 	_i = 0;
+	_player_variable_name = "";
 	while { _i < (count playerstringarray) } do {
 		private["_player", "_player_variable_name"];
 		_player_variable_name = playerstringarray select _i;
-		_player = missionNamespace getVariable _player_variable_name;
+		_player = missionNamespace getVariable [_player_variable_name, objNull];
 		
 		if ([_player] call player_human) then {
 			private["_label_text", "_index"];
@@ -300,11 +303,16 @@ if (_art == "spielerliste") then {
 	
 	private["_i"];
 	_i = 0;
+	
+	_player_variable_name = "";
+	_player_variable = objNull;
+	
 	while { _i < (count playerstringarray) } do {
 		private["_player_variable_name", "_player_variable"];
 		_player_variable_name = playerstringarray select _i;
-		_player_variable = missionNamespace getVariable _player_variable_name;
-
+		_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
+		
+		if !(isNull _player_variable) then {
 		if (not([_player_variable] call player_cop) && ([_player_variable] call player_get_wanted)) then {
 			private["_bounty", "_reasons"];
 			_reasons = [_player_variable] call player_get_reason; 
@@ -321,6 +329,8 @@ if (_art == "spielerliste") then {
 			};
 			(_DFML displayCtrl 1) lbAdd _trennlinie;
 		};
+		};
+		
 		_i = _i + 1;
 	};
 
@@ -537,30 +547,6 @@ if (_art == "copmenulite") then {
 if (_art == "distribute") then {
 	if (!(createDialog "distribute")) exitWith {hint "Dialog Error!"};
 };
-
-if (_art == "impound") then {
-	if (!(createDialog "distribute")) exitWith {hint "Dialog Error!"};
-	_DFML = findDisplay -1;
-	
-	lbClear 1;
-	lbClear (_DFML displayCtrl 1);
-
-	private "_j"; 
-	ctrlSetText [3, format["Retrieve impounded vehicle ($%1)", strM(impoundpay)]];
-
-	private["_vehicles"];
-	_vehicles = [player] call vehicle_list;
-	for [{_j=0}, {_j < (count _vehicles)}, {_j=_j+1}] do {
-		_vehicle = (_vehicles select _j);
-		if (!isNull _vehicle and _vehicle distance impoundarea1 < 200) then {
-			_index = (_DFML displayCtrl 1)	lbAdd format["%1 (%2)", _vehicle, typeof _vehicle];
-			(_DFML displayCtrl 1)	lbSetData [_index, format["%1", _vehicle]];
-		};
-	};
-	buttonSetAction [2, "[lbData [1, (lbCurSel 1)],""buy""] call A_SCRIPT_IMPOUND;"];
-};
-
-
 
 if (_art == "pmc_whitelist") then {
 	if (not(ischief)) exitWith { player groupChat "Cannot access PMC whitelist: You are not the police chief";};

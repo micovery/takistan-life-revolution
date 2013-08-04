@@ -9,9 +9,10 @@ showWatch     = 1;
 debriefing    = 1;
 respawn       = 3;
 respawnDelay  = 30;
+respawnDialog = 0;
 disabledAI    = 1;
-respawnDialog = false;
 
+onPauseScript = "Awesome\client\pause.sqf";
 // Define PMC Custom GPS Skin
 onMinimapScript[] = {"BIS_fnc_customGPS_Spawn"};
 

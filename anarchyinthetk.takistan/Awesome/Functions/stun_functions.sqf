@@ -377,6 +377,7 @@ stun_hands_prone = {
 		if ((_man distance _unit) > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER2";',_unit] call broadcast;
 		sleep M_punch;
@@ -385,6 +386,7 @@ stun_hands_prone = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER3";',_unit] call broadcast;
 		sleep M_punch;
@@ -393,9 +395,11 @@ stun_hands_prone = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 		sleep M_punch;
 		if (_man distance _unit > 2) exitwith {stunning = false;};
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 		
 		_idamage =  (M_prone_crit);	
@@ -409,7 +413,8 @@ stun_hands_prone = {
 		if ([_unit, "isstunned"] call player_get_bool) exitwith {stunning = false;};
 		if(_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
-
+		
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER2";',_unit] call broadcast;
 		sleep M_punch;
@@ -417,7 +422,8 @@ stun_hands_prone = {
 		if ([_unit, "isstunned"] call player_get_bool) exitwith {stunning = false;};
 		if(_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
-
+		
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 					
 		_idamage = (M_prone_hev);
@@ -425,13 +431,15 @@ stun_hands_prone = {
 	};
 		
 	if ((_random < 50) && (_random >= 0)) then {
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER3";',_unit] call broadcast;
 		sleep M_punch;
-			
+		
 		if ([_unit, "isstunned"] call player_get_bool) exitwith {stunning = false;};
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
-			
+		
+		[_man] call stun_punched;
 		format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_man] call broadcast;
 			
 		_idamage = (M_prone_reg);
@@ -467,6 +475,7 @@ stun_hands_front = {
 	_stun		= 0;
 	
 	if ((_random <= 100) && (_random >= 90)) then {	
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER1";',_unit] call broadcast;
 		sleep M_punch;
 		
@@ -474,6 +483,7 @@ stun_hands_front = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH1";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER2";',_unit] call broadcast;
 		sleep M_punch;
@@ -482,6 +492,7 @@ stun_hands_front = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH2";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER3";',_unit] call broadcast;
 		sleep M_punch;
@@ -490,17 +501,20 @@ stun_hands_front = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH3HARD";',_man] call broadcast;
 		sleep M_punch;
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_man] call broadcast;
 		
 		_idamage =  (M_front_crit);	
 		_stun = stunfrontcrit;
 	};		
 		
-	if ((_random < 90) && (_random >= 50)) then {	
+	if ((_random < 90) && (_random >= 50)) then {
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER1";',_unit] call broadcast;
 		sleep M_punch;
 		
@@ -508,6 +522,7 @@ stun_hands_front = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH1";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER2";',_unit] call broadcast;
 		sleep M_punch;
@@ -516,6 +531,7 @@ stun_hands_front = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH2";',_man] call broadcast;
 				
 		_idamage = (M_front_hev);
@@ -523,6 +539,7 @@ stun_hands_front = {
 	};
 		
 	if ((_random < 50) && (_random >= 0)) then {
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER3";',_unit] call broadcast;
 		sleep M_punch;
 		
@@ -530,6 +547,7 @@ stun_hands_front = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH3HARD";',_man] call broadcast;
 		
 		_idamage = (M_front_reg);
@@ -564,6 +582,7 @@ stun_hands_back = {
 	_stun = 0;
 	
 	if ((_random <= 100) && (_random >= 50)) then {	
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER1";',_unit] call broadcast;
 		sleep M_punch;
 		
@@ -571,6 +590,7 @@ stun_hands_back = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH2";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER2";',_unit] call broadcast;
 		sleep M_punch;
@@ -579,11 +599,14 @@ stun_hands_back = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH4";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER3";',_unit] call broadcast;
 		sleep M_punch;
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
+		
+		[_man] call stun_punched;
 		format['%1 switchmove "adthpercmstpslowwrfldnon_2";',_man] call broadcast;
 		format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_man] call broadcast;
 			
@@ -591,7 +614,8 @@ stun_hands_back = {
 		_stun = stunbackcrit;				
 	};
 	
-	if ((_random < 50) && (_random >= 30)) then {		
+	if ((_random < 50) && (_random >= 30)) then {
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER1";',_unit] call broadcast;
 		sleep M_punch;
 		
@@ -599,6 +623,7 @@ stun_hands_back = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH5HARD";',_man] call broadcast;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER2";',_unit] call broadcast;
 		sleep M_punch;
@@ -607,6 +632,7 @@ stun_hands_back = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH4";',_man] call broadcast;
 				
 		_idamage = (M_back_hev);
@@ -614,6 +640,7 @@ stun_hands_back = {
 	};		
 	
 	if ((_random < 30) && (_random >= 0)) then {
+		[_man] call stun_punched;
 		format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_AMATERUDER3";',_unit] call broadcast;
 		sleep M_punch;
 		
@@ -621,6 +648,7 @@ stun_hands_back = {
 		if (_man distance _unit > 2) exitwith {stunning = false;};
 		if (_pdamage != damage _unit) exitwith {stunning = false;};
 		
+		[_man] call stun_punched;
 		format['%1 switchmove "adthpercmstpslowwrfldnon_2";',_man] call broadcast;
 		
 		_idamage = (M_back_reg);
@@ -644,6 +672,14 @@ stun_hands_back = {
 	stunning = false;
 };
 
+stun_punched = {
+		(_this select 0) setVariable ["punched", time, true];
+	};
+	
+stun_punch_check = {
+		(time < ( ((_this select 0) getVariable ["punched", -5]) + 2 ))
+	};
+
 stun_broad_light = {
 	private ["_unit", "_attacker"];
 	
@@ -656,7 +692,7 @@ stun_broad_light = {
 stun_broadcast = {
 	private ["_unit", "_shooter"];
 	
-	if (stun_broadcasting) exitwith {};
+	if (missionNamespace getVariable ["stun_broadcasting", false]) exitwith {};
 	
 	stun_broadcasting = true;
 	
@@ -765,7 +801,9 @@ stun_effects_full = {
 	} 
 	else {
 		[_unit, "isstunned", false] call player_set_bool;
-		format['%1 switchmove "amovppnemstpsnonwnondnon";',_unit] call broadcast;
+		if ([_unit] call is_prone) then {
+				format['%1 switchmove "amovppnemstpsnonwnondnon";',_unit] call broadcast;
+			};
 	};
 
 };

@@ -180,7 +180,7 @@ gangs_lookup_player_uid = {
 	_gangs_list = call gangs_get_list;
 	
 	private["_gang"];
-	_gang = nil;
+	_gang = "";
 	{
 		private["_cgang", "_cgang_members"];
 		_cgang = _x;
@@ -244,8 +244,10 @@ gang_player_disconnected = {
 	_gang_player_uid = [_player] call gang_player_uid;
 	
 	private["_gang"];
+	
 	_gang = [_gang_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {};
+//	if (isNil "_gang") exitWith {};
+	if ((typeName _gang) != "ARRAY") exitwith {};
 	
 	private["_gang_id"];
 	_gang_id = _gang select gang_id;
@@ -328,8 +330,10 @@ gangs_calculate_income = {
 	
 	private["_gang", "_player_uid", "_extra"];
 	_player_uid = [_player] call gang_player_uid;
+	
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {0};
+//	if (isNil "_gang") exitWith {0};
+	if ((typeName _gang) != "ARRAY") exitwith {0};
 	
 	_extra = 0;
 
@@ -398,8 +402,10 @@ gang_area_owned = {
 	
 	private["_gang", "_player_uid"];
 	_player_uid = [_player] call gang_player_uid;
+	
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {false};
+//	if (isNil "_gang") exitWith {false};
+	if ((typeName _gang) != "ARRAY") exitwith {false};
 	
 	private["_gang_id"];
 	_gang_id = _gang select gang_id;
@@ -432,7 +438,7 @@ gang_area_player_near = {
 	
 	private["_min_distance", "_min_gang_area"];
 	_min_distance = _distance;
-	_min_gang_area = nil;
+	_min_gang_area = objNull;
 	
 	{
 		private["_cgang_area", "_cdistance"];
@@ -910,9 +916,11 @@ gangs_loop_iteration = {
 		private["_cgang_id", "_gang", "_player_uid"];
 		_cgang_id  = [_gang_area] call gang_area_get_control;
 		_player_uid = [_player] call gang_player_uid;
-		_gang = [_player_uid] call gangs_lookup_player_uid;
 		
-		if (isNil "_gang") exitWith {};
+		_gang = [_player_uid] call gangs_lookup_player_uid;
+//		if (isNil "_gang") exitWith {};
+		if ((typeName _gang) != "ARRAY") exitwith {};
+		
 		private["_gang_id"];
 		_gang_id = _gang select gang_id;
 		if (not (_gang_id == _cgang_id)) exitWith {};

@@ -24,5 +24,5 @@ BIS_MENU_GroupCommunication = [
 	["",[],"",-1,[],"0","0"]
 ]; 
 
-showCommandingMenu "#USER:BIS_MENU_GroupCommunication";
+//showCommandingMenu "#USER:BIS_MENU_GroupCommunication";
 

@@ -801,6 +801,7 @@ STRS_bank_rob_nosuccess,You escaped too early and didn't get the money!
 STRS_bank_rob_info,You decided to rob the bank. Stay here until you get the money and then get the hell outta here!
 STRS_bank_rob_noweapon,You can't rob the bank without being armed.
 STRS_bank_rob_no,You can't rob the bank at the moment.
+STRS_bank_rob_nomoneylost, The bank has been robbed, but you lost no money because of federal insurance
 STRS_bank_dialog_inventarmoneh,Money in your Inventory: $%1
 STRS_bank_dialoge_accountmoneh,Money in your Account: $%1
 STRS_bank_dialoge_tax,Incl. Taxes:

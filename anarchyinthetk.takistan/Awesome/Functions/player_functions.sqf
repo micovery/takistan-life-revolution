@@ -1,5 +1,9 @@
 #include "macro.h"
 
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+#define macroSub(VALUE, NUMBER) VALUE = VALUE - NUMBER;
+#define macroSub1(VALUE) macroSub(VALUE, 1)
+
 if (not(isNil "player_functions_defined")) exitWith {};
 
 player_exists = {
@@ -12,10 +16,12 @@ player_exists = {
 };
 
 player_human = {
-	private["_player"];
-	_player = _this select 0;
-	if (not([_player] call player_exists)) exitWith { false};
-	(isPlayer _player)
+//	private["_player"];
+//	_player = _this select 0;
+	if (isNull (_this select 0))exitwith {false};
+	if !((_this select 0) isKindOf "CAManBase") exitwith {false};
+	if (not(_this call player_exists)) exitWith { false};
+	(isPlayer (_this select 0))
 };
 
 player_human_side = {
@@ -137,7 +143,8 @@ player_gang_member = {
 	
 	private["_gang"];
 	_gang = [_player_gang_uid] call gangs_lookup_player_uid;
-	not(isNil "_gang")
+//	not(isNil "_gang")
+	((typeName _gang) == "ARRAY")
 };
 
 player_get_dead = {
@@ -465,11 +472,23 @@ player_reset_warrants = {
 	[_player, 0, true] call player_update_wantedtype;
 };
 
+
 player_armed = {
 	private["_player"];
 	_player = _this select 0;
 	([_player] call player_get_armed)
 };
+
+player_vehicle_armed = {
+		private["_unit", "_vehicle"];
+		_unit = _this select 0;
+		_vehicle = vehicle _unit;
+		if (_unit == _vehicle) then {
+				false
+			}else{
+				((count (configFile >> (typeOf _vehicle) >> "turrets")) > 0)
+			};
+	};
 
 player_update_armed = {
 	private["_player", "_armed"];
@@ -1569,14 +1588,35 @@ player_save_side_damage = {
 	_player = _this select 0;
 	if (not([_player] call player_exists)) exitWith {};
 	
-	private["_side"];
+	private["_side", "_damage", "_inAgony", "_total", "_head", "_body", "_legs", "_bloodloss", "_bloodlosspersecond"];
+		
 	_side = ([_player] call player_side);
 	_side = toLower(str(_side));
 	
-	private["_damage"];
 	_damage = damage _player;
-	//diag_log format["Saving damage %1", _damage];
+	
+	_inAgony = _player getVariable ["FA_inAgony", false];
+	
+	_total = _unit getVariable ["", 0];
+	_head = _player getVariable ["head_hit", 0];
+	_body = _player getVariable ["body", 0];
+	_hands = _player getVariable ["hands", 0];
+	_legs = _player getVariable ["legs", 0];
+	_bloodloss = _player getVariable ["bloodloss", 0];
+	_bloodlosspersecond	= _player getVariable ["bloodlossPerSecond", 0];
+	
 	[_player, format["damage_%1", _side], _damage] call player_set_scalar;
+	
+	[_player, format["agony_%1", _side], _inAgony] call player_set_bool;
+	
+	[_player, format["total_%1", _side], _total] call player_set_scalar;
+	[_player, format["head_%1", _side], _head] call player_set_scalar;
+	[_player, format["body_%1", _side], _body] call player_set_scalar;
+	[_player, format["hands_%1", _side], _hands] call player_set_scalar;
+	[_player, format["legs_%1", _side], _legs] call player_set_scalar;
+	[_player, format["bl_%1", _side], _bloodloss] call player_set_scalar;
+	[_player, format["blps_%1", _side], _bloodlosspersecond] call player_set_scalar;
+	
 };
 
 player_load_side_damage = {
@@ -1584,16 +1624,43 @@ player_load_side_damage = {
 	_player = _this select 0;
 	if (not([_player] call player_exists)) exitWith {};
 	
-	private["_side"];
+	private["_side", "_damage", "_inAgony", "_total", "_head", "_body", "_legs", "_bloodloss", "_bloodlosspersecond"];
+	
 	_side = ([_player] call player_side);
 	_side = toLower(str(_side));
-	
-	private["_damage"];
+
 	_damage = [_player, format["damage_%1", _side]] call player_get_scalar;
 	
-	if (_damage < 0 ||  _damage > 1) exitWith {};
+	_inAgony = [_player, format["agony_%1", _side]] call player_get_bool;
+	
+	_total = [_player, format["total_%1", _side]] call player_get_scalar;
+	_head = [_player, format["head_%1", _side]] call player_get_scalar;
+	_body = [_player, format["body_%1", _side]] call player_get_scalar;
+	_hands = [_player, format["hands_%1", _side]] call player_get_scalar;
+	_legs = [_player, format["legs_%1", _side]] call player_get_scalar;
+	_bloodloss = [_player, format["legs_%1", _side]] call player_get_scalar;
+	_bloodlosspersecond	= [_player, format["blps_%1", _side]] call player_get_scalar;
+	
+	_player setVariable ["FA_inAgony", _inAgony, true];
 	
 	_player setDamage _damage;
+	
+	_player setVariable ["", _total, true];
+	_player setVariable ["head_hit", _head, true];
+	_player setVariable ["body", _body, true];
+	_player setVariable ["hands", _hands, true];
+	_player setVariable ["legs", _legs, true];
+	_player setVariable ["bloodloss", _bloodloss, true];
+	_player setVariable ["bloodlossPerSecond", _bloodlosspersecond, true];
+	
+	_player setHit["", _total];
+	_player setHit["head_hit", _head];
+	_player setHit["body", _body];
+	_player setHit["hands", _hands];
+	_player setHit["legs", _legs];
+	_player setHit["bloodloss", _bloodloss];
+	_player setHit["bloodlossPerSecond", _bloodlosspersecond];
+	
 };
 
 
@@ -2245,22 +2312,22 @@ player_objects_filter = {
 	_objects = _this select 1;
 	_filter_function = _this select 2;
 	
-	if (typeName _objects != "ARRAY") exitWith {[]};
+	if ((typeName _objects) != "ARRAY") exitWith {[]};
+	if ((count _objects) <= 0) exitwith {[]};
 	if (isNil "_filter_function") exitWith {[]};
 	if (typeName _filter_function != "CODE") exitWith {[]};
 	
-	private["_result"];
+	private["_result", "_cobject"];
 	_result = [];
+	
 	{
-		private["_cobject", "_evaluation"];
 		_cobject = _x;		
-		_evaluation = ([_target, _cobject] call _filter_function);
-		if (_evaluation) then {
-			_result = _result + [_cobject];
+		if ([_target, _cobject] call _filter_function) then {
+			_result set[(count _result), _cobject];
 		};
 	} forEach _objects;
 	
-	(_result)
+	_result
 };
 
 player_count_carshop = {
@@ -2305,11 +2372,9 @@ player_count_atm = {
 	_filter_function = {
 		private["_target", "_object", "_player", "_distance"];
 		_target = _this select 0;
-		_object = _this select 1;
-		
 		_player = _target select 0;
 		_distance = _target select 1;
-		((_player distance _object) <= _distance)
+		((_player distance (_this select 1)) <= _distance)
 	};
 	
 	private["_filtered"];
@@ -2502,7 +2567,9 @@ player_continuity = {
 	private["_player"];
 	_player = player;
 	[_player] call player_reset_gear;
-
+	
+	[] call compile preprocessFileLineNumbers "Awesome\FA\firstAid_Init.sqf";
+	
 	[] call C_libraries;
 	_player = [] call C_connect_client;
 	
@@ -2526,7 +2593,7 @@ player_continuity = {
 	[_player, false] call player_set_dead;
 };
 
-player_despawn = { _this spawn {
+player_despawn = {
 	//player groupChat format["player_despawn %1", _this];
 	private["_unit", "_delay"];
 	_unit = _this select 0;
@@ -2537,28 +2604,29 @@ player_despawn = { _this spawn {
 	if (isNull _unit) exitWith {};
 	if (isNil "_delay") exitWith {};
 	if (typeName _delay != "SCALAR") exitWith {};
-
-	_delay = ((_delay - 5) max (0));
+	
+	
+//	_delay = ((_delay - 5) max (0));
 	//diag_log format["player_despawn waiting %1, %2", _unit, _delay];
-	[_delay] call isleep;
+//	[_delay] call isleep;
+
+	SleepWait(_delay)
 	
 	//diag_log format["player_despawn hiding %1", _unit];
-	private["_i"];
-	_i = 0;
-	while { _i < 5 } do {
-		hideBody _unit;
-		sleep 1;
-		_i = _i + 1;
-	};
+	private["_HBA"];
+	_HBA = 0;
+	for [{_HBA = 0}, {_HBA < 5}, {_HBA = _HBA + 1}] do {
+			hideBody _unit;
+			SleepWait(1)
+		};
 
 	//diag_log format["player_despawn deleting %1", _unit];
 	//_unit setPos [-1,-1,-1];
 	
-	if (isServer) then {
-		sleep 5;
-		deleteVehicle _unit;
+//	if (isServer) then {
+	deleteVehicle _unit;
+//	};
 	};
-};};
 
 
 player_reset_prison = {
@@ -2566,7 +2634,7 @@ player_reset_prison = {
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {};
 	
-	if (([_player, "restrained"] call player_get_bool) && not(iscop)) then {
+	if (([_player, "restrained"] call player_get_bool) && not(iscop) && (restrain_respawn)) then {
 		private["_message"];
 		_message = format["%1-%2 aborted while restrained, he has been sent to prison", _player, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
@@ -2637,6 +2705,8 @@ player_spawn = { _this spawn {
 	//mark the player alive when we are done with the dead camera
 	[_player, false] call player_set_dead;
 	[_player] call name_tags_3d_controls_setup;
+	
+	restrain_respawn = false;
 };};
 
 
@@ -2747,46 +2817,77 @@ player_drop_inventory = {
 	};
 };
 
-player_escape_menu_check = { _this spawn {
-	if (not(isClient)) exitWith {};
-	// Taken from DOMINATION
-	// Edited for TLR
-	disableSerialization;
-	sleep 10;
 
-	while {true} do {
-		waitUntil {not(isnull (findDisplay 49))};
+// Taken from DOMINATION - Edited for TLR
+// Respawn - 1010 -- Abort - 104
+player_escape_menu_check = {
+		if (not(isClient)) exitWith {};
+		private["_enCtrl"];
+		disableSerialization;
 
-		_ctrl = (findDisplay 49) displayCtrl 1010;
-		_ctrl ctrlEnable false;
-		//escape menu opened
-		_enCtrl = [_ctrl] spawn {
-			disableSerialization;
-			_ctrl = _this select 0;
-			_stext = ctrlText _ctrl;
-			private["_i"];
-			_ctrl buttonSetAction "respawnButtonPressed = true;";
-			for "_i" from 30 to 1 step -1 do {
-				if (isnull (findDisplay 49)) exitWith {};
-				_text = _stext + format ["(%1)",_i]; _ctrl ctrlSetText _text;
-				sleep 1;
-			};
+		while {true} do {
+				waitUntil {not(isnull (findDisplay 49))};
 				
-			if (!isnull (findDisplay 49)) then {
-				_ctrl ctrlSetText _stext; 
-				_ctrl ctrlEnable true;
+				_enCtrl = [] spawn player_escape_menu_spawn;
+				
+				waitUntil {isNull (findDisplay 49)};
+				if (!scriptDone _enCtrl) then {terminate _enCtrl};
 			};
-		};
-
-		waitUntil {isNull (findDisplay 49)};
-		//escape menu closed
-		if (!scriptDone _enCtrl) then {
-			terminate _enCtrl
-		};
 	};
-};};
+	
+player_escape_menu_spawn = {
+		private["_ctrl_1", "_ctrl_2", "_stext_1", "_stext_2", "_delayR", "_delayA", "_EML"];
+		disableSerialization;
 
+		_ctrl_1 = (findDisplay 49) displayCtrl 1010;
+		_ctrl_1 ctrlEnable false;
+				
+		_ctrl_2 = (findDisplay 49) displayCtrl 104;
+		_ctrl_2 ctrlEnable false;
+		
+		_stext_1 = ctrlText _ctrl_1;
+		_stext_2 = ctrlText _ctrl_2;
+		
+		_ctrl_1 buttonSetAction "respawnButtonPressed = time;";
+		
+		_delayR = 30;
+		_delayA = [] call player_escape_menu_abortCheck;
+		
+		_EML = if (_delayA > _delayR)then{_delayA}else{_delayR};
+		
+		while { _EML > 0 } do {
+				if (isnull (findDisplay 49)) exitWith {};
+				
+				if (_delayR > 0) then {
+						_ctrl_1 ctrlSetText format["%1(%2)", _stext_1, _delayR];	
+						macroSub1(_delayR)
+					}else{
+						_ctrl_1 ctrlSetText _stext_1; 	
+						_ctrl_1 ctrlEnable !(player getVariable ["restrained", false]);
+					};
+				
+				if (_delayA > 0) then {
+						_ctrl_2 ctrlSetText format["%1(%2)", _stext_2, _delayA];	
+						macroSub1(_delayA)
+					}else{
+						_ctrl_2 ctrlSetText _stext_2; 	
+						_ctrl_2 ctrlEnable !(player getVariable ["restrained", false]);
+					};
+				
+				macroSub1(_EML)
+				SleepWait(1)
+			};
+					
+		if (!isnull (findDisplay 49)) then {
+				_ctrl_1 ctrlSetText _stext_1; 	_ctrl_1 ctrlEnable true;
+				_ctrl_2 ctrlSetText _stext_2; 	_ctrl_2 ctrlEnable true;
+			};
+	};
 
+player_escape_menu_abortCheck = {
+		if (time < (lastShot + 60))then{60}else{5}
+	};
+	
 player_init_civilian_stats = {
 	private["_player"];
 	_player = _this select 0;
@@ -2829,7 +2930,7 @@ player_init_stats = {
 	pickaxedur = 50;
 	hammerdur = 100;
 	alreadygotaworkplacejob = 0;
-	respawnButtonPressed = false;
+	respawnButtonPressed = 0;
 	demerits = if ("car" call INV_haslicense) then {10} else {demerits};
 	[_player, "isstunned", false] call player_set_bool;
 	[_player, "restrained", false] call player_set_bool;
@@ -2843,15 +2944,11 @@ player_init_stats = {
 	[_player] call player_init_cop_stats;
 };
 
-
-
-
 player_handle_mpkilled = { _this spawn {
 	//player groupChat format["player_handle_mpkilled %1", _this];
 	private["_unit", "_killer"];
 	_unit = _this select 0;
 	_killer = _this select 1;
-	[_unit, 15] spawn player_despawn;
 	
 	if (str(_unit) != str(player)) exitWith {};
 	
@@ -2871,8 +2968,6 @@ player_handle_mpkilled = { _this spawn {
 	[_player] call name_tags_3d_controls_setup;
 };};
 
-
-
 player_handle_mprespawn = {
 	//player groupChat format["player_handle_mprespawn %1", _this];
 	private["_unit", "_corpse"];
@@ -2880,12 +2975,43 @@ player_handle_mprespawn = {
 	_corpse = _this select 1;
 	
 	if (not(str(_unit) == str(player))) exitWith {};
+	
+	[_unit, _corpse] spawn A_fnc_FA_init;
+	[_corpse, 5] spawn player_despawn;
+	
 	[_unit, false] call player_spawn;
 };
 
+PlayerAFKKick = {
+		server globalChat format["Kick to Lobby Started..."];
+		sleep 5;
+		failMission "END1";
+	};
 
-[] call player_escape_menu_check;
+player_isPMCclothes = {
+		private["_type", "_clothes"];
+		_type = _this select 0;
+		_clothes = "";
+		_clothes = if ((typeName _type) == "OBJECT") then {
+				(typeOf _type)
+			}else{
+				_type
+			};
+			
+		_clothes in pmc_skin_list
+	};	
+player_isPMCwhitelist = {(getPlayerUID (_this select 0)) in A_WBL_V_W_PMC_1};
+player_isPMC = {([typeOf (_this select 0)] call player_isPMCclothes) && (_this call player_isPMCwhitelist)};
+	
+player_PMCrevoke = {
+		player groupChat format["You have been off the PMC whitelist for too long and your clothes are being reprimanded"];
+		if ((vehicle player) != player) then {player action ["getOut", (vehicle player)]; player setVelocity [0,0,0]};
+		[] call C_change_original;
+	};
+
+/*
 [] call player_save_side_gear_setup;
 [] call player_init_arrays;
+*/
 
 player_functions_defined = true;

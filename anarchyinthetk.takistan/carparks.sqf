@@ -1,7 +1,7 @@
 INV_CarryingCapacity = 60;
 INV_TaxesPaid = 0;
 
-INV_VehicleGaragen = [
+INV_VehiclePark = [
 	carpark1,
 	carpark2,
 	carpark3,

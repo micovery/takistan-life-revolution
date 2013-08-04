@@ -16,7 +16,6 @@ if (_art == "init") then {
         if ((typeName _this) == "OBJECT") then {
             if (not(isNull _this)) then {
                 if (((getPosATL _this) select 2) < 5) then {
-                    liafu = true;
                     createVehicle ["Bo_GBU12_LGB", (getPosATL _this), [], 0, "NONE"];
                         
                     //if (player distance _this < 25) then {player setdamage 1;}; // All players within 25m die instantly
@@ -25,19 +24,17 @@ if (_art == "init") then {
                     if (!(_this isKindOf "Man")) then {
                         _men1 = (crew _this); 
                         {
-                            liafu = true;
-                            _has_admin_camera = _x getVariable "has_admin_camera";
-                            if ( !(isnil "_has_admin_camera") && _has_admin_camera) then {
-                                } else {
-                                    _x setDamage 1;
-                                };                
+ 
+                            _has_admin_camera = _x getVariable ["has_admin_camera", false];
+                            if !(_has_admin_camera) then {
+									 _x setDamage 1;
+                                };               
                         } forEach _men1;            
                     };
                         
                     _men2 = nearestObjects[getPosATL _this, ["Man", "LandVehicle", "Air"], 25];
 
                     {
-                        liafu = true;
                         _has_admin_camera = _x getVariable "has_admin_camera";
                         if ( !(isnil "_has_admin_camera") && _has_admin_camera) then {
                         } 
@@ -67,7 +64,6 @@ if (_art == "init") then {
             _men2 = nearestObjects[_this, ["Man", "LandVehicle", "Air"], 25];
                 
             {
-                liafu = true;
                 _x setDamage 1;
                         
                 if(!(_x isKindOf "Man")) then {
@@ -136,6 +132,21 @@ if (_art == "init") then {
             };
         };
     };
+	
+	INV_BombVehicle = {
+			private["_id", "_vehicle", "_i"];
+			
+			_id = _this select 0;
+			_vehicle = objNull;
+			
+			for [{_i=0}, {_i < (count INV_ServerBombArray)}, {_i=_i+1}] do {
+					if (((INV_ServerBombArray select _i) select 0) == _id) exitWith {
+							_vehicle = ((INV_ServerBombArray select _i) select 1);
+						};
+				};
+			
+			_vehicle
+		};
 
     if (isServer) then {["server"] spawn A_SCRIPT_BOMBS;};
     ["client"] spawn A_SCRIPT_BOMBS;
@@ -185,7 +196,7 @@ if (_art == "server") then {
 
                 case "aktivierungsbombe": {
                     if (!(_settings select 0)) then {
-                        _bombhandler = _vehicle addEventHandler ["engine", { _vehicle = _this select 0;  if (isEngineOn _vehicle) then { _vehicle removeAllEventHandlers "engine"; _vehicle spawn INV_BombSpawn; }; }];
+                      _vehicle addEventHandler ["engine", { _vehicle = _this select 0;  if (isEngineOn _vehicle) then { _vehicle removeAllEventHandlers "engine"; _vehicle spawn INV_BombSpawn; }; }];
                     };
 
                     if (_status == "defused") then {
@@ -416,6 +427,13 @@ if (_art == "config") then {
         };
         case "aktivierungsbombe": {
             if (_art == "defuse") then {
+				
+				private["_vehicle", "_i"];
+				_vehicle = objNull;
+				_vehicle = ([_id] call INV_BombVehicle);
+				_vehicle removeAllEventHandlers "engine";
+				format['%1 removeAllEventHandlers "engine";', _vehicle] call broadcast;
+				
                 format["""%1"" call INV_BombDelete", _id] call broadcast;
 				[player, _name, 1] call INV_AddInventoryItem;player groupChat localize "STRS_inv_item_vehiclebomb_defused";
             };

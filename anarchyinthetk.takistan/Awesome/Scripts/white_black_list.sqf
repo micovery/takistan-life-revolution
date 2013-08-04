@@ -97,7 +97,6 @@ A_LIST_ADMINS	=
 	"11060102",
 	"7547206",
 	"9784838",
-	"36557446",
 	"76476806",
 	"92317702",
 	"4022278",
@@ -106,11 +105,12 @@ A_LIST_ADMINS	=
 	"36621830",
 	"106972294",
 	"21532166",
-	"38764742",
+	"135130118",
 	"121911814",
 	"73708486",
 	"28237446",
-	"59597766"
+	"59597766",
+	"6903040"
 ];
 
 A_LIST_DONATORS = [];
@@ -467,8 +467,8 @@ A_WBL_F_LOAD_S = {
 						
 			_i = 0;
 			for [{_i=0}, {_i < (count _array)}, {_i=_i+1}] do {
-				call compile format["%1 set[%2, ""%3""];", _variable, _i, _array select _i];
-				call compile format["%1 set[%2, ""%3""];", _pv_s, _i, _array select _i];
+				[] call compile format["%1 set[%2, ""%3""];", _variable, _i, _array select _i];
+				[] call compile format["%1 set[%2, ""%3""];", _pv_s, _i, _array select _i];
 			};
 			publicVariable _pv_s;
 		};
@@ -537,7 +537,7 @@ A_WBL_F_REFRESH_R =  {
 			missionNamespace setVariable [_variable, []];
 			_i = 0;
 			for [{_i=0}, {_i < (count _pvariable_value)}, {_i=_i+1}] do {
-				call compile format["%1 set[%2, ""%3""];", _variable, _i, _pvariable_value select _i];
+				[] call compile format["%1 set[%2, ""%3""];", _variable, _i, _pvariable_value select _i];
 			};
 		};
 	} forEach A_WBL_LISTS;
@@ -583,8 +583,11 @@ A_WBL_F_L_ADD = {
 	if(	!(_uid in (call compile _List_variable))	) then {
 		player groupchat "Adding to list...";
 		
-		call compile format["%1 set[count %1, ""%2""];", _List_variable, _uid];
-		call compile format["%1 = %2;", _List_pv_c, _List_variable];
+		[] call compile format["%1 set[count %1, ""%2""];", _List_variable, _uid];
+		[] call compile format["%1 = %2;", _List_pv_c, _List_variable];
+
+//		Do not use, variables passed as strings		
+//		missionNamespace setVariable [_List_pv_c, _List_variable];
 		
 		publicVariableServer _List_pv_c;
 		
@@ -618,9 +621,13 @@ A_WBL_F_L_REMOVE = {
 	
 	if ((_uid in (call compile _List_variable))	) then {
 		player groupchat "Removing from list...";
+		
+		[] call compile format["%1 = %1 - [""%2""];", _List_variable, _uid];
+		[] call compile format["%1 = %2", _List_pv_c, _List_variable];
 
-		call compile format["%1 = %1 - [""%2""];", _List_variable, _uid];
-		call compile format["%1 = %2", _List_pv_c, _List_variable];
+//		Do note use, variables passed as string		
+//		missionNamespace setVariable [_List_pv_c, _List_variable];
+		
 		
 		publicVariableServer _List_pv_c;
 		
@@ -648,8 +655,12 @@ A_WBL_F_L_REMOVE_ALL = {
 	
 	player groupchat "Clearing list...";
 	
-	call compile format["%1 = [];", _List_variable];
-	call compile format["%1 = %2", _List_pv_c, _List_variable];
+//	Do not use, variables are passed as strings
+//	missionNamespace setVariable [_List_variable, []];
+//	missionNamespace setVariable [_List_pv_c, _List_variable];
+	
+	[] call compile format["%1 = [];", _List_variable];
+	[] call compile format["%1 = %2", _List_pv_c, _List_variable];
 
 	publicVariableServer _List_pv_c;	
 	player groupchat "Sent to server, please wait for lists to update";
@@ -673,7 +684,7 @@ A_WBL_GETTYPE_NUM = {
 	_return
 };
 
-// Gets the type name fro mthe UID
+// Gets the type name from the UID
 A_WBL_GETTYPE_NAME = {
 	private["_num", "_return"];
 

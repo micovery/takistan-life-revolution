@@ -3,6 +3,8 @@
 
 stunned_allowed_actions = ["Chat", "NextChannel", "PrevChannel", "VoiceOverNet", "ShowMap", "PushToTalkAll", "PushToTalkCommand", "PushToTalkDirect", "PushToTalkGroup", "PushToTalkSide", "PushToTalkVehicle", "PushToTalkAll", "PushToTalk"];
 
+agony_allowed_actions = ["Chat", "NextChannel", "PrevChannel"];
+
 keyboard_get_stunned_allowed_keys = {
 	private["_keys"];
 	
@@ -15,10 +17,26 @@ keyboard_get_stunned_allowed_keys = {
 	_keys
 };
 
-keyboard_animation_handler = {
+keyboard_get_agony_allowed_keys = {
+	private["_keys"];
+	
+	_keys = [];
+	{
+		private["_action"];
+		_action = _x;
+		_keys = _keys + (actionKeys _action);
+	} forEach agony_allowed_actions;
+	if ( time > ((player getVariable ["FA_AST", 0]) + 60)) then {
+			_keys set[count _keys, "IngamePause"];
+		};
+	_keys
+};
 
+keyboard_animation_handler = {
+	
 	if(!INV_shortcuts) exitWith { false };
-	if(arrested) exitWith{ false };
+	if([player] call player_get_arrest) exitWith{ false };
+	if ([player] call stun_punch_check) exitwith {false};
 	if (([player, (vehicle player)] call mounted_player_inside)) exitWith { false };
 	
 	if(dialog) exitWith {closeDialog 0;};
@@ -76,7 +94,7 @@ keyboard_lock_unlock_handler = {
 	private["_state"];
 	_state = [_vehicle] call vehicle_toggle_lock;
 	private["_message"];
-	_message = if (_state) then {"Vehicle locked"} else {"Vehicle unlocked"};
+	_message = if (_state) then {"Vehicle unlocked"} else {"Vehicle locked"};
 	player groupChat _message;
 		
 	true
@@ -89,7 +107,10 @@ keyboard_trunk_handler = {
 	private["_vcls", "_vcl"];
 	_vcls = nearestobjects [getpos player, ["LandVehicle", "Air", "ship", "TKOrdnanceBox_EP1"], 25];
 	_vcl = _vcls select 0;
-
+	
+	if !(alive _vcl) exitwith {
+			player groupchat "Vehicle is destroyed.";
+		};
 	
 	private["_inside_vehicle"];
 	_inside_vehicle = not((vehicle player) == player);
@@ -136,6 +157,9 @@ keyboard_restrained_check = {
 	([player, "restrained"] call player_get_bool)
 };
 
+keyboard_agony_check = {
+		player getVariable ["FA_inAgony", false];
+	};
 
 keyboard_interact_handler = {
 	private["_ctrl"];
@@ -144,7 +168,7 @@ keyboard_interact_handler = {
 	if (!INV_shortcuts) exitWith {false};
 	if (keyblock) exitWith {false};
 	if (dialog ) exitWith {closeDialog 0; false};
-	if (arrested) exitWith{ false };
+	if ([_victim] call player_get_arrest) exitWith{ false };
 
 	private ["_civ", "_handled", "_i"];
 
@@ -172,7 +196,7 @@ keyboard_interact_handler = {
 
 	if(_handled) exitWith { true };
 
-	//INTERACTIONS WITH VEHICLES
+/*	//INTERACTIONS WITH VEHICLES
 	private["_player_inside"];
 	_player_inside = [player, (vehicle player)] call mounted_player_inside;
 	//player groupChat format["_player_inside = %1", _player_inside];
@@ -203,6 +227,7 @@ keyboard_interact_handler = {
 		};
 		false
 	};
+*/
 
 	_vcl  = vehicle player;
 
@@ -240,6 +265,7 @@ keyboard_cop_siren_handler = {
 
 keyboard_stun_handler = {
 	if(!INV_shortcuts) exitWith {false};
+	player setVariable ["armed", true];
 	[3, player] execVM "Awesome\Scripts\Stun.sqf";
 	true
 };
@@ -420,6 +446,7 @@ keyboard_overlapping_keys = [];
 	keyboard_overlapping_keys = keyboard_overlapping_keys + (actionKeys _action);
 } foreach keyboard_overlapping_actions;
 
+keyboard_adminCheck = {_key == DIK_U};
 
 KeyUp_handler = {
 	private["_handled"];
@@ -430,14 +457,19 @@ KeyUp_handler = {
 	_ctrl	= _this select 3;
 	_alt	= _this select 4;
 	
+	afkTime = time;
+	
 	_handled = false;
 	
 	if (_key in(actionKeys "LookAround")) then {
 		lookingAround = false;
 	};
 	
-	if ((call keyboard_stunned_check) || (call keyboard_restrained_check)) exitWith {
+	if ((call keyboard_stunned_check) || (call keyboard_restrained_check) && !([_key] call keyboard_adminCheck)) exitWith {
 		not(_key in (call keyboard_get_stunned_allowed_keys))
+	};
+	if (call keyboard_agony_check && !([_key] call keyboard_adminCheck)) exitwith {
+		!(_key in (call keyboard_get_agony_allowed_keys))
 	};
 	
 	//Fix for exploit using cross-arms animation, that allows players to glitch through walls
@@ -527,13 +559,18 @@ KeyDown_handler = {
 	_ctrl	= _this select 3;
 	_alt	= _this select 4;
 
-
+	afkTime = time;
+	
 	if (_key in(actionKeys "LookAround")) then {
 		lookingAround = true;
 	};
 	
 	if ((call keyboard_stunned_check) || (call keyboard_restrained_check)) exitWith {
 		not(_key in (call keyboard_get_stunned_allowed_keys))
+	};
+	
+	if (call keyboard_agony_check) exitwith {
+		!(_key in (call keyboard_get_agony_allowed_keys))
 	};
 	
 	//Fix for exploit using cross-arms animation, that allows players to glitch through walls

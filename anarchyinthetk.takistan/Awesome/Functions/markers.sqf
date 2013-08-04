@@ -107,7 +107,7 @@ marker_side_loop_draw = {
 	
 	private["_player_variable_name", "_player_variable"];
 	_player_variable_name = _local_marker;
-	_player_variable = missionNamespace getVariable _player_variable_name;
+	_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 
 
 	if (not([player, "sidemarkers"] call player_get_bool) || 

@@ -9,7 +9,6 @@ _projectile		= _this select 4;
 private["_distance"];
 _distance 		= 0;
 
-liafu = true;
 
 if( ((_unit distance getmarkerpos "respawn_west" < 100))  || 
 	((_unit distance getmarkerpos "respawn_east" < 100)) || 
@@ -20,7 +19,6 @@ if( ((_unit distance getmarkerpos "respawn_west" < 100))  ||
 
 private["_exit"];
 _exit = false;
-
 
 {
 	private["_y"];
@@ -41,9 +39,7 @@ _weapon = currentWeapon _source;
 
 if (_projectile == "B_9x19_SD") then {
 	sleep 1;
-	private["_stunq"];
-	_stunq = (((_weapon == "M9") || (_weapon == "M9SD")) && _source_cop);
-	if ( (_stunq) ) then {
+	if ( (((_weapon == "M9") || (_weapon == "M9SD")) && _source_cop) ) then {
 		_reduce = true;
 		_distance = _source distance _unit;
 		_veh = vehicle _unit;
@@ -54,9 +50,7 @@ if (_projectile == "B_9x19_SD") then {
 
 if ((_projectile == "B_12Gauge_74Slug") ) then {
 	sleep 1;
-	private["_stunq"];
-	_stunq = ((_weapon == "M1014") && _source_cop);
-	if ( (_stunq) ) then {	
+	if ( ((_weapon == "M1014") && _source_cop) ) then {	
 		_reduce = true;
 		_distance = _source distance _unit;
 		_veh = vehicle _unit;

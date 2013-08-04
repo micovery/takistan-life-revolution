@@ -289,30 +289,10 @@ factory_globals = {
 		"An2_TK_EP1"
 	];
 
-	private["_alcoholfactory"];
-	_alcoholfactory = 
-	[
-		"beer",
-		"beer2",
-		"vodka",
-		"smirnoff",
-		"wiskey",
-		"wine",
-		"wine2"
-	];
-
-	private["_ringfactory"];
-	_ringfactory = 
-	[
-		"Diamondring",
-		"EDiamondring",
-		"Platinumring",
-		"EPlatinumring"
-	];
-
 	private["_furnace"];
 	_furnace = ["steel"];
-
+	
+	factory_selected = -1;
 	factory_object = 0;
 	factory_id = 1;
 	factory_name = 2;
@@ -330,8 +310,6 @@ factory_globals = {
 		[ ItemFabrik_1, "factory3", "General Factory", igunbox,dummyobj, _itemfactory, 650000, "Fabrikablage3", "itemqueue"],
 		[ weaponfactory, "factory4", "Weapon Factory", wfgunbox,dummyobj, _weaponfactory, 10000000, "Fabrikablage4", "weaponqueue"],
 		[ tairshop, "factory6", "Terrorist Vehicle Factory", dummyobj,tairspawn, _tairfactory, 20000000, "Fabrikablage6", "tavehiclequeue"],
-		[ alcoholfactory, "factory7", "Alcohol Factory", dummyobj, dummyobj, _alcoholfactory, 1000000, "Fabrikablage7", "alcoholfactoryqueue"] ,
-		//[ ringfactory, "factory9", "Ring Factory", dummyobj, dummyobj, _ringfactory, 2500000, "Fabrikablage9", "diamondqueue"],
 		[ Furnace, "factory10","Furnace", dummyobj, dummyobj, _furnace, 1500000, "Fabrikablage10","furnacequeue"]
 	];
 };
@@ -348,8 +326,9 @@ factory_init = {
 	
 	private["_factory"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {};
-	
+//	if (isNil "_factory") exitWith {};
+	if ((typeName _factory) != "ARRAY") exitwith {};
+		
 	//initialize the factory queue
 	private["_queue_name"];
 	_queue_name = _factory select factory_queue;
@@ -467,7 +446,7 @@ factory_lookup_id = {
 	if (typeName _id != "STRING") exitWith {nil};
 	
 	private["_factory"];
-	_factory = nil;
+	_factory = "";
 	{
 		private["_cfactory", "_cid"];
 		_cfactory = _x;
@@ -491,7 +470,7 @@ factory_player_near = {
 	
 	private["_min_distance", "_min_factory"];
 	_min_distance = _distance;
-	_min_factory = nil;
+	_min_factory = "";
 	
 	{
 		private["_cfactory", "_cdistance", "_cobject"];
@@ -529,16 +508,17 @@ factory_loop = {
 	
 	private["_factory", "_queue_name"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {
+//	if (isNil "_factory") exitWith {
+	if ((typeName _factory) != "ARRAY") exitwith {
 		player groupChat "Error (factory_loop): Invalid factory";
 		_this spawn factory_loop;
 	};
 	
 	_queue_name = _factory select factory_queue;
 	
-	call factory_update_queue_list;
-	call factory_update_dequeue_item;
-	call factory_update_enqueue_item;
+	[] call factory_update_queue_list;
+	[] call factory_update_dequeue_item;
+	[] call factory_update_enqueue_item;
 	
 	//wait for an item to be put on queue
 	//player groupChat format["Waiting for queue item at %1", _factory_id];
@@ -675,7 +655,8 @@ factory_item_dequeue = {
 	
 	private["_factory"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName _factory) != "ARRAY") exitwith {};
 	
 	private["_factory_name", "_queue_name", "_factory_storage"];
 	_factory_name = _factory select factory_name;
@@ -793,7 +774,8 @@ factory_item_enqueue = {
 	
 	private["_factory", "_factory_storage", "_factory_queue", "_factory_name", "_factory_money", "_starttime"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {factory_enqueue_active = false;};
+//	if (isNil "_factory") exitWith {factory_enqueue_active = false;};
+	if ((typeName _factory) != "ARRAY") exitwith {factory_enqueue_active = false;};
 	
 	_factory_storage = _factory select factory_storage;
 	_factory_queue = _factory select factory_queue;
@@ -876,7 +858,8 @@ factory_item_create = {
 
 	private["_factory", "_factory_storage", "_factory_spawn", "_factory_crate"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName _factory) != "ARRAY") exitwith {};
 	
 	_factory_storage = _factory select factory_storage;
 	_factory_spawn = _factory select factory_spawn;
@@ -931,7 +914,7 @@ factory_item_create = {
 		_amount = _amount - 1;
 	};
 	
-	call factory_update_enqueue_item;
+	[] call factory_update_enqueue_item;
 };
 
 
@@ -953,7 +936,8 @@ factory_remove_actions = {
 factory_update_enqueue_list = { 
 	private["_factory"];
 	_factory = factory_selected;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName factory_selected) != "ARRAY") exitwith {};
 	
 	private["_queue_name", "_queue", "_items", "_workers_name", "_workers"];
 	_queue_name = _factory select factory_queue;
@@ -977,16 +961,14 @@ factory_update_enqueue_list = {
 		lbSetData [factory_enqueue_list_id, _index, _x];
 	} forEach _items;
 		
-	call factory_update_enqueue_item;
+	[] call factory_update_enqueue_item;
 };
-
-
-
 
 factory_update_queue_list = { 
 	private["_factory"];
 	_factory = factory_selected;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName factory_selected) != "ARRAY") exitwith {};
 	
 	private["_queue_name", "_queue"];
 	_queue_name = _factory select factory_queue;
@@ -1060,10 +1042,9 @@ factory_update_status_fields = {
 };
 
 factory_update_enqueue_item = {
-	private["_index", "_item"];
+	private["_index", "_item", "_production_cost", "_avail"];
 	_index = (lbCurSel factory_enqueue_list_id);
 	
-	private["_production_cost", "_avail"];
 	_production_cost = 0;
 	_avail = 0;
 	
@@ -1090,9 +1071,9 @@ factory_update_enqueue_item = {
 	ctrlSetText [factory_item_cost_field_id, format["$%1", strM(_production_cost)]];
 	ctrlSetText [factory_item_produced_field_id, str(_avail)];
 	
-	private["_messages"];
-	_messages = call factory_validate_enqueue_item;
-	[_messages] call factory_update_status_fields;
+//	_messages = [] call factory_validate_enqueue_item;
+//	[_messages] call factory_update_status_fields;
+	[([] call factory_validate_enqueue_item)] call factory_update_status_fields;
 };
 
 factory_validate_enqueue_item = {
@@ -1103,7 +1084,8 @@ factory_validate_enqueue_item = {
 	
 	private["_factory"];
 	_factory = factory_selected;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName factory_selected) != "ARRAY") exitwith {};
 		
 	private["_player", "_item", "_index"];	
 	_player = player;
@@ -1176,10 +1158,8 @@ factory_validate_enqueue_item = {
 };
 
 factory_update_dequeue_item = {
-	call factory_update_production_stats;
-	private["_messages"];
-	_messages = call factory_validate_dequeue_item;
-	[_messages] call factory_update_status_fields;
+	[] call factory_update_production_stats;
+	[([] call factory_validate_dequeue_item)] call factory_update_status_fields;
 };
 
 factory_validate_dequeue_item = {
@@ -1187,7 +1167,8 @@ factory_validate_dequeue_item = {
 	
 	private["_factory"];
 	_factory = factory_selected;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName factory_selected) != "ARRAY") exitwith {};
 		
 	private["_player", "_item", "_index"];	
 	_player = player;
@@ -1225,8 +1206,10 @@ factory_validate_dequeue_item = {
 
 factory_update_production_stats = {
 	private["_factory"];
+	
 	_factory = factory_selected;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName factory_selected) != "ARRAY") exitwith {};
 	
 	private["_item", "_index"];	
 	_index = (lbCurSel factory_dequeue_list_id);
@@ -1284,7 +1267,7 @@ factory_production_menu = { _this spawn {
 	factory_selected = _factory;
 	[] spawn {
 		waitUntil { not(ctrlVisible factory_enqueue_list_id) };
-		factory_selected = nil;
+		factory_selected = "";
 	};
 	
 	private["_factory_name"];
@@ -1321,7 +1304,8 @@ factory_hire_workers = {
 	
 	private["_factory", "_queue_name", "_factory_name"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if ((typeName _factory) != "ARRAY") exitwith {};
 	
 	_queue_name = _factory select factory_queue;
 	_factory_name = _factory select factory_name;
@@ -1377,7 +1361,8 @@ factory_add_actions = {
 	
 	private["_factory"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory_id") exitWith {};
+//	if (isNil "_factory_id") exitWith {};
+	if ((typeName _factory) != "ARRAY") exitwith {};
 	
 	private["_factory_id", "_factory_cost", "_factory_storage", "_factory_name"];
 	_factory_name = _factory select factory_name;
@@ -1416,7 +1401,9 @@ factory_buy = {
 	
 	private["_factory", "_factory_cost"];
 	_factory = [_factory_id] call factory_lookup_id;
-	if (isNil "_factory") exitWith {};
+//	if (isNil "_factory") exitWith {};
+	if((typeName _factory) != "ARRAY")exitwith{};
+	
 	_factory_cost = _factory select factory_cost;
 	
 	if (_factory_id in INV_Fabrikowner) exitWith {

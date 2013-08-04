@@ -1,0 +1,859 @@
+/*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, agony">*/
+/*%FSM<HEAD>*/
+/*
+item0[] = {"Init",2,250,-19.917753,-258.998474,70.082275,-208.998550,0.000000,"Init"};
+item1[] = {"A_G_O_N_Y",2,250,-181.329132,-1.775620,102.347054,206.363586,0.000000,"A G O N Y"};
+item2[] = {"End___back_in_ac",2,250,295.000183,-440.199463,451.466949,-386.211548,0.000000,"End - back in action"};
+item3[] = {"A_T___E_A_S_E",2,250,-49.751709,-468.793182,118.215332,-359.675323,0.000000,"A T   E A S E"};
+item4[] = {"_",8,218,532.644714,256.728424,575.624573,291.564667,0.000000,""};
+item5[] = {"",7,210,683.096863,263.003296,691.097107,271.003418,0.000000,""};
+item6[] = {"not_inAgony",4,218,328.648621,-306.338959,418.648712,-256.338928,0.000000,"not inAgony"};
+item7[] = {"Is_damaged",4,218,-125.100166,-347.969360,-35.100109,-297.969360,1.000000,"Is damaged"};
+item8[] = {"T___0_2_",4,218,133.235367,-496.682251,223.870483,-436.939240,0.000000,"T + 0.2" \n ""};
+item9[] = {"Init_1",2,250,-11.674248,-706.166077,78.325729,-656.166077,0.000000,"Init"};
+item10[] = {"_",8,218,24.972992,-604.022705,44.701000,-589.653564,0.000000,""};
+item11[] = {"check_escape_from",2,250,363.887573,-39.998734,557.071045,12.531542,0.000000,"check escape from agony here " \n ""};
+item12[] = {"T",4,218,153.999817,237.204742,243.999847,287.204803,8.000000,"T"};
+item13[] = {"check_bleeding",2,250,263.684784,250.230133,415.942230,297.356598,0.000000,"check bleeding"};
+item14[] = {"Dead_by_damage",4,218,-806.300110,-297.536285,-716.300476,-247.536926,100.000000,"Dead by damage"};
+item15[] = {"_",8,218,-50.856785,-57.405174,-27.294140,-36.544331,0.000000,""};
+item16[] = {"inAgony__migrating",4,218,-25.379787,-347.897461,64.620232,-297.897400,0.000000,"inAgony" \n "(migrating)"};
+item17[] = {"_",8,218,213.195541,-422.323730,236.728882,-401.569092,0.000000,""};
+item18[] = {"parts__damage__bloodloss",4,218,491.560608,-461.895081,760.205139,-352.629181,2.000000,"parts, damage, bloodloss < FA_agonyDam" \n "bloodlossPerSecond == 0"};
+item19[] = {"T_3",4,218,155.456497,182.668335,245.456436,232.668350,1.000000,"T"};
+item20[] = {"Visual_Effect",2,250,274.345917,189.707581,396.184296,238.609467,0.000000,"Visual Effect"};
+item21[] = {"unconscious",4,218,69.361336,-347.953217,159.361267,-297.953217,0.000000,"unconscious"};
+item22[] = {"T_4",4,218,155.931412,130.038376,245.931351,180.038406,1.000000,"T"};
+item23[] = {"agonyCargo_gestu",2,250,279.020721,130.146927,400.859100,179.048904,0.000000,"agonyCargo gesture"};
+item24[] = {"__1",8,218,70.610168,-550.246216,160.610199,-500.246216,-1.000000,""};
+item25[] = {"AIS_Agony_Freeze",2,250,170.610199,-568.723816,365.796997,-518.723816,0.000000,"AIS_Agony_Freeze"};
+item26[] = {"__1",8,218,165.285278,-31.021324,255.285446,18.978731,0.000000,""};
+item27[] = {"T_5",4,218,156.510590,77.005356,246.510666,127.005173,0.000000,"T"};
+item28[] = {"respawn",2,250,-738.539795,-495.798859,-648.539917,-445.799103,0.000000,"respawn"};
+item29[] = {"_",8,218,-208.474152,-546.659485,-118.474060,-496.659912,0.000000,""};
+item30[] = {"check_respawn",4,218,-744.155762,-345.373199,-612.971680,-295.373169,0.000000,"check respawn"};
+item31[] = {"wait_for_new_identity",4,218,-597.721313,-546.966370,-432.554688,-495.477844,0.000000,"wait for new identity " \n "(set in damaging)"};
+item32[] = {"use_new_identity",2,250,-335.110046,-546.477295,-245.110168,-496.477234,0.000000,"use new identity"};
+item33[] = {"Start",0,250,-12.014027,-857.494629,77.985977,-807.494629,0.000000,"Start"};
+item34[] = {"wait_for_handle",4,218,-12.111183,-787.902527,77.888763,-737.902527,0.000000,"wait for handle"};
+item35[] = {"T_2",4,218,153.903839,348.241516,243.903809,398.241455,5.000000,"T"};
+item36[] = {"check_occupied_healplace",2,250,270.986755,382.140839,477.406006,467.523071,0.000000,"check occupied healplace" \n " for long by 1 person"};
+item37[] = {"long_healing__at",4,218,482.871338,390.672821,572.871460,440.672668,10.000000,"long healing" \n " at place 1"};
+item38[] = {"long_healing__at_1",4,218,483.556183,445.068787,573.556274,495.068512,10.000000,"long healing" \n " at place 0"};
+item39[] = {"dead_by_long_hea",2,250,612.612549,415.984863,702.612549,465.984467,0.000000,"dead by" \n "long heal"};
+item40[] = {"END___forced",1,250,-438.351959,-275.894409,-348.351868,-225.894394,0.000000,"END - forced"};
+item41[] = {"_",8,218,-294.810883,-314.061493,-204.810883,-264.062164,99.000000,""};
+item42[] = {"_",4,218,370.419830,-221.544037,460.419830,-171.544037,0.000000,""};
+item43[] = {"T_1",4,218,155.880173,291.734955,245.880203,341.735016,8.000000,"T"};
+item44[] = {"Increase_Bleedin",2,4346,264.624969,302.880005,416.882416,350.006470,0.000000,"Increase Bleeding"};
+item45[] = {"____FAKE____",9,1800,0.000000,0.000000,0.000000,0.000000,0.000000,"____FAKE____"};
+link0[] = {0,15};
+link1[] = {1,6};
+link2[] = {1,12};
+link3[] = {1,14};
+link4[] = {1,19};
+link5[] = {1,22};
+link6[] = {1,27};
+link7[] = {1,30};
+link8[] = {1,35};
+link9[] = {1,41};
+link10[] = {1,43};
+link11[] = {2,17};
+link12[] = {3,7};
+link13[] = {3,14};
+link14[] = {3,16};
+link15[] = {3,21};
+link16[] = {3,24};
+link17[] = {3,30};
+link18[] = {3,41};
+link19[] = {4,5};
+link20[] = {5,11};
+link21[] = {6,2};
+link22[] = {7,0};
+link23[] = {8,3};
+link24[] = {9,10};
+link25[] = {10,3};
+link26[] = {11,18};
+link27[] = {11,26};
+link28[] = {11,42};
+link29[] = {12,13};
+link30[] = {13,4};
+link31[] = {14,28};
+link32[] = {15,1};
+link33[] = {16,0};
+link34[] = {17,3};
+link35[] = {18,2};
+link36[] = {19,20};
+link37[] = {20,4};
+link38[] = {21,0};
+link39[] = {22,23};
+link40[] = {23,4};
+link41[] = {24,25};
+link42[] = {25,8};
+link43[] = {26,1};
+link44[] = {27,11};
+link45[] = {28,31};
+link46[] = {29,3};
+link47[] = {30,28};
+link48[] = {31,32};
+link49[] = {32,29};
+link50[] = {33,34};
+link51[] = {34,9};
+link52[] = {35,36};
+link53[] = {36,4};
+link54[] = {36,37};
+link55[] = {36,38};
+link56[] = {37,39};
+link57[] = {38,39};
+link58[] = {39,4};
+link59[] = {41,40};
+link60[] = {43,44};
+link61[] = {44,4};
+link62[] = {42,45};
+globals[] = {0.000000,0,0,0,0,640,480,1,189,6316128,1,-237.866394,558.463013,575.470459,-281.029236,847,911,1};
+window[] = {2,-1,-1,-1,-1,964,25,1210,25,3,865};
+*//*%FSM</HEAD>*/
+class FSM
+{
+  fsmName = "agony";
+  class States
+  {
+    /*%FSM<STATE "Init">*/
+    class Init
+    {
+      name = "Init";
+      init = /*%FSM<STATEINIT""">*/"//animation" \n
+       "" \n
+       "_who setVariable [""FA_healPlace0LastTime"", time, true];" \n
+       "_who setVariable [""FA_healPlace1LastTime"", time, true];" \n
+       "" \n
+       "_who switchCamera ""INTERNAL"";" \n
+       "_who playActionNow ""agonyStart"";" \n
+       "_who setUnconscious true;" \n
+       "_who setUnitPos ""DOWN"";" \n
+       "" \n
+       "_who setVariable [""FA_inAgony"",true,true]; " \n
+       "" \n
+       "[_who, ""restrained"", false] call player_set_bool;" \n
+       "" \n
+       "_who setVariable [""FA_AST"", time, false];" \n
+       "" \n
+       "//	_who setDamage 0.5;" \n
+       "" \n
+       "_agonyStartT = time;" \n
+       "" \n
+       "_waittill = time + 0;" \n
+       "_waittill2 = time + random 0.1;" \n
+       "_waittill3 = time + random 0.1;" \n
+       "_waittill4 = time + 30;" \n
+       "_waittill6 = time + (round (random 5));" \n
+       "_waittill7 = time + random 0.1;" \n
+       "_waittill8 = time + 0.2; " \n
+       "_waittill9 = time + 0.01; " \n
+       "" \n
+       "" \n
+       "_fade = true;" \n
+       "_fadeT = 0;" \n
+       "" \n
+       "format[""STARTING AGONY""] call A_FA_DEBUG;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="A_G_O_N_Y";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "A_G_O_N_Y">*/
+    class A_G_O_N_Y
+    {
+      name = "A_G_O_N_Y";
+      init = /*%FSM<STATEINIT""">*/"_inAgony = _who getVariable ""FA_inAgony"";" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Dead_by_damage">*/
+        class Dead_by_damage
+        {
+          priority = 100.000000;
+          to="respawn";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(damage _who >= 0.9)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 99.000000;
+          to="END___forced";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(_thisFSM getFSMVariable ""end"")"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "T">*/
+        class T
+        {
+          priority = 8.000000;
+          to="check_bleeding";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _waittill3"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_waittill3 = time + 3;" \n
+           "" \n
+           ""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "T_1">*/
+        class T_1
+        {
+          priority = 8.000000;
+          to="Increase_Bleedin";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _waittill4"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_waittill4 = time + 60;" \n
+           "" \n
+           ""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "T_2">*/
+        class T_2
+        {
+          priority = 5.000000;
+          to="check_occupied_healplace";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _waittill9"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_waittill9 = time + 1;"/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "T_3">*/
+        class T_3
+        {
+          priority = 1.000000;
+          to="Visual_Effect";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(_who == player) && (time > _waittill6)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "T_4">*/
+        class T_4
+        {
+          priority = 1.000000;
+          to="agonyCargo_gestu";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(_who == player) && (time > _waittill7)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_waittill7 = time + 0.5;" \n
+           "//random 0.5;" \n
+           "" \n
+           ""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "not_inAgony">*/
+        class not_inAgony
+        {
+          priority = 0.000000;
+          to="End___back_in_ac";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"!_inAgony"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "check_respawn">*/
+        class check_respawn
+        {
+          priority = 0.000000;
+          to="respawn";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"isNil {_who getVariable ""FA_agonyHandle""}" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "T_5">*/
+        class T_5
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _waittill8"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_waittill8 = time + 0.2;"/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "End___back_in_ac">*/
+    class End___back_in_ac
+    {
+      name = "End___back_in_ac";
+      init = /*%FSM<STATEINIT""">*/"_who setUnconscious false;" \n
+       "" \n
+       "if !([_who, ""restrained""] call player_get_bool) then {" \n
+       "		_who playAction ""GestureNod"";" \n
+       "		_who spawn {Sleep 5; _this playActionNow ""agonyStop"";};" \n
+       "	};" \n
+       "" \n
+       "_who setVariable [""FA_inAgony"",false,true];" \n
+       "" \n
+       "_who setUnitPos ""UP"";" \n
+       "" \n
+       "cutText["""", ""PLAIN"", 0];" \n
+       "" \n
+       "" \n
+       "_rtime = time + (30 * 60);"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="A_T___E_A_S_E";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"true"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "A_T___E_A_S_E">*/
+    class A_T___E_A_S_E
+    {
+      name = "A_T___E_A_S_E";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "Dead_by_damage">*/
+        class Dead_by_damage
+        {
+          priority = 100.000000;
+          to="respawn";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(damage _who >= 0.9)"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 99.000000;
+          to="END___forced";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(_thisFSM getFSMVariable ""end"")"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "Is_damaged">*/
+        class Is_damaged
+        {
+          priority = 1.000000;
+          to="Init";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((damage _who > 0.85) && (damage _who < 0.9)) || " \n
+           "(_who getVariable ""head_hit"" > 0.8) ||" \n
+           "(_who getVariable ""body"" > 0.8) ||" \n
+           "(_who getVariable ""hands"" > 0.8)" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "unconscious">*/
+        class unconscious
+        {
+          priority = 0.000000;
+          to="Init";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(lifeState _who) == ""UNCONSCIOUS"";"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "check_respawn">*/
+        class check_respawn
+        {
+          priority = 0.000000;
+          to="respawn";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"isNil {_who getVariable ""FA_agonyHandle""}" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "inAgony__migrating">*/
+        class inAgony__migrating
+        {
+          priority = 0.000000;
+          to="Init";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"_who getVariable [""FA_inAgony"", false]"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__1">*/
+        class __1
+        {
+          priority = -1.000000;
+          to="AIS_Agony_Freeze";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Init_1">*/
+    class Init_1
+    {
+      name = "Init_1";
+      init = /*%FSM<STATEINIT""">*/"_who = _this select 0;" \n
+       "" \n
+       "_thisFSM = ((_this select 0) getVariable ""FA_agonyHandle"");" \n
+       "_thisFSM setFSMVariable [""end"", false];" \n
+       "" \n
+       "_rtime = 0;" \n
+       "" \n
+       "_waittill = time;" \n
+       "" \n
+       "" \n
+       "" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="A_T___E_A_S_E";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "check_escape_from">*/
+    class check_escape_from
+    {
+      name = "check_escape_from";
+      init = /*%FSM<STATEINIT""">*/"/*" \n
+       "format['" \n
+       "		CHECKING ESCAPE FROM FUCKING AGONY: " \n
+       "		WHO1 - %1" \n
+       "		WHO2 - %2" \n
+       "		H-%3" \n
+       "		PAD-%4" \n
+       "		B1 - %5" \n
+       "		B2 - %6" \n
+       "		B3 - %7" \n
+       "		B4 - %8" \n
+       "		B5 - %9" \n
+       "		B6 - %10" \n
+       "		B7 - %11" \n
+       "		B8 - %12" \n
+       "		B9 - %13" \n
+       "		B10 - %14" \n
+       "	'," \n
+       "		_who," \n
+       "		_thisFSM getFSMVariable ""who""," \n
+       "		_thisFSM," \n
+       "		_personal_agonyDam," \n
+       "		(damage _who <= _personal_agonyDam)," \n
+       "		((_who getVariable [""body"", 0]) < _personal_agonyDam)," \n
+       "		((_who getVariable [""head_hit"", 0]) < _personal_agonyDam)," \n
+       "		((_who getVariable [""hands"", 0]) < _personal_agonyDam)," \n
+       "		((_who getVariable ["""", 0]) < _personal_agonyDam)," \n
+       "		((_who getVariable [""bloodloss"", 0]) <= _personal_agonyDam)," \n
+       "		((_who getVariable [""bloodlossPerSecond"", 0]) <= 0)," \n
+       "		!(_who getVariable [""FA_inAgony"", false])" \n
+       "	] call A_FA_DEBUG;" \n
+       "*/" \n
+       "" \n
+       "" \n
+       "" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "parts__damage__bloodloss">*/
+        class parts__damage__bloodloss
+        {
+          priority = 2.000000;
+          to="End___back_in_ac";
+          precondition = /*%FSM<CONDPRECONDITION""">*/"_personal_agonyDam = (_who getVariable [""FA_agonyDam"", FA_agonyDam]);  "/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(" \n
+           "(damage _who <= _personal_agonyDam)" \n
+           "&&" \n
+           "((_who getVariable [""body"", 0]) < _personal_agonyDam)" \n
+           "&&" \n
+           "((_who getVariable [""head_hit"", 0]) < _personal_agonyDam)" \n
+           "&&" \n
+           "((_who getVariable [""hands"", 0]) < _personal_agonyDam)" \n
+           "&&" \n
+           "((_who getVariable ["""", 0]) < _personal_agonyDam)" \n
+           "&&" \n
+           "((_who getVariable [""bloodloss"", 0]) <= _personal_agonyDam)" \n
+           "&&" \n
+           "((_who getVariable [""bloodlossPerSecond"", 0]) <= 0)" \n
+           ")" \n
+           "||" \n
+           "!(_who getVariable [""FA_inAgony"", false])" \n
+           "" \n
+           "" \n
+           "" \n
+           "" \n
+           ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="____FAKE____";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "__1">*/
+        class __1
+        {
+          priority = 0.000000;
+          to="A_G_O_N_Y";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "check_bleeding">*/
+    class check_bleeding
+    {
+      name = "check_bleeding";
+      init = /*%FSM<STATEINIT""">*/"if ((_who getVariable [""bloodlossPerSecond"", 0]) > 0 ) then {" \n
+       "//		[_who, ""bloodloss"", (_who getVariable [""bloodloss"", 0]) + (_who getVariable [""bloodlossPerSecond"", 0])] execFSM FA_hDamage;" \n
+       "		[_who, ""bloodloss"", (_who getVariable [""bloodloss"", 0]) + (_who getVariable [""bloodlossPerSecond"", 0])] spawn FA_hDamage;" \n
+	   "	};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Visual_Effect">*/
+    class Visual_Effect
+    {
+      name = "Visual_Effect";
+      init = /*%FSM<STATEINIT""">*/"_btime = 0;" \n
+       "if (_fade) then {" \n
+       "		_btime = 2 + round(random 10);" \n
+       "		cutText["""", ""BLACK OUT"", _btime];" \n
+       "		_fadeT =_btime + round( random 10);" \n
+       "	} else {" \n
+       "		_btime = 2 + round(random 10);" \n
+       "		cutText["""", ""BLACK IN"", _btime];" \n
+       "		_fadeT = _btime + round(random 5);" \n
+       "	};" \n
+       "" \n
+       "" \n
+       "_fade = !_fade;" \n
+       "_waittill6 = time + _fadeT;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "agonyCargo_gestu">*/
+    class agonyCargo_gestu
+    {
+      name = "agonyCargo_gestu";
+      init = /*%FSM<STATEINIT""">*/"if (_who !=( vehicle _who)) then {" \n
+       "		 _who playAction ""agonyCargo"";" \n
+       "	};" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "AIS_Agony_Freeze">*/
+    class AIS_Agony_Freeze
+    {
+      name = "AIS_Agony_Freeze";
+      init = /*%FSM<STATEINIT""">*/"if (time > _rtime) then {" \n
+       "		_who setVariable[""FA_healPlace0who"", objNull,true];" \n
+       "		_who setVariable[""FA_healPlace1who"", objNull,true];" \n
+       "		_who setVariable[""FA_healPlace0whoLast"", objNull,true];" \n
+       "		_who setVariable[""FA_healPlace1whoLast"", objNull,true];" \n
+       "		_who setVariable[""FA_healPlace0LastTime"", 0,true];" \n
+       "		_who setVariable[""FA_healPlace1LastTime"", 0,true];" \n
+       "	};"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "T___0_2_">*/
+        class T___0_2_
+        {
+          priority = 0.000000;
+          to="A_T___E_A_S_E";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"time > _waittill"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/"_waittill = time + 0.2;" \n
+           ""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "respawn">*/
+    class respawn
+    {
+      name = "respawn";
+      init = /*%FSM<STATEINIT""">*/"format[""AGONY RESPAWN - %1 - %2 - %3"", _who, (_thisFSM getFSMVariable ""who""), _thisFSM] call A_FA_DEBUG;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "wait_for_new_identity">*/
+        class wait_for_new_identity
+        {
+          priority = 0.000000;
+          to="use_new_identity";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(_thisFSM getFSMVariable ""who"") != _who;"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "use_new_identity">*/
+    class use_new_identity
+    {
+      name = "use_new_identity";
+      init = /*%FSM<STATEINIT""">*/"_who = (_thisFSM getFSMVariable ""who"");" \n
+       "format[""AGONY RESPAWN PASS - %1 - %2 - %3"", _who, (_thisFSM getFSMVariable ""who""), _thisFSM] call A_FA_DEBUG;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="A_T___E_A_S_E";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Start">*/
+    class Start
+    {
+      name = "Start";
+      init = /*%FSM<STATEINIT""">*/"private[" \n
+       "		""_who"", ""_thisFSM""," \n
+       "		""_waittill"", ""_waittill2"", ""_waittill3"", ""_waittill4"", ""_waittill5"", ""_waittill6"", ""_waittill7"", ""_waittill8"", ""_waittill9""," \n
+       "		""_agonyStartT"", ""_fade"", ""_fadeT"", ""_btime"", ""_rtime""" \n
+       "	];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "wait_for_handle">*/
+        class wait_for_handle
+        {
+          priority = 0.000000;
+          to="Init_1";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"!isNil {((_this select 0) getVariable ""FA_agonyHandle"")}"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "check_occupied_healplace">*/
+    class check_occupied_healplace
+    {
+      name = "check_occupied_healplace";
+      init = /*%FSM<STATEINIT""">*/"if (" \n
+       "		((_who getVariable ""FA_healPlace0whoLast"") != (_who getVariable ""FA_healPlace0who"")) ||" \n
+       "		(isNull (_who getVariable ""FA_healPlace0whoLast"")) ||" \n
+       "		(isNull (_who getVariable ""FA_healPlace0who""))" \n
+       "	) then {	" \n
+       "			_who setVariable [""FA_healPlace0LastTime"", time, true];" \n
+       "		};" \n
+       "" \n
+       "if (" \n
+       "		((_who getVariable ""FA_healPlace1whoLast"") != (_who getVariable ""FA_healPlace1who"")) ||" \n
+       "		(isNull (_who getVariable ""FA_healPlace1whoLast""))  ||" \n
+       "		(isNull (_who getVariable ""FA_healPlace1who""))" \n
+       "	) then {" \n
+       "			_who setVariable [""FA_healPlace1LastTime"", time, true];" \n
+       "		};" \n
+       "" \n
+       "_who setVariable [""FA_healPlace0whoLast"", (_who getVariable ""FA_healPlace0who""), true];" \n
+       "_who setVariable [""FA_healPlace1whoLast"", (_who getVariable ""FA_healPlace1who""), true];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "long_healing__at">*/
+        class long_healing__at
+        {
+          priority = 10.000000;
+          to="dead_by_long_hea";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((time - (_who getVariable ""FA_healPlace1LastTime"")) > FA_healPlaceTimeMax)" \n
+           "&&" \n
+           "(!isNull ((_who getVariable ""FA_healPlace1who"")))"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "long_healing__at_1">*/
+        class long_healing__at_1
+        {
+          priority = 10.000000;
+          to="dead_by_long_hea";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"((time - (_who getVariable ""FA_healPlace0LastTime"")) > FA_healPlaceTimeMax)" \n
+           "&&" \n
+           "(!isNull ((_who getVariable ""FA_healPlace0who"")))"/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "dead_by_long_hea">*/
+    class dead_by_long_hea
+    {
+      name = "dead_by_long_hea";
+      init = /*%FSM<STATEINIT""">*/"_who setDamage 1.0;" \n
+       ""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "END___forced">*/
+    class END___forced
+    {
+      name = "END___forced";
+      init = /*%FSM<STATEINIT""">*/"format[ ""FSM ENDED %1"", _thisFSM] call A_FA_DEBUG;"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "Increase_Bleedin">*/
+    class Increase_Bleedin
+    {
+      name = "Increase_Bleedin";
+      init = /*%FSM<STATEINIT""">*/"//_blps = _who getVariable [""bloodlossPerSecond"", 0];" \n
+       "//_who setVariable [""bloodlossPerSecond"", _blps +  (_blps * 0.001), true];"/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+        /*%FSM<LINK "_">*/
+        class _
+        {
+          priority = 0.000000;
+          to="check_escape_from";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+      };
+    };
+    /*%FSM</STATE>*/
+    /*%FSM<STATE "____FAKE____">*/
+    class ____FAKE____
+    {
+      name = "____FAKE____";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
+  };
+  initState="Start";
+  finalStates[] =
+  {
+    "END___forced",
+  };
+};
+/*%FSM</COMPILE>*/

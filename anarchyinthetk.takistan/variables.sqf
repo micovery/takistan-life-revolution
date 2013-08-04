@@ -226,12 +226,12 @@ if (isServer) then { [0] call shop_set_fuel_consumed; };
 
 
 //==============================MINING=============================================
-shoveldur=20;
-shovelmax=2;
-pickaxedur=50;
-pickaxemax=3;
-hammerdur=100;
-hammermax=4;
+m_shovel_max = 0.25;
+m_shovel_loop = 2;
+m_pick_max = 0.5;
+m_pick_loop = 5;
+m_drill_max = 1;
+m_drill_loop = 5;
 working=false;
 
 //===============================GANGS=============================================
@@ -239,10 +239,6 @@ gangincome          = 15000;
 gangcreatecost      = 75000;
 gangdeltime         = 300;
 gangareas           = [gangarea1,gangarea2,gangarea3];
-
-//=================================================================================
-CityLocationArray   = [[CityLogic1, 500], [CityLogic2, 400], [CityLogic4, 500], [CityLogic5, 200], [Militarybase, 200]];
-respawnarray        = [respawn1,respawn2,respawn3,respawn4,respawn5,respawn6,respawn7,respawn8,respawn9,respawn10,respawn11,respawn12];
 
 //=========== cop patrol array ==========
 coppatrolarray  =
@@ -288,7 +284,6 @@ robpoolsafe2           = 0;
 robpoolsafe3           = 0;
 deadtimebonus          = 0.001;
 
-["arrested", false] call stats_init_variable;
 ["deadtimes", 0] call stats_init_variable;
 ["copskilled", 0] call stats_init_variable;
 ["civskilled", 0] call stats_init_variable;
@@ -335,6 +330,7 @@ while { _i < (count playerstringarray) } do {
 	_i = _i + 1;
 };
 
+INV_InventarPistol = "";
 atmscriptrunning = 0;
 shopactivescript = 0;
 deadcam_wechsel_dauer    = 5;
@@ -357,14 +353,13 @@ speedbomb_mindur         = 10;
 speedbomb_maxdur         = 300;
 zeitbombe_mintime        = 1;
 zeitbombe_maxtime        = 10;
-HideoutLocationArray     = CityLocationArray;
 publichideoutarray       = [];
 hideoutcost              = 20000;
 marker_ausserhalb        = param1;
 marker_innerhalb         = 5;
 marker_CopDistance       = 50; //controls distance cops need to be to make civ dots appear outside of towns.
 CivMarkerUngenau         = 20;
-
+lastShot 				= 0;
 classmap = 
 [
 	["money", "EvMoney"],
@@ -433,17 +428,14 @@ timeinworkplace          = 0;
 wpcapacity               = 10;
 INV_hasitemshop          = 0;
 INV_haswepshop           = 0;
-gunlicensetargets        = [t11,t12,t21,t22,t31,t32,t41,t42,t51,t52,t61,t62,t71,t72,t81,t82,t91,t92,t101,t111,t112,t121,t131,t132,t133,t134,t135];
 ["BuildingsOwnerArray", []] call stats_init_variable;
 
-if(isciv) then {
 BuyAbleBuildingsArray    =
     [
         ["wp1", "Workplace 1", workplace_getjobflag_1, 100000, 500, "wp", "WpAblage_1"],
         ["wp2", "Workplace 2", workplace_getjobflag_2, 200000, 1000, "wp", "WpAblage_2"],
         ["wp3", "Workplace 3", workplace_getjobflag_3, 350000, 1500, "wp", "WpAblage_3"]
     ];
-};
 
 // array used in taxi missions
 civclassarray         =
@@ -484,8 +476,11 @@ player_connected_handler = {
 	publicVariable "INV_ItemTypenArray";
 	publicVariable "INV_ItemStocks";
 	publicVariable "INV_ItemMaxStocks";
+	
 	[_uid] call ftf_connected;
 };
+
+restrain_respawn = false;
 
 if(isServer)then {
 	onPlayerConnected { [_id, _name, _uid] call player_connected_handler };

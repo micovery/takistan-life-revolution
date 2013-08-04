@@ -4,6 +4,7 @@ _action = _this select 0;
 if (_action == 1) then {
 	private ["_unit"];
 	_unit = _this select 1;
+	if !(alive _unit) exitwith {};
 	if(not(isCop)) exitWith {};
 	if (((currentWeapon _unit) == "M9") || ((currentWeapon _unit) == "M9SD")) then {
 		format["%1 say ""tazer"";", _unit] call broadcast;
@@ -20,6 +21,8 @@ if (_action == 2) then {
 	_damage = _this select 5;
 	_veh = _this select 6;
 	_inveh = _this select 7;
+	
+	if !(alive _unit) exitwith {};
 	
 	if (_unit distance getMarkerpos "respawn_west" < 100) exitwith {};
 	if (_unit distance getMarkerpos "respawn_east" < 100) exitwith {};
@@ -52,7 +55,9 @@ if (_action == 3) then {
 	private ["_unit", "_man", "_men", "_currentw"];
 
 	_unit = _this select 1;
-
+	
+	if !(alive _unit) exitwith {};
+	
 	if (_unit distance getMarkerpos "respawn_west" < 100) exitwith {};
 	if (_unit distance getMarkerpos "respawn_east" < 100) exitwith {};
 	if (_unit distance getMarkerpos "respawn_guerrila" < 100) exitwith {};
@@ -61,9 +66,12 @@ if (_action == 3) then {
 	_currentw	= [_unit] call getCW_class;
 	
 	_men = nearestobjects [getpos _unit, ["CAManBase"], 3] - [_unit];
+	
+	if ((count _men) == 0) exitwith {};
+	
 	_man = _men select 0;
 	
-	// bailflag
+	if (isNull _man) exitwith {};
 	if ((_man in shopusearray) || (_man == bailflag)) exitWith {};
 	
 	_exit = false;

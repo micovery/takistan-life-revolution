@@ -230,9 +230,8 @@ C_change = {
 	
 	_score = score _oldUnit;
 	_rank = rank _oldUnit;
-	_damage = damage _olUnit;
-	_sarmor = _oldUnit getVariable "stun_armor";
-	_mask = _oldUnit getVariable "gasmask";
+	_sarmor = _oldUnit getVariable ["stun_armor", "none"];
+	_mask = _oldUnit getVariable ["gasmask", false];
 	
 	_oldUnit switchCamera "INTERNAL";
 	
@@ -264,11 +263,13 @@ C_change = {
 	addSwitchableUnit _newUnit;
 	selectPlayer _newUnit;
 	_group selectLeader _newUnit;
+	
+	[_oldUnit, _newUnit] call FA_transfer;
+	
 	[_oldUnit] call C_delete;
 	
 	_newUnit setRank _rank;
 	_newUnit addscore _score;
-	_newUnit setdamage _damage;
 	
 	[_newUnit] call player_reset_gear;
 	[_newUnit] call player_reset_side_inventory;
@@ -290,11 +291,6 @@ C_change = {
 	C_changing = false;
 	
 	role = _newUnit;
-	_newUnit addEventHandler ["fired", {_this execVM "Awesome\EH\EH_fired.sqf"}];
-	_newUnit addEventHandler ["handleDamage", {_this execVM "Awesome\EH\EH_handledamage.sqf"}];
-	_newUnit addEventHandler ["WeaponAssembled", {_this execVM "Awesome\EH\EH_weaponassembled.sqf"}];
-	_newUnit addMPEventHandler ["MPKilled", { _this call player_handle_mpkilled }];
-	_newUnit addMPEventHandler ["MPRespawn", { _this call player_handle_mprespawn }];
 	
 	_newUnit setVariable ["stun_armor", _sarmor, true];
 	_newUnit setVariable ["gasmask", _mask, true];

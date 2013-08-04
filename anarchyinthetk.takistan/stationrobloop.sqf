@@ -1,66 +1,33 @@
-// server keeps track of cash in gas stations, and makes the variable public
-// written by eddie vedder
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+
+private["_randomamount", "_newAmount", "_money", "_stringVariable", "_i"];
+
+for [{_i = 1}, {_i <= 9}, {_i = _i + 1}] do {
+			_stringVariable = format["station%1money", _i];
+			missionNamespace setVariable [_stringVariable, 5000];
+			publicVariable _stringVariable;
+		};
+
 while {true} do {
-_randomamount = ceil ((random 250) + 250);
-if (station3money < maxstationmoney) then
-	{
-	station1money = station1money + _randomamount;
-	if (station1money > maxstationmoney) then {station1money = maxstationmoney;};
-	};
-if (station3money < maxstationmoney) then
-	{
-	station2money = station2money + _randomamount;
-	if (station2money > maxstationmoney) then {station2money = maxstationmoney;};
-	};
-if (station3money < maxstationmoney) then
-	{
-	station3money = station3money + _randomamount;
-	if (station3money > maxstationmoney) then {station3money = maxstationmoney;};
-	};
-if (station4money < maxstationmoney) then
-	{
-	station4money = station4money + _randomamount;
-	if (station4money > maxstationmoney) then {station4money = maxstationmoney;};
-	};
-if (station5money < maxstationmoney) then
-	{
-	station5money = station5money + _randomamount;
-	if (station5money > maxstationmoney) then {station5money = maxstationmoney;};
-	};
-if (station6money < maxstationmoney) then
-	{
-	station6money = station6money + _randomamount;
-	if (station6money > maxstationmoney) then {station6money = maxstationmoney;};
-	};
-if (station7money < maxstationmoney) then
-	{
-	station7money = station7money + _randomamount;
-	if (station7money > maxstationmoney) then {station7money = maxstationmoney;};
-	};
-if (station8money < maxstationmoney) then
-	{
-	station8money = station8money + _randomamount;
-	if (station8money > maxstationmoney) then {station8money = maxstationmoney;};
-	};
-if (station9money < maxstationmoney) then
-	{
-	station9money = station9money + _randomamount;
-	if (station9money > maxstationmoney) then {station9money = maxstationmoney;};
-	};
-publicvariable "station1money";
-publicvariable "station2money";
-publicvariable "station3money";
-publicvariable "station4money";
-publicvariable "station5money";
-publicvariable "station6money";
-publicvariable "station7money";
-publicvariable "station8money";
-publicvariable "station9money";
-
-sleep 30;
+	_randomamount = ceil ((random 250) + 250);
+	_newAmount = 0;
+	_money = 0;
+	_stringVariable = "";
+	
+	for [{_i = 1}, {_i <= 9}, {_i = _i + 1}] do {
+			_stringVariable = format["station%1money", _i];
+			
+			_money = missionNamespace getVariable [_stringVariable, 0];
+			
+			_newAmount = if ( (_money + _randomamount) > maxstationmoney) then {
+					maxstationmoney
+				}else{
+					(_money + _randomamount)
+				};
+			
+			missionNamespace setVariable [_stringVariable, _newAmount];
+			publicVariable _stringVariable;
+		};
+	
+	SleepWait(5 * 60)
 };
-
-
-
-
-//eddie vedder

@@ -1023,10 +1023,10 @@ _igs =
 		["Rnd_SmokeGreen_GP25", -1, -1],
 		["Rnd_SmokeYellow_GP25", -1, -1],
 		["MineE", -1, -1],
-		["Garbage IED Small", -1, -1],
-		["Garbage IED Large", -1, -1],
-		["Ground IED Small", -1, -1],
-		["Ground IED Large", -1, -1],
+		["GarbageIEDSmall_PMC", -1, -1],
+		["GroundIEDSmall_PMC", -1, -1],
+		["GarbageIEDLarge_PMC", -1, -1],
+		["GroundIEDLarge_PMC", -1, -1],
 		["TK_ALICE_Pack_EP1", -1, -1],
 		["TK_Assault_Pack_EP1", -1, -1],
 		["TK_RPG_Backpack_EP1", -1, -1],
@@ -1525,6 +1525,10 @@ _russ =
 		["Rnd_762x54_SVD", -1, -1]
 	];
 	
+_bank = [
+		["bankversicherung", -1, -1]
+	];
+	
 INV_ItemShops_Object = 0;
 INV_ItemShops_Name = 1;
 INV_ItemShops_Crate = 2;
@@ -1587,7 +1591,7 @@ INV_ItemShops = [
 
 		[resourcesell,"Sell Resources",dummyobj,dummyobj,_rs,_rs,true],
 
-		[RingShop,"Ring Sell", dummobj,dummyobj,_gds,_gds,true],
+		[RingShop,"Ring Sell", dummyobj,dummyobj,_gds,_gds,true],
 
 		[OilSell1,"Oil Dealer", dummyobj,dummyobj, _emptyshop,_os,true],
 
@@ -1659,7 +1663,9 @@ INV_ItemShops = [
 
 		[hpcar,"Hospital Vehicle Shop",dummyobj,hospitalspawn,_hp,_hp,true],
 
-		[russmuggler,"Russian Arms Dealer",rusgunbox,dummyobj,_russ,_russ,true]
+		[russmuggler,"Russian Arms Dealer",rusgunbox,dummyobj,_russ,_russ,true],
+		
+		[mainbankShop,"Bank Insurance",dummyobj,dummyobj,_bank,_bank,true]
 	];
 
 

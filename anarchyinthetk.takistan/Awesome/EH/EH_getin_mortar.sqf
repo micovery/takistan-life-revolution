@@ -71,8 +71,8 @@ while {vehicle player == _piece} do {
 		M_Elevation = _str_elevation;
 		M_Azimut	= _str_azimut;
 		
-		titleText [format["E: %1		A: %2", _str_elevation, _str_azimut], "plain down", 0.01];
-		
+	//	titleText [format["E: %1		A: %2", _str_elevation, _str_azimut], "plain down", 0.01];
+		hintSilent format["E: %1		A: %2", _str_elevation, _str_azimut];
 	};
 
 };

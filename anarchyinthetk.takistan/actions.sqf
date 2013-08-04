@@ -8,11 +8,9 @@ _role = player;
 action1 =	_role addaction ["Defuse Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;if(!alive player)exitwith{};bombactive=false;publicvariable "bombactive";"hint ""The bomb has been defused!"";server globalchat ""The bomb has been defused!"";playsound ""fanfare"";" call broadcast;',1,false,true,"","player distance HQ <= 5 and iscop and bombactive and !planting"];
 action2 =	_role addaction ["Plant Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;publicvariable "planting";player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;publicvariable "planting";if(!alive player)exitwith{};bombactive=true;publicvariable "bombactive";',1,false,true,"","player distance HQ <= 5 and !bombactive and !planting and isciv"];
 //====================================== BANK ROB =====================================================
-action4 =	_role addaction ["Rob safe","bankrob.sqf", ["ausrauben", safe1],1,false,true,"","player distance safe1 <= 3 and isciv"];
-action5 =	_role addaction ["Rob safe","bankrob.sqf", ["ausrauben", safe2],1,false,true,"","player distance safe2 <= 3 and isciv"];
-action6 =	_role addaction ["Rob safe","bankrob.sqf", ["ausrauben", safe3],1,false,true,"","player distance safe3 <= 3 and isciv"];
-//==================================== HOLSTER RIFLE ==================================================
-//action7 = 	_role addaction ["Holster Rifle","\noscript.sqf",[""],1,false,true,"",'player distance workplacejob_deliveryflag3 <= 4'];
+action4 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe1],1,false,true,"","player distance safe1 <= 3 and isciv"];
+action5 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe2],1,false,true,"","player distance safe2 <= 3 and isciv"];
+action6 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe3],1,false,true,"","player distance safe3 <= 3 and isciv"];
 //===================================== ASSASSINATION =================================================
 action8 = 	_role addaction ["Get Assassination job","assassination.sqf",["getajob_assassin"],1,false,true,"","player distance assassin <= 3 and isciv"];
 action9 =   _role addaction ["Escort VIP", "noscript.sqf", "[VIPtarget] join (group player); player groupchat ""escort the VIP to the police base before he is assassinated!"";",1,false,true,"","player distance VIPtarget < 5 and iscop"];
@@ -70,9 +68,8 @@ action113 = _role addaction ["Reset targets","noscript.sqf",'{_x animate["terc",
 cpbkp = _role addaction ["Recruit Soldier $200000","noscript.sqf",'[player, 200000] call interact_recruit_ai;',1,false,true,"","!curreccop and player distance copbackup <= 10 and count (units group player) < 8 and iscop"];
 opbkp = _role addaction ["Recruit Soldier $150000","noscript.sqf",'[player, 150000] call interact_recruit_ai;',1,false,true,"","!currecred and player distance redbackup <= 10 and count (units group player) < 8"];
 insbkp = _role addaction ["Recruit Fighter $100000","noscript.sqf",'[player, 100000] call interact_recruit_ai;',1,false,true,"","!currecins and player distance civbackup <= 10 and count (units group player) < 8"];
-
 //===================================== IMPOUND AREA ==================================================
-action21 = _role addaction ["Impound Lot","maindialogs.sqf",["impound"],1,false,true,"","player distance impoundbuy <= 5 or player distance copcar <= 5"];
+action21 = _role addaction ["Impound Lot","noscript.sqf",'[] spawn A_impound_dialog',1,false,true,"","player distance impoundbuy <= 5 or player distance copcar <= 5"];
 //action22 = _role addaction ["Impound Lot","maindialogs.sqf",["impound"],1,false,true,"","player distance copcar <= 5"];
 //================================== COP DELETE EVIDENCE ================================================
 //action23 = _role addaction ["Take evidence","noscript.sqf",'player groupchat "evidence removed."; {deletevehicle _x} foreach (nearestobjects [getpos player, ["weaponholder"], 3])',1,true,true,"",'_weps = (nearestobjects [getpos player, ["weaponholder"], 3] select 0); player distance _weps < 5 and iscop'];
@@ -102,8 +99,8 @@ action25 = _role addaction ["Set slave free","noscript.sqf",'_slave = (nearestob
 //action420 = _role addaction ["Remove Campfire","noscript.sqf",'if (((call INV_GetOwnWeight) + ("Land_Campfire_burning" call INV_GetItemTypeKg)) > INV_CarryingCapacity)exitwith{player groupChat localize "STRS_inv_buyitems_maxgewicht"};deletevehicle (nearestobjects [getpos player, ["Land_Campfire_burning"],  5] select 0);[player, "Land_Campfire_burning", 1] call INV_AddInventoryItem;player groupchat "you picked up a Campfire";',1,true,true,"",'player distance (nearestobjects [getpos player, ["Land_Campfire_burning"],  5] select 0) < 5'];
 //action430 = _role addaction ["Remove Road Barricade","noscript.sqf",'if (((call INV_GetOwnWeight) + ("Fort_Barricade_EP1" call INV_GetItemTypeKg)) > INV_CarryingCapacity)exitwith{player groupChat localize "STRS_inv_buyitems_maxgewicht"};deletevehicle (nearestobjects [getpos player, ["Fort_Barricade_EP1"],  5] select 0);[player, "Fort_Barricade_EP1", 1] call INV_AddInventoryItem;player groupchat "you picked up a Road Barricade";',1,true,true,"",'player distance (nearestobjects [getpos player, ["Fort_Barricade_EP1"],  5] select 0) < 5'];
 //==================================== REPAIR POWER ===================================================
-action41 = _role addaction [format["Restore Power 1 ($%1)", powerrestorecost],"noscript.sqf",'_moneh = [player, "money"] call INV_GetItemAmount; if(_moneh < powerrestorecost)exitwith{player groupchat "you do not have enough money"};[player, "money", -(powerrestorecost)] call INV_AddInventoryItem; "power1 setdamage 0;liafu = true;" call broadcast',1,false,true,"","player distance power1 <= 7 and !alive power1 and iscop"];
-action42 = _role addaction [format["Restore Power 2 ($%1)", powerrestorecost],"noscript.sqf",'_moneh = [player, "money"] call INV_GetItemAmount; if(_moneh < powerrestorecost)exitwith{player groupchat "you do not have enough money"};[player, "money", -(powerrestorecost)] call INV_AddInventoryItem; "power2 setdamage 0;liafu = true;" call broadcast',1,false,true,"","player distance power2 <= 7 and !alive power2 and iscop"];
+//action41 = _role addaction [format["Restore Power 1 ($%1)", powerrestorecost],"noscript.sqf",'_moneh = [player, "money"] call INV_GetItemAmount; if(_moneh < powerrestorecost)exitwith{player groupchat "you do not have enough money"};[player, "money", -(powerrestorecost)] call INV_AddInventoryItem; "power1 setdamage 0;liafu = true;" call broadcast',1,false,true,"","player distance power1 <= 7 and !alive power1 and iscop"];
+//action42 = _role addaction [format["Restore Power 2 ($%1)", powerrestorecost],"noscript.sqf",'_moneh = [player, "money"] call INV_GetItemAmount; if(_moneh < powerrestorecost)exitwith{player groupchat "you do not have enough money"};[player, "money", -(powerrestorecost)] call INV_AddInventoryItem; "power2 setdamage 0;liafu = true;" call broadcast',1,false,true,"","player distance power2 <= 7 and !alive power2 and iscop"];
 //================================== COP CHIEF ELECTION ===============================================
 action43 = _role addaction ["Elect a Chief","maindialogs.sqf",["chief"],1,false,true,"","player distance copbank < 7"];
 //==================================== MAYOR ELECTION =================================================
@@ -114,7 +111,7 @@ action46 = _role addaction ["Change taxes","maindialogs.sqf",["steuern"],1,false
 //===================================== BUY HIDEOUT ===================================================
 //_role addaction [format["Buy Hideout ($%1)", hideoutcost],"noscript.sqf",'if( [player, "money"] call INV_GetItemAmount < hideoutcost)exitwith{player groupchat "not enough money"};[player, "money", -hideoutcost] call INV_AddInventoryItem;[player, "hideout", 1] call INV_AddInventoryItem;player groupchat format["you bought a hideout for $%1", hideoutcost];',1,false,true,"","player distance rathaus <= 3 and isciv"];
 //===================================== BUY INSURANCE ===================================================
-action47 = _role addaction [format["Buy bank insurance ($%1)", ("bankversicherung" call INV_GetItemBuyCost)],"noscript.sqf",'[player] call interact_buy_insurance;', 1 , false,true,"","(!interact_buy_item_active && (player distance mainbank <= 3 or player distance copbank <= 3 or player distance licenseflag5 <= 3 or player distance licenseflag6 <= 3 or player distance storage <= 7))"];
+action47 = _role addaction [format["Buy bank insurance ($%1)", ("bankversicherung" call INV_GetItemBuyCost)],"noscript.sqf",'[player] call interact_buy_insurance;', 1 , false,true,"","(!interact_buy_item_active && (player distance copbank <= 3 or player distance licenseflag5 <= 3 or player distance licenseflag6 <= 3 or player distance storage <= 7))"];
 //======================================= CRIMELOG ====================================================
 action48 = _role addaction ["Crime Log","maindialogs.sqf",["coplog"],1,false,true,"","player distance rathaus <= 3"];
 //======================================== SLAVES =====================================================
@@ -138,6 +135,12 @@ action53 = _role addAction
 [
 	"Process Oil", "noscript.sqf", '[player, "Oil", "OilBarrel", 10] call interact_item_process;', 1, false, true, "", 
 	'((player distance Oil_1) <= 5) && isciv && ([player, "oil"] call player_has_license)'
+];
+
+action53_1 = _role addAction 
+[
+	"Process Oil", "noscript.sqf", '[player, "Oil", "OilBarrel", 10] call interact_item_process;', 1, false, true, "", 
+	'((player distance Oil_2) <= 5) && isciv && ([player, "oil"] call player_has_license)'
 ];
 
 
@@ -172,7 +175,7 @@ action67 = _role addaction [format [localize "STRS_addAction_buy_shop", (BuyAble
 //====================================== VEHICLE ACTIONS ================================================
 action68 = _role addaction [localize "STRS_addaction_trunk_see","noscript.sqf",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);_str = ([_vcl] call vehicle_storage_name);[_str] call A_SCRIPT_VEHICLECHECK;',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and not([player, _vcl] call vehicle_owner) and ([_vcl] call INV_IsPlayerVehicle) and iscop'];
 action69 = _role addaction [localize "STRS_addaction_trunk_check","noscript.sqf",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);_str = ([_vcl] call vehicle_storage_name);if([_vcl,_str] call INV_RemoveIllegalStorage)then{call compile format["publicvariable ""%1"";", _str]};',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and not([player, _vcl] call vehicle_owner) and ([_vcl] call INV_IsPlayerVehicle) and iscop'];
-action70 = _role addaction ["Impound vehicle","noscript.sqf",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);[_vcl, "impound"] call A_SCRIPT_IMPOUND;',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and ([_vcl] call INV_IsPlayerVehicle) and iscop'];
+action70 = _role addaction ["Impound vehicle","noscript.sqf",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);[_vcl] call A_impound_action;',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and ([_vcl] call INV_IsPlayerVehicle) and iscop'];
 action71 = _role addaction ["Pull out","noscript.sqf",'(nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0) execVM "pullout.sqf";',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and count (crew _vcl) > 0 and ([_vcl] call INV_IsPlayerVehicle) and (call INV_IsArmed)'];
 action72 = _role addaction [localize "STRS_addAction_vehicleinfo","noscript.sqf",'(nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0) call A_SCRIPT_VEHINFO;',1,true,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 10 and ([_vcl] call INV_IsPlayerVehicle)'];
 //action73 = nil;
@@ -190,15 +193,15 @@ action82 = _role addaction ["Shop 4 export","noscript.sqf","[(shop4 call INV_Get
 //action84 = nil;	
 //action85 = nil;
 //===================================== Gas station Robbing===============================================
-gsshop1 = fuelshop1 addaction ["Rob Gas Station 1", "noscript.sqf", '[player, 1] call player_rob_station', 1, false, true, ""," not(iscop) && station1money >= 10000"];
-gsshop2 = fuelshop2 addaction ["Rob Gas Station 2", "noscript.sqf", '[player, 2] call player_rob_station', 1, false, true, ""," not(iscop) && station2money >= 10000"];
-gsshop3 = fuelshop3 addaction ["Rob Gas Station 3", "noscript.sqf", '[player, 3] call player_rob_station', 1, false, true, "",  "not(iscop) && station3money >= 10000"];
-gsshop4 = fuelshop4 addaction ["Rob Gas Station 4", "noscript.sqf", '[player, 4] call player_rob_station', 1, false, true, "", "not(iscop) && station4money >= 10000"];
-gsshop5 = fuelshop5 addaction ["Rob Gas Station 5", "noscript.sqf", '[player, 5] call player_rob_station', 1, false, true, "", "not(iscop) && station5money >= 10000"];
-gsshop6 = fuelshop6 addaction ["Rob Gas Station 6", "noscript.sqf", '[player, 6] call player_rob_station', 1, false, true, "", "not(iscop) && station6money >= 10000"];
-gsshop7 = fuelshop7 addaction ["Rob Gas Station 7", "noscript.sqf", '[player, 7] call player_rob_station', 1, false, true, "", "not(iscop) && station7money >= 10000"];
-gsshop8 = fuelshop8 addaction ["Rob Gas Station 8", "noscript.sqf", '[player, 8] call player_rob_station', 1, false, true, "", "not(iscop) && station8money >= 10000"];
-gsshop9 = fuelshop9 addaction ["Rob Gas Station 9", "noscript.sqf", '[player, 9] call player_rob_station', 1, false, true, "", "not(iscop) && station9money >= 10000"];
+gsshop1 = fuelshop1 addaction ["Rob Gas Station 1", "noscript.sqf", '[player, 1] call player_rob_station', 1, false, true, ""," not(iscop) && (station1money >= 10000)"];
+gsshop2 = fuelshop2 addaction ["Rob Gas Station 2", "noscript.sqf", '[player, 2] call player_rob_station', 1, false, true, ""," not(iscop) && (station2money >= 10000)"];
+gsshop3 = fuelshop3 addaction ["Rob Gas Station 3", "noscript.sqf", '[player, 3] call player_rob_station', 1, false, true, "",  "not(iscop) && (station3money >= 10000)"];
+gsshop4 = fuelshop4 addaction ["Rob Gas Station 4", "noscript.sqf", '[player, 4] call player_rob_station', 1, false, true, "", "not(iscop) && (station4money >= 10000)"];
+gsshop5 = fuelshop5 addaction ["Rob Gas Station 5", "noscript.sqf", '[player, 5] call player_rob_station', 1, false, true, "", "not(iscop) && (station5money >= 10000)"];
+gsshop6 = fuelshop6 addaction ["Rob Gas Station 6", "noscript.sqf", '[player, 6] call player_rob_station', 1, false, true, "", "not(iscop) && (station6money >= 10000)"];
+gsshop7 = fuelshop7 addaction ["Rob Gas Station 7", "noscript.sqf", '[player, 7] call player_rob_station', 1, false, true, "", "not(iscop) && (station7money >= 10000)"];
+gsshop8 = fuelshop8 addaction ["Rob Gas Station 8", "noscript.sqf", '[player, 8] call player_rob_station', 1, false, true, "", "not(iscop) && (station8money >= 10000)"];
+gsshop9 = fuelshop9 addaction ["Rob Gas Station 9", "noscript.sqf", '[player, 9] call player_rob_station', 1, false, true, "", "not(iscop) && (station9money >= 10000)"];
 //========================   unflip vehicle     ================================
 action86 = _role addaction ["Unflip vehicle","noscript.sqf","_this call vehicle_unflip;",1,false,true,"",'_vcl = (nearestobjects [getpos player, ["Air", "Ship", "LandVehicle"], 3] select 0);player distance _vcl < 5 and ([player, _vcl] call vehicle_owner)'];
 //=========================    Cop Patrol actions   ==============================
@@ -233,7 +236,7 @@ action96 = _role addaction ["Raise Gates","rgate3.sqf",[],1,false,true,"","iscop
 action97 = _role addaction ["Lower Gates","lgate3.sqf",[],1,false,true,"","iscop and player distance copgate3 <= 5"];
 action98 = _role addaction ["Raise Gates","rgate4.sqf",[],1,false,true,"","iscop and player distance copgate4 <= 5"];
 action99 = _role addaction ["Lower Gates","lgate4.sqf",[],1,false,true,"","iscop and player distance copgate4 <= 5"];
-action100 = _role addaction ["Lower Gates","lgate5.sqf",[],1,false,true,"","player distance pmcgate <= 5 and (""pmc_license_journeyman"" call INV_HasLicense)"];
+action100 = _role addaction ["Lower Gates","lgate5.sqf",[],1,false,true,"","((player distance pmcgate) <= 5) and ([player] call player_isPMCwhitelist)"];
 action101 = _role addaction ["Lower Gates","lgate6.sqf",[],1,false,true,"","isciv and player distance terrgate <= 4"];
 action102 = _role addaction ["Raise Gates","rgate5.sqf",[],1,false,true,"","isins and player distance opforgate2 <= 5"];
 action103 = _role addaction ["Lower Gates","lgate8.sqf",[],1,false,true,"","isins and player distance opforgate2 <= 5"];

@@ -39,8 +39,6 @@ _this setDir 243.25652;
 _this = createVehicle ["Land_arrows_yellow_L", [7097.2368, 2753.043, -3.8146973e-006], [], 0, "CAN_COLLIDE"];
 _this setDir -32.807194;
 
-_O0O0 = player;
-
 _this = createVehicle ["FoldTable", [7100.8057, 2751.7722, 0.3], [], 0, "CAN_COLLIDE"];
 _this setDir -34.473118;
 

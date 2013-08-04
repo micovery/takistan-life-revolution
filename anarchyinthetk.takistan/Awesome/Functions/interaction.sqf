@@ -117,9 +117,12 @@ interact_arrest_player = {
 	if (typeName _bail_percent != "SCALAR") exitWith {};
 	if (_bail_percent <= 0) exitWith {};
 	
-	
 	if (not([_victim, "restrained"] call player_get_bool)) exitWith {
 		player groupChat format["%1-%2 is not restrained!", _victim, (name _victim)];
+	};
+	
+	if (_victim getVariable ["FA_inAgony", false]) then {
+		player groupChat format["%1-%2 must be healed!", _victim, (name _victim)];
 	};
 	
 	if ([_victim] call player_get_arrest) exitWith {
@@ -224,12 +227,21 @@ interact_toggle_restrains = {
 	private["_message"];
 	if ([_victim, "restrained"] call player_get_bool) then {
 		[_victim, "restrained", false] call player_set_bool;
+		
+		if (_victim getVariable ["FA_inAgony", false]) then {
+			_victim playActionNow "agonyStart";
+			_victim setUnitPos "DOWN";
+		};
+		
 		_message = format["%1-%2 was unrestrained by %3", _victim, _victim_name, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	}
 	else {
-		if (not([_victim] call player_vulnerable)) exitWith {
-			player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];
+	
+		if !(_victim getVariable ["FA_inAgony", false]) then {
+			if (not([_victim] call player_vulnerable)) exitWith {
+				player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];
+			};
 		};
 		
 		[_victim, "restrained", true] call player_set_bool;
@@ -293,7 +305,7 @@ interact_want_player = {
 	_message = format["%1-%2 has been set wanted by %3-%4 for %5", _victim, (name _victim), _player, (name _player), _reason];
 	format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	_reason = _reason + format[" by %1-%2", _player, (name _player)];
-	[_victim, _reason, 0, 1, false] call player_update_warrants;
+	[_victim, _reason, 0, 1, false] call player_update_warrants
 };
 
 
@@ -431,9 +443,17 @@ interact_president_change_taxes = {
 	magazinetax = _this select 2;
 	weapontax  = _this select 3;
 	bank_tax = _this select 4;
-	publicVariable   "bank_tax";	
-	"[true,[""itemtax"",""vehicletax"",""magazinetax"",""weapontax""]] call item_setup_taxes;
-	hint ""The President has changed the tax rates!"";" call broadcast;
+	
+	publicVariable   "itemtax";
+	publicVariable   "vehicletax";
+	publicVariable   "magazinetax";
+	publicVariable   "weapontax";
+	publicVariable   "bank_tax";
+	
+	format['
+		%1 call item_setup_taxes;
+		hint "The President has changed the tax rates!";
+	', [true]] call broadcast;
 };
 
 civilian_camera_cost_per_second = 1000000;
@@ -783,7 +803,7 @@ interact_atm_menu = { _this spawn {
 	if (not([_player] call player_human)) exitWith {};
 	if (_player != player) exitWith {};
 
-	if (local_robbsperre == 1)  exitWith {
+	if !(local_useBankPossible)  exitWith {
 		player groupChat format ["You robbed the bank a few minutes ago. You can not use it for %1 minutes after you robbed it.", strM(local_robbsperre_zeit)];
 	};
 
@@ -879,8 +899,12 @@ interact_inventory_menu = {
 	_c = 0;
 	while { _c < (count playerstringarray) } do {
 		private["_player_variable_name", "_player_variable"];
+		
+		_player_variable_name = "";
+		_player_variable = objNull;
+		
 		_player_variable_name = playerstringarray select _c;
-		_player_variable = missionNamespace getVariable _player_variable_name;
+		_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 		//player groupChat format["_player_variable_name = %1", _player_variable_name];
 		
 		if ([_player_variable] call player_human) then {
@@ -894,7 +918,7 @@ interact_inventory_menu = {
 
 	lbSetCurSel [99, 0];
 	lbSetCurSel [1, 0];
-	buttonSetAction [3, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_use; closedialog 0;"]];
+	buttonSetAction [3, format["[player, lbData [1, (lbCurSel 1)], lbData [99, (lbCurSel 99)], ([(ctrlText 501)] call parse_number)] call interact_item_use; closedialog 0;"]];
 	buttonSetAction [4, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_drop; closedialog 0;"]];
 	buttonSetAction [246, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number), (missionNamespace getVariable (lbData [99, (lbCurSel 99)]))] call interact_item_give; closedialog 0;"]];
 
@@ -963,7 +987,7 @@ interact_check_armed = {
 
 //HEALING
 interact_heal_player = {
-	private["_player", "_target"];
+	private["_player", "_target", "_damage", "_paramedic", "_medic"];
 	_player = _this select 0;
 	_target = _this select 1;
 	
@@ -974,21 +998,32 @@ interact_heal_player = {
 	_interaction = "heal";
 	if (not([_player, _target, _interaction] call interact_check_distance)) exitWith {};
 	
+	_paramedic = ("paramedic_license" call INV_HasLicense);
+	_medic = ((getNumber(configFile >> "CfgVehicles" >> (typeOf _player) >> "attendant")) == 1);
+	
+	_damage = 0.5;
+	if (_paramedic) then {if (_medic) then {_damage = 0.2;}else{_damage = 0.3;};};
+	
+	if ((damage _target) <= _damage) exitwith {
+			player groupChat "You cannot heal this player anymore";
+		};
+	
 	player groupChat format["You healed %1-%2", _target, (name _target)];
-	format['[%1, %2] call interact_heal_receive;', _player, _target] call broadcast;
+	format['[%1, %2, %3] call interact_heal_receive;', _player, _target, _damage] call broadcast;
 };
 
 interact_heal_receive = {
-	private["_player", "_target"];
+	private["_player", "_target", "_damage"];
 	_player = _this select 0;
 	_target = _this select 1;
+	_damage = _this select 2;
 	
 	if (not([_player] call player_human)) exitWith {};
 	if (not([_target] call player_human)) exitWith {};
 	
 	if (_target != player) exitWith {};
 	
-	player setDamage 0;
+	player setDamage _damage;
 	player groupChat format["%1-%2 healed you", _player, (name _player)];
 };
 
@@ -1076,6 +1111,7 @@ interact_rob_inventory = {
 	if (([player, 40] call player_near_cops) && not([_target] call player_cop)) then {
 		player groupChat format["You cannot rob %1-%2, there is a cop near", _target, (name _target)];
 	};
+
 	
 	if (not([_target] call player_vulnerable)) exitWith {
 		player groupChat format["%1-%2 does not have his hands up, or is not subdued", _target, (name _target)];
@@ -1128,7 +1164,7 @@ interact_rob_inventory_receive = {
 	};
 	[_target, "money", -(_amount)] call INV_AddInventoryItem;
 	format['[%1, %2, %3] call interact_rob_inventory_response;', _player, _target, _amount] call broadcast;
-	[_player, format["(armed-robbery, %1-%2)", _target, (name _target)], _amount, 100, false] call player_update_warrants;
+	[_player, format["(armed-robbery, %1-%2)", _target, (name _target)], _amount] call player_update_warrants;
 	
 	private["_message"];
 	_message = format["%1-%2 stole $%3 from %4-%5", _player, (name _player), strM(_amount), _target, (name _target)];
@@ -1513,6 +1549,7 @@ interact_recruit_ai = { _this spawn {
 	interact_recruit_ai_busy = false;
 };};
 
+
 interact_recruit_ai_complete = {
 	private["_player", "_unit"];
 	_player = _this select 0;
@@ -1593,8 +1630,8 @@ interact_generic_storage_menu = { _this spawn {
 	lbClear 1;
 	lbClear 101;
 
-	[_object, _arrname] call INV_CheckArray;
-	_arr = _object getVariable _arrname;
+//	[_object, _arrname] call INV_CheckArray;
+//	_arr = _object getVariable _arrname;
 	//player groupChat format["_arr = %1", _arr];
 
 	CtrlSetText [91,localize "Take Items"];
@@ -1751,6 +1788,7 @@ interact_private_storage_menu = {
 		_item = _this select 0;
 		_count = _this select 1;
 		if (_count <= 0) exitWith {};
+		if (_item call INV_GetItemIsIllegal) exitwith {player groupChat "We do not accept illegal items!"};
 		[%1, "%2", _item, _count] call interact_generic_storage;	
 	', _player, _private_storage_name];
 	
@@ -2242,7 +2280,8 @@ interact_gang_join = {
 	_cgang = [_player_uid] call gangs_lookup_player_uid;
 	//player groupChat format["_cgang = %1", _cgang];
 	
-	if (not(isNil "_cgang")) exitWith {
+//	if (not(isNil "_cgang")) exitWith {
+	if ((typeName _gang) == "ARRAY") exitwith {
 		private["_cgang_name"];
 		_cgang_name = _cgang select gang_name;
 		player groupChat format["%1-%2, you are already in gang %3", _player, (name _player), _cgang_name];
@@ -2270,7 +2309,8 @@ interact_gang_leave = {
 	private["_player_uid", "_gang"];
 	_player_uid = [_player] call gang_player_uid;
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {
+//	if (isNil "_gang") exitWith {
+	if ((typeName _gang) != "ARRAY") exitwith {
 		player groupChat format["%1-%2, you are not in any gang", _player, (name _player)];
 	};
 	
@@ -2361,7 +2401,8 @@ interact_gang_area_neutralise = {
 	private["_gang", "_player_uid"];
 	_player_uid = [_player] call gang_player_uid;
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {};
+//	if (isNil "_gang") exitWith {};
+	if ((typeName _gang) != "ARRAY") exitwith {};
 	
 	private["_gang_name"];
 	_gang_name = _gang select gang_name;
@@ -2395,7 +2436,8 @@ interact_gang_area_capture = {
 	private["_gang", "_player_uid"];
 	_player_uid = [_player] call gang_player_uid;
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {};
+//	if (isNil "_gang") exitWith {};
+	if ((typeName _gang) != "ARRAY") exitwith {};
 
 	private["_gang_id", "_gang_name"];
 	_gang_id = _gang select gang_id;
@@ -2435,7 +2477,8 @@ interact_gang_create = {
 	private["_gang", "_player_uid"];
 	_player_uid = [_player] call gang_player_uid;
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (not(isNil "_gang")) exitWith {
+//	if (not(isNil "_gang")) exitWith {
+	if ((typeName _gang) == "ARRAY") exitwith {
 		private["_gang_name"];
 		_gang_name = _gang select gang_name;
 		player groupChat format["%1-%2, you are already a member of gang %3", _player, (name _player), _gang_name];
@@ -2495,7 +2538,8 @@ interact_gang_kick = { _this spawn {
 	
 	private["_gang"];
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {
+//	if (isNil "_gang") exitWith {
+	if ((typeName _gang) != "ARRAY") exitwith {
 		player groupChat format["%1-%2, you are no in a gang", _player, (name _player)];
 	};
 	
@@ -2542,7 +2586,8 @@ interact_gang_make_leader = { _this spawn {
 	
 	private["_gang"];
 	_gang = [_player_uid] call gangs_lookup_player_uid;
-	if (isNil "_gang") exitWith {
+//	if (isNil "_gang") exitWith {
+	if ((typeName _gang) != "ARRAY") exitwith {
 		player groupChat format["%1-%2, you are no in a gang", _player, (name _player)];
 	};
 	
@@ -2689,7 +2734,7 @@ interact_item_process = {
 	[_player, _input_item, -(_input_amount_used)] call INV_AddInventoryItem;
 	[_player, _output_item, _output_amount, ([_player] call player_inventory_name)] call INV_CreateItem;
 
-	player groupChat format["%1-%2, you porcessed %3 %4 into %5 %6", _player, (name _player), _input_amount_used, _input_item_name, _output_amount, _output_item_name];
+	player groupChat format["%1-%2, you processed %3 %4 into %5 %6", _player, (name _player), _input_amount_used, _input_item_name, _output_amount, _output_item_name];
 };
 
 interact_admin_menu = {
@@ -2699,7 +2744,7 @@ interact_admin_menu = {
 	if (not([_player] call player_exists)) exitWith {};
 	
 	if (not(createDialog "AdminMenu")) exitWith {
-		player groupChat format["ERROR: could create admin dialog"];
+		player groupChat format["ERROR: could not create admin dialog"];
 	};
 	
 	[admin_player_list_id] call DialogAllPlayersList;
@@ -2958,7 +3003,7 @@ interact_item_drop = {_this spawn {
 				
 		private["_vehicle"];
 		_vehicle = [_vehicles] call interact_select_vehicle_wait;
-		if (isNil "_vehicle") exitWith {};
+		if (isNull _vehicle) exitWith {};
 		
 		[_player, _vehicle] call vehicle_remove;
 		player groupChat format["You dropped the key for %1", _vehicle];
@@ -2975,10 +3020,11 @@ interact_item_drop = {_this spawn {
 
 interact_item_use = {
 	//player groupChat format["interact_item_use %1", _this];
-	private["_player", "_item", "_amount"];
+	private["_player", "_item", "_unit", "_amount"];
 	_player = _this select 0;
 	_item = _this select 1;
-	_amount = _this select 2;
+	_unit = _this select 2;
+	_amount = _this select 3;
 	
 	if (not([_player] call player_human)) exitWith {};
 	if (isNil "_item") exitWith {};
@@ -2986,6 +3032,16 @@ interact_item_use = {
 	if (typeName _item != "STRING") exitWith {};
 	if (typeName _amount != "SCALAR") exitWith {};
 	if (_amount <= 0) exitWith {};
+	
+	if ((typeName _unit) != "STRING") then {
+			_unit = player;
+		}else{
+			if(_unit != "")then{
+					_unit = missionNamespace getVariable [_unit, player];
+				}else{
+					_unit = player;
+				};
+		};
 	
 	if (_amount > ([_player, _item] call INV_GetItemAmount)) exitWith {
 		player groupChat format["You do not have that many items to use"];
@@ -3005,7 +3061,7 @@ interact_item_use = {
 	};
 	
 	//player groupChat format["_item = %1, _amount = %2, _script = %3", _item, _amount, _script];
-	["use", _item, _amount, []] execVM _script;
+	["use", _item, _amount, [], _unit] execVM _script;
 };
 
 interact_inventory_actions_allowed = {
@@ -3080,7 +3136,7 @@ interact_item_give = { _this spawn {
 		
 		private["_vehicle"];
 		_vehicle = [_vehicles] call interact_select_vehicle_wait;
-		if (isNil "_vehicle") exitWith {};
+		if (isNull _vehicle) exitWith {};
 		
 		player groupChat format["You gave %1-%2 a copy of the key for %3", _target, (name _target), _vehicle];
 		format["[%1, %2, %3] call interact_keychain_give_receive;", _player, _target, _vehicle] call broadcast;
@@ -3174,7 +3230,7 @@ interact_select_vehicle_wait = {
 	private["_i", "_count"];
 	_count = count _vehicles;
 	_i = 0;
-	interact_selected_vehicle = nil;
+	interact_selected_vehicle = objNull;
 	while { _i < _count } do {
 		private["_index", "_vehicle", "_vehicle_str"];
 		_vehicle = _vehicles select _i;

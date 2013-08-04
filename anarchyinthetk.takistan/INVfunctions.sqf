@@ -1,20 +1,39 @@
 
 INV_Heal = {
+	
+	_paramedic = ("paramedic_license" call INV_HasLicense);
+	_medic = ((getNumber(configFile >> "CfgVehicles" >> (typeOf player) >> "attendant")) == 1);
+	
+	_damage = 0.3;
+	
+	if (_paramedic) then {
+			if (_medic) then {
+					_damage = 0;
+				}else{
+					_damage = 0.1;
+				};
+		};
+	
+	if ((damage _this) <= _damage) exitwith {
+			player groupChat "Cannot be healed anymore with a medkit";
+			false
+		};
+	
 	if(_this == player) exitWith {
 		liafu = true;
 
 		format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 		player groupChat format[localize "STRS_inv_items_medikit_benutzung"];
 		sleep 5;
-		player setdamage 0;
+		player setdamage _damage;
 		player groupChat format[localize "STRS_inv_items_medikit_fertig"];
 		true
 	};
 	
-	format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", _this] call broadcast;
-	player groupChat "Healing civ...";
+	format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
+	player groupChat "Healing...";
 	sleep 5;
-	_this setdamage 0;
+	_this setdamage _damage;
 
 	true
 };
@@ -251,26 +270,23 @@ INV_StorageRemoveKindOf = {
 
 // Check Stored Item Weight
 INV_GetStorageWeight = {
-	private ["_object", "_Arrayname"];
+	private ["_object", "_Arrayname", "_weight"];
 	_object = _this select 0;
 	_Arrayname = _this select 1;
 	
 	[_object, _Arrayname] call INV_CheckArray;
 	
-	private["_weight"];
 	_weight = 0;
-
+	
+	private["_entry", "_item", "_count", "_infos", "_item_weight"];
 	{
-		private["_entry", "_item", "_count", "_infos", "_item_weight"];
 		_entry = _x;
 		_item = _entry select 0;
 		_count = [(_entry select 1)] call decode_number;
 		_infos  = _item call INV_GetItemArray;
 		_item_weight = (_infos call INV_GetItemTypeKg);
 		_weight = _weight + (_count) * (_item_weight);
-		
-		_i = _i + 1;
-	} forEach (_object getVariable _Arrayname);
+	} forEach (_object getVariable [_Arrayname, []]);
 	
 	_weight
 };

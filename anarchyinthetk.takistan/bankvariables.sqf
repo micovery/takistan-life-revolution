@@ -1,4 +1,4 @@
-startmoneh                   = 50000;
+startmoneh                   = if(debug)then{1000000000}else{50000};
 donatormoneh                 = startmoneh * 5; //(250k)
 silvermoneh                  = donatormoneh * 2; //(500k)
 goldmoneh                    = donatormoneh * 3; //(750k)
@@ -27,10 +27,20 @@ robenable                    = true;
 if (isServer) then {
 
 	private["_file"];
+	
+	donators0	= [];
+	donators1	= [];
+	donators2	= [];
+	donators3	= [];
+	donators4	= [];
+	
 	_file = "server\donators.sqf";
 	
 	if (_file != "") then {
-		call compile preProcessFileLineNumbers _file;
+		_fileLoad = preProcessFileLineNumbers _file;
+		if (_fileLoad != "") then {
+			call compile _fileLoad;
+		};
 	};
 	
 	server setVariable ["donators0", donators0, true];
@@ -77,14 +87,13 @@ if (isNil "bankaccount") then {
 	["bankaccount", ([startmoneh] call encode_number)] call stats_init_variable;
 };
 
+
 shopflagarray            = [shop1,shop2,shop3,shop4];
-bankflagarray            = [mainbank, copbank, coppbank_1, atm1, atm2, atm3, atm4, atm5, atm6, atm8, atm11, atm12, atmpf, atmins, pmcatm, adminbank];
+bankflagarray            = [mainbank, copbank, atm1, atm2, atm3, atm4, atm5, atm6, atm8, atm11, atm12, atmpf, atmins, pmcatm, adminbank];
 carshoparray             = [carshop1, carshop2, carshop3, carshop4, carshop5, carshop6, carshop7, carshop8];
 speedcamarray            = [speed1,speed2,speed3,speed4,speed5];
 drugsellarray            = [mdrugsell,cdrugsell,ldrugsell,hdrugsell];
-GasStationArray          =
-[
-    copfuel,
+GasStationArray          = [
     (nearestobject[getpos fuelshop1, "Land_Ind_FuelStation_Feed_Ep1"]),
     (nearestobject[getpos fuelshop2, "Land_Ind_FuelStation_Feed_Ep1"]),
     (nearestobject[getpos fuelshop3, "Land_Ind_FuelStation_Feed_Ep1"]),
@@ -95,3 +104,6 @@ GasStationArray          =
     (nearestobject[getpos fuelshop8, "Land_Ind_FuelStation_Feed_Ep1"]),
     (nearestobject[getpos fuelshop9, "Land_Ind_FuelStation_Feed_Ep1"])
 ];
+
+
+//	[] spawn compile preProcessFileLineNumbers "interest.sqf";

@@ -3,7 +3,6 @@ A_SCRIPT_LISTS =
 	"settings",
 	"bombs",
 	"vehiclecheck",
-	"impound",
 	"pullout",
 	"vehinfo"
 ];

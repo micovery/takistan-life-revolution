@@ -1,9 +1,7 @@
-
-A_DEBUG = { diag_log _this; };
 if !(isServer) exitwith {};
 
 if ((isNil "A_AI_ARRAY")) then {
-	A_AI_ARRAY = [university, storage, rathaus, bailflag, assassin, hostage, impoundbuy, shop1export, shop2export, shop3export, shop4export, civ_logicunit, licenseflag4, licenseflag6];
+	A_AI_ARRAY = [university, storage, rathaus, bailflag, assassin, hostage, impoundbuy, shop1export, shop2export, shop3export, shop4export, civ_logicunit, licenseflag6];
 		
 	{
 		private["_shop"];
@@ -71,21 +69,42 @@ if ((isNil "A_AI_ARRAY")) then {
 	{
 		[_x] joinSilent (group server);
 	} forEach A_AI_ARRAY;
+	
+	private["_file", "_fileLoad"];
+	
+	_file = "server\loop.sqf";
+	
+	if (_file != "") then {
+		_fileLoad = preProcessFileLineNumbers _file;
+		if (_fileLoad != "") then {
+			[] spawn (compile _fileLoad);
+		};
+	};
 };
 
-private["_sleep", "_counter", "_time", "_time_wait", "_wait"];
+private["_sleep", "_counter", "_time", "_time_wait", "_wait", "_restartTime"];
 _sleep = 10;
 _counter = 0;
 _time = 0;
 _time_wait = 5;
 _wait = _time + (60 * _time_wait);
 
-format['SERVER_LOOP: '] call A_DEBUG;
+// Time when Restart is
+_restartTime = 12 * (60^2);
+// Time before restart to begin kicking/refusing loading
+_restartShort = 2 * 60;
+// Time when restart process will begin
+_restartInit = _restartTime - _restartShort;
+
+format['SERVER_LOOP: '] call A_DEBUG_S;
 
 while {true} do {
+
+	if ( time >= _restartInit ) exitwith A_RESTART_S;
+
 	if (_time >= _wait) then {
-		format[''] call A_DEBUG;
-		format['SERVER_LOOP: FPS MIN- %1 	FPS AVG- %2		TIME- %3 Minutes', diag_fpsmin, diag_fps, round(time / 60)] call A_DEBUG;
+		format[''] call A_DEBUG_S;
+		format['SERVER_LOOP: FPS MIN- %1 	FPS AVG- %2		TIME- %3 Minutes', diag_fpsmin, diag_fps, round(time / 60)] call A_DEBUG_S;
 	};
 		
 	[] call A_WBL_F_REFRESH_S;
@@ -100,8 +119,8 @@ while {true} do {
 	_groups = allGroups;
 		
 	if (_time >= _wait) then {
-		format['SERVER_LOOP: allGroups Count- %1	Empty- %2	West- %3	East- %4	Resistance- %5	Civilian- %6	isNull groups- %7', count _groups, {(count (units _x)) <= 0} count _groups, {(side _x) == west} count _groups, {(side _x) == east} count _groups, {(side _x) == resistance} count _groups, {(side _x) == civilian} count _groups, {isNull _x} count _groups] call A_DEBUG;
-		format['SERVER_LOOP: allGroups- %1', _groups] call A_DEBUG;
+		format['SERVER_LOOP: allGroups Count- %1	Empty- %2	West- %3	East- %4	Resistance- %5	Civilian- %6	isNull groups- %7', count _groups, {(count (units _x)) <= 0} count _groups, {(side _x) == west} count _groups, {(side _x) == east} count _groups, {(side _x) == resistance} count _groups, {(side _x) == civilian} count _groups, {isNull _x} count _groups] call A_DEBUG_S;
+		format['SERVER_LOOP: allGroups- %1', _groups] call A_DEBUG_S;
 	};
 		
 	{
@@ -111,13 +130,12 @@ while {true} do {
 		_count = count _units;
 		
 		if (_time >= _wait) then {
-			format['SERVER_LOOP: group- %1	units- %2	count- %3	side- %4	isNull- %5', _group, _units, _count, side _group, isNull _group] call A_DEBUG;
+			format['SERVER_LOOP: group- %1	units- %2	count- %3	side- %4	isNull- %5', _group, _units, _count, side _group, isNull _group] call A_DEBUG_S;
 		};
 		
 		if (_count <= 0) then {
-			[civ_logicunit] joinSilent _group;
-			//[civ_logicunit] joinSilent grpNull;
-			[civ_logicunit] joinSilent A_SHOP_GROUP;
+		//	[dummyobj] joinSilent _group;
+		//	[dummyobj] joinSilent A_SHOP_GROUP;
 			deleteGroup _group;
 		};
 			
@@ -125,8 +143,8 @@ while {true} do {
 		
 	if (_time >= _wait) then {
 		_groups = allGroups;
-		format['SERVER_LOOP: allGroups Count- %1	Empty- %2	West- %3	East- %4	Resistance- %5	Civilian- %6	isNull groups- %7', count _groups, {(count (units _x)) <= 0} count _groups, {(side _x) == west} count _groups, {(side _x) == east} count _groups, {(side _x) == resistance} count _groups, {(side _x) == civilian} count _groups, {isNull _x} count _groups] call A_DEBUG;
-		format['SERVER_LOOP: allGroups- %1', _groups] call A_DEBUG;
+		format['SERVER_LOOP: allGroups Count- %1	Empty- %2	West- %3	East- %4	Resistance- %5	Civilian- %6	isNull groups- %7', count _groups, {(count (units _x)) <= 0} count _groups, {(side _x) == west} count _groups, {(side _x) == east} count _groups, {(side _x) == resistance} count _groups, {(side _x) == civilian} count _groups, {isNull _x} count _groups] call A_DEBUG_S;
+		format['SERVER_LOOP: allGroups- %1', _groups] call A_DEBUG_S;
 	};
 		
 	{
@@ -157,8 +175,7 @@ while {true} do {
 							', _player
 						] call broadcast;
 					};	
-				} 
-				else { if (A_WBL_V_ACTIVE_COP_1 == 2) then {
+				} else { if (A_WBL_V_ACTIVE_COP_1 == 2) then {
 					if ((_uid in A_WBL_V_B_COP_1)) then {
 						_update = false; 
 						format
@@ -180,7 +197,7 @@ while {true} do {
 
 	if (_time >= _wait) then {
 		_wait = _time + (60 * _time_wait);
-		format[''] call A_DEBUG;
+		format[''] call A_DEBUG_S;
 	};
 	
 	sleep _sleep;
