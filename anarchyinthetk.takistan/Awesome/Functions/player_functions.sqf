@@ -728,7 +728,7 @@ player_rob_station = {
 	_money_variable_name = format["station%1money", _station];
 	_money_variable = missionNamespace getVariable _money_variable_name;
 	
-	[_player, "Robbed a gas station", wantedamountforrobbing, 25, false] call player_update_warrants;
+	[_player, "Robbed a gas station", wantedamountforrobbing, -1, false] call player_update_warrants;
 	format ['server globalChat "Someone robbed gas station %1!";', _station] call broadcast;
 	
 	[_player, 'money', _money_variable] call INV_AddInventoryItem;
@@ -2885,7 +2885,7 @@ player_escape_menu_spawn = {
 	};
 
 player_escape_menu_abortCheck = {
-		if (time < (lastShot + 60))then{60}else{5}
+		if ( time < ((player getVariable ["robTime", -600]) + (60 * 3)) ) then{(60 * 3)}else{if (time < (lastShot + 60))then{60}else{5}}
 	};
 	
 player_init_civilian_stats = {

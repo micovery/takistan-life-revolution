@@ -793,7 +793,7 @@ vehicle_create_shop_extended = {
 	};
 	
 	if (isCop) then {
-		_vehicle setVariable ["tuning", 2, true];	
+		[_vehicle] call vehicle_cop_nitro;
 	};
 	
 	//player groupChat format["_vehicle_name = %1,  _vehicle = %2", _vehicle_name, _vehicle];
@@ -991,6 +991,16 @@ vehicle_lockpick = {
 			format['hint (toString(%1));', toArray(_message)] call broadcast;
 		};			
 	};
+};
+
+vehicle_cop_nitro = {
+	private["_vehicle"];
+	_vehicle = _this select 0;
+	
+	if(!(_vehicle iskindof "car"))exitwith{};
+	if (({_vehicle isKindOf _x} count ["BRDM2_Base","BTR90_Base","LAV25_Base","HMMWV_M1151_M2_DES_Base_EP1","StrykerBase_EP1"]) > 0) exitwith {};
+	
+	_vehicle setVariable ["tuning", 2, true];
 };
 
 vehicle_toggle_lock = {

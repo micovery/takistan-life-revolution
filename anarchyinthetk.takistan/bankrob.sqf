@@ -17,7 +17,7 @@ switch (toLower _art) do {
 				_timeS = format["robtime%1", _safe];
 				_local_time = missionNamespace getVariable [_timeS, 0];
 				
-				if( (time - _local_time) < (20 * 60) )exitwith{player groupchat "this safe has recently been stolen from and is empty"};
+				if( (time - _local_time) < (60 * 60) )exitwith{player groupchat "this safe has recently been stolen from and is empty"};
 				
 				
 				if(!robenable)exitwith{player groupchat "you are already robbing the bank"};
@@ -39,7 +39,7 @@ switch (toLower _art) do {
 						};
 				} forEach playableUnits;
 				
-				_local_cash = (_total_cash / 11);
+				_local_cash = round(_total_cash / 30);
 				
 				player groupChat format[localize "STRS_bank_rob_info", strM(_local_cash)];
 
@@ -54,6 +54,15 @@ switch (toLower _art) do {
 				if (alive player) then {
 					[player, 'money', _local_cash] call INV_AddInventoryItem;
 					player groupChat format[localize "STRS_bank_rob_success"];
+					
+					private["_nearby"];
+					_nearby = (getPosATL player) nearEntities ["caManBase", 300];
+					if ( ({(alive _x) && ((side _x) == West)} count _nearby) > 0 ) then {
+							[player, "Bank Robbery", _local_cash, -1, false] call player_update_warrants;
+						};
+					
+					player setVariable ["robTime", time, true];
+					
 				//	[_local_cash] spawn Bank_Rob_End_Script;
 				};
 

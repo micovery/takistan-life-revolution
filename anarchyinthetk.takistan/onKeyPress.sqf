@@ -446,10 +446,10 @@ keyboard_overlapping_keys = [];
 	keyboard_overlapping_keys = keyboard_overlapping_keys + (actionKeys _action);
 } foreach keyboard_overlapping_actions;
 
-keyboard_adminCheck = {_key == DIK_U};
+keyboard_adminCheck = {(_this select 0) == DIK_U};
 
 KeyUp_handler = {
-	private["_handled"];
+	private["_handled", "_disp", "_key", "_shift", "_ctrl", "_alt"];
 
 	_disp	= _this select 0;
 	_key    = _this select 1;

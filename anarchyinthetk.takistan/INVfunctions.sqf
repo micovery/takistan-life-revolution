@@ -20,8 +20,6 @@ INV_Heal = {
 		};
 	
 	if(_this == player) exitWith {
-		liafu = true;
-
 		format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 		player groupChat format[localize "STRS_inv_items_medikit_benutzung"];
 		sleep 5;
@@ -459,7 +457,7 @@ INV_GetVehicleType = {
 };
 
 // Check if Player is Armed
-INV_IsArmed = {if (count (weapons player - nonlethalweapons) > 0) then {true}else{false}};
+INV_IsArmed = {if (count ((weapons player) - nonlethalweapons) > 0) then {true}else{false}};
 
 // Check if unit is Armed
 INV_UnitArmed = {if (count (weapons _this - nonlethalweapons) > 0) then {true}else{false}};

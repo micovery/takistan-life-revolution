@@ -26,7 +26,7 @@ if (_mode == "use") then {
 	// Set the player criminal IF someone else is around and may saw it
 	if (([player, 40] call player_near_cops) || ([player, 40] call player_near_civilians)) then {
 		// Get the price of the burned vehicle
-		[player, "Setting a vehicle on fire", 20000] call player_update_warrants;
+		[player, "Setting a vehicle on fire", 20000, 50, false] call player_update_warrants;
 	};
 	
 	

@@ -55,7 +55,7 @@ gangs_lookup_id = {
 	_gangs_list = call gangs_get_list;
 	
 	private["_gang"];
-	_gang = nil;
+	_gang = "";
 	{
 		private["_cgang", "_cgang_id"];
 		_cgang = _x;

@@ -494,7 +494,7 @@ compute_death_parameters = {
 	_killer_name = (name _killer);
 	_victim_name = (name player);
 	
-	_lighter = missionNamespace getVariable ["lighterUsed", []];
+/*	_lighter = missionNamespace getVariable ["lighterUsed", []];
 	_lighterUsed = false;
 	if ((count _lighter) > 0) then {
 			if (time < (60 + (_lighter select 3))) then {
@@ -513,10 +513,13 @@ compute_death_parameters = {
 	if ((time - _respawnTime) < 60) then {
 			_respawn = true;
 		};
+*/
 		
 	_roadkill = false;
 	_is_driver_near = !(isNull _near_driver);
-	_suicide = (_killer_name == _victim_name) || _lighterUsed || _vehSuicide || _respawn;
+	
+	_suicide = (_killer_name == _victim_name);
+//	_suicide = (_killer_name == _victim_name) || _lighterUsed || _vehSuicide || _respawn;
 
 		
 	if (_suicide && _is_driver_near) then {
@@ -527,7 +530,10 @@ compute_death_parameters = {
 	};
 	
 	private["_victim_armed", "_victim_side", "_killer_side", "_victim_bounty", "_victim_criminal", "_teamkill", "_justified", "_enemies", "_killer_uid", "_victim_uid", "_victim_PMC", "_killer_PMC", "_wantedtype"];
-	_victim_armed = ([player] call player_armed) || ([player] call player_vehicle_armed);
+
+//	_victim_armed = ([player] call player_armed) || ([player] call player_vehicle_armed);
+	_victim_armed = [player] call player_armed;
+	
 	_victim_side = [player] call stats_get_faction;
 	_killer_side = [_killer] call stats_get_faction;
 	_victim_bounty = [player] call player_get_bounty;
@@ -540,9 +546,14 @@ compute_death_parameters = {
 	_victim_PMC = ([player] call player_isPMC);
 	_killer_PMC = ([_killer] call player_isPMC);
 	
-	_enemies = (_killer_side != _victim_side) && (((_victim_side != "Civilian") && (_killer_side != "Civilian")) || (_killer_PMC && (_victim_side != "Cop")));
+	_teamkill = (_victim_side == _killer_side) && (_victim_side != "Civilian");
+	_justified = (_victim_armed || ((_victim_criminal) and (_wantedtype >= 200)));
+	_enemies = ((_killer_side != _victim_side) && not((_victim_side == "Civilian") || (_killer_side == "Civilian")));
+	
+/*	_enemies = (_killer_side != _victim_side) && (((_victim_side != "Civilian") && (_killer_side != "Civilian")) || (_killer_PMC && (_victim_side != "Cop")));
 	_justified = (_victim_armed || (_victim_criminal && (_wantedtype >= 200))) || (_killer_PMC && (_victim_side in ["Opfor", "Insurgent"]));
 	_teamkill = ((_victim_side == _killer_side) && (_victim_side != "Civilian")) || ( ( _victim_PMC && _killer_PMC ) || (_killer_PMC && (_victim_side == "Cop")) || (_victim_PMC && (_killer_side == "Cop")));
+*/
 	
 	private["_result"];
 	_result = [];
@@ -563,13 +574,13 @@ compute_death_parameters = {
 	_result set [dp_killer_uid, _killer_uid];
 	_result set [dp_victim_uid, _victim_uid];
 	
-	_result set [dp_lighter, _lighterUsed];
+/*	_result set [dp_lighter, _lighterUsed];
 	_result set [dp_vehSuicide, _vehSuicide];
 	_result set [dp_respawn, _respawn];
 	
 	_result set [dp_PMC_victim, _victim_PMC];
 	_result set [dp_PMC_Killer, _killer_PMC];
-	
+*/	
 	//player groupChat format["RES: %1", _result];
 
 	_result
@@ -823,8 +834,8 @@ track_death = {
 	_teamkill = _dp select dp_is_teamkill;
 	_enemies = _dp select dp_enemies;
 	
-	_victim_PMC = _dp select dp_PMC_victim;
-	_killer_PMC = _dp select dp_PMC_Killer;
+//	_victim_PMC = _dp select dp_PMC_victim;
+//	_killer_PMC = _dp select dp_PMC_Killer;
 	
 	[_dp] call update_killer_stats;
 	
@@ -850,7 +861,7 @@ track_death = {
 	_qualifier = format["%1%2", _armed_str, _criminal_str];
 	
 
-	if ((_victim_side == "Civilian") and !(_victim_armed or _victim_criminal) && !_victim_PMC) exitWith {
+	if ((_victim_side == "Civilian") and !(_victim_armed or _victim_criminal)/* && !_victim_PMC*/) exitWith {
 		[_dp] call time_penalty;
 		[_dp] call remove_licenses;
 		[_dp, format["aggravated-crime%1", _qualifier], _bounty] call death_set_wanted; 
@@ -879,10 +890,10 @@ track_death = {
 		[_dp] call time_penalty;
 		[_dp, format["homicide%1", _qualifier], _bounty] call death_set_wanted; 
 	}
-	else { if ((_killer_side == "Civilian") && !_killer_PMC and _victim_side == "Civilian" and _victim_criminal && _victim_armed) then {
+	else { if ((_killer_side == "Civilian") /*&& !_killer_PMC*/ and _victim_side == "Civilian" and _victim_criminal && _victim_armed) then {
 		[_dp, format["homicide%1", _qualifier], _bounty] call death_set_wanted; 
 	}
-	else { if (((_killer_side == "Civilian") && !_killer_PMC) and (_victim_side == "Opfor" or _victim_side == "Insurgent")) then {
+	else { if (((_killer_side == "Civilian") /*&& !_killer_PMC*/) and (_victim_side == "Opfor" or _victim_side == "Insurgent")) then {
 		[_dp, format["vigilante-crime%1", _qualifier], 0] call death_set_wanted; 
 	}
 	else { if (_killer_side == "Civilian" and (_victim_side == "Cop")) then {
@@ -909,13 +920,13 @@ victim = {
 	_killer = _this select 0;
 	_victim = _this select 1;
 	
-	diag_log format['victim START - %1 - %2 - %3', _this, respawnButtonPressed, missionNamespace getVariable "lastShooter"];
+//	diag_log format['victim START - %1 - %2 - %3', _this, respawnButtonPressed, missionNamespace getVariable "lastShooter"];
 	
 	if (isNil "_killer") exitWith {};
-	if (isNil "_victim") exitWith {diag_log format['victim END1'];};
-	if (_victim != player) exitWith {diag_log format['victim END2'];};
+	if (isNil "_victim") exitWith {/*diag_log format['victim END1'];*/};
+	if (_victim != player) exitWith {/*diag_log format['victim END2'];*/};
 	
-	if([_victim] call player_get_dead) exitWith {diag_log format['victim END3'];};
+	if([_victim] call player_get_dead) exitWith {/*diag_log format['victim END3'];*/};
 	[_victim, true] call player_set_dead;
 	
 	if (!([_killer] call player_exists)) then {
@@ -932,11 +943,14 @@ victim = {
 				case ([_killer] call player_cop): {
 						format["%1 was killed by the UN Stabilization Forces!", _victim_name]
 					};
-				case ([_killer] call player_cop): {
+				case ([_killer] call player_opfor): {
 						format["%1 was killed by the South Takistan Liberation Army!", _victim_name]
 					};
-				case ([_killer] call player_cop): {
+				case ([_killer] call player_insurgent): {
 						format["%1 was killed by the Insurgents!", _victim_name]
+					};
+				case ([_killer] call player_civilian): {
+						format["%1 was killed by angry civilians!", _victim_name]
 					};
 				default {
 						format["%1 - Death Message Error", _victim_name];
@@ -944,12 +958,14 @@ victim = {
 			};
 		
 		if ((typeName _message) != "STRING") then {
-				_message = format["%1 Death Message Error", _victim_name];
+				_message = format["%1-%2 - Death Message Error #1", _victim, _victim_name];
+			}else{
+				if (_message == "") then {
+						_message = format["%1-%2 - Death Message Error #2", _victim, _victim_name];
+					};
 			};
-			
-		if (_message != "") then {
-				format['server globalChat (toString %1);', (toArray _message)] call broadcast;
-			};
+		
+		format['server globalChat (toString %1);', (toArray _message)] call broadcast;
 	} 
 	else { 
 		//player killed by human
@@ -963,7 +979,7 @@ victim = {
 		[_dp] call track_death;
 	};};
 	
-	diag_log format['victim END - %1 - %2 - %3', _this, respawnButtonPressed, missionNamespace getVariable ["lastShooter", objNull]];
+//	diag_log format['victim END - %1 - %2 - %3', _this, respawnButtonPressed, missionNamespace getVariable ["lastShooter", objNull]];
 };
 
 player_unfair_killed = false;
@@ -985,10 +1001,11 @@ track_retributions = {
 	_killer_name = _dp select dp_killer_name;
 	_teamkill = _dp select dp_is_teamkill;
 	_justified = _dp select dp_justified;
-	_victim_PMC = _dp select dp_PMC_victim;
+/*	_victim_PMC = _dp select dp_PMC_victim;
 	_lighter = _dp select dp_lighter;
 	_vehSuicide = _dp select dp_vehSuicide;
 	_respawn = _dp select dp_respawn;
+*/
 	
 	//Retributions
 	if (_suicide ||
@@ -998,7 +1015,7 @@ track_retributions = {
 		_victim_name == "Error: No unit") exitWith {};
 	
 	//player groupChat format["JUST: %1", _justified];
-	if ((_victim_side == "Civilian") && !_justified && !_victim_PMC) exitWith {
+	if ((_victim_side == "Civilian") && !_justified /*&& !_victim_PMC*/) exitWith {
 		[_killer, "DM"] call add_killer;
 		player_unfair_killed = true;
 	};
@@ -1035,14 +1052,15 @@ get_death_message = {
 	_teamkill = _dp select dp_is_teamkill;
 	_justified = _dp select dp_justified;
 	
-//	_lighter = _dp select dp_lighter;
-//	_vehSuicide = _dp select dp_vehSuicide;
+/*	_lighter = _dp select dp_lighter;
+	_vehSuicide = _dp select dp_vehSuicide;
 	_respawn = _dp select dp_respawn;
 	
 	if (_respawn) exitWith {
 		format["%1 commited suicide, by clicking on respawn", _victim_name];
 		restrain_respawn = true;
 	};
+*/	
 	
 	if (_suicide) exitWith { 
 		format["%1 committed suicide", _victim_name];	

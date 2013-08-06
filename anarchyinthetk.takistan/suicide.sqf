@@ -23,7 +23,7 @@ if (_art == "use") then {
 	
 	_nearby = (getPosATL player) nearEntities ["caManBase", 100];
 	if ( ({(isPlayer _x) && (alive _x) && ((side _x) == West)} count _nearby) > 0 ) then {
-			[player, "Activating a Suicide Bomb", 100000, 255, true] call player_update_warrants;
+			[player, "Activating a Suicide Bomb", 100000, -1, false] call player_update_warrants;
 		};
 	
 	for [{_i=10}, {_i >= 0}, {_i=_i-1}] do {

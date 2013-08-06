@@ -1916,6 +1916,7 @@ interact_vehicle_storage_menu = {
 		_item = _this select 0;
 		_count = _this select 1;
 		if (_count <= 0) exitWith {};
+		if (_item == "money") exitwith {player groupChat "Storage of money in trunks has been temporarily disabled"};
 		[%1, _item, _count] call interact_vehicle_storage;
 	', _vehicle];
 	
@@ -2270,18 +2271,22 @@ interact_gang_join = {
 	
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
-	if (isNil "_gang") exitWith {
+//	if (isNil "_gang") exitWith {
+	if ((typeName _gang) == "STRING" ) exitwith {
 		player groupChat format["%1-%2, the selected gang does not exist",  _player, (name _player)];
 	};
 	
 	private["_cgang", "_player_uid"];
+	_player_uid = "";
+	_cgang = [];
+	
 	_player_uid = [_player] call gang_player_uid;
 	//player groupChat format["_player_uid = %1", _player_uid];
 	_cgang = [_player_uid] call gangs_lookup_player_uid;
 	//player groupChat format["_cgang = %1", _cgang];
 	
 //	if (not(isNil "_cgang")) exitWith {
-	if ((typeName _gang) == "ARRAY") exitwith {
+	if ((typeName _cgang) == "ARRAY") exitwith {
 		private["_cgang_name"];
 		_cgang_name = _cgang select gang_name;
 		player groupChat format["%1-%2, you are already in gang %3", _player, (name _player), _cgang_name];
