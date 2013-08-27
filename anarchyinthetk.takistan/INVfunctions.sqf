@@ -1,5 +1,6 @@
 
 INV_Heal = {
+	private["_paramedic","_medic","_damage","_legs"];
 	
 	_paramedic = ("paramedic_license" call INV_HasLicense);
 	_medic = ((getNumber(configFile >> "CfgVehicles" >> (typeOf player) >> "attendant")) == 1);
@@ -13,8 +14,17 @@ INV_Heal = {
 					_damage = 0.1;
 				};
 		};
+		
+	_legs = false;
+	_legs = (_this getVariable ["legs", 0]) > 0;
 	
-	if ((damage _this) <= _damage) exitwith {
+	if ((_paramedic && _legs) && ((damage _this) <= _damage)) exitwith {
+			_this setHit ["legs", 0];
+			_this setVariable ["legs", 0, true];
+			player groupChat "Legs healed, but nothing more can be done with the medkit";
+		};
+	
+	if (((damage _this) <= _damage)) exitwith {
 			player groupChat "Cannot be healed anymore with a medkit";
 			false
 		};

@@ -34,6 +34,18 @@ broadcast_server = {
 	publicVariableServer player_broadcast_buffer;
 };
 
+broadcast_client = {
+	private["_code", "_client"];
+	_code = _this select 0;
+	_client = _this select 1;
+	if (isNil "_code") exitWith {};
+	if (typeName _code != "STRING") exitWith {};
+	if ((typeName _client) == "OBJECT") then {_client = owner _client};
+	if ((typeName _client) != "SCALAR") exitwith {};
+	missionNamespace setVariable [player_broadcast_buffer, _code];
+	_client publicVariableClient player_broadcast_buffer;
+};
+
 broadcast_setup = {
 	private["_player_number", "_player_count"];
 	

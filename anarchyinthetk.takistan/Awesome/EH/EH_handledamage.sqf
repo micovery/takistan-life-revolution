@@ -73,6 +73,7 @@ if ((_projectile == "B_12Gauge_74Slug") ) then {
 	};
 	
 	_unit SetHit [_select, _damage];
+	_unit setVariable [_select, _damage, true];
 
 	if(_select == "" and _damage >= 1 and !isnull _shooter) then {
 		_unit setdamage 1;

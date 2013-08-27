@@ -2,6 +2,7 @@
 
 #define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 
+private["_art", "_safe"];
 _this = _this select 3;
 _art  = _this select 0;
 _safe = _this select 1;
@@ -42,8 +43,11 @@ switch (toLower _art) do {
 				_local_cash = round(_total_cash / 30);
 				
 				player groupChat format[localize "STRS_bank_rob_info", strM(_local_cash)];
-
-				format['[0,1,2,["victim", %1, %2]] execVM "bankrob.sqf";', _safe, _local_cash] call broadcast;
+				
+				private["_nearCops"];
+				_nearCops = [player, 300, true] call player_near_west;
+				
+				format['[0,1,2,["victim", %1, %2, %3, %4]] execVM "bankrob.sqf";', _safe, _local_cash, player, _nearCops] call broadcast;
 
 				player playmove "AinvPknlMstpSlayWrflDnon_medic";
 				SleepWait(5)
@@ -55,9 +59,7 @@ switch (toLower _art) do {
 					[player, 'money', _local_cash] call INV_AddInventoryItem;
 					player groupChat format[localize "STRS_bank_rob_success"];
 					
-					private["_nearby"];
-					_nearby = (getPosATL player) nearEntities ["caManBase", 300];
-					if ( ({(alive _x) && ((side _x) == West)} count _nearby) > 0 ) then {
+					if (_nearCops) then {
 							[player, "Bank Robbery", _local_cash, -1, false] call player_update_warrants;
 						};
 					
@@ -83,11 +85,21 @@ switch (toLower _art) do {
 				rblock = 0;
 			};
 		case "victim": {
-				private["_bank_account", "_insurances_inv", "_insurances_stor", "_insurance", "_verlust", "_verlustA", "_verlustB", "_pLost"];
+				private["_robpool", "_robber", "_known", "_message", "_bank_account", "_insurances_inv", "_insurances_stor", "_insurance", "_verlust", "_verlustA", "_verlustB", "_pLost"];
 				_robpool = _this select 2;
-
-				titleText [localize "STRS_bank_rob_titlemsg", "plain"];
+				_robber = _this select 3;
+				_known = _this select 4;
 				
+				_message = "";
+				_message = if _known then {
+						format[localize "STRS_bank_rob_titlemsg_known", _robber, name _robber]
+					}else{
+						localize "STRS_bank_rob_titlemsg"
+					};
+					
+				titleText [_message, "PLAIN DOWN"];
+				
+
 				{_x say "Bank_alarm";} forEach [_safe, copbase1];
 
 				SleepWait(8)

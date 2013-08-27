@@ -162,7 +162,7 @@ interact_arrest_player = {
 			_realBounty = _realBounty - _invmoney;
 		};
 		[_victim, "money", -(_realBounty)] call INV_AddInventoryItem;
-		//_victim groupChat format["You had a bounty of $%1. Because %2-%3 arrested you you loose $%4", _bounty, _player, (name _player), _realBounty];
+		//_victim groupChat format["You had a bounty of $%1. Because %2-%3 arrested you, you lose $%4", _bounty, _player, (name _player), _realBounty];
 		
 		[_victim, 0] call player_set_bounty;
 	};
@@ -235,14 +235,18 @@ interact_toggle_restrains = {
 		
 		_message = format["%1-%2 was unrestrained by %3", _victim, _victim_name, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-	}
-	else {
-	
+	} else {
+		
+		private["_exit"];
+		_exit = false;
+		
 		if !(_victim getVariable ["FA_inAgony", false]) then {
-			if (not([_victim] call player_vulnerable)) exitWith {
+			_exit = !([_victim] call player_vulnerable);
+		};
+		
+		if _exit exitwith{
 				player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];
 			};
-		};
 		
 		[_victim, "restrained", true] call player_set_bool;
 		_message = format["%1-%2 was restrained by %3", _victim, _victim_name, (name _player)];
@@ -3105,7 +3109,7 @@ interact_item_give = { _this spawn {
 		_amount = _space_available;
 	};
 	
-	if (not([_player] call interact_inventory_actions_allowed)) then {
+	if (not([_player] call interact_inventory_actions_allowed)) exitWith {
 		player groupChat "You cannot use your inventory now";
 	};
 	
@@ -3187,7 +3191,7 @@ interact_item_give_receive = { _this spawn {
 	if (typeName _amount != "SCALAR") exitWith {};
 	if (_amount < 0) exitWith {};
 	
-	[] call interact_play_pickup_animation;
+//	[] call interact_play_pickup_animation;
 	
 	private["_item_name", "_price"];
 	_item_name = (_item call INV_GetItemName);

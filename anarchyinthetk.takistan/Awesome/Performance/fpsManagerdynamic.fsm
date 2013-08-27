@@ -1,26 +1,30 @@
 /*%FSM<COMPILE "E:\Program Files\Bohemia Interactive\Tools\FSM Editor Personal Edition\scriptedFSM.cfg, FPS manager">*/
 /*%FSM<HEAD>*/
 /*
-item0[] = {"START",0,250,-100.000000,-300.000000,0.000000,-250.000000,0.000000,"START"};
+item0[] = {"START",0,4346,-100.000000,-300.000000,0.000000,-250.000000,0.000000,"START"};
 item1[] = {"Sites_init_done",4,218,-100.000000,-225.000000,0.000000,-175.000000,0.000000,"Sites" \n "init done"};
-item2[] = {"hide_distant_obj",2,4346,-100.000000,-150.000000,0.000000,-100.000000,0.000000,"hide" \n "distant objects"};
+item2[] = {"hide_distant_obj",2,250,-100.000000,-150.000000,0.000000,-100.000000,0.000000,"hide" \n "distant objects"};
 item3[] = {"moved_far_enough",4,218,-150.000000,-75.000000,-50.000000,-25.000000,0.000000,"moved far" \n "enough"};
 item4[] = {"setPos_d",4,218,-100.000000,-50.000000,0.000000,0.000000,0.000000,"setPos'd"};
 item5[] = {"rescan_new_objec",4,218,-50.000000,-75.000000,50.000000,-25.000000,0.000000,"rescan new" \n "objects"};
 item6[] = {"scan_for_new_obj",2,250,50.000000,-75.000000,150.000000,-25.000000,0.000000,"scan for" \n "new objects"};
 item7[] = {"always",8,218,50.000000,-150.000000,150.000000,-100.000000,0.000000,"always"};
+item8[] = {"EXIT",1,250,0.000000,-300.000000,100.000000,-250.000000,0.000000,"EXIT"};
+item9[] = {"Exit_Check",8,218,0.000000,-225.000000,100.000000,-175.000000,1.000000,"Exit Check"};
 link0[] = {0,1};
 link1[] = {1,2};
 link2[] = {2,3};
 link3[] = {2,4};
 link4[] = {2,5};
-link5[] = {3,2};
-link6[] = {4,2};
-link7[] = {5,6};
-link8[] = {6,7};
-link9[] = {7,2};
-globals[] = {25.000000,1,0,0,16777215,640,480,1,181,6316128,1,-287.601563,345.370575,212.252686,-454.380402,865,911,1};
-window[] = {2,-1,-1,-1,-1,755,25,1285,25,3,883};
+link5[] = {2,9};
+link6[] = {3,2};
+link7[] = {4,2};
+link8[] = {5,6};
+link9[] = {6,7};
+link10[] = {7,2};
+link11[] = {9,8};
+globals[] = {25.000000,1,0,0,16777215,640,480,1,183,6316128,1,-200.561646,258.329773,120.582947,-362.711945,865,911,1};
+window[] = {2,-1,-1,-1,-1,780,50,1310,50,3,883};
 *//*%FSM</HEAD>*/
 class FSM
 {
@@ -31,7 +35,9 @@ class FSM
     class START
     {
       name = "START";
-      init = /*%FSM<STATEINIT""">*/"private[" \n
+      init = /*%FSM<STATEINIT""">*/"GFX_ManagerHandle setFSMVariable [""end"", false];" \n
+       "" \n
+       "private[" \n
        "		""_afterStartCheck"", ""_missionObjs"", ""_toHide"", ""_t"", ""_t2"", ""_virtualSpeed"", ""_cacheDist""," \n
        "		""_addArray"", ""_subArray"", ""_grabMissionObjs"", " \n
        "		""_freezeDist"", ""_arrayHide"", ""_arrayShow"", ""_checkFor"", ""_oldPersistent""" \n
@@ -62,8 +68,12 @@ class FSM
        "		_C = count _array1;" \n
        "		if ((typeName _array2) == ""ARRAY"") then {" \n
        "				{" \n
-       "					_array1 set[_C, _x];" \n
-       "					_C = _C + 1;" \n
+       "					if ((typeName _x) == ""OBJECT"") then {" \n
+       "							if !(isNull _x) then {" \n
+       "									_array1 set[_C, _x];" \n
+       "									_C = _C + 1;" \n
+       "								};" \n
+       "						};" \n
        "				} forEach _array2;" \n
        "			}else{" \n
        "				_array1 set[_C, _array2];" \n
@@ -248,13 +258,13 @@ class FSM
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
       class Links
       {
-        /*%FSM<LINK "setPos_d">*/
-        class setPos_d
+        /*%FSM<LINK "Exit_Check">*/
+        class Exit_Check
         {
-          priority = 0.000000;
-          to="hide_distant_obj";
+          priority = 1.000000;
+          to="EXIT";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
-          condition=/*%FSM<CONDITION""">*/"({(vehicle _x) distance (_x getVariable [""BIS_FPS_lastPos"", [0,0,0]]) > (_freezeDist / 4)} count _checkFor) > 0"/*%FSM</CONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"(GFX_ManagerHandle getFSMVariable ""end"")"/*%FSM</CONDITION""">*/;
           action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
@@ -266,6 +276,16 @@ class FSM
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
           condition=/*%FSM<CONDITION""">*/"BIS_fps_rescanNewObjects || ((count _oldPersistent) != (count BIS_persistent)) || (time > 0 && !_afterStartCheck)" \n
            ""/*%FSM</CONDITION""">*/;
+          action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
+        };
+        /*%FSM</LINK>*/
+        /*%FSM<LINK "setPos_d">*/
+        class setPos_d
+        {
+          priority = 0.000000;
+          to="hide_distant_obj";
+          precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
+          condition=/*%FSM<CONDITION""">*/"({(vehicle _x) distance (_x getVariable [""BIS_FPS_lastPos"", [0,0,0]]) > (_freezeDist / 4)} count _checkFor) > 0"/*%FSM</CONDITION""">*/;
           action=/*%FSM<ACTION""">*/""/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
@@ -311,10 +331,22 @@ class FSM
       };
     };
     /*%FSM</STATE>*/
+    /*%FSM<STATE "EXIT">*/
+    class EXIT
+    {
+      name = "EXIT";
+      init = /*%FSM<STATEINIT""">*/""/*%FSM</STATEINIT""">*/;
+      precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
+      class Links
+      {
+      };
+    };
+    /*%FSM</STATE>*/
   };
   initState="START";
   finalStates[] =
   {
+    "EXIT",
   };
 };
 /*%FSM</COMPILE>*/

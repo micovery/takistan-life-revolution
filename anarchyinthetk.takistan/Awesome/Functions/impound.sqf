@@ -54,14 +54,14 @@ A_impound_vacant = {
 		private["_vc"];
 		_vcl = _this select 0;
 		[_vcl] spawn A_impound;
-		format['hint format["%1 has been vacant for too long and impounded",  %1]', _vcl] call broadcast;
+		format['hintSilent format["%1 has been vacant for too long and impounded",  %1]', _vcl] call broadcast;
 	};
 	
 A_impound_spawnBlock = {
 		private["_vcl"];
 		_vcl = _this select 0;
 		[_vcl] spawn A_impound;
-		format['hint format["%1 has been impounded for blocking a spawn",  %1]', _vcl] call broadcast;
+		format['hintSilent format["%1 has been impounded for blocking a spawn",  %1]', _vcl] call broadcast;
 	};
 
 A_impound_action = {
@@ -92,7 +92,7 @@ A_impound_action = {
 		
 		[_vcl] spawn A_impound;
 		player groupChat localize "STRS_inventar_impound_success";
-		format['hint format[localize "STRS_inventar_impound_gesehen", "%1", "(%2)", %3]', name player, player, _vcl] call broadcast;
+		format['hintSilent format[localize "STRS_inventar_impound_gesehen", "%1", "(%2)", %3]', name player, player, _vcl] call broadcast;
 	};
 
 A_impound_dialog = {
@@ -167,16 +167,29 @@ A_impound_buy = {
 		_dir = 0;
 		_pos = [0,0,0];
 		
-		if(isciv)then {
-				_logic = impoundarea2;
-				_pos = [(getPosATL impoundarea2 select 0)-(random 10)+(random 10), (getPosATL impoundarea2 select 1)-(random 10)+(random 10), getPosATL impoundarea2 select 2];
-				_dir = (getdir impoundarea2);
-			} else {
+		if ((player distance copcar) <= 5) then {
 				_logic = ccarspawn;
 				_pos = (getPosATL ccarspawn);
 				_dir = (getdir ccarspawn);
+			}else{
+				if ((player distance impoundbuy1) <= 5) then {
+						_logic = impoundarea2;
+						_pos = [(getPosATL impoundarea2 select 0)-(random 10)+(random 10), (getPosATL impoundarea2 select 1)-(random 10)+(random 10), getPosATL impoundarea2 select 2];
+						_dir = (getdir impoundarea2);
+					}else{
+						if ((player distance impoundbuy2) <= 5) then {
+								_logic = impoundarea3;
+								_pos = (getPosATL impoundarea3);
+								_dir = (getdir impoundarea3);
+							};
+					};
 			};
-
+			
+		if (isNull _logic) exitwith {
+				player groupchat "Impound Error: Logic Null";
+			};
+		
+		
 		if(count (nearestobjects [getPosATL _logic, ["Ship","car","motorcycle","truck"], 3]) > 0) exitWith {
 				player groupChat format["WARNING: Unable to retrieve vehicle, there is a vehicle blocking the spawn"];
 			};

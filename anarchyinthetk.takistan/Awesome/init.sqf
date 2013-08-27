@@ -17,6 +17,8 @@ ExecSQF("Awesome\Functions\armoredsuv_functions.sqf");
 ExecSQF("Awesome\Functions\halo_functions.sqf");
 ExecSQF("Awesome\Functions\trunk_functions.sqf");
 ExecSQF("Awesome\Functions\impound.sqf");
+ExecSQF("Awesome\Functions\bankrob.sqf");
+ExecSQF("Awesome\Functions\items.sqf");
 
 ExecSQF("Awesome\R3F\init.sqf");
 

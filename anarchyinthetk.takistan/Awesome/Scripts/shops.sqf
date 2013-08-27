@@ -224,6 +224,7 @@ _os =
 //Gangarea Shops
 _gangshop_buy =
 	[
+		["cracker", 4, 10],
 		["GPS_ill", -1, -1],
 		["Binocular_ill", -1, -1],
 		["NVGoggles_ill", -1, -1],
@@ -549,9 +550,14 @@ _copshop_sobr =
 		["BAF_L85A2_UGL_SUSAT", -1, -1],
 		["BAF_L86A2_ACOG", -1, -1],
 		["Rnd_556x45_Stanag", -1, -1],
+		["M4A1_Aim_camo", -1, -1],
+		["M4A1_HWS_GL_camo", -1, -1],
 		["M4A3_RCO_GL_EP1", -1, -1],
 		["M4A3_CCO_EP1", -1, -1],
 		["Rnd_556x45_Stanag", -1, -1],
+		["M4A1_AIM_SD_camo", -1, -1],
+		["M4A1_HWS_GL_SD_Camo", -1, -1],
+		["Rnd_556x45_StanagSD", -1, -1],
 		["SCAR_H_CQC_CCO", -1, -1],
 		["SCAR_H_STD_EGLM_Spect", -1, -1],
 		["rnd_762x51_B_SCAR",  -1, -1],
@@ -564,6 +570,7 @@ _copshop_sobr =
 		["Mk_48", -1, -1],
 		["Mk_48_DES_EP1", -1, -1],
 		["M60A4_EP1", -1, -1],
+		["M249_200", -1, -1],
 		["M249_EP1", -1, -1],
 		["Rnd_100_M249", -1, -1],
 		["M240", -1, -1],

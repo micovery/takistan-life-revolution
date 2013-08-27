@@ -8,9 +8,9 @@ _role = player;
 action1 =	_role addaction ["Defuse Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;if(!alive player)exitwith{};bombactive=false;publicvariable "bombactive";"hint ""The bomb has been defused!"";server globalchat ""The bomb has been defused!"";playsound ""fanfare"";" call broadcast;',1,false,true,"","player distance HQ <= 5 and iscop and bombactive and !planting"];
 action2 =	_role addaction ["Plant Bomb","noscript.sqf",'if(planting)exitwith{};planting=true;publicvariable "planting";player playmove "AinvPknlMstpSlayWrflDnon_medic";sleep 4;waituntil {animationstate player != "AinvPknlMstpSlayWrflDnon_medic"};planting=false;publicvariable "planting";if(!alive player)exitwith{};bombactive=true;publicvariable "bombactive";',1,false,true,"","player distance HQ <= 5 and !bombactive and !planting and isciv"];
 //====================================== BANK ROB =====================================================
-action4 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe1],1,false,true,"","player distance safe1 <= 3 and isciv"];
-action5 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe2],1,false,true,"","player distance safe2 <= 3 and isciv"];
-action6 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe3],1,false,true,"","player distance safe3 <= 3 and isciv"];
+//action4 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe1],1,false,true,"","player distance safe1 <= 3 and isciv"];
+//action5 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe2],1,false,true,"","player distance safe2 <= 3 and isciv"];
+//action6 =	_role addaction ["Rob safe","bankrob.sqf", ["rob", safe3],1,false,true,"","player distance safe3 <= 3 and isciv"];
 //===================================== ASSASSINATION =================================================
 action8 = 	_role addaction ["Get Assassination job","assassination.sqf",["getajob_assassin"],1,false,true,"","player distance assassin <= 3 and isciv"];
 action9 =   _role addaction ["Escort VIP", "noscript.sqf", "[VIPtarget] join (group player); player groupchat ""escort the VIP to the police base before he is assassinated!"";",1,false,true,"","player distance VIPtarget < 5 and iscop"];
@@ -69,7 +69,7 @@ cpbkp = _role addaction ["Recruit Soldier $200000","noscript.sqf",'[player, 2000
 opbkp = _role addaction ["Recruit Soldier $150000","noscript.sqf",'[player, 150000] call interact_recruit_ai;',1,false,true,"","!currecred and player distance redbackup <= 10 and count (units group player) < 8"];
 insbkp = _role addaction ["Recruit Fighter $100000","noscript.sqf",'[player, 100000] call interact_recruit_ai;',1,false,true,"","!currecins and player distance civbackup <= 10 and count (units group player) < 8"];
 //===================================== IMPOUND AREA ==================================================
-action21 = _role addaction ["Impound Lot","noscript.sqf",'[] spawn A_impound_dialog',1,false,true,"","player distance impoundbuy <= 5 or player distance copcar <= 5"];
+action21 = _role addaction ["Impound Lot","noscript.sqf",'[] spawn A_impound_dialog',1,false,true,"","((player distance impoundbuy1) <= 5) or ((player distance impoundbuy2) <= 5) or ((player distance copcar) <= 5)"];
 //action22 = _role addaction ["Impound Lot","maindialogs.sqf",["impound"],1,false,true,"","player distance copcar <= 5"];
 //================================== COP DELETE EVIDENCE ================================================
 //action23 = _role addaction ["Take evidence","noscript.sqf",'player groupchat "evidence removed."; {deletevehicle _x} foreach (nearestobjects [getpos player, ["weaponholder"], 3])',1,true,true,"",'_weps = (nearestobjects [getpos player, ["weaponholder"], 3] select 0); player distance _weps < 5 and iscop'];

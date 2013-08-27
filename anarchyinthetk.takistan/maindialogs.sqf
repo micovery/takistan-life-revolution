@@ -173,7 +173,8 @@ if (_art == "spielerliste") then {
 			_gang = [_gang_id] call gangs_lookup_id;
 			//player groupChat format["_gang = %1", _gang];
 			
-			if (isNil "_gang") then {
+//			if (isNil "_gang") then {
+			if ((typename _gang) != "ARRAY") then {
 				(_DFML displayCtrl 1) lbAdd format["    %1 - (Abandoned)", _gang_area_name];
 			}
 			else {

@@ -1,7 +1,7 @@
 if !(isServer) exitwith {};
 
 if ((isNil "A_AI_ARRAY")) then {
-	A_AI_ARRAY = [university, storage, rathaus, bailflag, assassin, hostage, impoundbuy, shop1export, shop2export, shop3export, shop4export, civ_logicunit, licenseflag6];
+	A_AI_ARRAY = [university, storage, rathaus, bailflag, assassin, hostage, impoundbuy1, impoundbuy2, shop1export, shop2export, shop3export, shop4export, civ_logicunit, licenseflag6];
 		
 	{
 		private["_shop"];

@@ -386,8 +386,9 @@ keyboard_forward_tuning_handler = {
 		_vcl setVelocity [(_vel select 0) * 1.001, (_vel select 1) * 1.001, (_vel select 2) * 0.99];
 	};
 
-	_lvl = _vcl getvariable "tuning";
-	if (isNil "_lvl") exitWith {false};
+	_lvl = 0;
+	_lvl = _vcl getvariable ["tuning", 0];
+	if (_lvl == 0) exitWith {false};
 	
 	if( _vcl iskindof "LandVehicle") then {
 		_vel = velocity _vcl;
@@ -418,8 +419,9 @@ keyboard_vehicle_nitro_handler = {
 	private["_nos", "_vcl", "_spd", "_vel"];
 	_vcl = vehicle player;
 	
-	_nos = _vcl getvariable "nitro";
-	if (isNil "_nos") exitWith { false };
+	_nos = 0;
+	_nos = _vcl getvariable ["nitro", 0];
+	if (_nos == 0) exitWith { false };
 	if (not(isEngineOn _vcl)) exitWith { false };
 		
 	_vel  = velocity _vcl;

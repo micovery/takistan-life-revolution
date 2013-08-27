@@ -1,5 +1,8 @@
 #define ExecSQF(FILE) [] call compile preprocessFileLineNumbers FILE
+#define ExecSQFspawnpass(PASS, FILE) PASS spawn compile preprocessFileLineNumbers FILE
+#define ExecSQFspawn(FILE) ExecSQFspawnpass([], FILE)
 #define ExecSQFwait(FILE) private["_handler"]; _handler = [] spawn (compile (preprocessFileLineNumbers FILE)); waitUntil{scriptDone _handler};
+#define ExecSQFwaitPass(PASS, FILE) private["_handler"]; _handler = PASS spawn (compile (preprocessFileLineNumbers FILE)); waitUntil{scriptDone _handler};
 
 enableSaving [false, false];
 
@@ -29,7 +32,7 @@ if (isClient) then {
 		["Loading - Stage 1/5"] call stats_client_update_loading_title;
 		[0] call stats_client_update_loading_progress;
 		
-		[] execFSM "Awesome\Performance\fpsManagerDynamic.fsm";
+//		[] execFSM "Awesome\Performance\fpsManagerDynamic.fsm";
 //		[] execFSM "Awesome\Client\afkCheck.fsm";
 	};
 
@@ -93,23 +96,24 @@ if(isClient) then {
 	[0.8] call stats_client_update_loading_progress;
 	["Loading - Stage 4/5"] call stats_client_update_loading_title;
 	
-	[] execVM "briefing.sqf";
-	[] execVM "Awesome\Functions\holster.sqf";
-	[] execVM "clientloop.sqf";
-	[] spawn gangs_loop;
-	[] execVM "respawn.sqf";
-	[] execVM "petrolactions.sqf";
-	[] execVM "nametags.sqf";
-	[] execVM "Awesome\Functions\markers.sqf";
-	[] execVM "Awesome\Functions\salary.sqf";
-	[] execVM "motd.sqf";
-	[] ExecVM "Awesome\MountedSlots\functions.sqf";
-	["client"] execVM "bombs.sqf";
-
-	[] execVM "onKeyPress.sqf";
+	ExecSQFspawn("briefing.sqf");
 	
-	[] ExecVM "Awesome\Functions\camera_functions.sqf";
-	[] ExecVM "Awesome\Functions\admin_functions.sqf";
+	ExecSQFwait("Awesome\Functions\camera_functions.sqf")
+	ExecSQFwait("Awesome\Functions\admin_functions.sqf")
+	ExecSQFwait("Awesome\Functions\markers.sqf");
+	ExecSQFwait("Awesome\Functions\holster.sqf");
+	ExecSQFwait("Awesome\MountedSlots\functions.sqf");
+	
+	ExecSQFspawn("clientloop.sqf");
+	[] spawn gangs_loop;
+	ExecSQFspawn("respawn.sqf");
+	ExecSQFspawn("petrolactions.sqf");
+	ExecSQFspawn("nametags.sqf");
+	ExecSQFspawn("Awesome\Functions\salary.sqf");
+	ExecSQFspawn("motd.sqf");
+	ExecSQFspawnpass(["client"], "bombs.sqf");
+	
+	ExecSQFwait("onKeyPress.sqf")
 	
 	[1] call stats_client_update_loading_progress;
 	["Loading - Stage 5/5"] call stats_client_update_loading_title;
@@ -120,13 +124,13 @@ if(isClient) then {
 };
 
 if (isServer) then {
-	[0, 0, 0, ["serverloop"]] execVM "mayorserverloop.sqf";
-	[0, 0, 0, ["serverloop"]] execVM "chiefserverloop.sqf";
-	[] execVM "targets.sqf";
-	[] execVM "druguse.sqf";
-	[] execVM "drugreplenish.sqf";
-	[] execVM "Awesome\Scripts\hunting.sqf";
-	[] execVM "setObjectPitches.sqf";
+	[0,0,0,["serverloop"]] spawn compile preprocessfilelineNumbers "mayorserverloop.sqf";
+	[0,0,0,["serverloop"]] spawn compile preprocessfilelineNumbers "chiefserverloop.sqf";
 	
-	[] spawn (compile preProcessFileLineNumbers "stationrobloop.sqf");
+	ExecSQFspawn("targets.sqf");
+	ExecSQFspawn("druguse.sqf");
+	ExecSQFspawn("drugreplenish.sqf");
+	ExecSQFspawn("Awesome\Scripts\hunting.sqf");
+	ExecSQFspawn("setObjectPitches.sqf");
+	ExecSQFspawn("stationrobloop.sqf");
 };

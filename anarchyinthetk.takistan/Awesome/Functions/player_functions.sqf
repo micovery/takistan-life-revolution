@@ -282,7 +282,8 @@ player_update_reason = {
 	_reasons = [_player] call player_get_reason;
 	
 	if (_reason in _reasons) exitWith {};
-	_reasons = _reasons + [_reason];
+//	_reasons = _reasons + [_reason];
+	_reasons set[(count _reasons), _reason];
 	[_player, _reasons] call player_set_reason;
 };
 
@@ -739,6 +740,15 @@ player_rob_station = {
 	publicVariable _money_variable_name;
 };
 
+player_disconnect_setPrison = {
+	private["_player"];
+	_player = _this select 0;
+	
+	[_player, "jailtimeleft", (25 * 60)] call player_set_scalar;
+	[_player, round(0.25 * ([_player] call player_get_total_money)) + _money] call player_set_bail;
+	
+};
+
 player_prison_time = {
 	private["_player", "_minutes"];
 	_player = _this select 0;
@@ -795,13 +805,17 @@ player_prison_strip = {
 	
 	//remove stolen cash, and illlal items
 	[_player] call INV_RemoveIllegal;
-	if (stolencash > 0) then {
-		[_player, stolencash] call player_lose_money;
+	
+	private["_charge"];
+	if ([_player] call bankRob_checkRobber) then {
+		_charge = 100000 + ([_player] call bankRob_getStolen);
+		[_player] call bankRob_resetStolen;
+		[_player, _charge] call player_lose_money;
 		private["_message"];
-		_message = format["%1-%2 was a bank robber, and has been charged $%3!", _player, (name _player), stolencash];
+		_message = format["%1-%2 was a bank robber, and has been charged $%3!", _player, (name _player), _charge];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+		[_player] spawn bankRob_returnLost;
 	};
-	stolencash = 0;
 };
 
 player_prison_reset = {
@@ -889,6 +903,14 @@ player_prison_loop = { _this spawn {
 			*/
 			[_player] call player_prison_reset;
 			[_player] call player_prison_release;
+		};
+		
+		//PLAYER HAS ESCAPED PRISON
+		if (((player distance prison_logic) >= 100) && ((vehicle player) == player)) then {
+			private["_message"];
+			_message = format["%1-%2 attempted to escape from prison !", _player, _player_name];
+			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+			player setPosATL (getPosATL prison_logic);
 		};
 		
 		//PLAYER HAS ESCAPED PRISON
@@ -2634,24 +2656,39 @@ player_reset_prison = {
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {};
 	
-	if (([_player, "restrained"] call player_get_bool) && not(iscop) && (restrain_respawn)) then {
+
+	if ([_player, "RobberDisconnect"] call player_get_bool) then {
 		private["_message"];
-		_message = format["%1-%2 aborted while restrained, he has been sent to prison", _player, (name _player)];
+		_message = format["%1-%2 aborted while a bank robber, he has been sent to prison", _player, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-		
-		[_player, 15] call player_prison_time;
+			
+		[_player, 1] call player_prison_time;
 		[_player, 100] call player_prison_bail;
 		[_player] call player_prison_convict;
-	}
-	else { if (([_player] call player_get_arrest) && not(iscop))then {
-		private["_message"];
-		_message = format["%1-%2 has been sent to prison to complete his previous sentence", _player, (name _player)];
-		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-		[_player] call player_prison_convict;
-	}
-	else {if ([_player, "roeprison"] call player_get_bool) then {
-		[_player] call player_prison_roe;
-	};};};
+		
+		[_player, "RobberDisconnect", false] call player_set_bool;
+	}else{
+		if (([_player, "restrained"] call player_get_bool) && not(iscop)) then {
+			private["_message"];
+			_message = format["%1-%2 aborted while restrained, he has been sent to prison", _player, (name _player)];
+			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+			
+			[_player, 15] call player_prison_time;
+			[_player, 100] call player_prison_bail;
+			[_player] call player_prison_convict;
+		}else { 
+			if (([_player] call player_get_arrest) && not(iscop))then {
+				private["_message"];
+				_message = format["%1-%2 has been sent to prison to complete his previous sentence", _player, (name _player)];
+				format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+				[_player] call player_prison_convict;
+			}else {
+				if ([_player, "roeprison"] call player_get_bool) then {
+				[_player] call player_prison_roe;
+				};	
+			};
+		};
+	};
 };
 
 player_set_saved_group = {
@@ -3009,6 +3046,53 @@ player_PMCrevoke = {
 		[] call C_change_original;
 	};
 
+player_near_west = {
+	private["_pos", "_range", "_AI"];
+	_pos = _this select 0;
+	_range = _this select 1;
+	_AI = _this select 2;
+	[_pos, west, _range, _AI] call player_sideNear
+};
+
+player_near_east = {
+	private["_pos", "_range", "_AI"];
+	_pos = _this select 0;
+	_range = _this select 1;
+	_AI = _this select 2;
+	[_pos, east, _range, _AI] call player_sideNear
+};
+	
+player_near_resistance = {
+	private["_pos", "_range", "_AI"];
+	_pos = _this select 0;
+	_range = _this select 1;
+	_AI = _this select 2;
+	[_pos, resistance, _range, _AI] call player_sideNear
+};
+
+player_near_civilian = {
+	private["_pos", "_range", "_AI"];
+	_pos = _this select 0;
+	_range = _this select 1;
+	_AI = _this select 2;
+	[_pos, civilian, _range, _AI] call player_sideNear
+};
+	
+player_sideNear = {
+	private["_pos", "_side", "_range", "_AI", "_nearby"];
+	_pos = _this select 0;
+	_side = _this select 1;
+	_range = _this select 2;
+	_AI = _this select 3;
+	
+	if ((typeName _pos) == "OBJECT") then {
+			_pos = getPosATL _pos;
+		};
+	
+	_nearby = _pos nearEntities ["caManBase", _range];
+	( ({ (if(_AI)then{isPlayer _x}else{true}) && (alive _x) && ((side _x) == _side) } count _nearby) > 0 )
+};
+	
 /*
 [] call player_save_side_gear_setup;
 [] call player_init_arrays;

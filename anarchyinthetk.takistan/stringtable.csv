@@ -793,6 +793,7 @@ STRS_inv_item_selbstmordbombe,Suicide Bomb
 STRS_inv_item_selbstmordbombe_info,When you are using this item
 STRS_inv_item_selbstmordbombe_globalmsg,Allah Hu Akbar infidels
 STRS_bank_rob_titlemsg,$$$$WARNING$$$$ Someone is robbing the bank $$$$WARNING$$$$
+STRS_bank_rob_titlemsg_known,$$$$WARNING$$$$ %1-%2 is robbing the bank $$$$WARNING$$$$
 STRS_bank_rob_lostnomoney,Because of your bank insurance you lost no money but you lost one bank insurance.
 STRS_bank_rob_somemoneylost,The bank has been robbed. You lost $%1 and have $%2 left on your account.
 STRS_bank_rob_allmoneylost,The bank has been robbed. You lost all the money on your account!
