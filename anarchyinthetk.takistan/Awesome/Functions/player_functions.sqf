@@ -3092,7 +3092,50 @@ player_sideNear = {
 	_nearby = _pos nearEntities ["caManBase", _range];
 	( ({ (if(_AI)then{isPlayer _x}else{true}) && (alive _x) && ((side _x) == _side) } count _nearby) > 0 )
 };
+
+player_vehicleGrabKiller = {
+	private["_vehicle", "_unit", "_driver", "_gunner", "_commander", "_crew"];
+	_vehicle = _this select 0;
 	
+	if !(({_vehicle isKindOf _x} count ["Car","Mortocycle","Tank","Plane","Helicopter"]) > 0)exitwith{objNull};
+	
+	_unit = objNull;
+	
+	_driver = objNull;
+	_gunner = objNull;
+	_commander = objNull;
+	_crew = [];
+	
+	_driver = driver _vehicle;
+	_gunner = gunner _vehicle;
+	_commander = commander _vehicle;
+	_crew = crew _vehicle;
+	
+	
+	if !(isNull _driver) then {
+			if (isPlayer _driver) then {
+					_unit = _driver;
+				};
+		};
+	if !(isNull _unit) exitwith {_unit};
+	
+	if !(isNull _gunner) then {
+			if (isPlayer _gunner) then {
+					_unit = _gunner;
+				};
+		};
+	if !(isNull _unit) exitwith {_unit};
+	
+	if !(isNull _commander) then {
+			if (isPlayer _commander) then {
+					_unit = _commander;
+				};
+		};
+	if !(isNull _unit) exitwith {_unit};
+	
+	_unit
+};
+
 /*
 [] call player_save_side_gear_setup;
 [] call player_init_arrays;

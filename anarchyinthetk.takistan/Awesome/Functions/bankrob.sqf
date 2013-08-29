@@ -161,7 +161,7 @@ bankRob_victimEnd = {
 								};
 							default {};
 						};
-					if ((_bank_account - _pLost) < _fdic) then {
+					if ((_bank_account - _pLost) <= _fdic) then {
 							_pLost = _bank_account - _fdic;
 						};
 					[player, -(_pLost)] call bank_transaction;
@@ -286,7 +286,7 @@ bankRob_safeInUse_s = {
 
 // Get Money lost
 bankRob_getLoss = {
-	private["_money", "_percent", "_fdic", "_insurances"];
+	private["_player", "_money", "_percent", "_fdic", "_insurances"];
 	_player = _this select 0;
 	_money = _this select 1;
 	
@@ -346,7 +346,7 @@ bankRob_addLosses_s = {
 };
 
 bankRob_totalloss = {
-	private["_player", "_array", "_total_money", "_money"];
+	private["_player", "_array", "_totalMoney", "_money"];
 	_player = _this select 0;
 	_array = _player getVariable [bankRob_v_localLoss, []];
 	
@@ -419,7 +419,7 @@ bankRob_resetStolen = {
 
 // Check if a player is considered a robber
 bankRob_checkRobber = {
-	private["_player", "_losses", "_robTime"];
+	private["_player", "_losses", "_robTime", "_reason"];
 	_player = _this select 0;
 	
 	_losses = [_player] call bankRob_totalloss;
@@ -440,7 +440,7 @@ bankRob_robReason = {
 
 // Check if disconnected was robber
 bankRob_disconnect = {
-	private[];
+	private["_player", "_robAbort"];
 	_player = _this select 0;
 	_robAbort = _player getVariable [bankRob_v_robbed, 0];
 	

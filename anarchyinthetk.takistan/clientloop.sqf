@@ -555,13 +555,6 @@ client_loop = {
 		[] call check_droppable_items;
 		[] call check_restrains;
 		[] call check_insideBase;
-		if (not([player] call ftf_faction_allowed)) then {
-				server globalChat "You are not allowed to play this faction yet. Please try again later";
-				disableuserinput true;
-				sleep 5;
-				disableuserinput false;
-				failMission "END1";
-			};
 		sleep 0.5;
 		disableuserinput false;
 		_client_loop_i = _client_loop_i + 1;

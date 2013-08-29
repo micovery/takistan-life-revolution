@@ -43,7 +43,7 @@ armored_suv_add_actions =
 	if (isNil "_has_suv_actions") then { _has_suv_actions = false;}; 
 	if (_has_suv_actions) exitWith {};
 	
-	player groupChat format["Adding SUV Actions"];
+//	player groupChat format["Adding SUV Actions"];
 	_vehicle addaction ["Open Minigun","noscript.sqf",'[_this select 0] call armored_suv_open_minigun;',1,false,true,"","([player, _target] call vehicle_owner) && !([_target] call armored_suv_is_minigun_open)"];
 	_vehicle addaction ["Close Minigun","noscript.sqf",'[_this select 0] call armored_suv_close_minigun;',1,false,true,"","([player, _target] call vehicle_owner) && ([_target] call armored_suv_is_minigun_open)"];
 	

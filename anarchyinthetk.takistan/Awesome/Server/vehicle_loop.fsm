@@ -29,7 +29,7 @@ class FSM
        "		""_checkTime"", ""_vehicleArray"", ""_timeWait""" \n
        "	];" \n
        "" \n
-       "diag_log format['SERVER VEHICLE LOOP: Start - 1'];" \n
+       "format['SERVER VEHICLE LOOP: Start - 1'] call A_DEBUG_S;" \n
        "" \n
        "_checkTime = vehicle_clean_checkTime;" \n
        "_vehicleArray= [];" \n
@@ -44,7 +44,7 @@ class FSM
           to="Main";
           precondition = /*%FSM<CONDPRECONDITION""">*/""/*%FSM</CONDPRECONDITION""">*/;
           condition=/*%FSM<CONDITION""">*/""/*%FSM</CONDITION""">*/;
-          action=/*%FSM<ACTION""">*/"diag_log format['SERVER VEHICLE LOOP: Start - 2'];"/*%FSM</ACTION""">*/;
+          action=/*%FSM<ACTION""">*/"format['SERVER VEHICLE LOOP: Start - 2'] call A_DEBUG_S;"/*%FSM</ACTION""">*/;
         };
         /*%FSM</LINK>*/
       };
@@ -54,7 +54,7 @@ class FSM
     class Main
     {
       name = "Main";
-      init = /*%FSM<STATEINIT""">*/"diag_log format['SERVER VEHICLE LOOP: Main Loop Start - %1', time];" \n
+      init = /*%FSM<STATEINIT""">*/"format['SERVER VEHICLE LOOP: Main Loop Start - %1', time] call A_DEBUG_S;" \n
        "" \n
        "_vehicleArray = [] call vehicle_clean_getArray;" \n
        "" \n
@@ -71,7 +71,7 @@ class FSM
        "" \n
        "_timeWait = time + vehicle_clean_checkTime;" \n
        "" \n
-       "diag_log format['SERVER VEHICLE LOOP: Main Loop End - %1', time];" \n
+       "format['SERVER VEHICLE LOOP: Main Loop End - %1', time] call A_DEBUG_S;" \n
        ""/*%FSM</STATEINIT""">*/;
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
       class Links

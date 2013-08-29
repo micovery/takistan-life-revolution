@@ -75,31 +75,57 @@ ftf_faction_allowed = {
 	if (isNil "_player") exitWith {false};
 	if (not([_player] call player_human)) exitWith {false};
 	_uid = getPlayerUID _player;
+	
+	waitUntil{alive _player};
+	
+	if (isCiv) exitWith {true};
+	
 	//Reducing traffic by setting local if loaded
 	if (isNil "ignoreFactionPlaytime") then {
 		ignoreFactionPlaytime = [_player, "ignoreFactionPlaytime"] call player_get_bool;
 	};
 	
-	if ((_uid in alldonators) or ((getPlayerUID _player) in A_LIST_ADMINS) or (ignoreFactionPlaytime)) exitWith {true};
-	
 	if (isNil "playtime") then {
-		playtime = _player getVariable ["playtime", 0];
+		playtime = [_player, "playtime"] call player_get_scalar;
 	};
-		
-	if (isCiv) exitWith {true};
-	if ((isOpf) and (playtime < ftf_opf_playtime)) exitWith {false};
-	if ((isCop) and (playtime < ftf_cop_playtime)) exitWith {false};
-	if ((isIns) and (playtime < ftf_ins_playtime)) exitWith {false};	
 	
-	true
+	//Manual overrides:
+	if ((_uid in alldonators) or (_uid in A_LIST_ADMINS) or (ignoreFactionPlaytime)) exitWith {true};
 	
+	
+	//Get side var
+	private["_factionVar", "_allowed"];
+	_factionVar = missionNamespace getVariable format["faction_%1_allowed", (side _player)];
+	
+	_allowed = [_player, _factionVar] call player_get_bool;
+	
+	//Check if already set
+	if (typeName _allowed != "BOOL") then {_allowed = false;};
+	if (_allowed) exitWith {true};
+	
+	//Check if time is ok and set the var
+	
+	if (((isOpf) and (playtime < ftf_opf_playtime)) or ((isCop) and (playtime < ftf_cop_playtime)) or ((isIns) and (playtime < ftf_ins_playtime))) exitWith {
+		[_player, _factionVar, true] call player_set_bool;
+		(true)
+	};
+	false
 };
 
-ftf_init_server = {
-	if (not(isServer)) exitWith {};
-	server setVariable ["player_time_array", [], true];
+ftf_init = {
+	if (isServer) then {
+		server setVariable ["player_time_array", [], true];
+	} else {
+		if (not([player] call ftf_faction_allowed)) then {
+			server globalChat format["You are not allowed to play %1 faction yet. Please try again later", (side player)];
+			disableuserinput true;
+			sleep 5;
+			disableuserinput false;
+			failMission "END1";
+		};
+	};
 };
 
-[] call ftf_init_server;
+[] call ftf_init;
 
 faction_time_functions_loaded = true;

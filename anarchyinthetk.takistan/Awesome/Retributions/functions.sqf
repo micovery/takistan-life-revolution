@@ -929,6 +929,14 @@ victim = {
 	if([_victim] call player_get_dead) exitWith {/*diag_log format['victim END3'];*/};
 	[_victim, true] call player_set_dead;
 	
+	if !(_killer isKindOf "CAManBase") then {
+			private["_newKiller"];
+			_newKiller = [_killer] call player_vehicleGrabKiller;
+			if !(isNull _newKiller) then {
+					_killer = _newKiller;
+				};
+		};
+	
 	if (!([_killer] call player_exists)) then {
 		//hmm, do nothing ...
 	}

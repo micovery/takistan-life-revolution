@@ -22,6 +22,7 @@ INV_Heal = {
 			_this setHit ["legs", 0];
 			_this setVariable ["legs", 0, true];
 			player groupChat "Legs healed, but nothing more can be done with the medkit";
+			true
 		};
 	
 	if (((damage _this) <= _damage)) exitwith {
@@ -34,6 +35,8 @@ INV_Heal = {
 		player groupChat format[localize "STRS_inv_items_medikit_benutzung"];
 		sleep 5;
 		player setdamage _damage;
+		_this setHit ["legs", 0];
+		_this setVariable ["legs", 0, true];
 		player groupChat format[localize "STRS_inv_items_medikit_fertig"];
 		true
 	};
@@ -42,6 +45,8 @@ INV_Heal = {
 	player groupChat "Healing...";
 	sleep 5;
 	_this setdamage _damage;
+	_this setHit ["legs", 0];
+	_this setVariable ["legs", 0, true];
 
 	true
 };
