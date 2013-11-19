@@ -94,8 +94,8 @@ if (_art == "spielerliste") then {
 		(_DFML displayCtrl 1)	lbAdd (playerstringarray select MayorNumber);
 	};
 	
-	_next_president_election = server getVariable "next_president_election";
-	if (not(isnil "_next_president_election")) then { if (typeName _next_president_election == "SCALAR") then { if (_next_president_election > 0) then {
+	_next_president_election = server getVariable ["next_president_election", false];
+	if ((typeName _next_president_election) == "STRING") then { if (typeName _next_president_election == "SCALAR") then { if (_next_president_election > 0) then {
 		private ["_s"];
 		_s = "";
 		if (_next_president_election > 1) then { _s = "s";};
@@ -110,8 +110,8 @@ if (_art == "spielerliste") then {
 		(_DFML displayCtrl 1)	lbAdd (playerstringarray select chiefNumber);
 	};
 	
-	_next_chief_election = server getVariable "next_chief_election";
-	if (not(isnil "_next_chief_election")) then { if (typeName _next_chief_election == "SCALAR") then { if (_next_chief_election > 0) then {
+	_next_chief_election = server getVariable ["next_chief_election", false];
+	if ((typeName _next_chief_election) == "STRING") then { if (typeName _next_chief_election == "SCALAR") then { if (_next_chief_election > 0) then {
 		private ["_s"];
 		_s = "";
 		if (_next_chief_election > 1) then { _s = "s";};

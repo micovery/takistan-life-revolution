@@ -366,8 +366,8 @@ interact_president_elect = { _this spawn {
 	
 	
 	private["_next_election_str", "_next_election"];
-	_next_election = server getVariable "next_president_election";
-	_next_election_str = if (not(isNil "_next_election")) then { format["The results will be announced in %1 minute/s", _next_election]} else {""};
+	_next_election = server getVariable ["next_president_election", false];
+	_next_election_str = if ((typeName _next_election) == "STRING") then { format["The results will be announced in %1 minute/s", _next_election]} else {""};
 	
 	player groupChat format["You voted for %1-%2. %3", _target, (name _target), _next_election_str];
 	format['if (isServer) then { [%1, %2] call interact_president_update_votes;}',_voter_number, _candidate_number] call broadcast;

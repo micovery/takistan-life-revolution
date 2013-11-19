@@ -1,5 +1,6 @@
 items_cracker_use = {
 	if (isCop) exitwith {player groupChat "You know what you did";};
+	if (player != (vehicle player)) exitwith {player groupchat "You're in a vehicle"}};
 	
 	_useTime = missionNamespace getVariable ["cracker_used", 0];
 	_used = false;
