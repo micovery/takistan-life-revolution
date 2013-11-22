@@ -2,7 +2,7 @@
 
 disableSerialization;
 
-private["_art"];
+private["_art", "_array", "_moneh", "_zusatzString"];
 
 _array = _this select 3;
 _art   = _array select 0;
@@ -94,14 +94,24 @@ if (_art == "spielerliste") then {
 		(_DFML displayCtrl 1)	lbAdd (playerstringarray select MayorNumber);
 	};
 	
+
+
+//	_next_president_election = server getVariable "next_president_election";
+//	if (not(isnil "_next_president_election")) then {
+	
+	private["_next_president_election"];
 	_next_president_election = server getVariable ["next_president_election", false];
-	if ((typeName _next_president_election) == "STRING") then { if (typeName _next_president_election == "SCALAR") then { if (_next_president_election > 0) then {
-		private ["_s"];
-		_s = "";
-		if (_next_president_election > 1) then { _s = "s";};
-		
-		(_DFML displayCtrl 1)	lbAdd format["Next election results in %1 minute%2", _next_president_election, _s]; 
-	};};}; 
+	if ((typeName _next_president_election) != "BOOL") then {
+		if ((typeName _next_president_election) == "SCALAR") then {
+			if (_next_president_election > 0) then {
+				private ["_s"];
+				_s = "";
+				if (_next_president_election > 1) then { _s = "s";};
+				(_DFML displayCtrl 1)	lbAdd format["Next election results in %1 minute%2", _next_president_election, _s]; 
+			};
+		};
+	};
+
 	
 	(_DFML displayCtrl 1)	lbAdd _trennlinie;
 	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_chief";
@@ -110,14 +120,20 @@ if (_art == "spielerliste") then {
 		(_DFML displayCtrl 1)	lbAdd (playerstringarray select chiefNumber);
 	};
 	
+
+	private["_next_chief_election"];
 	_next_chief_election = server getVariable ["next_chief_election", false];
-	if ((typeName _next_chief_election) == "STRING") then { if (typeName _next_chief_election == "SCALAR") then { if (_next_chief_election > 0) then {
-		private ["_s"];
-		_s = "";
-		if (_next_chief_election > 1) then { _s = "s";};
-		
-		(_DFML displayCtrl 1)	lbAdd format["Next election results in %1 minute%2", _next_chief_election, _s]; 
-	};};}; 
+	if ((typeName _next_chief_election) != "BOOL") then {
+		if ((typeName _next_chief_election) == "SCALAR") then {
+			if (_next_chief_election > 0) then {
+					private ["_s"];
+					_s = "";
+					if (_next_chief_election > 1) then { _s = "s";};
+					
+					(_DFML displayCtrl 1)	lbAdd format["Next election results in %1 minute%2", _next_chief_election, _s]; 
+				};
+			};
+		}; 
 
 
 	(_DFML displayCtrl 1) lbAdd _trennlinie;

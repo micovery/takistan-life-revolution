@@ -617,7 +617,11 @@ player_get_bool = {
 
 	if (isNil "_player") exitWith {};
 	if (isNil "_variable_name") exitWith {};
-
+	
+	if (A_DEBUG_ON) then {
+			format['PLAYER_GET_BOOL: VAR NAME - %1 - TypeName: %2', _variable_name, typeName _variable_name] call A_DEBUG_S;
+		};
+	
 	private["_variable_value"];
 	_variable_value = _player getVariable _variable_name;
 	_variable_value = if (isNil "_variable_value") then { false } else { _variable_value };
@@ -1039,7 +1043,7 @@ players_object_near = {
 	{
 		private["_player_variable_name", "_player_variable"];
 		_player_variable_name = _x;
-		_player_variable = missionNamespace getVariable _player_variable_name;
+		_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 		if ([_player_variable] call player_human) then {
 			if ((_player_variable distance _object) < _distance) then {
 				_near_players = _near_players + [_player_variable];
@@ -3105,12 +3109,21 @@ player_vehicleGrabKiller = {
 	_gunner = objNull;
 	_commander = objNull;
 	_crew = [];
+
 	
 	_driver = driver _vehicle;
 	_gunner = gunner _vehicle;
 	_commander = commander _vehicle;
 	_crew = crew _vehicle;
 	
+
+	
+	_driver = driver _vehicle;
+	_gunner = gunner _vehicle;
+	_commander = commander _vehicle;
+	_crew = crew _vehicle;
+	
+
 	
 	if !(isNull _driver) then {
 			if (isPlayer _driver) then {

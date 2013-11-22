@@ -10,7 +10,6 @@ ftf_opf_playtime = 4.5*3600;
 ftf_cop_playtime = 4.5*3600;
 ftf_ins_playtime = 4.5*3600;
 
-
 ftf_connected = {
 	//Trigger on connected
 	private["_timearray", "_playeruid"];
@@ -71,12 +70,13 @@ ftf_disconnected = {
 ftf_faction_allowed = {
 	private["_player", "_faction", "_uid"];
 	_player = _this select 0;
-		
+	
 	if (isNil "_player") exitWith {false};
+	
 	if (not([_player] call player_human)) exitWith {false};
 	_uid = getPlayerUID _player;
 	
-	waitUntil{alive _player};
+//	waitUntil{alive _player};
 	
 	if (isCiv) exitWith {true};
 	
@@ -95,9 +95,12 @@ ftf_faction_allowed = {
 	
 	//Get side var
 	private["_factionVar", "_allowed"];
-	_factionVar = missionNamespace getVariable format["faction_%1_allowed", (side _player)];
+	
+	_factionVar = format["faction_%1_allowed", (side _player)];
 	
 	_allowed = [_player, _factionVar] call player_get_bool;
+//	_allowed = _player getVariable [_factionVar, false];
+
 	
 	//Check if already set
 	if (typeName _allowed != "BOOL") then {_allowed = false;};
@@ -116,7 +119,7 @@ ftf_init = {
 	if (isServer) then {
 		server setVariable ["player_time_array", [], true];
 	} else {
-		if (not([player] call ftf_faction_allowed)) then {
+		if (!([player] call ftf_faction_allowed)) then {
 			server globalChat format["You are not allowed to play %1 faction yet. Please try again later", (side player)];
 			disableuserinput true;
 			sleep 5;
@@ -126,6 +129,8 @@ ftf_init = {
 	};
 };
 
-[] call ftf_init;
+
+// Moved to init
+//	[] spawn ftf_init;
 
 faction_time_functions_loaded = true;

@@ -82,7 +82,7 @@ if ((isNil "A_AI_ARRAY")) then {
 	};
 };
 
-private["_sleep", "_counter", "_time", "_time_wait", "_wait", "_restartTime"];
+private["_sleep", "_counter", "_time", "_time_wait", "_wait", "_restartTime", "_restartShort", "_restartInit"];
 _sleep = 10;
 _counter = 0;
 _time = 0;
@@ -100,7 +100,7 @@ format['SERVER_LOOP: '] call A_DEBUG_S;
 
 while {true} do {
 
-	if ( time >= _restartInit ) exitwith A_RESTART_S;
+	if ( time >= _restartInit ) exitwith {[] call A_RESTART_S};
 
 	if (_time >= _wait) then {
 		format[''] call A_DEBUG_S;
@@ -153,7 +153,7 @@ while {true} do {
 		_player	= missionNamespace getVariable _string;
 		_uid = getPlayerUID _player;
 		
-		if ( (!isNull _player) && (isPlayer _player) && (_uid != "")) then {
+		if ((!isNull _player) && (isPlayer _player) && (_uid != "")) then {
 			private["_player_cop"];
 			_player_cop = ([_player] call player_cop);
 			if ( _player_cop && (alive _player) ) then {

@@ -8,6 +8,9 @@ GFX_ManagerHandle			= -1;
 GFX_ManagerToggle			= {
 	if (GFX_EnableManagerFPS) then {
 			GFX_ManagerHandle setFSMVariable ["end", true];
+			if ((GFX_ArmaViewDistance % 50) != 0) then {
+					GFX_ArmaViewDistance = GFX_ArmaViewDistance - 50;
+				};
 		}else{
 			GFX_ManagerHandle = [] execFSM "Awesome\Performance\fpsManagerDynamic.fsm";
 			GFX_ManagerHandle setFSMVariable ["end", false];

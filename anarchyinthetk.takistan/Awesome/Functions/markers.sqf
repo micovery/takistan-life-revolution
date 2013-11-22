@@ -110,18 +110,22 @@ marker_side_loop_draw = {
 	_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 
 
-	if (not([player, "sidemarkers"] call player_get_bool) || 
-		not([player] call player_human) || 
-		([player] call player_civilian) ||
-		not([_player_variable] call player_human) ||
-		([_player_variable] call player_civilian)) exitWith {
+	if (
+			!([player, "sidemarkers"] call player_get_bool) || 
+			!([player] call player_human) || 
+			([player] call player_civilian) ||
+			!([_player_variable] call player_human) ||
+			([_player_variable] call player_civilian)
+		) exitWith {
 		_local_marker setMarkerAlphaLocal 0;
 	};
 	
 	private["_has_admin_camera"];
-	_has_admin_camera = _player_variable getVariable "has_admin_camera";
-	_has_admin_camera = if (isNil "_has_admin_camera") then { false } else {_has_admin_camera};
-	_has_admin_camera = if (typeName _has_admin_camera != "BOOL") then {false} else {_has_admin_camera};
+//	_has_admin_camera = _player_variable getVariable "has_admin_camera";
+//	_has_admin_camera = if (isNil "_has_admin_camera") then { false } else {_has_admin_camera};
+//	_has_admin_camera = if (typeName _has_admin_camera != "BOOL") then {false} else {_has_admin_camera};
+	
+	_has_admin_camera = _player_variable getVariable ["has_admin_camera", false];
 	
 	if (_has_admin_camera) exitWith {
 		_local_marker setMarkerAlphaLocal 0;

@@ -2,7 +2,7 @@ SpeedGun_init = {
 	SG_ON = if (isNil "SG_ON") then { true } else {not(SG_ON)};
 	private["_state"];
 	_state = if (SG_ON) then { "ON" } else { "OFF" };
-	server globalChat format["Speed Gun: %1", SG_ON];
+	server globalChat format["Speed Gun: %1", _state];
 };
 
 SpeedGun_loop = {

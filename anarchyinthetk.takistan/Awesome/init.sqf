@@ -1,9 +1,9 @@
 #define ExecSQF(FILE) [] call compile preprocessFileLineNumbers FILE
 
 ExecSQF("Awesome\Paint\Paint.sqf");
-
 ExecSQF("Awesome\Functions\faction_functions.sqf");
 ExecSQF("Awesome\Functions\gear_functions.sqf");
+
 ExecSQF("Awesome\Functions\pos_functions.sqf");
 ExecSQF("Awesome\Functions\stun_functions.sqf");
 
@@ -14,10 +14,15 @@ ExecSQF("Awesome\Scripts\newactions.sqf");
 ExecSQF("Awesome\Retributions\functions.sqf");
 
 ExecSQF("Awesome\Functions\armoredsuv_functions.sqf");
+
 ExecSQF("Awesome\Functions\halo_functions.sqf");
+
 ExecSQF("Awesome\Functions\trunk_functions.sqf");
+
 ExecSQF("Awesome\Functions\impound.sqf");
+
 ExecSQF("Awesome\Functions\bankrob.sqf");
+
 ExecSQF("Awesome\Functions\items.sqf");
 
 ExecSQF("Awesome\R3F\init.sqf");
@@ -28,14 +33,13 @@ if (isServer) then {
 	[] spawn A_WBL_F_INIT_S;
 };
 
-
 if(isClient) then {
 	[] execVM "Awesome\Scripts\communications.sqf";
 	[] execVM "Awesome\Client\client_loop.sqf";
 	[] execVM "Awesome\Scripts\speedgun.sqf";
 	[] spawn A_WBL_F_INIT_C;
 };
-	
+
 
 enableEngineArtillery false;
 
@@ -97,7 +101,3 @@ M_ill_time = 60;
 M_ill_decent = 0.0075;
 
 pmc_shop_list = [pmccar, pmcair, pmcbox, fortshop2, "pmc_license_journeyman", "pmc_license_defense", "pmc_license_air"];
-
-
-
-

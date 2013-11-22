@@ -459,7 +459,7 @@ A_WBL_F_LOAD_S = {
 				if (_out == "") then {_true = false};
 			};
 				
-			_array = call compile _text;
+			_array = [] call compile _text;
 			
 			missionNamespace setVariable [_variable, []];
 			missionNamespace setVariable [_pv_s, []];

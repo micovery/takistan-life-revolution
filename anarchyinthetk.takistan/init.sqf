@@ -3,6 +3,8 @@
 #define ExecSQFspawn(FILE) ExecSQFspawnpass([], FILE)
 #define ExecSQFwait(FILE) private["_handler"]; _handler = [] spawn (compile (preprocessFileLineNumbers FILE)); waitUntil{scriptDone _handler};
 #define ExecSQFwaitPass(PASS, FILE) private["_handler"]; _handler = PASS spawn (compile (preprocessFileLineNumbers FILE)); waitUntil{scriptDone _handler};
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+
 
 enableSaving [false, false];
 
@@ -83,14 +85,17 @@ ExecSQF("Awesome\Functions\convoy_functions.sqf");
 ExecSQF("Awesome\Functions\factory_functions.sqf");
 ExecSQF("setPitchBank.sqf");
 
+format['LOADING 3/5 - Part 1'] call A_DEBUG_S;
 if (isClient) then {
 		[0.6] call stats_client_update_loading_progress;
 		["Loading - Stage 3/5"] call stats_client_update_loading_title;
 	};
-
+format['LOADING 3/5 - Part 2'] call A_DEBUG_S;
 
 // Starts up Awesome scripts
 ExecSQF("Awesome\init.sqf");
+
+format['LOADING 3/5 - Part 3'] call A_DEBUG_S;
 
 if(isClient) then {
 	[0.8] call stats_client_update_loading_progress;
@@ -136,6 +141,10 @@ if(isClient) then {
 	[] call stats_client_stop_loading;
 	
 	[] call music_stop;
+	
+	SleepWait(30)
+	[] spawn ftf_init;
+
 };
 
 if (isServer) then {

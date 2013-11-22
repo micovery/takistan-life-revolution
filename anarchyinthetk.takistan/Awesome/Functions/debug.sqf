@@ -1,5 +1,5 @@
 debug  			= false;
-A_DEBUG_ON 		= false;
+A_DEBUG_ON 		= true;
 A_FA_DEBUG_ON 	= false;
 A_PF_DEBUG_ON	= false;
 
