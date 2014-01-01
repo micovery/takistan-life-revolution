@@ -228,7 +228,7 @@ bankRob_nearestSafe = {
 		_safes = nearestObjects [_pos,["Misc_cargo_cont_tiny"], 100];
 		if ( (count _safes) > 0) then {
 				_safe = _safes select 0;
-				if ((_pos distance _pos) > 5) then {
+				if ((_pos distance (getPosATL _safe)) > 5) then {
 						objNull
 					}else{
 						_safe

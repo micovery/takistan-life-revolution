@@ -135,8 +135,12 @@ if(isClient) then {
 	format['LOADING 4/5 - Part 15'] call A_DEBUG_S;
 	ExecSQFwait("onKeyPress.sqf")
 	
+	format['LOADING 4/5 - Part 16'] call A_DEBUG_S;
+	
 	[1] call stats_client_update_loading_progress;
 	["Loading - Stage 5/5"] call stats_client_update_loading_title;
+	
+	format['LOADING 5/5'] call A_DEBUG_S;
 	
 	[] call stats_client_stop_loading;
 	
