@@ -33,7 +33,6 @@ if (_art == "use") then {
 	if (isServer) then {
 		[] spawn {
 			_counter = 0;
-			liafu = true;
 			while{alive %1} do {
 				_counter = _counter + 1;
 				if(_counter > 3900)exitwith{deletevehicle %1;};

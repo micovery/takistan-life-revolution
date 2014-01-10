@@ -1,8 +1,6 @@
 #include "Awesome\Functions\macro.h"
 if (not(isNil "client_loop_functions_defined")) exitWith {};
 
-liafu = true;
-
 player_is_armed = false;
 check_armed_player = {
 	private["_player"];

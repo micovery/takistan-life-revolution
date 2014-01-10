@@ -27,7 +27,6 @@ _objectposition = getpos (_objectlogic);
 _objectradius   = _objposarray select 1;
 _objectradius2  = _objposarray select 2;
 _searchobject = _searchobj createVehicleLocal [((_objectposition select 0)+(random(_objectradius)-random(_objectradius))), ((_objectposition select 1)+(random(_objectradius2)-random(_objectradius2))), _objectposition select 2];
-liafu = true;
 player groupChat _searchmsg;
 _action            = 0;
 _action2	   = 0;

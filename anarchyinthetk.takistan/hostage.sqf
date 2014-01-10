@@ -45,7 +45,6 @@ if (_art == "getajob_hostage") then {
 
 
 	//creating VIP
-	liafu = true;
 	_group = createGroup east;
 	hostage1 = _group createUnit ["Functionary1_EP1", _pos, [], _radius, "FORM"];
 	hostage1 setvehicleinit 'hostage1 = this;this setVehicleVarName "hostage1";';

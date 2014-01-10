@@ -120,6 +120,7 @@ ftf_init = {
 		server setVariable ["player_time_array", [], true];
 	} else {
 		if (!([player] call ftf_faction_allowed)) then {
+			format['Faction not allowed, kicking'] call A_DEBUG_S;
 			server globalChat format["You are not allowed to play %1 faction yet. Please try again later", (side player)];
 			disableuserinput true;
 			sleep 5;

@@ -80,8 +80,6 @@ stun_shot_far = {
 	_veh = _this select 5;
 	_inveh = _this select 6;
 	_distance = _this select 7;
-	
-	liafu = true;
 
 	[_unit, _shooter] spawn stun_broadcast;
 	
@@ -811,7 +809,6 @@ stun_effects_full = {
 stun_drop_weapons = {
 	private ["_unit", "_weapons", "_holder", "_pos"];
  
-	 liafu = true;
 	 _unit = _this select 0;
 	 _weapons = weapons _unit;
 	 _weapons = _weapons - nonlethalweapons;

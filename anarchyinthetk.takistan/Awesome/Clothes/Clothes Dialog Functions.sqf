@@ -1,6 +1,5 @@
 
 C_Dialog_Choice = {
-	liafu = true;
 	private ["_DFML"];
 
 	disableSerialization;
@@ -21,7 +20,6 @@ C_Dialog_Choice = {
 
 
 C_Dialog_Full = {
-	liafu = true;
 	private ["_cam", "_IA", "_index", "_item", "_cost", "_lic", "_armorb", "_armors", "_texts", "_class", "_cfg", "_pack", "_DFML", "_n", "_c", "_t_cfg", "_t_count", "_selected_maps"];
 
 	disableSerialization;
@@ -41,7 +39,7 @@ C_Dialog_Full = {
 	C_Preview_Pos = getPosATL C_Preview_Logic;
 	C_Preview_Unit = C_Preview_Group createUnit [C_Preview_Class, C_Preview_Pos, [], 0, "CAN_COLLIDE"];
 	[C_Preview_Unit] joinSilent C_Preview_Group;
-	C_Preview_Unit setVehicleInit format["liafu = true; this setVehicleVarName '%1_%2_C_Dummy'; %1_%2_C_Dummy = this; this disableAI 'move';this disableAI 'anim'; this allowDamage false;", player, round(time)];
+	C_Preview_Unit setVehicleInit format["this setVehicleVarName '%1_%2_C_Dummy'; %1_%2_C_Dummy = this; this disableAI 'move';this disableAI 'anim'; this allowDamage false;", player, round(time)];
 	processInitCommands;
 	C_Preview_Unit setDir ((getDir C_Preview_Logic));
 	C_Preview_Unit setBehaviour "CARELESS";
@@ -398,7 +396,6 @@ C_Dialog_Full = {
 
 
 C_Dialog_Switch = {
-	liafu = true;
 	private ["_IA", "_index"];
 
 	Switch C_choice do {
@@ -432,7 +429,6 @@ C_Dialog_Switch = {
 
 
 C_Preview_Zoom = {
-	liafu = true;
 	private ["_choice"];
 
 	_choice = _this select 0;
@@ -475,7 +471,6 @@ C_Preview_Zoom = {
 
 
 C_Preview_Camera = {
-	liafu = true;
 	private ["_choice"];
 
 	_choice = _this select 0;
@@ -514,14 +509,13 @@ C_Preview_Camera = {
 
 
 C_Preview = {
-	liafu = true;
 	deleteVehicle C_Preview_Unit;
 
 	C_Preview_Class = C_selectedarray select 1;
 	
 	C_Preview_Unit = C_Preview_Group createUnit [C_Preview_Class, C_Preview_Pos, [], 0, "CAN_COLLIDE"];
 	[C_Preview_Unit] joinSilent C_Preview_Group;
-	C_Preview_Unit setVehicleInit format["liafu = true; this setVehicleVarName '%1_%2_C_Dummy'; %1_%2_C_Dummy = this; this disableAI 'move';this disableAI 'anim'; this allowDamage false;", player, round(time)];
+	C_Preview_Unit setVehicleInit format["this setVehicleVarName '%1_%2_C_Dummy'; %1_%2_C_Dummy = this; this disableAI 'move';this disableAI 'anim'; this allowDamage false;", player, round(time)];
 	processInitCommands;
 	C_Preview_Unit setDir ((getDir C_Preview_Logic));
 	C_Preview_Unit setBehaviour "CARELESS";
@@ -542,7 +536,6 @@ C_Preview = {
 
 
 C_buy = {
-	liafu = true;
 	private ["_choice"];
 
 	_choice = _this select 0;
@@ -560,7 +553,6 @@ C_buy = {
 };
 
 C_Switch_Storage = {
-	liafu = true;
 	private ["_choice"];
 
 	_choice = _this select 0;
@@ -577,7 +569,7 @@ C_Switch_Storage = {
 
 
 C_T_Apply = {
-	liafu = true;
+C_T_Apply = {
 	private ["_exit"];
 
 	C_T_SSlot 		= parseNumber (lbData [1502, (lbCurSel 1502)]);
@@ -723,7 +715,6 @@ C_T_Apply = {
 
 
 C_T_R_Slot = {
-	liafu = true;
 	private ["_c", "_x", "_cfg1", "_cfg2", "_C_T_P"];
 
 	C_T_SSlot 		= parseNumber (lbData [1502, (lbCurSel 1502)]);
@@ -751,7 +742,6 @@ C_T_R_Slot = {
 
 
 C_T_R_All = {
-	liafu = true;
 	private ["_n", "_x", "_cfg1", "_cfg2"];
 
 	_cfg1		= getArray (configFile >> "CfgVehicles" >> P_Preview_Class >> "hiddenselections");
@@ -771,7 +761,6 @@ C_T_R_All = {
 
 
 C_Dialog_Setup = {
-	liafu = true;
 	private ["_DFML", "_shop", "_shop_change", "_c_1", "_c_2", "_cb_1", "_cb_2", "_index"];
 
 	_DFML = findDisplay 3003;

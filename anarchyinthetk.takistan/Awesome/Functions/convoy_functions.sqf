@@ -120,7 +120,6 @@ convoy_create_units = {
 		_unit = _convoy_group createUnit [_class, _location, [], 0, "FORM"];
 		_unit setVehicleInit format[
 		'
-			liafu = true;
 			%1 = this; 
 			this setSpeedMode "full"; 
 			this allowFleeing 0;

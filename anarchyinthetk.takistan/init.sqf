@@ -5,7 +5,7 @@
 #define ExecSQFwaitPass(PASS, FILE) private["_handler"]; _handler = PASS spawn (compile (preprocessFileLineNumbers FILE)); waitUntil{scriptDone _handler};
 #define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 
-
+ALL_LOADING_DONE = false;
 enableSaving [false, false];
 
 isClient = !isServer || (isServer && !isDedicated);
@@ -135,8 +135,12 @@ if(isClient) then {
 	format['LOADING 4/5 - Part 15'] call A_DEBUG_S;
 	ExecSQFwait("onKeyPress.sqf")
 	
+	format['LOADING 4/5 - Part 16'] call A_DEBUG_S;
+	
 	[1] call stats_client_update_loading_progress;
 	["Loading - Stage 5/5"] call stats_client_update_loading_title;
+	
+	format['LOADING 5/5'] call A_DEBUG_S;
 	
 	[] call stats_client_stop_loading;
 	
@@ -144,13 +148,15 @@ if(isClient) then {
 	
 	SleepWait(30)
 	[] spawn ftf_init;
-
+	
 };
+
+ALL_LOADING_DONE = true;
 
 if (isServer) then {
 	[0,0,0,["serverloop"]] spawn compile preprocessfilelineNumbers "mayorserverloop.sqf";
 	[0,0,0,["serverloop"]] spawn compile preprocessfilelineNumbers "chiefserverloop.sqf";
-	
+
 	ExecSQFspawn("targets.sqf");
 	ExecSQFspawn("druguse.sqf");
 	ExecSQFspawn("drugreplenish.sqf");

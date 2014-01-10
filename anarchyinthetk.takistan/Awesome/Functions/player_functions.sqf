@@ -618,10 +618,11 @@ player_get_bool = {
 	if (isNil "_player") exitWith {};
 	if (isNil "_variable_name") exitWith {};
 	
-	if (A_DEBUG_ON) then {
+/*	if (A_DEBUG_ON) then {
 			format['PLAYER_GET_BOOL: VAR NAME - %1 - TypeName: %2', _variable_name, typeName _variable_name] call A_DEBUG_S;
 		};
-	
+*/
+		
 	private["_variable_value"];
 	_variable_value = _player getVariable _variable_name;
 	_variable_value = if (isNil "_variable_value") then { false } else { _variable_value };
@@ -2818,7 +2819,6 @@ player_drop_item = {
 	_object_name = format["%1_%2_%3_%4", _class, (getPlayerUID _player), round(time), round(random(time))];
 	_object setVehicleInit format[
 	'
-		liafu = true;
 		%1 = this;
 		this setVehicleVarName "%1";
 	', _object_name];

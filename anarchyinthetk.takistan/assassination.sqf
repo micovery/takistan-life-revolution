@@ -208,6 +208,4 @@ if (_art == "getajob_assassin") then {
 	};
 };
 
-liafu = format["%1", (name player)];
-
 // written by eddie vedder

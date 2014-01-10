@@ -5,7 +5,6 @@ _RandomParams = [5,[0, 0, 0],[0.25, 0.25, 0.25],1,0.5,[0.1,0.1,0.1,0.1],1,0];
 if (_effekt == "rauch") then {
 	_obj = (_this select 1);
 	_pos = (_this select 2);
-	liafu = true;
 	while {true} do {
 		_rauch= "#particlesource" createVehicleLocal _pos;
 		_rauch setParticleRandom _RandomParams;

@@ -1,8 +1,6 @@
 _art = _this select 0;
 
 if (_art == "use") then {
-	liafu = true;
-
 	_item = _this select 1;
 	_vcl = (nearestobjects [getpos player, ["LandVehicle", "Air"], 15] select 0);
 

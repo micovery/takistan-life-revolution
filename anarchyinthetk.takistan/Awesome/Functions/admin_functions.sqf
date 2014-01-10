@@ -48,7 +48,6 @@ admin_actions_list = {
 			
 			format['
 				[] spawn {
-					liafu = true;
 					if (player != %1) exitWith {};
 					[player] call player_reset_gear;
 				};
@@ -64,7 +63,6 @@ admin_actions_list = {
 			
 			format['
 				[] spawn {
-					liafu = true;
 					if (player != %1) exitWith {};
 					(player) setDamage 1; 
 				};
@@ -81,7 +79,6 @@ admin_actions_list = {
 			
 			format['
 				[] spawn {
-					liafu = true;
 					if (player != %1) exitWith {};
 					(vehicle player) setDamage 1; 
 				};

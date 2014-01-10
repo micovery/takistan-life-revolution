@@ -41,7 +41,7 @@ if (_art == "use") then {
 			player groupChat format["The bomb failed to work"];
 			titleText ["", "plain"];
 		};
-//	call compile format ["liafu = true; autobombe%2 = createVehicle [""Bo_GBU12_LGB"", (%1), [], 0, ""NONE""];",(getpos player), (round (random 2000))];
+//	call compile format ["autobombe%2 = createVehicle [""Bo_GBU12_LGB"", (%1), [], 0, ""NONE""];",(getpos player), (round (random 2000))];
 	
 	_weapon = "BombLauncher";
 	_magazine = "6Rnd_GBU12_AV8B";

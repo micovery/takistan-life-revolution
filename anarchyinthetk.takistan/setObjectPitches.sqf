@@ -1,5 +1,3 @@
-liafu = true;
-
 [alight, 1, 0] call setPitchBank;
 [alight2, 1, 0] call setPitchBank;
 [agunbox, 0, 3] call setPitchBank;

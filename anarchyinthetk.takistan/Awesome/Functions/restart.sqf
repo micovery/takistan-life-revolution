@@ -10,6 +10,7 @@ A_RESTART_S = {
 
 A_RESTART_C = {
 		if !([] call A_RESTART_CHECK) exitwith {};
+		format['Restart check passed, kicking'] call A_DEBUG_S;
 		private["_messageString", "_TL"];
 		_messageString = "YOU HAVE %1 SECONDS TO LEAVE BEFORE BEING KICKED TO ENSURE SAVING OF STATS FOR SERVER RESTART";
 		_TL = 0;

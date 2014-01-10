@@ -23634,7 +23634,7 @@ class Mission
 			interruptable=1;
 			age="UNKNOWN";
 			expCond="isServer";
-			expActiv="{_x setvehicleinit 'this addEventHandler [""handleDamage"", { false }]'}foreach nearestObjects[getpos CopPrison,[""NonStrategic"", ""fence""], 50]; processInitCommands; liafu = true;";
+			expActiv="{_x setvehicleinit 'this addEventHandler [""handleDamage"", { false }]'}foreach nearestObjects[getpos CopPrison,[""NonStrategic"", ""fence""], 50]; processInitCommands;";
 			class Effects
 			{
 			};

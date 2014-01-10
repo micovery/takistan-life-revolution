@@ -5,6 +5,8 @@ _pmcCheckTime = 0;
 _pmcCheckDelay = 3 * 60;
 _pmcCheckBool = false;
 
+waitUntil {ALL_LOADING_DONE};
+
 while {true} do {
 	if ([] call A_RESTART_CHECK) exitwith {[] spawn A_RESTART_C};
 	

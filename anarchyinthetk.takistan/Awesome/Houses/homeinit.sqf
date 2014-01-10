@@ -434,7 +434,7 @@ _HomeLogic =
         
         _home_object_pos = getPosATL _home_object;
         _home_object_dir = getDir _home_object;
-        liafu = true;
+		
         _wall = createVehicle [_home_wall_type,  [_home_object_pos, _home_wall_pos] call home_addPositions, [], 0, "CAN_COLLIDE"];
         _wall setDir ([_home_object_dir, _home_wall_dir] call home_addDirections)
         

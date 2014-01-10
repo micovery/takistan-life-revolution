@@ -157,4 +157,3 @@ _this setDir 57.109604;
 _this setvehicleinit ' this setVehicleVarName "t135";t135 = this;';
 
 processInitCommands;
-liafu = true;

@@ -150,7 +150,7 @@ while {true} do {
 	{
 		private["_string", "_player", "_uid"];
 		_string = _x;
-		_player	= missionNamespace getVariable _string;
+		_player	= missionNamespace getVariable [_string, objNull];
 		_uid = getPlayerUID _player;
 		
 		if ((!isNull _player) && (isPlayer _player) && (_uid != "")) then {

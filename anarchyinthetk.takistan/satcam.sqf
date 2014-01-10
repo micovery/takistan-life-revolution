@@ -1,5 +1,3 @@
-liafu = true;
-
 private["_position"];
 
 _position = _this select 0;

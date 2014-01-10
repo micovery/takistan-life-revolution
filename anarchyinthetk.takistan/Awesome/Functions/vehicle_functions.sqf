@@ -479,35 +479,35 @@ vehicle_set_modifications = {
 		/* Octavia_ill, Octavia_PMC, Octavia_UN, Octavia_Cop, Octavia_Civ */
 		case "Octavia_Civ": {};
 		case "Octavia_ill": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(0.5,0,0.5,0.5,ca)"]'; 
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0.5,0,0.5,0.5,ca)"]'; 
 			processInitCommands;
 		};
 		case "Octavia_Cop": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(0,1,0,0.5,ca)"]'; 
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,1,0,0.5,ca)"]'; 
 			processInitCommands;
 		};
 		case "Octavia_UN": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(1,1,1,0.5,ca)"]'; 
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(1,1,1,0.5,ca)"]'; 
 			processInitCommands;
 		};
 		case "Octavia_PMC": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(0,0,0,1,ca)"]';
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,0,0,1,ca)"]';
 			processInitCommands;
 		};
 		case "SUV_UN_EP1": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(1,1,1,0.5,ca)"]'; 
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(1,1,1,0.5,ca)"]'; 
 			processInitCommands;
 		};
 		case "SUV_TK_EP1":{
-				//_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(0,1,0,0.5,ca)"]'; 
+				//_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,1,0,0.5,ca)"]'; 
 				//processInitCommands;
 		};
 		case "SUV_PMC_BAF": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(argb,8,8,3)color(0,0,0,0.5,ca)"]'; 
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,0,0,0.5,ca)"]'; 
 			processInitCommands;
 		};
 		case "SUV_PMC": {
-			_vehicle setVehicleInit 'liafu = true; this setObjectTexture [0, "#(rgb,1,1,1)color(0.1,0.1,0.1,1)"]'; 
+			_vehicle setVehicleInit 'this setObjectTexture [0, "#(rgb,1,1,1)color(0.1,0.1,0.1,1)"]'; 
 			processInitCommands;
 		};
 		case "ArmoredSUV_PMC": {

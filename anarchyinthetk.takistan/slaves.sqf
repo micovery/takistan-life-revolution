@@ -3,8 +3,6 @@
 _art  = ((_this select 3) select 0);
 _moneh = [player, 'money'] call INV_GetItemAmount;
 
-liafu = true;
-
 if (_art == "slave") exitWith {
 
 	if (localslave >= maxslave) exitWith {
@@ -52,7 +50,6 @@ if (_art == "slave") exitWith {
 	currecciv = false;
 
 	processInitCommands;
-	liafu = true;
 
 	call compile format ["arbeitergeld%1 = 0;", _arbeiternummer];
 
@@ -71,7 +68,6 @@ if (_art == "slave") exitWith {
 		private["_i"];
 		
 		for [{_i=0}, {_i < 60}, {_i=_i+1}] do {
-			liafu = true;
 			if ( (not(alive _slavename)) or (not(alive player))) exitWith {
 				sleep 2; 
 				if (!isnull _slavename) then {
