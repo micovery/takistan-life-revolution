@@ -44,6 +44,7 @@ bankRob_rob = {
 	
 	_player groupchat "The cracker is attached, this will take some time";
 	
+	keyblock = true; 
 	
 	_damage = damage _player;
 	_interupt = false;
@@ -62,6 +63,8 @@ bankRob_rob = {
 					_interupt = true;
 				};
 		};
+	
+	keyblock = false; 
 	
 	if _interupt exitwith {
 			_player groupChat "Your Cracking attempt was interrupted, the tool is now useless";
@@ -224,11 +227,18 @@ bankRob_nearestSafe = {
 		private["_player", "_pos", "_safe", "_safes"];
 		_player = _this select 0;
 		_pos = getPosATL _player;
+		_posZ = _pos select 2;
 		_safe = objNull;
 		_safes = nearestObjects [_pos,["Misc_cargo_cont_tiny"], 100];
 		if ( (count _safes) > 0) then {
 				_safe = _safes select 0;
-				if ((_pos distance (getPosATL _safe)) > 5) then {
+				_safePos = getPosATL _safe;
+				_safeZ = _safePos select 2;
+				
+				_maxZ = (_posZ max _safeZ);
+				_minZ = (_posZ min _safeZ);
+				
+				if (((_pos distance (getPosATL _safe)) > 5) || ((_maxZ - _minZ) > 0.5)) then {
 						objNull
 					}else{
 						_safe

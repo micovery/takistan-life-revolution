@@ -123,7 +123,7 @@ storage2 = _role addaction ["Private storage","noscript.sqf",'[player] call inte
 storage3 = _role addaction ["Private storage","noscript.sqf",'[player] call interact_private_storage_menu;', 1, false,true,"","player distance atmins < 7"];
 storage4 = _role addaction ["Private storage","noscript.sqf",'[player] call interact_private_storage_menu;', 1, false,true,"","player distance atm5 < 7"];
 //========================================= BAIL ======================================================
-action51 = _role addaction [format ["Pay Bail", slave_cost],"maindialogs.sqf", ["bail"],1,false,true,"","player distance bailflag <= 5 and isciv"];
+action51 = _role addaction [format ["Pay Bail", slave_cost],"maindialogs.sqf", ["bail"],1,false,true,"","((player distance bailflag) <= 5) && isciv && ([_this] call player_get_arrest)"];
 //===================================== ITEM PROCESS ==================================================
 action52 = _role addAction 
 [

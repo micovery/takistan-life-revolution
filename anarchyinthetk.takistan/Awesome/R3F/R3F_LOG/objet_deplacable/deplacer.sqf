@@ -89,7 +89,10 @@ else
 			_action_menu = player addAction [("<t color=""#dddd00"">" + STR_R3F_LOG_action_relacher_objet + "</t>"), "Awesome\R3F\R3F_LOG\objet_deplacable\relacher.sqf", nil, 5, true, true, "", ""];
 			
 			// On limite la vitesse de marche et on interdit de monter dans un véhicule tant que l'objet est porté
-			while {!isNull R3F_LOG_joueur_deplace_objet && alive player} do {
+			
+			keyblock = true; 
+			
+			while {!(isNull R3F_LOG_joueur_deplace_objet) && (alive player) && !([player, "isstunned"] call player_get_bool) && !([player, "restrained"] call player_get_bool)} do {
 				if (vehicle player != player) then
 				{
 					player globalChat STR_R3F_LOG_ne_pas_monter_dans_vehicule;
@@ -106,6 +109,8 @@ else
 				
 				sleep 0.25;
 			};
+			
+			keyblock = false; 
 			
 			// L'objet n'est plus porté, on le repose
 			detach _objet;

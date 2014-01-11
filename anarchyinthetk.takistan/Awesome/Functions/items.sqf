@@ -1,20 +1,6 @@
 items_cracker_use = {
 	if (isCop) exitwith {player groupChat "You know what you did";};
 	if (player != (vehicle player)) exitwith {player groupchat "You're in a vehicle";};
-
-	
-	_useTime = missionNamespace getVariable ["cracker_used", 0];
-	_used = false;
-	if (_useTime > 0) then {
-			_used = ((time - _useTime) <= 60) 
-		};
-	if _used exitwith {
-			player groupChat "You cannot use this yet";
-		};
-	missionNamespace setVariable ["cracker_used", time];
-	
-	private["_item", "_nearSafe", "_inUse"];
-	_item = _this select 0;
 	
 	_nearSafe = objNull;
 	_nearSafe = [player] call bankRob_nearestSafe;
@@ -32,11 +18,23 @@ items_cracker_use = {
 			player groupChat "Safe is not crackable at the moment";
 		};
 		
+	
+	_useTime = missionNamespace getVariable ["cracker_used", 0];
+	_used = false;
+	if (_useTime > 0) then {
+			_used = ((time - _useTime) <= 60) 
+		};
+	if _used exitwith {
+			player groupChat "You cannot use this yet";
+		};
+	missionNamespace setVariable ["cracker_used", time];
+	
+	private["_item", "_nearSafe", "_inUse"];
+	_item = _this select 0;
+		
 	player groupChat "Attaching Safe Cracker...";
-	
-	[player, _nearSafe] call bankRob_rob;
-	
 	[player, _item, -1] call INV_AddInventoryItem;
+	[player, _nearSafe] call bankRob_rob;
 };
 
 item_lockpick_use = {	

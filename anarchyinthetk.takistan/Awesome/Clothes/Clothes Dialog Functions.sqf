@@ -569,7 +569,6 @@ C_Switch_Storage = {
 
 
 C_T_Apply = {
-C_T_Apply = {
 	private ["_exit"];
 
 	C_T_SSlot 		= parseNumber (lbData [1502, (lbCurSel 1502)]);

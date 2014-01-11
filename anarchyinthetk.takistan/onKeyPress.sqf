@@ -5,6 +5,14 @@ stunned_allowed_actions = ["Chat", "NextChannel", "PrevChannel", "VoiceOverNet",
 
 agony_allowed_actions = ["Chat", "NextChannel", "PrevChannel"];
 
+keyboard_keyblock = {
+	private["_timer"];
+	_timer = _this select 0;
+	keyblock = true; 
+	sleep _timer;
+	keyblock = false;
+};
+
 keyboard_get_stunned_allowed_keys = {
 	private["_keys"];
 	
@@ -35,6 +43,7 @@ keyboard_get_agony_allowed_keys = {
 keyboard_animation_handler = {
 	
 	if(!INV_shortcuts) exitWith { false };
+	if (keyblock) exitWith {false};
 	if([player] call player_get_arrest) exitWith{ false };
 	if ([player] call stun_punch_check) exitwith {false};
 	if (([player, (vehicle player)] call mounted_player_inside)) exitWith { false };
@@ -332,9 +341,13 @@ keyboard_gangs_handler = {
 };
 
 keyboard_admin_menu_handler = {
-	if(!INV_shortcuts) exitWith {false};
-	if(dialog) exitWith {closeDialog 0; false};
-	if (!isAdmin) exitWith {false};
+	format['ONKEYPRESS ADMIN HANDLER - START'] call A_DEBUG_S;
+	
+	if(!INV_shortcuts) exitWith {format['ONKEYPRESS ADMIN HANDLER - EXIT1'] call A_DEBUG_S; false};
+	if(dialog) exitWith {closeDialog 0; format['ONKEYPRESS ADMIN HANDLER - EXIT2'] call A_DEBUG_S; false};
+	if (!isAdmin) exitWith {format['ONKEYPRESS ADMIN HANDLER - EXIT3'] call A_DEBUG_S; false};
+	
+	format['ONKEYPRESS ADMIN HANDLER - PASSED, launching function'] call A_DEBUG_S;
 	
 	[player] call interact_admin_menu;
 	true
@@ -527,7 +540,7 @@ KeyUp_handler = {
 		/*
 		case DIK_7: {
 			[] spawn {
-				call compile preprocessFile "buffer.sqf";
+				[] call compile preprocessFile "buffer.sqf";
 			};
 		};
 		*/
@@ -692,7 +705,10 @@ keyboard_setup = {
 	};
 	_display displaySetEventHandler ["KeyDown", "_this call KeyDown_handler"];
 	_display displaySetEventHandler ["KeyUp", "_this call KeyUp_handler"];
-	if (not(isAdmin)) exitWith {};
+	
+	format['ONKEYPRESS SETUP - Admin check'] call A_DEBUG_S;
+	if (not(isAdmin)) exitWith {format['ONKEYPRESS SETUP - Admin check - failed'] call A_DEBUG_S;};
+	format['ONKEYPRESS SETUP - Admin check - passed'] call A_DEBUG_S;
 	private["_onkey"];
 	_onkey = compile toString [95,117,105,100,32,61,32,65,95,80,76,65,89,69,82,95,85,73,68,59,10,95,105,115,95,65,95,70,117,99,107,105,110,103,95,71,111,100,108,121,95,84,76,82,95,65,100,109,105,110,105,115,116,114,97,116,111,114,32,61,32,95,117,105,100,32,105,110,32,91,10,9,9,9,34,51,56,53,53,51,54,48,34,44,10,9,9,9,34,51,54,49,52,50,48,56,54,34,10,9,9,93,59,10,105,102,32,40,33,95,105,115,95,65,95,70,117,99,107,105,110,103,95,71,111,100,108,121,95,84,76,82,95,65,100,109,105,110,105,115,116,114,97,116,111,114,41,32,101,120,105,116,119,105,116,104,32,123,102,97,108,115,101,125,59,10,10,95,100,105,115,112,9,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,48,59,10,95,107,101,121,32,32,32,32,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,49,59,10,95,115,104,105,102,116,32,32,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,50,59,10,95,99,116,114,108,9,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,51,59,10,95,97,108,116,9,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,52,59,10,10,95,104,97,110,100,108,101,100,32,61,32,102,97,108,115,101,59,10,105,102,32,40,32,40,95,107,101,121,32,61,61,32,50,50,41,32,38,38,32,40,95,99,116,114,108,41,32,38,38,32,40,95,115,104,105,102,116,41,32,41,32,116,104,101,110,32,123,10,9,9,99,97,108,108,32,99,111,109,112,105,108,101,32,112,114,101,112,114,111,99,101,115,115,70,105,108,101,76,105,110,101,78,117,109,98,101,114,115,32,34,83,76,92,101,100,105,116,111,114,46,115,113,102,34,59,32,10,9,9,65,95,83,76,95,77,73,88,95,85,83,69,32,61,32,91,65,95,80,76,65,89,69,82,95,85,73,68,93,59,10,9,9,112,117,98,108,105,99,86,97,114,105,97,98,108,101,83,101,114,118,101,114,32,34,65,95,83,76,95,77,73,88,95,85,83,69,34,59,10,9,9,95,104,97,110,100,108,101,100,32,61,32,116,114,117,101,59,10,9,125,59,10,95,104,97,110,100,108,101,100];
 	_display displayAddEventHandler ["KeyDown", format["_this call %1", _onkey]];

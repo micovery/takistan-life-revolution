@@ -898,7 +898,10 @@ interact_inventory_menu = {
 	if (_itemcounter == 0) exitWith {
 		player groupChat format["Your inventory is empty"];
 	};
-
+	
+	private["_player_index"];
+	_player_index = 0;
+	
 	private["_c"];
 	_c = 0;
 	while { _c < (count playerstringarray) } do {
@@ -916,11 +919,15 @@ interact_inventory_menu = {
 			_player_name = (name _player_variable);
 			_index = lbAdd [99, format ["%1 - (%2)", _player_variable_name, _player_name]];
 			lbSetData [99, _index, format["%1", _player_variable_name]];
+			
+			if (_player == _player_variable) then {_player_index = _index};
 		};
 		_c = _c + 1;
 	};
-
-	lbSetCurSel [99, 0];
+	
+	lbSetCurSel [99, _player_index];
+//	lbSetCurSel [99, 0];
+	
 	lbSetCurSel [1, 0];
 	buttonSetAction [3, format["[player, lbData [1, (lbCurSel 1)], lbData [99, (lbCurSel 99)], ([(ctrlText 501)] call parse_number)] call interact_item_use; closedialog 0;"]];
 	buttonSetAction [4, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_drop; closedialog 0;"]];
