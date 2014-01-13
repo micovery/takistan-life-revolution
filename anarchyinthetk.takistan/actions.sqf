@@ -246,6 +246,8 @@ action106 = _role addaction ["Raise Gates","rgate7.sqf",[],1,false,true,"","isop
 action107 = _role addaction ["Lower Gates","lgate10.sqf",[],1,false,true,"","isopf and player distance opforgate3 <= 5"];
 action108 = _role addaction ["Lower Gates","lgate11.sqf",[],1,false,true,"","isopf and player distance opforgateb <= 5"];
 
+//======================= Misc ==============================================
+action109 = _role addaction [format["Doctor Operation ($%1)", A_DK_Price], "noscript.sqf", '[player] call A_DK_operation', 1 , false,true,"","([player] call A_DK_NearDoctor)"];
 
 [copbank, ["Access PMC White List", "maindialogs.sqf", ["pmc_whitelist"], 0, false, true, "", "true"]] call add_new_action;
 [player] call holster_add_actions;

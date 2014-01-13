@@ -1,5 +1,13 @@
 #define strM(x) ([x, ","] call format_integer)
 
+A_impound_lots = [
+// Lot vendor, array of buyable vehicle types
+	[copcar, ["LandVehicle"]],
+	[impoundbuy1, ["LandVehicle"]],
+	[impoundbuy2, ["Plane", "Helicopter"]]
+];
+
+
 A_impound_check = {
 //		((["impound_lot", (_this select 0)] call vehicle_storage_contains))
 		
@@ -82,10 +90,10 @@ A_impound_action = {
 				player groupchat "the vehicle is already impounded!"
 			};
 
-		if(_vcl iskindof "air")exitwith { 
+/*		if(_vcl iskindof "air")exitwith { 
 				player groupchat "you cannot impound this vehicle!"
 			};
-		
+*/		
 		if ( ({_vcl in (list _x)} count INV_VehiclePark) > 0 ) exitwith {
 				player groupchat "this vehicle is in a carpark. you cannot impound it!"
 			};
@@ -96,6 +104,7 @@ A_impound_action = {
 	};
 
 A_impound_dialog = {
+		private["_DFML"];
 		disableSerialization;
 		if (!(createDialog "distribute")) exitWith {hint "Dialog Error!"};
 		_DFML = findDisplay -1;
@@ -106,14 +115,27 @@ A_impound_dialog = {
 		private "_j"; 
 		ctrlSetText [3, format["Retrieve impounded vehicle ($%1)", strM(impoundpay)]];
 		
-		private["_vehicles"];
+		private["_buyer", "_types"];
+		
+		_buyer = objNull;
+		_types = [];
+		{
+			_buyer = _x select 0;
+			_types = _x select 1;
+			if ((player distance _buyer) <= 5) exitwith {};
+		} forEach A_impound_lots;
+		
+		
+		private["_vehicles", "_index", "_vehicle"];
 		_vehicles = [];
 		_vehicles = [player] call vehicle_list;
 		for [{_j=0}, {_j < (count _vehicles)}, {_j=_j+1}] do {
 				_vehicle = (_vehicles select _j);
-				if (!isNull _vehicle and _vehicle distance impoundarea1 < 200) then {
-						_index = (_DFML displayCtrl 1)	lbAdd format["%1 (%2)", _vehicle, typeof _vehicle];
-						(_DFML displayCtrl 1)	lbSetData [_index, format["%1", _vehicle]];
+				if (!(isNull _vehicle) && ((_vehicle distance impoundarea1) < 200)) then {
+						if (({_vehicle isKindOf _x} count _types) > 0) then {
+							_index = (_DFML displayCtrl 1)	lbAdd format["%1 (%2)", _vehicle, typeof _vehicle];
+							(_DFML displayCtrl 1)	lbSetData [_index, format["%1", _vehicle]];
+							};
 					};
 			};
 		buttonSetAction [2, "[lbData [1, (lbCurSel 1)]] call A_impound_buy;"];
@@ -129,7 +151,6 @@ A_impound_dialog = {
 		
 		
 		private["_vehicles_name_list","_impounded_vehicles_name_list", "_impounded_vehicles_data"];
-		
 		
 		_vehicles_name_list = [_player, "vehicles_name_list"] call player_get_array;
 		

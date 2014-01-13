@@ -1087,7 +1087,7 @@ player_prison_roe = { _this spawn {
 	format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	
 	[_player, "roeprison", true] call player_set_bool;
-	_player setPos (getPos CopPrison);
+	_player setPosATL (getPosATL CopPrison);
 	[_player] call player_reset_gear;
 	
 	private["_time_original"];
@@ -1116,7 +1116,9 @@ player_prison_roe = { _this spawn {
 			private["_message"];
 			_message = format["%1-%2 attempted to escape from prison with %3 minute/s left on his sentence", _player, (name _player), strN(round(_time_left/60))];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-			_player setPos (getPos CopPrison);
+			if ((vehicle _player) != _player) then {moveOut _player};
+			_player setPosATL (getPosATL CopPrison);
+			_player setVelocity [0,0,0];
 		};
 	
 		//PLAYER HAS SERVED HIS FULL SENTNECE
@@ -1125,7 +1127,7 @@ player_prison_roe = { _this spawn {
 			[_player, "roeprison", false] call player_set_bool;
 			_message = format["%1-%2 has been set free, after serving %3 minute/s", _player, (name _player), strN(round(_time_original/60))];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-			_player setPos (getPos CopPrisonAusgang);
+			_player setPosATL (getPosATL CopPrisonAusgang);
 		};
 		
 		_time_left  = _time_left - 1;
@@ -1624,7 +1626,7 @@ player_save_side_damage = {
 	
 	_inAgony = _player getVariable ["FA_inAgony", false];
 	
-	_total = _unit getVariable ["", 0];
+	_total = _player getVariable ["", 0];
 	_head = _player getVariable ["head_hit", 0];
 	_body = _player getVariable ["body", 0];
 	_hands = _player getVariable ["hands", 0];
@@ -1644,6 +1646,7 @@ player_save_side_damage = {
 	[_player, format["bl_%1", _side], _bloodloss] call player_set_scalar;
 	[_player, format["blps_%1", _side], _bloodlosspersecond] call player_set_scalar;
 	
+	format['Saving player damage - %1, %2. Damage: %3, Total: %4, Legs: %5', _player, _side, _damage, _total, _legs] call A_DEBUG_S;
 };
 
 player_load_side_damage = {
@@ -1680,14 +1683,33 @@ player_load_side_damage = {
 	_player setVariable ["bloodloss", _bloodloss, true];
 	_player setVariable ["bloodlossPerSecond", _bloodlosspersecond, true];
 	
-	_player setHit["", _total];
+/*	_player setHit["", _total];
 	_player setHit["head_hit", _head];
 	_player setHit["body", _body];
 	_player setHit["hands", _hands];
 	_player setHit["legs", _legs];
 	_player setHit["bloodloss", _bloodloss];
 	_player setHit["bloodlossPerSecond", _bloodlosspersecond];
+*/
 	
+	format['
+		private["_part", "_value"];
+		{
+			_part = _x select 0;
+			_value = _x select 1;
+			%1 setHit [_part, _value]
+		} forEach [
+			["", %2],
+			["head_hit", %3],
+			["body", %4],
+			["hands", %5],
+			["legs", %6],
+			["bloodloss", %7],
+			["bloodlossPerSecond", %8]
+		];
+	', _player, _total, _head, _body, _hands, _legs, _bloodloss, _bloodlosspersecond] call broadcast;
+	
+	format['Loading player damage - %1, %2. Damage: %3, Total: %4, Legs: %5, Dead: %6', _player, _side, _damage, _total, _legs, [_player] call player_get_dead] call A_DEBUG_S;
 };
 
 
@@ -2327,8 +2349,9 @@ player_init_arrays = {
 	isopf = [_player] call player_opfor;
 	isins = [_player] call player_insurgent;
 	
-	_player addMPEventHandler ["MPKilled", { _this call player_handle_mpkilled }];
-	_player addMPEventHandler ["MPRespawn", { _this call player_handle_mprespawn }];
+//	_player addMPEventHandler ["MPKilled", { _this call player_handle_mpkilled }];
+//	_player addMPEventHandler ["MPRespawn", { _this call player_handle_mprespawn }];
+
 };
 
 
@@ -2718,7 +2741,7 @@ player_get_saved_group = {
 };
 
 
-player_spawn = { _this spawn {
+player_spawn = {
 	private["_player", "_first_time"];
 	_player = _this select 0;
 	_first_time = _this select 1;
@@ -2728,7 +2751,7 @@ player_spawn = { _this spawn {
 	
 	waitUntil { alive _player };
 	
-	if (not(_first_time)) then {
+	if (!(_first_time)) then {
 		[_player] call player_reset_gear;
 	};
 	
@@ -2736,12 +2759,12 @@ player_spawn = { _this spawn {
 		[_player] call player_intro_text;
 	};
 	
-	if (not(_first_time) && ([_player] call player_cop)) then {
+	if (!(_first_time) && ([_player] call player_cop)) then {
 		[_player] call player_load_side_gear;
 	};
 	
 	[_player] call player_reset_prison;
-	call respawn_retribution;
+	[] call respawn_retribution;
 	[_player] call player_init_stats;
 	
 	//mark the player alive when we are done with the dead camera
@@ -2749,7 +2772,7 @@ player_spawn = { _this spawn {
 	[_player] call name_tags_3d_controls_setup;
 	
 	restrain_respawn = false;
-};};
+};
 
 
 
@@ -3015,7 +3038,7 @@ player_handle_mprespawn = {
 	_unit = _this select 0;
 	_corpse = _this select 1;
 	
-	if (not(str(_unit) == str(player))) exitWith {};
+	if (!(str(_unit) == str(player))) exitWith {};
 	
 	[_unit, _corpse] spawn A_fnc_FA_init;
 	[_corpse, 5] spawn player_despawn;
@@ -3149,9 +3172,9 @@ player_vehicleGrabKiller = {
 	_unit
 };
 
-/*
-[] call player_save_side_gear_setup;
-[] call player_init_arrays;
-*/
+
+//	[] call player_save_side_gear_setup;
+//	[] call player_init_arrays;
+
 
 player_functions_defined = true;

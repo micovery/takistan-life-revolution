@@ -8,7 +8,6 @@ bankRob_v_useTime = "useTime";
 bankRob_v_robTime = "lastRob";
 bankRob_v_robbed = "robTime";
 bankRob_v_localLoss = "local_loss";
-bankRob_v_globalLoss = "global_loss";
 bankRob_v_amountStolen = "stolenAmount";
 bankRob_v_robDisc = "RobberDisconnect";
 
@@ -114,6 +113,8 @@ bankRob_victimEnd = {
 	private["_success", "_money", "_bank_account", "_fdic", "_insurances_inv", "_insurances_stor", "_insurance", "_verlust", "_verlustA", "_verlustB", "_pLost"];
 	_success = _this select 0;
 	_money = _this select 1;
+	
+	if !(ALL_LOADING_DONE) exitwith {};
 	
 	if !(_success) exitwith {
 			player groupchat format["The Robbery failed, no money lost"];

@@ -1,3 +1,4 @@
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 #include "Awesome\Functions\macro.h"
 if (not(isNil "client_loop_functions_defined")) exitWith {};
 
@@ -512,9 +513,14 @@ check_respawn_time = {
 	if (not(alive player)) exitWith {};
 	private["_interval"];
 	_interval = 30;
-	if (not((time % _interval) == 0)) exitWith {};
+	if (not((round(time) % _interval) == 0)) exitWith {};
+	if (([player, "extradeadtime"] call player_get_scalar) <= 0) exitwith {
+			[player, "extradeadtime", 0] call player_set_scalar;
+		};
+	if ((([player, "extradeadtime"] call player_get_scalar) - _interval) <= 0) exitwith {
+			[player, "extradeadtime", 0] call player_set_scalar;
+		};
 	[player, "extradeadtime", -(_interval)] call player_update_scalar;
-	
 };
 
 check_insideBase = {
@@ -528,6 +534,43 @@ check_insideBase = {
 		
 		if ((player in (list _trigger_area)) && (_faction_bool)) exitWith {player call FA_fHeal;};
 	} forEach bases_checks;
+};
+
+check_insideJail = {
+	private["_player", "_trigger", "_list", "_inJail"];
+	
+	_player = player;
+	
+	if ([_player] call player_get_arrest) exitwith {};
+	if (isCop && ([_player, "roeprison"] call player_get_bool)) exitwith {};
+	if (((getPosATL _player) select 2) > 5) exitwith {};
+	if ((vehicle _player) != _player) exitwith {};
+	
+	_trigger = JailTrigger1;
+	_list = list _trigger;
+	
+	if !(_player in _list) exitwith {};
+	
+	_inJail = false;
+	{
+		_trigger = _x;
+		_list = list _trigger;
+		
+		if (_player in _list) exitwith {
+				_inJail = true;
+			};
+	} forEach [JailTrigger2, JailTrigger3, JailTrigger4];
+	
+	if _inJail then {
+			player groupchat "You have 30 seconds to leave the Jail";
+			SleepWait(30)
+			if !(_player in (list JailTrigger1)) exitwith {};
+			if (({_player in (list _x)} count [JailTrigger2, JailTrigger3, JailTrigger4]) == 0) exitwith {};
+			if (((getPosATL _player) select 2) > 5) exitwith {};
+			if ((vehicle _player) != _player) exitwith {};
+			player groupchat "You have been removed from Jail";
+			player setPosATL (getPosATL CopPrisonAusgang);
+		};
 };
 
 client_loop = {
@@ -553,6 +596,7 @@ client_loop = {
 		[] call check_droppable_items;
 		[] call check_restrains;
 		[] call check_insideBase;
+		[] call check_insideJail;
 		sleep 0.5;
 		disableuserinput false;
 		_client_loop_i = _client_loop_i + 1;

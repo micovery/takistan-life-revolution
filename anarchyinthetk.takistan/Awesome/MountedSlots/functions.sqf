@@ -317,9 +317,9 @@ mounted_get_slot_occupant = {
 	_vehicle = _this select 0;
 	_slot_id = _this select 1;
 	
-	if (isNil "_slot_id") exitWith {nil};
-	if (typeName _slot_id != "STRING") exitWith {nil};
-	if (isNil "_vehicle") exitWith {nil};
+	if (isNil "_slot_id") exitWith {objNull};
+	if (typeName _slot_id != "STRING") exitWith {objNull};
+	if (isNil "_vehicle") exitWith {objNull};
 	
 	private["_occupant"];
 	_occupant = objNull;
@@ -328,6 +328,7 @@ mounted_get_slot_occupant = {
 //		_occupant = if (isNull _occupant) then { nil } else { _occupant };
 //	};
 	
+	if (isNil "_occupant") exitwith {objNull};
 	if (isNull _occupant) then {objNull}else{_occupant}
 };
 

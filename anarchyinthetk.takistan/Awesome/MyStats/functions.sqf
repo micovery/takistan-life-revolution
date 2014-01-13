@@ -1,3 +1,4 @@
+#define ExecSQF(FILE) [] call compile preprocessFileLineNumbers FILE
 #include "constants.h"
 #include "ASCII.h"
 
@@ -388,6 +389,7 @@ stats_load_core_libraries = {
 //	waitUntil {scriptDone _h};
 	[] call player_save_side_gear_setup;
 	[] call player_init_arrays;
+	ExecSQF("broadcast.sqf");
 	
 	_h = [] execVM "Awesome\Clothes\Clothes.sqf";
 	waitUntil {scriptDone _h};
@@ -422,7 +424,7 @@ stats_server_setup = {
 	server setVariable ["restart_count", _restart_count, true];
 	["restart_count", _restart_count] call stats_server_save;
 	
-	call stats_load_core_libraries;
+	[] call stats_load_core_libraries;
 	
 
 	server setVariable ["stats_server_setup_complete", true, true];
@@ -796,8 +798,8 @@ stats_client_setup = {
 	[format["Restoring client continuity ... "]] call stats_client_update_loading_title;
 	[0.9] call stats_client_update_loading_progress;
 	uiSleep 1;
-	call stats_load_core_libraries;
-	call player_continuity;
+	[] call stats_load_core_libraries;
+	[] call player_continuity;
 
 	["Client stats setup complete ... "] call stats_client_update_loading_title;
 	[1] call stats_client_update_loading_progress;
@@ -807,14 +809,14 @@ stats_client_setup = {
 
 stats_setup = {
 	if (isServer) then {
-		call stats_server_setup;
+		[] call stats_server_setup;
 	};
 	
 	if (isClient) then {
-		call stats_client_setup;
+		[] call stats_client_setup;
 	};
 };
 
-call stats_setup;
+[] call stats_setup;
 
 stats_functions_defined =  true;

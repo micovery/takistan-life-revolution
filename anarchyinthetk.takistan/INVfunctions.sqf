@@ -89,7 +89,7 @@ INV_CheckArray = {
 		_object setVariable [_array_name, [], true];
 	};
 	
-	if (typeName _array_variable != "ARRAY") exitWith {
+	if ((typeName _array_variable) != "ARRAY") exitWith {
 		_object setVariable [_array_name, [], true];
 	};
 };

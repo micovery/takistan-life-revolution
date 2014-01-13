@@ -21,6 +21,7 @@ bank_set_value = {
 	if (isNil "_value") exitWith {};
 	if (typeName _value != "SCALAR") exitWith {};
 	
+	if (_value < 0) then {_value = 0};
 	_value = [_value] call encode_number;
 	[_player, "bankaccount", _value] call player_set_array;
 };

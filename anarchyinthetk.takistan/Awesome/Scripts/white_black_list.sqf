@@ -115,6 +115,9 @@ A_LIST_ADMINS	=
 
 A_LIST_DONATORS = [];
 
+format['ISADMIN UID - %1, PLAYER - %2', (getPlayerUID player), player] call A_DEBUG_S; 
+format['ISADMIN LIST - %1', A_LIST_ADMINS] call A_DEBUG_S; 
+
 isAdmin = (getPlayerUID player) in A_LIST_ADMINS;
 
 // Used for white-black list dialog

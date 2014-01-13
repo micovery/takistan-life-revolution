@@ -149,8 +149,8 @@ interact_arrest_player = {
 		_moneyVictim = _bankmoney + _invmoney;
 		
 		if (_moneyVictim < _bounty) then {
+			player groupChat format["%1-%2 had a bounty of $%3. Because he only has $%4 you get $%4", _victim, (name _victim), _bounty, _moneyVictim];
 			_realBounty = _moneyVictim;
-			player groupChat format["%1-%2 had a bounty of $%3. Because he only has $%4 you get $%4", _victim, (name _victim), _realBounty];
 		} else {
 			_realBounty = _bounty;
 			player groupChat format["%1-%2 had a bounty of $%3. You got that bounty!", _victim, (name _victim), _realBounty];
@@ -555,8 +555,8 @@ interact_civilian_camera = {_this spawn {
 	private["_dx"];
 	_dx = -20;
 
+	private["_tx", "_ty", "_tz", "_td", "_tpos"];
 	while {(ctrlVisible 1050) and (time < _endTime)} do {
-		private["_tx", "_ty", "_tpos"];
 		_tpos = getPosATL (vehicle _target);
 		_tx = _tpos select 0;
 		_ty = _tpos select 1;
@@ -602,7 +602,7 @@ interact_mobile_receive = {
 };
 
 interact_mobile_send = {
-	private["_player", "_target"];
+	private["_player", "_target", "_text"];
 
 	_player = _this select 0;
 	_target = _this select 1;
@@ -882,7 +882,7 @@ interact_inventory_menu = {
 	private["_inventory"];
 	_inventory = [_player] call player_get_inventory;
 	while { _i < (count _inventory) } do {
-		private ["_item", "_number", "_lbl_name"];
+		private ["_item", "_number", "_lbl_name", "_index"];
 		_item = ((_inventory select _i) select 0);
 		_number = ([player, _item] call INV_GetItemAmount);
 
@@ -915,7 +915,7 @@ interact_inventory_menu = {
 		//player groupChat format["_player_variable_name = %1", _player_variable_name];
 		
 		if ([_player_variable] call player_human) then {
-			private["_player_name"];
+			private["_player_name", "_index"];
 			_player_name = (name _player_variable);
 			_index = lbAdd [99, format ["%1 - (%2)", _player_variable_name, _player_name]];
 			lbSetData [99, _index, format["%1", _player_variable_name]];
@@ -933,6 +933,7 @@ interact_inventory_menu = {
 	buttonSetAction [4, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_drop; closedialog 0;"]];
 	buttonSetAction [246, format["[player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number), (missionNamespace getVariable (lbData [99, (lbCurSel 99)]))] call interact_item_give; closedialog 0;"]];
 
+	private["_item","_number","_array"];
 	while {ctrlVisible 1001} do {
 		_item   = lbData [1, (lbCurSel 1)];
 		_number = [player, _item]  call INV_GetItemAmount;
@@ -1379,7 +1380,7 @@ interact_ticket = {
 
 
 interact_ticket_distribute = {
-	private["_player", "_target", "_amount"];
+	private["_player", "_target", "_amount", "_message"];
 	_player = _this select 0;
 	_target = _this select 1;
 	_amount = _this select 2;
@@ -1489,7 +1490,7 @@ interact_recruit_ai_receive = {
 	private["_class"];
 	_class = [([_player] call player_side)] call interact_side_ai_class;
 	
-	private["_unit"];
+	private["_unit", "_backup"];
 	_unit = (group _player) createUnit [_class, position _player, [], 0, "FORM"];
 	[_unit] joinSilent (group _player);
 	
@@ -1505,7 +1506,7 @@ interact_recruit_ai_receive = {
 	processInitCommands;
 
 	_unit = missionNamespace getVariable _unit_name;
-	_backup = call compile format["%1", _varName];
+	_backup = [] call compile format["%1", _varName];
 
 	private["_side_ai_weapons", "_side_ai_magazines"];
 	
@@ -1652,10 +1653,10 @@ interact_generic_storage_menu = { _this spawn {
 	CtrlSetText [100, (call _right_label_code)];
 
 	private["_left_list"];
-	_left_list = call _left_list_code;
+	_left_list = [] call _left_list_code;
 	
 	private["_right_list"];
-	_right_list = call _right_list_code;
+	_right_list = [] call _right_list_code;
 	
 	{
 		private["_index", "_text", "_value", "_entry"];
@@ -1680,7 +1681,7 @@ interact_generic_storage_menu = { _this spawn {
 	buttonSetAction [103, format['[(lbData [101, (lbCurSel 101)]), ([(ctrlText 102)] call parse_number)] call %1', _right_button_code]];
 
 	while {ctrlVisible 1015} do {
-		private["_left_selection"];
+		private["_left_selection_index"];
 		_left_selection_index = (lbCurSel 1);
 
 		if (_left_selection_index >= 0) then {
@@ -1715,6 +1716,8 @@ interact_generate_storage_list_code = {
 	_object = _this select 0;
 	_storage = _this select 1;
 	
+	format['interact_generate_storage_list_code: Starting, %1, %2', _object, _storage] call A_DEBUG_S;
+	
 	if (isNil "_object") exitWith {{}};
 	if (isNil "_storage") exitWith {{}};
 	if (typeName _object != "OBJECT") exitWith {{}};
@@ -1739,6 +1742,10 @@ interact_generate_storage_list_code = {
 		} forEach (%1 getVariable "%2");
 		(_entries)
 	', _object, _storage];
+	
+	format['interact_generate_storage_list_code: %1', _code] call A_DEBUG_S;
+	
+	format['interact_generate_storage_list_code: Ending'] call A_DEBUG_S;
 	
 	_code
 };
@@ -1768,29 +1775,40 @@ interact_generate_selection_code = {
 interact_private_storage_menu = {
 	private["_player"];
 	
+	
+	
+	format['interact_private_storage_menu: Starting'] call A_DEBUG_S;
+	
 	_player = _this select 0;
-	if (not([_player] call player_exists)) exitWith {};
+	if (not([_player] call player_exists)) exitWith {format['interact_private_storage_menu: Exit1'] call A_DEBUG_S;};
 
 	private["_private_storage_name", "_player_storage_name"];
 	_private_storage_name = "private_storage";
 	_player_storage_name = ([_player] call object_storage_name);
 	
+	format['interact_private_storage_menu: %1-%2-%3', _player, _private_storage_name, (_player getVariable _private_storage_name)] call A_DEBUG_S;
+	
 	private["_left_button_code", "_right_button_code", 
 			"_left_label_code", "_right_label_code", 
 			"_left_list_code", "_right_list_code", 
 			"_right_selection_code", "_left_selection_code"];
-			
+	
+	format['interact_private_storage_menu: Generating Lists'] call A_DEBUG_S;
+	
 	_left_list_code = [_player, _private_storage_name] call interact_generate_storage_list_code;
 	_right_list_code = [_player, _player_storage_name] call interact_generate_storage_list_code;
 	
 	_left_selection_code = ["Take"] call interact_generate_selection_code;
 	_right_selection_code = ["Put"] call interact_generate_selection_code;
 	
+	format['interact_private_storage_menu: Generating Buttons'] call A_DEBUG_S;
+	
 	_left_button_code = compile format['
 		private["_item", "_count"];
 		_item = _this select 0;
 		_count = _this select 1;
 		if (_count <= 0) exitWith {};
+		format["interact_private_storage_menu: Left Button, interact"] call A_DEBUG_S;
 		[%1, "%2", _item, -(_count)] call interact_generic_storage;
 	', _player, _private_storage_name];
 	
@@ -1800,6 +1818,7 @@ interact_private_storage_menu = {
 		_count = _this select 1;
 		if (_count <= 0) exitWith {};
 		if (_item call INV_GetItemIsIllegal) exitwith {player groupChat "We do not accept illegal items!"};
+		format["interact_private_storage_menu: Right Button, interact"] call A_DEBUG_S;
 		[%1, "%2", _item, _count] call interact_generic_storage;	
 	', _player, _private_storage_name];
 	
@@ -1825,6 +1844,8 @@ interact_private_storage_menu = {
 		_left_button_code, _left_selection_code, _left_list_code, _left_label_code,
 		_right_button_code, _right_selection_code, _right_list_code, _right_label_code 
 	] call interact_generic_storage_menu;
+	
+	format['interact_private_storage_menu: Ending'] call A_DEBUG_S;
 };
 
 factory_storage_menu = {
@@ -2118,16 +2139,19 @@ interact_generic_storage = {
 	_item = _this select 2;
 	_amount = _this select 3;
 	
-	if (not([_player] call player_exists)) exitWith {};
 	
-	if (isNil "_storage") exitWith {};
-	if (isNil "_item") exitWith {};
-	if (isNil "_amount") exitWith {};
-	if (typeName _storage != "STRING") exitWith {};
-	if (typeName _item != "STRING") exitWith {};
-	if (typeName _amount != "SCALAR") exitWith {};
+	format['interact_generic_storage: Starting'] call A_DEBUG_S;
 	
-	if (_amount == 0) exitWith {};
+	if (not([_player] call player_exists)) exitWith {format['interact_generic_storage: Exit1'] call A_DEBUG_S;};
+	
+	if (isNil "_storage") exitWith {format['interact_generic_storage: Exit2'] call A_DEBUG_S;};
+	if (isNil "_item") exitWith {format['interact_generic_storage: Exit3'] call A_DEBUG_S;};
+	if (isNil "_amount") exitWith {format['interact_generic_storage: Exit4'] call A_DEBUG_S;};
+	if (typeName _storage != "STRING") exitWith {format['interact_generic_storage: Exit5'] call A_DEBUG_S;};
+	if (typeName _item != "STRING") exitWith {format['interact_generic_storage: Exit6'] call A_DEBUG_S;};
+	if (typeName _amount != "SCALAR") exitWith {format['interact_generic_storage: Exit7'] call A_DEBUG_S;};
+	
+	if (_amount == 0) exitWith {format['interact_generic_storage: Exit8'] call A_DEBUG_S;};
 	
 	//player groupChat format["interact_generic_storage %1", _this];
 	
@@ -2154,10 +2178,12 @@ interact_generic_storage = {
 	if (_amount > 0) then {
 		//adding items to the storage
 		if (_amount > _p_items_amount) exitWith {
+			format['interact_generic_storage: Exit9'] call A_DEBUG_S;
 			player groupChat format["You do not have that many items in your inventory"];
 		};
 		
 		if (_g_max_weight > 0 && ((_items_weight + _g_cur_weight) > _g_max_weight)) exitWith {
+			format['interact_generic_storage: Exit10'] call A_DEBUG_S;
 			player groupChat format["The total weight of the items exceed the storage's capacity"];
 		};
 		
@@ -2165,26 +2191,39 @@ interact_generic_storage = {
 	}
 	else {
 		if ((isCop) and (_item call INV_GetItemIsIllegal)) exitWith {
+			format['interact_generic_storage: Exit11'] call A_DEBUG_S;
 			//Illegal Item as cop
 			player groupChat "You are not allowed to take this illegal item(s)";
 		};
 		//removing items from the storage
 		if (abs(_amount) > _g_items_amount) exitWith {
+			format['interact_generic_storage: Exit12'] call A_DEBUG_S;
 			player groupChat format["The storage does not have that many item(s)"];
 		};
 		
 		if (_p_max_weight > 0 && (_items_weight + _p_cur_weight) > _p_max_weight) exitWith {
+			format['interact_generic_storage: Exit13'] call A_DEBUG_S;
 			player groupChat format["The total weight of the items exceed the your carrying capacity"];
 		};
 		_valid = true;
 	};
 	
-	if (not(_valid)) exitWith {};
+	if (not(_valid)) exitWith {format['interact_generic_storage: Exit14'] call A_DEBUG_S;};
+	
+	format['interact_generic_storage: Adding between INVs'] call A_DEBUG_S;
+	format['interact_generic_storage: %1-%2-%3', _player, _g_storage, _player getVariable _g_storage] call A_DEBUG_S;
+	
 	[_player, _item, (_amount), _g_storage] call INV_AddItemStorage;
 	[_player, _item, -(_amount), _p_storage] call INV_AddItemStorage;
+	
+	format['interact_generic_storage: Calling save'] call A_DEBUG_S;
+	format['interact_generic_storage: %1-%2-%3', _player, _g_storage, _player getVariable _g_storage] call A_DEBUG_S;
+	
 	[_g_storage, (_player getVariable _g_storage)] call stats_client_save;
 	closeDialog 0;
-	call shop_play_animation;
+	[] call shop_play_animation;
+	
+	format['interact_generic_storage: Ending'] call A_DEBUG_S;
 };
 
 
@@ -2245,10 +2284,10 @@ interact_gang_menu = {
 	private["_i", "_gangs_list"];
 	_gangs_list = call gangs_get_list;
 	_i = 0;
+	private["_gang_id", "_gang_name", "_member_uids", "_gang_open"];
 	while {_i < count (_gangs_list) } do {
 		private["_gang"];
 		_gang = _gangs_list select _i;
-		private["_gang_id", "_gang_name", "_member_uids"];
 		_gang_id = _gang select gang_id;
 		_gang_name = _gang select gang_name;
 		_gang_open = _gang select gang_open;
@@ -2538,7 +2577,7 @@ interact_gang_create = {
 
 interact_gang_kick = { _this spawn {
 	
-	private["_player", "_member_variable"];
+	private["_player", "_member_variable", "_member"];
 	_player = _this select 0;
 	_member_variable = _this select 1;
 	if (not([_player] call player_human)) exitWith {};
@@ -2586,7 +2625,7 @@ interact_gang_kick = { _this spawn {
 };};
 
 interact_gang_make_leader = { _this spawn {
-	private["_player", "_member_variable"];
+	private["_player", "_member_variable", "_member"];
 	_player = _this select 0;
 	_member_variable = _this select 1;
 	if (not([_player] call player_human)) exitWith {};
@@ -2711,7 +2750,7 @@ interact_gang_open = {
 interact_item_process = {
 	//player groupChat format["interact_item_process %1", _this];
 	
-	private["_player", "_item_name", "_item"];
+	private["_player", "_item_name", "_item", "_input_item", "_output_item", "_input_amount_required"];
 	_player = _this select 0;
 	_input_item = _this select 1;
 	_output_item = _this select 2;
@@ -3247,8 +3286,8 @@ interact_select_vehicle_wait = {
 	_count = count _vehicles;
 	_i = 0;
 	interact_selected_vehicle = objNull;
+	private["_index", "_vehicle", "_vehicle_str"];
 	while { _i < _count } do {
-		private["_index", "_vehicle", "_vehicle_str"];
 		_vehicle = _vehicles select _i;
 		_vehicle_str = format["%1", _vehicle];
 		_index = lbAdd [vehiclesList_list_idc, _vehicle_str];

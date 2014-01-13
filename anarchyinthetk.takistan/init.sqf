@@ -63,7 +63,6 @@ if (isClient) then {
 		["Loading - Stage 2/5"] call stats_client_update_loading_title;
 	};
 
-ExecSQF("broadcast.sqf");
 ExecSQF("customfunctions.sqf");
 ExecSQF("strfuncs.sqf");
 ExecSQF("1007210.sqf");

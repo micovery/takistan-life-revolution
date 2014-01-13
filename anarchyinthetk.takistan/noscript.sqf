@@ -5,8 +5,7 @@ _com = _this select 3;
 
 if ((typeName _com) == "ARRAY") then {
 	{[_target, _caller, _id] call compile format [ "%1", _x];} forEach _com;
-} 
-else {
+} else {
 	[_target, _caller, _id] call compile format [ "%1", _com];
 };
 
