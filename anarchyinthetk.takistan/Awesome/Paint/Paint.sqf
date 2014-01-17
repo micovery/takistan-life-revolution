@@ -1,6 +1,6 @@
 P_init =
 {
-private ["_h", "_n"];
+private ["_h", "_n", "_c"];
 
 	_h = [] execVM "Awesome\Paint\P_dialog_functions.sqf";
 	waituntil {scriptDone _h};

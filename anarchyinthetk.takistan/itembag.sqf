@@ -1,6 +1,8 @@
+private["_art"];
 _art = _this select 0;
 
 if (_art == "use") then {
+	private["_item","_deleted"];
 	_item    = _this select 1;
 	_deleted = 0;
 	if (vehicle player == player) then {

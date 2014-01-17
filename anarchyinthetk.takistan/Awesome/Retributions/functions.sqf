@@ -66,7 +66,7 @@ add_killer = {
 };
 
 add_victim = {
-	private ["_victims"];
+	private ["_victims","_victim","_type","_euid","_lost_money","_victim_name","_victim_uid","_victim_data"];
 	_victim = _this select 0;
 	_type = _this select 1;
 	_euid = _this select 2;
@@ -95,7 +95,7 @@ add_victim = {
 };
 
 remove_killer = {
-	private["_i"];
+	private["_i","_euid","_killers","_new_killers","_killer_data","_ceuid"];
 	_euid = _this select 0;
 	
 	_killers = player getVariable "killers";
@@ -117,6 +117,7 @@ remove_killer = {
 };
 
 remove_victim = {
+	private["_euid","_victims","_i","_new_victims","_ceuid","_victim_data"];
 	_euid = _this select 0;
 	
 	_victims = player getVariable "victims";
@@ -137,7 +138,7 @@ remove_victim = {
 };
 
 calculate_fees = {
-	private ["_damages", "_fees"];
+	private ["_damages", "_fees","_all_money","_p20"];
 	_damages = _this select 0;
 	_fees = 0;
 	
@@ -152,7 +153,7 @@ calculate_fees = {
 
 fill_retributions = {
 	lbClear kvlist;
-	private ["_victims", "_damages", "_fees"];
+	private ["_victims", "_damages", "_fees", "_victim_data", "_type", "_victim_name", "_victim_uid", "_lost_money", "_index"];
 	
 	_victims = [];
 	_victims =  player getVariable ["victims", []];
@@ -179,6 +180,8 @@ fill_retributions = {
 		};};
 	} foreach _victims;
 	
+	private["_killers","_killer_data","_killer_name","_killer_uid"];
+	
 	_killers =  player getVariable ["killers", []];
 	{
 		_killer_data = _x;
@@ -204,6 +207,7 @@ fill_retributions = {
 
 open_retributions =  {
 	if (dialog) exitWith { closeDialog 0; };
+	private["_ok"];
 	_ok = createDialog "Retribution";
 	if (not(_ok)) then { 
 		player groupChat "Unable to open the retributions dialog";
@@ -214,6 +218,7 @@ open_retributions =  {
 
 
 get_retribution_selection = {
+	private["_selected_index","_selection"];
 	_selected_index = lbCurSel kvlist;
 	if (isNil "_selected_index" || typeName _selected_index != "SCALAR" || _selected_index < 0) exitWith { nil };
 	_selection = (call compile lbData [kvlist, _selected_index]);
@@ -221,6 +226,7 @@ get_retribution_selection = {
 };
 
 kill_type_2_str = {
+	private["_type"];
 	_type = _this select 0;
 	
 	if (_type == "vtk" || _type == "ktk") exitWith { "team-killing" };
@@ -230,6 +236,7 @@ kill_type_2_str = {
 };
 
 compensate_player = {
+	private["_selection","_type","_p_data","_killer_name","_victim_name","_victim_fletter","_victim_uid","_lost_money","_euid"];
 	_selection = [] call get_retribution_selection;
 	if (isNil "_selection") exitWith { player groupChat "You have not selected a player to compensate";};
 	_type = _selection select 0;
@@ -243,7 +250,7 @@ compensate_player = {
 	_lost_money = _p_data select vs_money;
 	_euid = _p_data select vs_euid;
 	
-	private ["_message", "_damages", "_fees", "_type_str"];
+	private ["_message", "_damages", "_fees", "_type_str", "_compensation_money"];
 	
 	_damages = _lost_money;
 	_fees = [_damages] call calculate_fees;
@@ -265,6 +272,7 @@ compensate_player = {
 	
 	format[
 	'
+		private["_pname","_puid","_pfletter","_victim_name","_victim_fletter","_victim_uid","_euid","_damages"];
 		_pname = name player;
 		_puid = getPlayerUID player;
 		_pfletter = (toArray _pname) select 0;
@@ -285,12 +293,15 @@ compensate_player = {
 
 
 punish_player = {	
+	private["_selection"];
 	_selection = [] call get_retribution_selection;
 	if (isNil "_selection") exitWith { player groupChat "You have not selected a player to punish";};
+	private["_type","_p_data"];
 	_type = _selection select 0;
 	_p_data = _selection select 1;
 	if ( !(_type == "ktk" || _type == "kdm")) exitWith { player groupChat "You can only punish team-killer or death-matchers";};
 	
+	private["_victim_name", "_killer_name", "_killer_fletter", "_killer_uid", "_killer_money", "_euid"];
 	_victim_name = (name player);
 	_killer_name = toString (_p_data select ks_name);
 	_killer_fletter = (toArray _killer_name) select 0;
@@ -298,7 +309,7 @@ punish_player = {
 	_killer_money = _p_data select ks_money;
 	_euid = _p_data select ks_euid;
 	
-	private ["_message", "_damages", "_fees"];
+	private ["_message", "_damages", "_fees", "_type_str"];
 	
 	_damages = _killer_money;
 	_type_str = [_type] call kill_type_2_str;
@@ -312,11 +323,12 @@ punish_player = {
 	
 	format[
 	'
+		private["_pname","_puid","_pfletter"];
 		_pname = name player;
 		_puid = getPlayerUID player;
 		_pfletter = (toArray _pname) select 0;
 
-		private ["_damages", "_fees"];
+		private ["_damages", "_fees", "_killer_name", "_killer_fletter", "_killer_uid", "_euid", "_type"];
 		
 		_killer_name = (name player);
 		_killer_fletter = %1;
@@ -333,7 +345,7 @@ punish_player = {
 
 
 punished_logic = {
-	private ["_damages", "_fees", "_message", "_type_str"];
+	private ["_damages", "_fees", "_message", "_type_str", "_type", "_euid", "_killer_name", "_punish_money"];
 	
 	_type = _this select 0;
 	_euid = _this select 1;
@@ -365,12 +377,15 @@ punished_logic = {
 };
 
 forgive_player = {	
+	private["_selection"];
 	_selection = [] call get_retribution_selection;
 	if (isNil "_selection") exitWith { player groupChat "You have not selected a player to punish";};
+	private["_type","_p_data"];
 	_type = _selection select 0;
 	_p_data = _selection select 1;
 	if ( !(_type == "ktk" || _type == "kdm")) exitWith { player groupChat "You can only forgive team-killer or death-matchers";};
 	
+	private["_victim_name","_killer_name","_killer_fletter","_killer_uid","_killer_money","_euid"];
 	_victim_name = (name player);
 	_killer_name = toString (_p_data select ks_name);
 	_killer_fletter = (toArray _killer_name) select 0;
@@ -378,7 +393,7 @@ forgive_player = {
 	_killer_money = _p_data select ks_money;
 	_euid = _p_data select ks_euid;
 	
-	private ["_message"];
+	private ["_message","_type_str"];
 	_type_str = [_type] call kill_type_2_str;
 
 	_message = format["%1 forgave %2 for %3", _victim_name, _killer_name, _type_str];
@@ -389,6 +404,7 @@ forgive_player = {
 	
 	format[
 	'
+		private["_pname","_puid","_pfletter","_killer_fletter","_killer_uid","_euid","_killer_money","_type"];
 		_pname = name player;
 		_puid = getPlayerUID player;
 		_pfletter = (toArray _pname) select 0;
@@ -424,7 +440,7 @@ setablaze_player = {
 };
 
 determine_retribution = {
-	private["_lost_money"];
+	private["_lost_money", "_default_comp"];
 	_lost_money  = [player, 'money'] call INV_GetItemAmount;
 	
 	_default_comp = 20000;
@@ -587,7 +603,7 @@ compute_death_parameters = {
 };
 
 substr = {
-	private["_string"];
+	private["_string","_offset","_length"];
 	_string = _this select 0;
 	_offset = _this select 1;
 	_length = _this select 2;
@@ -637,7 +653,7 @@ criminal_reward = {
 	
 	if (_player != player) exitWith {};
 	
-	private["_reward"];
+	private["_reward","_sendReward"];
 	_reward = floor(_bounty/3);
 	if (_victimBankMoney < _reward) then {
 		_sendReward = _victimBankMoney;
@@ -812,7 +828,7 @@ tk_penalty = {
 time_penalty = {
 	private["_dp"];
 	_dp = _this select 0;
-	private["_killer", "_killed_uid"];
+	private["_killer", "_killer_uid"];
 	_killer = _dp select dp_killer;
 	_killer_uid = getPlayerUID _killer;
 	[_killer, "extradeadtime", 30] call player_update_scalar;
@@ -822,7 +838,7 @@ track_death = {
 	private["_dp"];
 	_dp = _this select 0;
 
-	private["_victim", "_killer", "_suidice", "_victim_criminal", "_victim_armed", "_victim_side", "_killer_side", "_teamkill", "_enemies", "_victim_PMC", "_killer_PMC"];
+	private["_victim", "_killer", "_suicide", "_victim_criminal", "_victim_armed", "_victim_side", "_killer_side", "_teamkill", "_enemies", "_victim_PMC", "_killer_PMC"];
 	_victim = player;
 	_killer = _dp select dp_killer;
 	_suicide = _dp select dp_is_suicide;
@@ -996,7 +1012,7 @@ track_retributions = {
 	private["_dp"];
 	_dp = _this select 0;
 	
-	private["_killer", "_suicide", "_victim_armed", "_victim_criminal", "_roadkill", "_victim_side", "_victim_name", "_killer_name", "_teamkill", "_justified"];
+	private["_killer", "_suicide", "_victim_armed", "_victim_criminal", "_roadkill", "_victim_side", "_killer_side", "_victim_name", "_killer_name", "_teamkill", "_justified"];
 	
 	_killer = _dp select dp_killer;
 	_suicide = _dp select dp_is_suicide;
@@ -1101,6 +1117,7 @@ get_death_message = {
 retributions_main = {
 	handling_retribution = if (isNil "handling_retribution") then {false} else {handling_retribution};
 	
+	private["_action"];
 	_action = _this select 0;
 	switch _action do {
 		case "open": {

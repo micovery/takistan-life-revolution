@@ -21,7 +21,7 @@ if (_action == "add") then {
 		player groupChat localize "STRS_inv_buylicense_nomoney";
 	};
 	
-	private["_exit"];
+	private["_exit", "_uid"];
 	_exit = false;
 	if((_license in pmc_shop_list)	) then {
 		if ((iscop || isopf || isins)) then {

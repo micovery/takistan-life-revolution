@@ -1,24 +1,26 @@
 // script by eddiev223 and cobra//additions by Gman
 
+private["_selection", "_moneyearned", "_distance"];
+
 _selection = ((_this select 3)select 0);
 
 _moneyearned = 0;
 _distance = 0;
 
 
-if (_selection == "start") then
-{
+if (_selection == "start") then {
+
+private["_newmarker","_markerlocation","_markerobj","_markername","_plocation"];
 
 pmissionactive = true;
 deleteMarkerLocal "patrolmarker";
-
 
 _newmarker = (floor(random(count coppatrolarray)));
 _markerlocation = (coppatrolarray select _newmarker);
 
 _markerobj = createmarkerlocal ["patrolmarker",[0,0]];
 _markername = "patrolmarker";
-_markerojb setmarkershapelocal "Icon";
+_markerobj setmarkershapelocal "Icon";
 //"patrolmarker" setMarkerBrushLocal "solid";
 "patrolmarker" setmarkertypelocal "warning";
 "patrolmarker" setmarkercolorlocal "coloryellow";
@@ -48,7 +50,7 @@ while {pmissionactive} do {
 
 		_markerobj = createmarkerlocal ["patrolmarker",[0,0]];
 		_markername = "patrolmarker";
-		_markerojb setmarkershapelocal "icon";
+		_markerobj setmarkershapelocal "icon";
 		//"patrolmarker" setMarkerBrushLocal "solid";
 		"patrolmarker" setmarkertypelocal "warning";
 		"patrolmarker" setmarkercolorlocal "coloryellow";
@@ -67,19 +69,15 @@ while {pmissionactive} do {
 	};
 deleteMarkerLocal "patrolmarker";
 
-
-
 };
 
-if (_selection == "end") then
-{
-pmissionactive = false;
-deleteMarkerLocal "patrolmarker";
-player sidechat "Patrol mission ended you must wait 60s to get a new one";
-patrolwaittime = true;
-sleep 60;
-patrolwaittime = false;
-
+if (_selection == "end") then {
+	pmissionactive = false;
+	deleteMarkerLocal "patrolmarker";
+	player sidechat "Patrol mission ended you must wait 60s to get a new one";
+	patrolwaittime = true;
+	sleep 60;
+	patrolwaittime = false;
 };
 
 

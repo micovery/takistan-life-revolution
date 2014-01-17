@@ -1,3 +1,4 @@
+private["_a1","_a2","_a3","_f1","_f2","_f3","_Cshopa","_Clocation","_PShopa","_PSpawn","_PLocation_1","_PLocation_2","_veh","_i"];
 _a1 = 0;
 _a2 = 0;
 _a3 = 0;

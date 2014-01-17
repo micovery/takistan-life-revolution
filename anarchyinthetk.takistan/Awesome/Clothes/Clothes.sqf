@@ -86,7 +86,9 @@ C_variables = {
 	C_T_Width = [];
 	C_T_Height = [];
 	C_T_MiniMap = [];
-
+	
+	private["_n", "_c"];
+	
 	_n = count C_T_Width;
 	for [{_c = 1}, {_c <= 128}, {_c=_c * 2}] do
 	{

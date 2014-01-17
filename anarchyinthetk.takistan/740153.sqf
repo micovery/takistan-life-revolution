@@ -2,6 +2,8 @@ if (!(createDialog "INV_ItemListDialog")) exitWith {
     hint "Dialog Error!";
 };
 
+private["_buttonaction", "_buttontext", "_i", "_item", "_infos", "_index", "_selected", "_benoetigteItems"];
+
 _buttonaction = _this select 0;
 _buttontext = _this select 1;
 buttonSetAction [5, {_buttonaction}];

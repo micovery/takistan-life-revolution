@@ -5,7 +5,7 @@
 if (not(isNil "shop_functions_defined")) exitWith {};
 
 shop_lookup = {
-	private["_shop_id"];
+	private["_shop_id", "_shop_key", "_shop_cache"];
 	_shop_id = _this select 0;
 	_shop_key = [_shop_id] call shop_make_key;
 	
@@ -17,7 +17,7 @@ shop_lookup = {
 };
 
 shop_make_key = {
-	private ["_shop_id"];
+	private ["_shop_id","_shop_key"];
 	_shop_id = _this select 0;
 	if (isNil "_shop_id") exitWith { 0 };
 	if (typeName _shop_id != "SCALAR") exitWith { 0 };
@@ -51,7 +51,7 @@ shop_close =  {
 
 
 shop_open =  {
-	private ["_shop_id", "_shop_cache"];
+	private ["_shop_id", "_shop_cache", "_indicator"];
 	_shop_id = _this select 0;
 	if (isNil "_shop_id") exitWith {};
 	if (typeName _shop_id != "SCALAR") exitWith {};
@@ -70,7 +70,7 @@ shop_open =  {
 };
 
 shop_init = {
-	private ["_shop_id", "_shop_cache"];
+	private ["_shop_id", "_shop_cache", "_shop_key"];
 	_shop_id = _this select 0;
 	_shop_cache = _this select 1;
 	
@@ -105,7 +105,7 @@ shop_sort_list_by_distance = {
 	_i = 0;
 	_count = count _unsorted_shop_list;
 	while {_i < _count} do {
-		private["_shop_object", "_shop_id", "_distance", "_shop"];
+		private["_shop_object", "_shop_id", "_distance", "_shop", "_element"];
 		_shop_id = _i;
 		_shop = _unsorted_shop_list select _i;
 		_shop_object = _shop select INV_ItemShops_Object;
@@ -123,7 +123,7 @@ shop_sort_list_by_distance = {
 
 shop_setup_progress = 0;
 shop_setup = {
-	private[ "_i", "_count", "_sorted_item_shops"];
+	private[ "_i", "_count", "_sorted_item_shops", "_unsorted_shops"];
 	_unsorted_shops = _this select 0;
 	
 	_sorted_item_shops = [(getPos player), _unsorted_shops] call shop_sort_list_by_distance;
@@ -132,7 +132,7 @@ shop_setup = {
 	//initialize and close all the shops
 	_i = 0;
 	while { _i < _count } do {
-		private["_element", "_shop", "_shop_object"];
+		private["_element", "_shop", "_shop_object", "_shop_id"];
 		_element = _sorted_item_shops select _i;
 		_shop_id = _element select sort_data;
 		_shop_object = (_unsorted_shops select _shop_id) select INV_ItemShops_Object;
@@ -147,7 +147,7 @@ shop_setup = {
 	_count = count _sorted_item_shops;
 	//build the list for each shop, and open them
 	while { _i < _count } do {
-		private["_element", "_shop", "_shop_object"];
+		private["_element", "_shop", "_shop_object", "_shop_id"];
 		_element = _sorted_item_shops select _i;
 		_shop_id = _element select sort_data;
 		_shop_object = (_unsorted_shops select _shop_id) select INV_ItemShops_Object;
@@ -269,7 +269,7 @@ shop_build_sell_list = {
 	
 	_i = 0;
 	while { _i < _count } do {
-		private ["_data", "_item", "_infos", "_price", "_name", "_isItem", "_weight_str", "_label"];
+		private ["_data", "_item", "_infos", "_price", "_name", "_isItem", "_isDroppable", "_weight_str", "_label"];
 		_item = _item_sell_list select _i;
 		_infos = _item call INV_GetItemArray;
 		_price = _infos call INV_GetItemSellCost;
@@ -323,7 +323,7 @@ shop_buy_item_in_hands = 21;
 
 
 shop_build_buy_list  =  {
-	private ["_i", "_shop_id", "_item_buy_list", "_shop_buy_list", "_count", "_shop", "_crate", "_logic"];
+	private ["_i", "_shop_id", "_item_buy_list", "_shop_buy_list", "_count", "_shop", "_crate", "_logic", "_shop_needs_license"];
 
 	_shop_id = _this select 0;
 	
@@ -377,6 +377,7 @@ shop_build_buy_list  =  {
 
 //Boolean not equal
 BNE = {
+	private["_bool1","_bool2"];
 	_bool1 = _this select 0;
 	_bool2 = _this select 1;
 	((_bool1 && not(_bool2)) || (not(_bool1) && _bool2))
@@ -529,10 +530,16 @@ shop_get_market_adjustment = {
 };
 
 shop_buy_item_validate_data = {
-	private ["_index", "_item", "_base_price", "_price", "_infos", "_amount", "_total_price", "_shop_id", "_supply", "_max_stock"];
-	private ["_sales_tax", "_market_adjust", "_name", "_kind", "_label", "_data", "_control", "_type", "_tax"];
-	private ["_weight_str", "_base_weight", "_weight", "_price_str", "_buy_label", "_limitedStock", "_isItem", "_isIllegal"];
-	private ["_amount_str", "_class", "_logic", "_quiet", "_supply_str"];
+	private [
+			"_index", "_item", "_base_price", "_price", "_infos", "_amount", "_total_price", "_shop_id", "_supply", "_max_stock",
+			"_sales_tax", "_market_adjust", "_name", "_kind", "_label", "_data", "_control", "_type", "_tax", "_salesTax_str", "_marketAdjust_str", "_totalDue_str", 
+			"_needsLicense", "_license_1", "_license_2", "_near_vehicles", "_near_vehicles_count", "_player_money",
+			"_weight_str", "_base_weight", "_weight", "_playerWeight", "_price_str", "_buy_label", "_limitedStock", 
+			"_isItem", "_isIllegal", "_isFort", "_isWeapon", "_isMagazine", "_isVehicle", "_isBackpack",
+			"_status_message", "_buyButton_state", "_putInHands", "_primary_weapon", "_secondary_weapon", "_pistol", "_backpack", 
+			"_hasPrimaryWeapon", "_hasSecondaryWeapon", "_hasPistol", "_hasBackpack", "_isRifle", "_isLauncher", "_isPistol", 
+			"_amount_str", "_class", "_logic", "_quiet", "_supply_str"
+		];
 	
 	_data = _this select 0;
 //	if (isNil "_data") exitWith {nil};
@@ -572,7 +579,7 @@ shop_buy_item_validate_data = {
 	_isBackpack = (_type == "backpack");
 	
 	_base_weight = if (_isItem) then { (_infos call INV_GetItemTypeKg) } else { 0 };
-	_playerWeight =  call INV_GetOwnWeight;
+	_playerWeight =  [] call INV_GetOwnWeight;
 	_isIllegal = if(_isItem) then {(_item call INV_GetItemIsIllegal)} else { false };
 	_class = if(not(_isItem)) then { _infos call INV_GetItemClassName } else { "" };
 	
@@ -716,11 +723,15 @@ shop_buy_item_validate_data = {
 };
 
 shop_sell_item_validate_data = {
-	private ["_index", "_item", "_base_price", "_price", "_infos", "_amount", "_total_price", "_shop_id", "_supply", "_max_stock"];
-	private ["_sales_tax", "_market_adjust", "_name", "_kind", "_label", "_data", "_control", "_type", "_tax"];
-	private ["_weight_str", "_base_weight","_weight", "_price_str", "_buy_label", "_limitedStock", "_isItem", "_isIllegal"];
-	private ["_amount_str", "_class", "_logic", "_quiet", "_demand_str", "_isOilBarrel"];
-	
+	private [
+			"_index", "_item", "_base_price", "_price", "_infos", "_amount", "_total_price", "_shop_id", "_supply", "_max_stock",
+			"_sales_tax", "_market_adjust", "_name", "_kind", "_label", "_data", "_control", "_type", "_tax", "_sellableItems", "_demand", 
+			"_isWeapon", "_isMagazine", "_isVehicle", "_isBackpack", "_weapons", "_magazines", "_vehicles", "_weapon_count", "_magazine_count", 
+			"_item_count", "_vehicle_count", "_vehicle_alive_count", "_vehicle_near_count",
+			"_salesTax_str", "_marketAdjust_str", "_totalReturn_str", "_sell_label",
+			"_weight_str", "_base_weight","_weight", "_price_str", "_buy_label", "_limitedStock", "_isItem", "_isIllegal", "_hasBackpack",
+			"_amount_str", "_class", "_logic", "_quiet", "_demand_str", "_isOilBarrel"
+		];
 	
 	_data = _this select 0;
 	if (isNil "_data") exitWith {""};
@@ -744,9 +755,6 @@ shop_sell_item_validate_data = {
 	_supply = [_item, _shop_id] call INV_GetStock;
 	_max_stock = [_item, _shop_id] call INV_GetMaxStock;
 	_isOilBarrel = (_item == "OilBarrel");
-	
-	
-
 	
 	_type = _infos call INV_GetItemType;
 	_limitedStock = (_max_stock != -1);
@@ -908,6 +916,7 @@ shop_sell_item_validate_data = {
 
 
 shop_set_status_message = {
+	private["_text","_quiet"];
 	_text = _this select 0;
 	_quiet = if (count _this > 1) then { _this select 1 } else { false };
 	if (_quiet) exitWith {};
@@ -1082,7 +1091,7 @@ shop_sell_item = {
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
 	
-	private ["_item", "_total_return", "_item_name", "_i", "_amount", "_type", "_isDrug", "_price","_kind"];
+	private ["_item", "_total_return", "_item_name", "_i", "_amount", "_type", "_isDrug", "_price","_kind", "_shop_id"];
 
 	_item = _data select shop_sell_item_key;
 	_item_name = _data select shop_sell_item_name;
@@ -1136,8 +1145,9 @@ shop_sell_select_vehicle_wait = {
 	_count = count _vehicles;
 	_i = 0;
 	shop_sell_selected_vehicle = nil;
+	
+	private["_index", "_vehicle", "_vehicle_str"];
 	while { _i < _count } do {
-		private["_index", "_vehicle", "_vehicle_str"];
 		_vehicle = _vehicles select _i;
 		_vehicle_str = format["%1", _vehicle];
 		_index = lbAdd [selectVehicle_list_idc, _vehicle_str];
@@ -1162,7 +1172,7 @@ shop_sell_vehicle = {
 	private["_player"];
 	_player = player;
 	
-	private ["_class", "_item", "_total_return", "_class", "_item_name", "_i", "_amount", "_type", "_vehicles", "_vehicle"];
+	private ["_class", "_item", "_total_return", "_class", "_item_name", "_i", "_amount", "_type", "_vehicles", "_vehicles_count", "_vehicle"];
 	
 	_item = _data select shop_sell_item_key;
 	_item_name = _data select shop_sell_item_name;
@@ -1312,7 +1322,7 @@ shop_buy_item = {
 	
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
-	private ["_amount", "_item", "_total_due", "_shop_id", "_item_name"];
+	private ["_amount", "_item", "_total_due", "_shop_id", "_item_name", "_kind", "_isDrug"];
 	
 	_total_due = [(_data select shop_buy_item_total_due)] call decode_number;
 	_amount = _data select shop_buy_item_amount;
@@ -1410,7 +1420,7 @@ shop_distribute_drug_sale = {
 	if (typeName _total_due != "SCALAR") exitWith{};
 
 	
-	private["_gang", "_gang_name", "_gang_members", "_income"];
+	private["_gang", "_gang_name", "_gang_members", "_gang_members_count", "_income"];
 	_gang = [_shop_id] call shop_get_gang_by_shop_id;
 	
 	if (isNil "_gang") exitWith {};
@@ -1580,7 +1590,7 @@ shop_buy_vehicle = {
 		if (isNil "_data") exitWith {};
 		if (typeName _data != "ARRAY") exitWith {};
 		
-		private ["_kind", "_total_due", "_item_name", "_class", "_logic", "_sleep_time"];
+		private ["_kind", "_total_due", "_item", "_item_name", "_class", "_logic", "_sleep_time"];
 		_item = _data select shop_buy_item_key;
 		_item_name = _data select shop_buy_item_name;
 		_logic = _data select shop_buy_item_logic;
@@ -1621,6 +1631,7 @@ shop_buy_update_stocks = {
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
 	
+	private["_item", "_max_stock", "_amount", "_supply", "_shop_id", "_isOilBarrel", "_new_supply"];
 	_item = _data select shop_buy_item_key;
 	_max_stock = _data select shop_buy_item_max_stock;
 	_amount = _data select shop_buy_item_amount;
@@ -1644,6 +1655,7 @@ shop_sell_update_stocks = {
 	if (isNil "_data") exitWith {};
 	if (typeName _data != "ARRAY") exitWith {};
 	
+	private["_item", "_max_stock", "_amount", "_supply", "_shop_id", "_isOilBarrel", "_new_supply"];
 	_item = _data select shop_sell_item_key;
 	_max_stock = _data select shop_sell_item_max_stock;
 	_amount = _data select shop_sell_item_amount;

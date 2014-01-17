@@ -1105,7 +1105,7 @@ class white_black_list {
 		TITLE3,					// IDC: 1002
 		TITLE1_DESC,			// IDC: 1003
 		TITLE2_DESC,			// IDC: 1004
-		TITLE3_DESC,			// IDC: 1005
+		TITLE3_DESC				// IDC: 1005
 	};
 
 	// Backgrounds

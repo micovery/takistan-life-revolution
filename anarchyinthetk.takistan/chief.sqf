@@ -1,6 +1,9 @@
+private["_this","_art","_moneh"];
 _this = _this select 3;
 _art  = _this select 0;
 _moneh = [player, 'money'] call INV_GetItemAmount;
+
+private["_spielernum", "_kandidatnum", "_waehlernum", "_item", "_mag", "_weap", "_vcl", "_bank", "_i", "_arr"];
 
 if (_art == "ClientWahlc") then {
 	if (isNil("WahlChief")) then { WahlChief = false;};

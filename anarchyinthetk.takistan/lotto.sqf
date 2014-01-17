@@ -1,5 +1,6 @@
 #include "Awesome\Functions\macro.h"
 
+private["_lotto","_lottocost","_lottowin","_chance","_winner","_moneh"];
 _lotto     = (_this  select 0) call GetLottoArray;
 _lottocost = (_lotto select 2);
 _lottowin  = (_lotto select 3);

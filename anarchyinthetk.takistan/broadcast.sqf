@@ -7,11 +7,11 @@ broadcast_make_key = {
 };
 
 broadcast_receive = {
-	private["_value"];
+	private["_value","_code"];
 	_code = _this select 1;
 	if (isNil "_code") exitWith{};
 	if (typeName _code != "STRING") exitWith {};
-	call compile _code;
+	[] call compile _code;
 };
 
 broadcast = {
@@ -22,7 +22,7 @@ broadcast = {
 	
 	missionNamespace setVariable [player_broadcast_buffer, _code];
 	publicVariable player_broadcast_buffer;
-	call compile _code;
+	[] call compile _code;
 };
 
 broadcast_server = {

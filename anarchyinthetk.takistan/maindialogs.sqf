@@ -28,6 +28,7 @@ if (_art == "bail") then {
 if (_art == "spielerliste") then {
 
 	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
+	private["_DFML"];
 	_DFML = findDisplay -1;
 	
 	private["_dead_wait_time"];
@@ -36,7 +37,7 @@ if (_art == "spielerliste") then {
 	lbClear 1;
 	lbClear (_DFML displayCtrl 1);
 	
-	private["_total_money", "_private_money", "_factory_money", "_cash"];
+	private["_total_money", "_private_money", "_factory_money", "_cash", "_bank","_trennlinie"];
 	_total_money = [player] call player_get_total_money;
 	_private_money = [player] call player_get_private_storage_money;
 	_factory_money = [player] call player_get_factory_money;
@@ -66,7 +67,7 @@ if (_art == "spielerliste") then {
 	(_DFML displayCtrl 1)	lbAdd _trennlinie;
 	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_licenselist";
 	
-	private["_i"];
+	private["_i","_workers"];
 	
 	for [{_i=0}, {_i < (count INV_Licenses)}, {_i=_i+1}] do {
 		if (((INV_Licenses select _i) select 0) call INV_HasLicense) then
@@ -239,7 +240,8 @@ if (_art == "spielerliste") then {
 
 	(_DFML displayCtrl 1) lbAdd _trennlinie;
 	(_DFML displayCtrl 1) lbAdd "F O O D  S T O C K S:";
-
+	
+	private["_stock"];
 	_stock = ["boar", (shop1 call INV_getshopnum)] call INV_GetStock;
 	_stock = _stock + (["boar", (shop2 call INV_GetShopNum)] call INV_GetStock);
 	_stock = _stock + (["boar", (shop3 call INV_GetShopNum)] call INV_GetStock);
@@ -295,7 +297,7 @@ if (_art == "spielerliste") then {
 	(_DFML displayCtrl 1)	lbAdd _trennlinie;
 	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_playerlist";
 
-	private ["_i"];
+	private ["_i","_player_variable_name"];
 	_i = 0;
 	_player_variable_name = "";
 	while { _i < (count playerstringarray) } do {
@@ -318,7 +320,7 @@ if (_art == "spielerliste") then {
 	(_DFML displayCtrl 1)	lbAdd _trennlinie;
 	(_DFML displayCtrl 1)	lbAdd "W A N T E D:";
 	
-	private["_i"];
+	private["_i","_player_variable"];
 	_i = 0;
 	
 	_player_variable_name = "";
@@ -358,6 +360,7 @@ if (_art == "spielerliste") then {
 if (_art == "inventorycheck") then {
 	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
 	
+	private["_DFML","_licensearray","_inventararray","_civobj","_waffenarray","_magazinarray","_trennlinie","_lizenz","_objekt","_objektname","_anzahl","_scriptname","_index"];
 	_DFML = findDisplay -1;
 	
 	lbClear 1;
@@ -418,6 +421,7 @@ if (_art == "inventorysteal") then {
 if (_art == "gesetz") then {
 	if (!(createDialog "gesetzdialog")) exitWith {hint "Dialog Error!";};
 	
+	private["_DFML", "_index", "_selected"];
 	_DFML = findDisplay -1;
 		
 	lbClear 1;
@@ -439,6 +443,7 @@ if (_art == "gesetz") then {
 if (_art == "coplog") then {
 	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
 	
+	private["_DFML", "_trennlinie"];
 	_DFML = findDisplay -1;
 	
 	lbClear 1;
@@ -479,6 +484,8 @@ if (_art == "coplog") then {
 if (_art == "wahlen") then {
 	if (!(createDialog "wahldialog")) exitWith {hint "Dialog Error!";};
 	
+	private["_DFML"];
+	
 	_DFML = findDisplay -1;
 	
 	lbClear 1;
@@ -497,7 +504,7 @@ if (_art == "chief") then {
 	lbClear 1;
 	lbClear (_DFML displayCtrl 1);
 	
-	private["_c", "_index"];
+	private["_c", "_index", "_player_variable_name"];
 	_c = 0;
 	_player_variable_name = "";
 	_index = -1;

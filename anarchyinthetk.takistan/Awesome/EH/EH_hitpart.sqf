@@ -1,6 +1,7 @@
 // hitpart event handler scripts
 // EH_hitpart.sqf
 // This event handler is fired localy to the shooter
+private["_target","_shooter","_bullet","_position","_velocity","_selection","_ammo","_direction","_radius","_surface","_direct"];
 _target			= _this select 0;	// Object		Object that got damaged
 _shooter		= _this select 1;	// Object		Object that inflicted damage
 _bullet			= _this select 2;	// Object		object fired

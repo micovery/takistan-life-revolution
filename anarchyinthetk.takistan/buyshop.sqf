@@ -1,5 +1,6 @@
 #include "Awesome\Functions\macro.h"
 
+private["_this","_art","_num","_moneh","_cost","_name"];
 _this = _this select 3;
 _art   = (_this select 0);
 _num   = (_this select 1);

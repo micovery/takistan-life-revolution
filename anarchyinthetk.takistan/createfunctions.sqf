@@ -30,7 +30,7 @@ INV_CreateFort = {
 };
 
 INV_CreateWeapon = {
-	private["_class", "_amount", "_crate"];
+	private["_class", "_amount", "_crate", "_in_hands"];
 	_class = _this select 0;
 	_amount = _this select 1;
 	_crate = _this select 2;
@@ -56,7 +56,7 @@ INV_CreateMag = {
 };
 
 INV_CreatePack = {
-	private["_class", "_amount", "_crate"];
+	private["_class", "_amount", "_crate", "_in_hands"];
 	_class = _this select 0;
 	_amount = _this select 1;
 	_crate = _this select 2;

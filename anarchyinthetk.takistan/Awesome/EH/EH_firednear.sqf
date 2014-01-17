@@ -1,6 +1,6 @@
 //  fired near event handler script
 // EH_firednear.sqf
-
+private["_unit","_shooter","_distance","_weapon","_muzzle","_mode","_ammo"];
 _unit		=	_this select 0;
 _shooter	=	_this select 1;
 _distance	=	_this select 2;

@@ -29,6 +29,7 @@ camera_keyUpHandler = {
 
 camera_remove_keyUp = {
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if (not(isnil "camera_keyUpHandler_id")) then {
 		_display displayRemoveEventHandler  ["keyUp", camera_keyUpHandler_id];
@@ -38,7 +39,7 @@ camera_remove_keyUp = {
 
 
 camera_setup_keyUp = {
-	private["_data"];
+	private["_data","_display"];
 	_data = _this;
 	
 	disableSerialization;
@@ -60,6 +61,7 @@ camera_move_pos_vector = {
 	_angle = _data select 1;
 	_pitch = _data select 2;
 	
+	private["_vecdx","_vecdy","_vecdz"];
 	_vecdx = (sin(_direction) * cos(_angle)) * _velocity;
 	_vecdy = (cos(_direction) * cos(_angle)) * _velocity;
 	_vecdz = (sin(_angle)) * _velocity;
@@ -346,7 +348,7 @@ camera_update_position = {
 	_key = _this select 1;
 	_shift = _this select 2;
 	
-	private["_posistion"];
+	private["_position"];
 	_position = [_player] call camera_get_position;
 		
 	private["_velocity"];
@@ -570,6 +572,7 @@ camera_keyDownHandler = {
 
 camera_remove_keyDown = {
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if (not(isnil "camera_keyDownHandler_id")) then {
 		_display displayRemoveEventHandler  ["keyDown", camera_keyDownHandler_id];
@@ -578,7 +581,7 @@ camera_remove_keyDown = {
 };
 
 camera_setup_keyDown = {
-	private["_data"];
+	private["_data", "_display"];
 	_data = _this;
 	
 	disableSerialization;
@@ -608,6 +611,7 @@ camera_mouseMoving_handler = {
 
 camera_remove_mouseMoving = {
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if (not(isnil "camera_mouseMoving_id")) then {
 		_display displayRemoveEventHandler  ["mouseMoving", camera_mouseMoving_id];
@@ -619,6 +623,7 @@ camera_setup_mouseMoving = {
 	private["_data"];
 	_data = _this;
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if ( isnil "camera_mouseMoving_id" ) then {
 		camera_mouseMoving_id = _display displayAddEventHandler  ["mouseMoving", format["[_this, %1] call camera_mouseMoving_handler", _data]];
@@ -635,10 +640,12 @@ camera_heading2vectors = {
 	_angle = _heading select 1;
 	_bank = _heading select 2;
 	
+	private["_vecdx","_vecdy","_vecdz"];
 	_vecdx = sin(_direction) * cos(_angle);
 	_vecdy = cos(_direction) * cos(_angle);
 	_vecdz = sin(_angle);
 
+	private["_vecux","_vecuy","_vecuz"];
 	_vecux = cos(_direction) * cos(_angle) * sin(_bank);
 	_vecuy = sin(_direction) * cos(_angle) * sin(_bank);
 	_vecuz = cos(_angle) * cos(_bank);
@@ -656,7 +663,7 @@ camera_vectorDir2heading = {
 	_vecdy = _vectorDir select 1;
 	_vecdz = _vectorDir select 2;
 	
-	private["_angle"];
+	private["_angle","_direction"];
 	_angle = asin(_vecdz);
 	_direction = asin(_vecdx / cos(_angle)); 
 	
@@ -779,7 +786,7 @@ camera_create = {
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {};
 	
-	private["_pos"];
+	private["_pos","_camera"];
 	_pos = (getPosATL _player);
 	_camera = "camera" camCreate [(_pos select 0), (_pos select 1), ((_pos select 2) + 3)];
 	_camera cameraEffect ["Internal", "LEFT"];
@@ -811,7 +818,7 @@ camera_mouseButtonClick_handler = {
 	
 	if (not([_player] call camera_get_map_open)) exitWith {false};
 	
-	private["_button", "_control", "_x", "_y"];
+	private["_button", "_control", "_x", "_y", "_display"];
 	_display = _this select 0;
 	_button = _this select 1;
 	_x = _this select 2;

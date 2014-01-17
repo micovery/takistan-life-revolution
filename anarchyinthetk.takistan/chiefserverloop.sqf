@@ -1,3 +1,4 @@
+private["_this","_art","_moneh"];
 _this = _this select 3;
 _art  = _this select 0;
 _moneh = [player, 'money'] call INV_GetItemAmount;
@@ -5,7 +6,8 @@ _moneh = [player, 'money'] call INV_GetItemAmount;
 chief_elections_term = 15; //number of minutes between elections
 server setVariable ["next_chief_election", -1, true];
 
-if (_art == "serverloop") then {	
+if (_art == "serverloop") then {
+	private["_currentchief","_iteration_delay","_iterations", "_chiefString"];
 	_currentchief = -1;
 	_iteration_delay = 30;
 	_iterations = (chief_elections_term * 60) / _iteration_delay;
@@ -13,9 +15,9 @@ if (_art == "serverloop") then {
 	
 	//player groupChat format["ITER: %1", _iterations];
 	
+	private["_i", "_time_left"];
 	while {true} do {
 		server setVariable ["next_chief_election", -1, true];
-		private["_i"];
 		for [{_i=0}, {_i < _iterations}, {_i=_i+1}] do {
 			sleep _iteration_delay;
 		

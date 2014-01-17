@@ -84,62 +84,38 @@ ExecSQF("Awesome\Functions\convoy_functions.sqf");
 ExecSQF("Awesome\Functions\factory_functions.sqf");
 ExecSQF("setPitchBank.sqf");
 
-format['LOADING 3/5 - Part 1'] call A_DEBUG_S;
 if (isClient) then {
 		[0.6] call stats_client_update_loading_progress;
 		["Loading - Stage 3/5"] call stats_client_update_loading_title;
 	};
-format['LOADING 3/5 - Part 2'] call A_DEBUG_S;
 
 // Starts up Awesome scripts
 ExecSQF("Awesome\init.sqf");
-
-format['LOADING 3/5 - Part 3'] call A_DEBUG_S;
 
 if(isClient) then {
 	[0.8] call stats_client_update_loading_progress;
 	["Loading - Stage 4/5"] call stats_client_update_loading_title;
 	
-	format['LOADING 4/5 - Part 1'] call A_DEBUG_S;
 	ExecSQFspawn("briefing.sqf");
 	
-	format['LOADING 4/5 - Part 2'] call A_DEBUG_S;
 	ExecSQFwait("Awesome\Functions\camera_functions.sqf")
-	format['LOADING 4/5 - Part 3'] call A_DEBUG_S;
 	ExecSQFwait("Awesome\Functions\admin_functions.sqf")
-	format['LOADING 4/5 - Part 4'] call A_DEBUG_S;
 	ExecSQFwait("Awesome\Functions\markers.sqf");
-	format['LOADING 4/5 - Part 5'] call A_DEBUG_S;
 	ExecSQFwait("Awesome\Functions\holster.sqf");
-	format['LOADING 4/5 - Part 6'] call A_DEBUG_S;
 	ExecSQFwait("Awesome\MountedSlots\functions.sqf");
-	
-	format['LOADING 4/5 - Part 7'] call A_DEBUG_S;
 	ExecSQFspawn("clientloop.sqf");
-	format['LOADING 4/5 - Part 8'] call A_DEBUG_S;
 	[] spawn gangs_loop;
-	format['LOADING 4/5 - Part 9'] call A_DEBUG_S;
 	ExecSQFspawn("respawn.sqf");
-	format['LOADING 4/5 - Part 10'] call A_DEBUG_S;
 	ExecSQFspawn("petrolactions.sqf");
-	format['LOADING 4/5 - Part 11'] call A_DEBUG_S;
 	ExecSQFspawn("nametags.sqf");
-	format['LOADING 4/5 - Part 12'] call A_DEBUG_S;
 	ExecSQFspawn("Awesome\Functions\salary.sqf");
-	format['LOADING 4/5 - Part 13'] call A_DEBUG_S;
 	ExecSQFspawn("motd.sqf");
-	format['LOADING 4/5 - Part 14'] call A_DEBUG_S;
 	ExecSQFspawnpass(["client"], "bombs.sqf");
 	
-	format['LOADING 4/5 - Part 15'] call A_DEBUG_S;
 	ExecSQFwait("onKeyPress.sqf")
-	
-	format['LOADING 4/5 - Part 16'] call A_DEBUG_S;
 	
 	[1] call stats_client_update_loading_progress;
 	["Loading - Stage 5/5"] call stats_client_update_loading_title;
-	
-	format['LOADING 5/5'] call A_DEBUG_S;
 	
 	[] call stats_client_stop_loading;
 	

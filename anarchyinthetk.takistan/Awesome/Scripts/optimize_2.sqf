@@ -1,5 +1,6 @@
 // List of scripts to speed up the mission hopefully
 // Quick way of grabbing master array entries
+private["_array","_Nname","_name"];
 
 _array = [];
 _Nname = "A_MS_";

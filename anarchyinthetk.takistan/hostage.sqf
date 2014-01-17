@@ -1,13 +1,16 @@
 // new version of assassin mission with vip and guards armed, car,  new spawn locations, bug fixes and more stability by Scripter Wulfer
+private["_secondcounter", "_minutecounter", "_art"];
 _secondcounter = 0;
 _minutecounter = 0;
 _art = (_this select 3) select 0;
 
 if (isNil "workplacejob_hostage_serverarray") then {workplacejob_hostage_serverarray = []};
 
-if (_art == "serverloop") then {
+workplacejob_hostage_break = 5;
 
+if (_art == "serverloop") then {
 	while {true} do {
+		private["_i"];
 		for [{_i=0}, {_i < (count workplacejob_hostage_serverarray)}, {_i=_i+1}] do {
 			if (isNull ((workplacejob_hostage_serverarray select _i) select 0)) then {
 
@@ -32,7 +35,9 @@ if (_art == "serverloop") then {
 if (_art == "getajob_hostage") then {
 	if(workplacejob_hostage_active)exitWith{player groupChat "There are currently no more hostages.";};
 	if(workplacejob_hostage_failed)exitWith{player groupChat "You have failed a hostage mission recently, maybe you can do it again later.";};
-
+	
+	private["_array","_city","_pos","_radius","_a1","_group"];
+	
 	_array  = [[Hostagespawn1, 10], [Hostagespawn2, 10], [Hostagespawn3, 10], [Hostagespawn4, 10], [Hostagespawn5, 10]];
 	_city   = (floor(random(count _array)));
 	_pos    = (_array select _city) select 0;
@@ -52,14 +57,14 @@ if (_art == "getajob_hostage") then {
 	processInitCommands;
 
 	format["workplacejob_hostage_serverarray = workplacejob_hostage_serverarray + [[%1, hostage1]];", player] call broadcast;
-
+	private["_markerobj", "_markername"];
+	
 	_markerobj = createMarker ["htargetmarker",[0,0]];
 	_markername= "htargetmarker";
 	_markerobj setMarkerShape "ICON";
 	"htargetmarker" setMarkerType "Marker";
 	"htargetmarker" setMarkerColor "ColorRed";
 	"htargetmarker" setMarkerText "Hostage target";
-	_markername SetMarkerPos _start;
 
 	workplacejob_hostage_active = true; publicvariable "workplacejob_hostage_active";
 

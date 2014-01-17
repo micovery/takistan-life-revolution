@@ -1,5 +1,5 @@
 stun_shot_close = {
-	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh"];
+	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh","_distance"];
 
 	_unit = _this select 0;
 	_shooter = _this select 1;
@@ -70,7 +70,7 @@ stun_shot_close = {
 };
 
 stun_shot_far = {
-	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh"];
+	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh", "_distance"];
 
 	_unit = _this select 0;
 	_shooter = _this select 1;

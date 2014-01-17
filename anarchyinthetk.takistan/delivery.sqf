@@ -1,7 +1,11 @@
 #include "Awesome\Functions\macro.h"
 
+private["_art"];
 _art = ((_this select 3) select 0);
+
 if (_art == "getajob_delivery") then {
+	private["_whereto","_msg","_a1","_pos"];
+	
 	if (alreadygotaworkplacejob == 2) exitWith {
 		player groupChat localize "STRS_workplacemission_searchalready";
 	};

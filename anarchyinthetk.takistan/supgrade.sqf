@@ -1,11 +1,10 @@
+private["_art","_item","_vcl","_type"];
 _art 	= _this select 0;
 _item 	= _this select 1;
 _vcl	= vehicle player;
 _type	= typeof _vcl;
 
-if(_art == "use")then
-
-{
+if(_art == "use")then {
 
 if(_vcl == player)exitwith{player groupchat "you must be in a vehicle"};
 if(!(_vcl iskindof "car"))exitwith{player groupchat "you cannot tune this vehicle"};

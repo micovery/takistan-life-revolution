@@ -364,7 +364,7 @@ vehicle_save_stats = {
 	if (typeName _vehicle != "OBJECT") exitWith {};
 	if (_vehicle isKindOf "Man") exitWith {};
 	
-	private["_dirver"];
+	private["_driver"];
 	_driver = driver(_vehicle);
 	
 	private["_name", "_class", "_driver_uid", "_velocity", "_position_atl", "_vector_direction", "_vector_up", "_fuel", "_damage", "_engine_state", "_fuel"];
@@ -421,7 +421,7 @@ vehicle_init_stats = {
 	if (isNil "_vehicle") exitWith {};
 	if (typeName _vehicle != "OBJECT") exitWith {};
 	
-	private["_driver", "_velocity", "_position_atl", "_vector_direction", "_vector_up", "_fuel", "_damage", "_engine_state", "_weapons", "_magazines"];
+	private["_driver", "_velocity", "_position_atl", "_vector_direction", "_vector_up", "_fuel", "_damage", "_engine_state", "_weapons", "_magazines", "_speed", "_nitro"];
 	
 	_velocity = [_vehicle, "velocity"] call vehicle_get_array;
 	_position_atl = [_vehicle, "position_atl"] call vehicle_get_array;
@@ -681,13 +681,13 @@ vehicle_set_init_server addPublicVariableEventHandler {
 		private["_vehicle"];
 		_vehicle = missionNamespace getVariable (_this select 1);
 		
-		_vehicle addEventHandler ["handleDamage", {_this call EH_handleDamage}];
-		_vehicle addEventHandler ["fired", {_this execVM "Awesome\EH\EH_fired_vehicle.sqf"}];
+		_vehicle addEventHandler ["handleDamage", {_this call A_fnc_EH_hDamageV}];
+		_vehicle addEventHandler ["fired", {_this spawn A_fnc_EH_firedV}];
 		_vehicle addMPEventhandler ["MPKilled", {_this call vehicle_handle_mpkilled}];
 	};
 
 vehicle_generate_name = {
-	private["_restart_count"];
+	private["_restart_count","_vehicle_name"];
 	_restart_count = server getVariable "restart_count";
 	_vehicle_name = format["vehicle_%1_%2_%3", player, _restart_count, round(time)];
 	if ([_vehicle_name] call vehicle_name_exist)then{[] call vehicle_generate_name}else{_vehicle_name};
@@ -905,6 +905,7 @@ vehicle_reset_gear = {
 };
 
 vehicle_unflip = {
+	private["_vcl"];
 	_vcl = (nearestobjects [getpos player, ["LandVehicle"], 10] select 0);
 	//if (_vcl == "") exitwith {player groupchat "No vehicles in range";};
 	if (([player, _vcl] call vehicle_owner)) then {
@@ -1320,7 +1321,7 @@ vehicle_clean_trigCheck = {
 	};
 
 vehicle_clean_trigOn = {
-	private["_vehicleString", "_triggerString", "_vehicle", "_trigger"];
+	private["_vehicleString", "_triggerString", "_vehicle", "_trigger", "_nearbyHumans"];
 	
 	_vehicleString = _this select 0;
 	_triggerString = _this select 1;
@@ -1338,6 +1339,9 @@ vehicle_clean_trigOn = {
 	if !(alive _vehicle) exitwith {
 			deleteVehicle _trigger;
 		};
+	
+	_nearbyHumans = [];
+	_nearbyHumans = (getPosATL _vehicle) nearEntities ["caManBase", 100];
 	
 	if (({(isPlayer _x) && (alive _x)} count _nearbyHumans) == 0) then {
 			[_vehicle] call vehicle_clean_cleanUp

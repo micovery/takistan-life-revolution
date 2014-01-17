@@ -360,7 +360,7 @@ factory_init = {
 	private["_queue"];
 	_queue = missionNamespace getVariable _queue_name;
 	{
-		private["_item", "_pend_name"];
+		private["_item", "_pend_name", "_pend"];
 		_item = _x;
 		_pend_name = format["%1pend", _item];
 		_pend = missionNamespace getVariable _pend_name;
@@ -391,7 +391,7 @@ factory_calculate_production_cost = {
 	if (isNil "_item") exitWith {0};
 	if (typeName _item != "STRING") exitWith {0};
 	
-	private["_buy_price"];
+	private["_buy_price", "_sell_price"];
 	_buy_price = (_item call INV_GetItemBuyCost);
 	_sell_price = (_item call INV_GetItemSellCost);
 	
@@ -903,7 +903,7 @@ factory_item_create = {
 				[(_info call INV_GetItemClassName), 1, _factory_crate] spawn INV_CreateMag;
 			};
 			case "Vehicle": {
-				private["_vehicle_class"];
+				private["_vehicle_class", "_vehicle_script_name"];
 				_vehicle_class = (_info call INV_GetItemClassName);
 				_vehicle_script_name = (_info call INV_GetItemScriptName);
 				[_factory_spawn, _vehicle_class, _vehicle_script_name, false] spawn vehicle_create_shop_extended;
@@ -1129,7 +1129,7 @@ factory_validate_enqueue_item = {
 	_factory_money = [_player, "money", _factory_storage] call INV_GetStorageAmount;
 	_production_cost = ([_item] call factory_calculate_production_cost) * _amount;
 	
-	private["_created_allowed", "_enqueue_allowed"];
+	private["_create_allowed", "_enqueue_allowed"];
 	_create_allowed = true;
 	_enqueue_allowed = true;
 	

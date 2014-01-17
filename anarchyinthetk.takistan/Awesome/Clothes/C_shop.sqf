@@ -451,6 +451,7 @@ Clothing_Shops =
 
 pmc_skin_list = [];
 
+private["_array"];
 {
 	_array = [_x] call C_array_d;
 	pmc_skin_list set[(count pmc_skin_list), (_array select 1)];

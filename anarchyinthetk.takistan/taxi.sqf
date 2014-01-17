@@ -1,3 +1,4 @@
+private["_art"];
 _art = ((_this select 3) select 0);
 
 if (isNil "INV_LocalTaxiKunde" ) then {INV_LocalTaxiKunde = player};
@@ -7,52 +8,30 @@ if (isNil "workplacejob_taxi_kundeactive") then {workplacejob_taxi_kundeactive =
 if (isNil "workplacejob_taxi_active") then {workplacejob_taxi_active = false};
 if (isNil "workplacejob_taxi_serverarray") then {workplacejob_taxi_serverarray = []};
 
-if (_art == "serverloop") then
+private["_i","_warte","_moneh"];
 
-{
+if (_art == "serverloop") then {
 
 while {true} do {
-
-	for [{_i=0}, {_i < (count workplacejob_taxi_serverarray)}, {_i=_i+1}] do
-
-		{
-
-		if (isNull ((workplacejob_taxi_serverarray select _i) select 0)) then
-
-			{
-
-			if (!(isNull ((workplacejob_taxi_serverarray select _i) select 1))) then
-
-				{
-
-				deleteVehicle ((workplacejob_taxi_serverarray select _i) select 1);
-
+	for [{_i=0}, {_i < (count workplacejob_taxi_serverarray)}, {_i=_i+1}] do {
+		if (isNull ((workplacejob_taxi_serverarray select _i) select 0)) then {
+			if (!(isNull ((workplacejob_taxi_serverarray select _i) select 1))) then {
+					deleteVehicle ((workplacejob_taxi_serverarray select _i) select 1);
 				};
 
 			workplacejob_taxi_serverarray set [_i,""];
 			workplacejob_taxi_serverarray = workplacejob_taxi_serverarray - [""];
-
 			};
-
 		};
-
 	sleep 10;
-
 	};
-
 };
 
 
-if (_art == "getajob_taxi") then
+if (_art == "getajob_taxi") then {
 
-{
-
-if (workplacejob_taxi_sperre) exitWith
-
-	{
-
-	player groupChat format [localize "STRS_workplacemission_taxi_alreadyinuse",workplacejob_taxi_sperrzeit];
-
+if (workplacejob_taxi_sperre) exitWith {
+		player groupChat format [localize "STRS_workplacemission_taxi_alreadyinuse",workplacejob_taxi_sperrzeit];
 	};
 
 workplacejob_taxi_active = true;

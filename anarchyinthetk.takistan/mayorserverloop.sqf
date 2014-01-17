@@ -15,7 +15,7 @@ if (_action == "serverloop") then {
 	_iterations = round _iterations;
 
 	while {true} do {
-		private["_i"];
+		private["_i","_time_left"];
 		for [{_i=0}, {_i < _iterations}, {_i=_i+1}] do {
 			sleep _iteration_delay;
 			_time_left = round(((president_elections_term * 60) - (_i * 30))/60);
@@ -33,7 +33,7 @@ if (_action == "serverloop") then {
 			};
 		};
 	
-		private["_MaxStimmen", "_MaxPos"];
+		private["_MaxStimmen", "_MaxPos", "_MayorString"];
 		_MaxStimmen = 1;
 		_MaxPos = -1;
 

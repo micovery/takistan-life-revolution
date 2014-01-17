@@ -2,6 +2,7 @@ if !(isClient) exitwith {};
 
 #define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 
+private["_i","_var"];
 for [{_i = 0}, {_i <= 15}, {_i = _i + 1}] do {
 		_var = format["A_R_rope%1", _i];
 		missionNamespace setVariable [_var, objNull];
@@ -33,7 +34,7 @@ A_R_LOOP = {
 	};
 
 A_R_LOOP_P = {
-		private["_veh", "_unit", "_speedMax", "_elevMin", "_elevMax", "_deployed", "_actionId_Deploy", "_actionId_Drop", "_height", "_heightBreak"];
+		private["_veh", "_unit", "_speedMax", "_elevMin", "_elevMax", "_speedOver", "_deployed", "_actionId_Deploy", "_actionId_Drop", "_height", "_heightBreak"];
 		_veh = _this select 0;
 		_unit = player;
 		

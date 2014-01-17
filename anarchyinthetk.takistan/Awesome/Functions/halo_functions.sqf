@@ -4,7 +4,7 @@ if (!isNil "halo_functions_defined") exitWith {};
 
 halo_jump = {
 	//player groupchat "halo jump with delay!";
-	private ["_height"];
+	private ["_height", "_vehicle", "_unit","_pos"];
 	_vehicle = _this select 0;
 	_unit = _this select 1;
 	
@@ -17,7 +17,7 @@ halo_jump = {
 	_height = _pos select 2;
 	
 	[] spawn {
-	    private[ "_anim", "_canim"];
+	    private[ "_anim", "_canim", "_time_end"];
 		_time_end = time + 10;
 		_anim = "HaloFreeFall_non";
 		format[' if (%1 != player) then { %1 switchMove "%2";};', player, _anim] call broadcast;
@@ -56,6 +56,7 @@ halo_jump = {
 		[_unit] call halo_remove_all_smoke_actions;
 		[_unit] call halo_deactivate_smoke;
 		sleep 3;
+		private["_canim", "_anim_list"];
 		if (alive _unit) then {
 			hint "Sucessful landing";
 			_canim = (animationState player);
@@ -94,6 +95,7 @@ halo_activate_smoke = {
 };
 
 halo_deactivate_smoke = {
+	private["_unit", "_old_smoke_object"];
 	_unit = _this select 0;
 	_old_smoke_object = _unit getVariable "halo_smoke_object";
 	//player groupChat format["Removing old smoke object %1", _old_smoke_object];
@@ -104,9 +106,10 @@ halo_deactivate_smoke = {
 
 
 halo_add_smoke_actions = {
+	private["_unit"];
 	_unit = _this select 0;
 	
-	private ["_actions"];
+	private ["_actions", "_smokes", "_smoke_name", "_smoke_class", "_action_id"];
 	//player groupChat "Adding smoke actions";
 	_smokes = [ ["Smoke White", "SmokeShell"],
 	          ["Smoke Red", "SmokeShellRed"],
@@ -134,12 +137,14 @@ halo_add_smoke_actions = {
 
 
 halo_remove_smoke_action =  {
+	private["_unit", "_smoke_class", "_actions"];
 	_unit = _this select 0;
 	_smoke_class = _this select 1;
 	_actions = _unit getVariable "halo_smoke_actions";
 	if (isNil "_actions") exitWith {};
 	if (typeName _actions != "ARRAY") exitWith {};
 	
+	private["_smoke_struct", "_smoke_action", "_smoke_cclass"];
 	{
 		_smoke_struct = _x;
 		_smoke_action = _x select 0;
@@ -151,6 +156,7 @@ halo_remove_smoke_action =  {
 };
 
 halo_remove_all_smoke_actions = {
+	private["_unit","_actions","_smoke_struct","_smoke_action","_smoke_class"];
 	_unit = _this select 0;
 	_actions = _unit getVariable "halo_smoke_actions";
 	if (isNil "_actions") exitWith {};
@@ -166,7 +172,7 @@ halo_remove_all_smoke_actions = {
 
 
 halo_jump_allowed = {
-	
+	private["_vehicle","_is_in_vehicle","_is_air_vehicle","_vehicle_position","_is_above_100m"];
 	_vehicle = _this select 0;
 	_is_in_vehicle = (_vehicle == vehicle(player));
 	if (!_is_in_vehicle) exitWith { false };
@@ -184,6 +190,7 @@ halo_jump_allowed = {
 
 halo_jump_add_actions = 
 {
+	private["_vehicle"];
 	_vehicle = _this select 0;
 	
 	private ["_has_halo_actions"];
@@ -204,6 +211,7 @@ halo_jump_add_actions =
 
 halo_start = {
 	sleep 1;
+	private["_unit","_dir"];
 	_unit = player;
 	
 	if (!local _unit) exitwith {};
@@ -213,7 +221,7 @@ halo_start = {
 	_unit setdir _dir;
 	_unit switchmove "HaloFreeFall_non";
 
-
+	private["_brightness","_pos","_parray"];
 	_brightness = 0.99;
 	_pos = position player;
 	_parray = [
@@ -261,6 +269,7 @@ halo_start = {
 	halo_action = _unit addaction ["Open Chute","noscript.sqf",'[_this select 1] call halo_open_parachute;',1,false,true,"","true"];
 
 	halo_keydown = {
+		private["_key","_shiftstate"];
 		_key = _this select 1;
 		_shiftState = _this select 2; // boolean
 
@@ -305,6 +314,7 @@ halo_start = {
 	halo_dirAdd = 0.06;
 
 	[] spawn {
+		private["_time","_fpsCoef","_dir","_vel","_anim","_v","_h","_vLimit","_hLimit","_vAnim","_hAnim"];
 		_time = time - 0.1;
 		while {alive player && vehicle player == player && isnil {player getvariable "halo_terminate"}} do {
 
@@ -398,6 +408,7 @@ halo_start = {
 };
 
 halo_open_parachute = {
+	private["_unit","_para","_vel"];
 	_unit = _this select 0;
 	if (!local _unit) exitwith {};
 
@@ -431,6 +442,7 @@ halo_open_parachute = {
 		halo_para_dirAdd = 0.03;
 
 		halo_para_keydown = {
+			private["_key"];
 			_key = _this select 1;
 
 			//--- Forward
@@ -456,6 +468,7 @@ halo_open_parachute = {
 		halo_para_loop_time = time - 0.1;
 		halo_para_velZ = velocity _para select 2;
 		halo_para_loop = {
+				private["_para","_fpsCoef","_dir","_velZ"];
 				if (!isnil {player getvariable "halo_terminate"}) exitwith {};
 				if (time == halo_para_loop_time) exitwith {}; //--- FPS too high
 

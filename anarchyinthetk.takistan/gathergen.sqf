@@ -2,6 +2,7 @@
 
 //Modded For TL:R by M5iC
 
+private["_type","_item","_chance","_maxzahl","_anzahl","_stock"];
 _type    = ((_this select 3)select 0);
 _item    = _this select 0;
 _chance  = _this select 1;

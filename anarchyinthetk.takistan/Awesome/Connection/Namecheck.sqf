@@ -1,4 +1,5 @@
 // Namecheck.sqf
+private["_name","_namearray","_i","_check","_invalid"];
 
 player groupchat "checking name";
 

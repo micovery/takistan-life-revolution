@@ -30,7 +30,7 @@ _exit = false;
 private["_nvcls"];
 _nvcls = nearestObjects [getpos _unit, ["LandVehicle"], 5];
 
-private["_reduce"];
+private["_veh","_inveh", "_reduce"];
 _reduce = false;
 
 private["_source_cop", "_weapon"];

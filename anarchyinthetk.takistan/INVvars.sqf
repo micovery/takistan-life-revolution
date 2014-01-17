@@ -15,5 +15,5 @@ ExecSQF("facharvest.sqf");
 ExecSQF("licensearray.sqf");
 
 if (isClient) then {
-	_handler = [] execVM "shopfarmfaclicenseactions.sqf";
+	[] execVM "shopfarmfaclicenseactions.sqf";
 };

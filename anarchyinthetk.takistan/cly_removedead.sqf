@@ -1,5 +1,7 @@
 if (!isServer) exitWith {};
 
+private["_oa","_manwait","_vehiclewait","_removedead","_allunits","_alldead","_gear","_wait"];
+
 CLY_ignoregear=["ItemRadio","ItemCompass","ItemWatch","ItemMap","ItemGPS"];
 CLY_keepgear=[];
 CLY_noremovegear=[];
@@ -15,6 +17,7 @@ publicVariable "CLY_dontremovedeadremove";
 
 //Spawnable script
 _removedead={
+	private["_unit","_wait","_gear","_removetime"];
 	_unit=_this select 0;
 	_wait=_this select 1;
 	sleep _wait;
@@ -41,7 +44,7 @@ while {true} do {
 	if (!_oa) then {
 		{if (!alive _x) then {_alldead set [count _alldead,_x]}} forEach _allunits;
 		{if (isNull _x) then {_alldead=_alldead-[_x]}} forEach _alldead;
-	} else {_alldead=allDead};
+	} else {_alldead = allDead};
 	{
 		if (isNil {_x getVariable "CLY_removedead"}) then {
 			if !(_x in CLY_removedeadpending) then {

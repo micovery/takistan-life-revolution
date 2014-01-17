@@ -113,7 +113,6 @@ name_tags_draw = {
 	if (typeName _target != "OBJECT") exitWith {false};
 	if (isNull _target) exitWith {false};
 	if (not(INV_shortcuts)) exitWith {false};
-	if (player getVariable ["FA_inAgony", false]) exitwith {false};
 	if (visibleMap) exitWith {false};
 	
 	
@@ -236,7 +235,7 @@ name_tags_text = {
 };
 
 int_to_hex = {
-	private["_valueD", "_valueH", "_len", "_hexarray","_i"];
+	private["_valueD", "_valueH", "_len", "_hexarray","_i","_tmp"];
 	_valueD = _this select 0;
 	_len = _this select 1;
 	_hexarray = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
@@ -271,7 +270,7 @@ name_3d_tags_draw = {
 	_side = _this select 1;
 	
 
-	private["_i"];
+	private["_i","_count"];
 	_count = 20; // this value has to be changed if more slots are added to any faction (at the moment, cops have the max 20)
 	_i = 0;
 	
@@ -279,7 +278,7 @@ name_3d_tags_draw = {
 	{
 		if (not(_i < (count name_3d_controls)) ||
 			not(INV_shortcuts)  || [_player] call player_civilian ||
-			not(alive _player) || visibleMap || (_player getVariable ["FA_inAgony", false])) exitWith {};
+			not(alive _player) || visibleMap) exitWith {};
 		
 		if (true) then {
 			private["_control"];

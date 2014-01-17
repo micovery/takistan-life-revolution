@@ -8,6 +8,8 @@ if (vehicle player != player) exitWith {
 	hint "You must be on foot"
 };
 
+private["_animnumber", "_animScriptName", "_animCode", "_animname", "_animart", "_withWeapon", "_callScript", "_hasweapon"];
+
 _animnumber = _this select 0;
 _animScriptName = _this select 1; 
 _animCode = _this select 2;

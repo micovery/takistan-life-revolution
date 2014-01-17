@@ -52,7 +52,7 @@ if (_action == 2) then {
 };
 
 if (_action == 3) then {
-	private ["_unit", "_man", "_men", "_currentw"];
+	private ["_unit", "_man", "_men", "_currentw", "_exit", "_y"];
 
 	_unit = _this select 1;
 	

@@ -1,6 +1,7 @@
 if (!(isNil "trunk_functions")) exitWith {};
 
 trunk_get_uuid = {
+	private["_name","_uid","_result"];
 	_name = (name player);
 	_uid = (getPlayerUID player);
 	_result = format["%1_%2", _name, _uid];
@@ -8,7 +9,7 @@ trunk_get_uuid = {
 };
 
 trunk_close = {
-	
+	private["_vehicle"];
 	_vehicle = player getVariable "vehicle_trunk_used";
 	if (isNil "_vehicle") exitWith { };
 	
@@ -20,8 +21,9 @@ trunk_close = {
 };
 
 trunk_open = {
+	private["_vehicle"];
 
-	call trunk_close;
+	[] call trunk_close;
 	
 	_vehicle = _this select 0;
 	_vehicle setVariable ["trunk_user_uuid", (call trunk_get_uuid), true];
@@ -35,6 +37,7 @@ trunk_open = {
 };
 
 close_other_trunk = {
+	private["_player","_vehicle","_cvehicle"];
 	_player = _this select 0;
 	_vehicle = _this select 1;
 	
@@ -56,6 +59,7 @@ close_other_trunk = {
 
 
 trunk_in_use = {
+	private["_vehicle","_uuid","_cuuid","_in_use"];
 	_vehicle = _this select 0;
 	_uuid = call trunk_get_uuid;
 	_cuuid = _vehicle getVariable "trunk_user_uuid";
@@ -71,6 +75,7 @@ trunk_in_use = {
 };
 
 trunk_user =  {
+	private["_vehicle","_cname"];
 	_vehicle = _this select 0;
 	_cname = _vehicle getVariable "trunk_user_name";
 	

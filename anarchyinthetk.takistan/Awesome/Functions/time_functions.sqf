@@ -55,13 +55,13 @@ time_init_remote_globals = {
 [] call time_init_globals;
 
 time_real2game_seconds = {
-	private ["_rsecs", "_gsecs", "_base_seconds", "_seconds_since_sunrise", "_seconds_since_sunset" ];
+	private ["_rsecs", "_gsecs", "_base_seconds", "_seconds_since_sunrise", "_seconds_since_sunset", "_game_days"];
 	_rsecs = _this select 0;
 	
 	_game_days = floor(_rsecs / time_full_day);
 	_gsecs = _game_days  * SECSDAY;
 	
-	private["_cycle_seconds", "_sunrise_secs"];
+	private["_cycle_seconds", "_sunrise_secs","_sunset_secs"];
 	_sunrise_secs = _rsecs  % time_full_day;
 	
 	if (_sunrise_secs <= time_sunrise_to_sunset) then {
@@ -79,7 +79,7 @@ time_real2game_seconds = {
 };
 
 time_game_time_number = {
-	private ["_rsecs", "_gsecs"];
+	private ["_rsecs", "_gsecs", "_isecs", "_result", "_date"];
 	
 	if (isNil "init_date") then {
 		init_date = [YEAR, 01, 27, 5, 30];
@@ -97,7 +97,7 @@ time_game_time_number = {
 
 
 time_update = {
-	private ["_game_time", "_rsecs", "_gsecs"];
+	private ["_game_time", "_rsecs", "_gsecs", "_game_time_number"];
 
 	_game_time_number	= call time_game_time_number;
 
@@ -135,7 +135,8 @@ time_update = {
 time_init = {
 	init_date = nil;
 	time_loop_exit = false;
-	call time_init_globals;
+	[] call time_init_globals;
+	private["_game_time_number", "_new_date"];
 	_game_time_number = call time_game_time_number;
 	_new_date = numberToDate [YEAR, _game_time_number];
 	player groupChat  format["Synchronizing time with server @ %1, %2m day, %3m night", _new_date, time_sunrise_to_sunset_minutes, time_sunset_to_sunrise_minutes];
@@ -143,6 +144,7 @@ time_init = {
 };
 
 time_loop = {
+	private["_init"];
 	_init = _this select 0;
 	if (_init) then {call time_init;};
 	
@@ -160,6 +162,7 @@ time_loop = {
 
 time_move = {
 	_this spawn {
+		private["_offset"];
 		_offset = _this select 0;
 		if (isNil "_offset") exitWith {};
 		if (typeName _offset != "SCALAR") exitWith {};
@@ -173,6 +176,7 @@ time_move = {
 
 time_reset = {
 	_this spawn {
+		private["_sunrise","_sunset"];
 		_sunrise = _this select 0;
 		_sunset = _this select 1;
 		

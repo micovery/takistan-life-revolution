@@ -1,6 +1,8 @@
- _art = _this select 0;
+private["_art"];
+_art = _this select 0;
 
 if (_art == "use") then {
+	private["_item","_anzahl","_DefuseBombArray","_bombs","_i"];
 	_item   = _this select 1;
 	_anzahl = _this select 2;
 	_DefuseBombArray = ["TimeBomb", "Mine", "MineE", "BAF_ied_v1", "BAF_ied_v2", "BAF_ied_v3", "BAF_ied_v4"];

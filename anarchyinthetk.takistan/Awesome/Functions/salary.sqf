@@ -86,6 +86,7 @@ civilian_salary_handout = {
 	
 	player groupChat format[localize "STRS_moneh_civmoneyadd", rolestring, strM(_income)];
 	
+	private["_taxes"];
 	_taxes = round((call shop_get_paid_taxes));
 	
 	if (isMayor) then {

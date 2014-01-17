@@ -177,7 +177,7 @@ convoy_mission_check_damage = {
 	if ((damage _truck) < 0.2) exitWith {};
 	if (not([(driver _truck)] call player_exists)) exitWith {};
 
-	private["_velocity", "_direction"];
+	private["_velocity", "_direction", "_speed"];
 	
 	_velocity = velocity _truck ;
 	_direction = direction _truck ;		
@@ -191,7 +191,7 @@ convoy_mission_check_damage = {
 };
 
 convoy_mission_check_targets = {
-	private["_truck", "_group"];
+	private["_truck", "_group", "_target"];
 	_truck = _this select 0;
 	_group = _this select 1;
 	
@@ -344,7 +344,7 @@ convoy_get_current_state = {
 	_truck = _this select 0;
 	_time = _this select 1;
 	
-	private["_cur_pos", "_las_pos"];
+	private["_cur_pos", "_last_pos"];
 	_cur_pos = getPos _truck;
 	_last_pos = _truck getVariable "last_pos";
 	_last_pos = if (isNil "_last_pos") then {_cur_pos} else {_last_pos};
@@ -377,7 +377,7 @@ calculate_half_waypoint = {
 convoy_mission_check_position = {
 	//format["convoy_mission_check_position %1", _this] call convoy_debug;
 	
-	private["_truck", "_group", "_destination"];
+	private["_truck", "_group", "_destination", "_time"];
 	_truck = _this select 0;
 	_group = _this select 1;
 	_destination = _this select 2;

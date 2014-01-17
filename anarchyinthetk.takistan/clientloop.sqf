@@ -110,7 +110,7 @@ check_armed = {
 	if (isNil "_player") exitWith { false };
 	if (not(alive _player)) exitWith {false};
 	
-	private["_armed_vehicle", "_armed_player"];
+	private["_armed_vehicle", "_armed_player", "_was_stunning"];
 	_armed_vehicle = ([_player] call check_armed_vehicle);
 	_armed_player =  ([_player] call check_armed_player);
 	_was_stunning = ([_player] call check_armed_stunning);
@@ -169,7 +169,10 @@ cop_stun_gun_modify = {
 	if((player ammo (currentWeapon player)) <= 0) exitWith {};
 	if (not(alive player)) exitWith {};
 	
-	if ((((currentWeapon player) == "M9" || (currentWeapon player) == "M9SD")) && ((currentMagazine player) == ("15Rnd_9x19_M9SD"))) then {	
+	if ((((currentWeapon player) == "M9" || (currentWeapon player) == "M9SD")) && ((currentMagazine player) == ("15Rnd_9x19_M9SD"))) then {
+		
+		private["_magazines", "_magazines_count", "_ammo", "_c"];
+		
 		_magazines = magazines player;
 		_magazines_count = {_x == "15Rnd_9x19_M9SD"} count (_magazines);
 		_ammo = player ammo (currentWeapon player);
@@ -216,7 +219,7 @@ check_bank = {
 };
 
 check_actions = {
-	private["_vehicle"];
+	private["_vehicle","_in_vehicle"];
 	_vehicle = (vehicle player);
 	_in_vehicle = (_vehicle != player);
 	if (not(_in_vehicle)) exitWith {};
@@ -296,7 +299,7 @@ check_logics = {
 	if (not(_alive)) exitWith {};
 
 	{
-		private["_entry", "_cdistance", "_logic", "_warn_distance", "_teleport_distance"];
+		private["_entry", "_cdistance", "_logic", "_warn_distance", "_teleport_distance", "_distance"];
 		_entry = _x;
 		
 		_warn_distance = _entry select logics_check_warn_distance;
@@ -448,7 +451,7 @@ check_droppable_items = {
 		_distance = _near_object distance _player;
 		if (not(_distance < 3)) exitWith {};
 
-		private["_amount", "_item", "_illegal"];
+		private["_amount", "_item", "_illegal", "_isIllegal"];
 		_amount = _near_object getVariable "amount";
 		_item = _near_object getVariable "item";
 		
@@ -501,15 +504,13 @@ check_restrains = {
 		if (not([player, 50] call player_near_cops)) then {
 			[player, "restrained", false] call player_set_bool;
 			player groupChat format["You have managed to unrestrain yourself!"];
-			if (player getVariable ["FA_inAgony", false]) then {
-				player playActionNow "agonyStart";
-				player setUnitPos "DOWN";
-			};
 		};
 	};};};
 };
 
 check_respawn_time = {
+// Disabled until it has a possible use
+/* 
 	if (not(alive player)) exitWith {};
 	private["_interval"];
 	_interval = 30;
@@ -521,19 +522,7 @@ check_respawn_time = {
 			[player, "extradeadtime", 0] call player_set_scalar;
 		};
 	[player, "extradeadtime", -(_interval)] call player_update_scalar;
-};
-
-check_insideBase = {
-	if (admin_camera_on) exitWith {};
-	{
-		private["_base_check", "_faction_bool", "_trigger_area", "_teleport_height", "_teleport_marker", "_teleport_message"];
-		_base_check = _x;
-		
-		_faction_bool =  missionNamespace getVariable (_base_check select bases_check_faction_bool);
-		_trigger_area = missionNamespace getVariable (_base_check select bases_check_trigger_area);
-		
-		if ((player in (list _trigger_area)) && (_faction_bool)) exitWith {player call FA_fHeal;};
-	} forEach bases_checks;
+*/
 };
 
 check_insideJail = {
@@ -595,7 +584,6 @@ client_loop = {
 		[] call check_smoke_grenade;
 		[] call check_droppable_items;
 		[] call check_restrains;
-		[] call check_insideBase;
 		[] call check_insideJail;
 		sleep 0.5;
 		disableuserinput false;

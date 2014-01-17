@@ -1,5 +1,6 @@
 //stun_armor
 
+private["_action", "_item", "_amount"];
 _action = _this select 0;
 _item   = _this select 1;
 _amount = _this select 2;

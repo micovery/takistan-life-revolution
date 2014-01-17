@@ -11,6 +11,7 @@ holster_pistol_in_inventory =  {
 };
 
 holster_add_actions = {
+	private["_player"];
 	_player = _this select 0;
 	if (isNil "_player") exitWith {};
 

@@ -35,7 +35,7 @@ ISSE_Cfg_WeaponInfo = {
 };
 
 ISSE_Cfg_MagazineInfo = {
-    private["_cfg", "_name", "_DescShort", "_DescLong", "_Type", "_Count"];
+    private["_cfg", "_name", "_DescShort", "_DescLong", "_Type", "_Count", "_Pic"];
     _name = _this;
     _cfg = (configFile >> "CfgMagazines" >> _name);
 	
@@ -78,7 +78,7 @@ ISSE_Cfg_MagazineInfo = {
 };
 
 ISSE_Cfg_VehicleInfo = {
-    private["_cfg", "_name", "_DescShort", "_DescLong", "_Type", "_MaxSpeed", "_MaxFuel"];
+    private["_cfg", "_name", "_DescShort", "_DescLong", "_Type", "_MaxSpeed", "_MaxFuel", "_Pic"];
     _name = _this;
     _cfg  = (configFile >>  "CfgVehicles" >>  _name);
 	

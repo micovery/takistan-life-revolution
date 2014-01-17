@@ -22,6 +22,7 @@ if (_art == "jailcam") then {
 
 
 if (_art == "camcontrol") then {
+	private["_zoom","_slider1","_slider2"];
 	_camera = _array select 1;
 	_zoom   = _array select 2;
 	buttonSetAction [25, format["camUseNVG true;"] ];

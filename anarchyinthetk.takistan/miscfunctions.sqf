@@ -153,6 +153,7 @@ Isse_AddCrimeLogEntry = {
 };
 
 Bomb_Vehicle = {
+	private["_obj"];
 	if (count _this > 1) then {
 		if (not(isNull (_this select 1))) then {
 			_obj = _this select 1;
@@ -182,7 +183,7 @@ Bomb_Vehicle = {
 
 
 SayDirectSpeach = {
-	private ["_text", "_dis"];
+	private ["_art", "_text", "_dis"];
 	_text = _this select 0;
     _art = _this select 1;
     if (not ((_text == "") or (_text == " ")) ) then {
@@ -270,6 +271,7 @@ strstr = {
 	if (typeName _needle != "STRING") exitWith {false};
 	if (typeName _haystack != "STRING") exitWith {false};
 	
+	private["_needle_array", "_haystack_array"];
 	_needle_array = toArray _needle;
 	_haystack_array = toArray _haystack;
 	

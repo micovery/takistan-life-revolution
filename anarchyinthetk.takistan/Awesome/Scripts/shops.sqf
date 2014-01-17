@@ -1,10 +1,17 @@
+private[
+		"_emptyshop", "_fs", "_is", "_pub", "_gs", "_es", "_cu", "_cs", "_ts", "_as", "_as_1", "_td", "_ms", "_rs", "_gds", "_os",
+		"_gangshop_buy", "_db1", "_db2", "_db3", "_dsc", "_dsm", "_dsl", "_dsh", "_cv", "_ca", "_sv", "_sa", "_pmcveh", "_pmcair", "_copshop", 
+		"_copshop_patrol", "_copshop_response", "_copshop_sobr", "_pmcs", "_terrorshop_buy", "_smgrw", "_smgrveh", "_fm", "_bm", "_bm1", "_hash",
+		"_igs", "_ihs", "_isup", "_bt", "_ihvy", "_iair", "_rgs", "_rsup", "_rhs", "_rlt", "_rhvy", "_rair", "_carparts", "_as_2",
+		"_fs1", "_fs2", "_fs3", "_fs4", "_fs5", "_fs6", "_hp", "_russ", "_bank"
+		
+	];
+
 _emptyshop = [];
 
 shop_list_item = 0;
 shop_list_stock = 1;
 shop_list_stock_max = 2;
-
-["LandRover_MG_TK_EP1", -1, -1],
 
 //Fishing Shop
 //Syphon Refuel kit, Refuel Can, Small Repair Kit, Large Repair Kit

@@ -1,4 +1,5 @@
- _art = _this select 0;
+private["_art","_item","_anzahl"];
+_art = _this select 0;
 
 if (_art == "use") then
 

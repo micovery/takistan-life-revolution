@@ -9,6 +9,7 @@ scriptName "Weather\data\scripts\main.sqf";
 	Parameter(s):
 	_this: Weather logic unit which triggered this script.
 */
+private["_logic", "_logicFnc", "_debug", "_intensity", "_delay", "_particleEffects", "_center"];
 _logic = _this select 0;
 _logic setpos [1,1,1];
 

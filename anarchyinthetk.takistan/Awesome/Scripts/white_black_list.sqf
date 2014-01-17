@@ -115,9 +115,6 @@ A_LIST_ADMINS	=
 
 A_LIST_DONATORS = [];
 
-format['ISADMIN UID - %1, PLAYER - %2', (getPlayerUID player), player] call A_DEBUG_S; 
-format['ISADMIN LIST - %1', A_LIST_ADMINS] call A_DEBUG_S; 
-
 isAdmin = (getPlayerUID player) in A_LIST_ADMINS;
 
 // Used for white-black list dialog
@@ -126,8 +123,8 @@ A_WBL_F_DIALOG_INIT = {
 	[
 		"_DFML", 
 		"_DFML_LIST1", "_DFML_LIST2", "_DFML_LIST3",
-		"_DFML_BUTTON_B_1", "_DFML_BUTTON_B_2", "_DFML_BUTTON_B_3",
-		"_DFML_BUTTON_W_1", "_DFML_BUTTON_W_2", "_DFML_BUTTON_W_3",
+		"_DFML_BUTTON_B_1", "_DFML_BUTTON_B_2", "_DFML_BUTTON_B_3", "_DFML_BUTTON_B_4",
+		"_DFML_BUTTON_W_1", "_DFML_BUTTON_W_2", "_DFML_BUTTON_W_3", "_DFML_BUTTON_W_4",
 		"_DFML_TITLE_1", "_DFML_TITLE_2", "_DFML_TITLE_3", "_DFML_TITLE_1_DESC", "_DFML_TITLE_2_DESC", "_DFML_TITLE_3_DESC", 
 		"_list_name", "_array", "_whiteList", "_blackList", "_list_choice_num",
 		"_uid", "_whiteList_active", "_blackList_active",

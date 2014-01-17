@@ -1,6 +1,8 @@
+private["_art"];
 _art = _this select 0;
 
 if (_art == "use") then {
+	private["_item","_vcl","_type"];
 	_item   = _this select 1;
 	_vcl  	= vehicle player;
 	_type	= typeof _vcl;

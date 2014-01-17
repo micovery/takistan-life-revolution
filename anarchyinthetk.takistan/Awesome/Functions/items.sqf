@@ -2,6 +2,8 @@ items_cracker_use = {
 	if (isCop) exitwith {player groupChat "You know what you did";};
 	if (player != (vehicle player)) exitwith {player groupchat "You're in a vehicle";};
 	
+	private["_nearSafe", "_inUse", "_useTime", "_used"];
+	
 	_nearSafe = objNull;
 	_nearSafe = [player] call bankRob_nearestSafe;
 	
@@ -38,7 +40,7 @@ items_cracker_use = {
 };
 
 item_lockpick_use = {	
-	private["_incarpark","_item"];
+	private["_incarpark","_item","_vehicle"];
 	_item   = _this select 0;	
 	_incarpark = false;
 	_vehicle  = [10] call INV_LocateClosestVehicle;

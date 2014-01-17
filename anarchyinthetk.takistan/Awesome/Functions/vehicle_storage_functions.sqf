@@ -117,7 +117,7 @@ vehicle_storage_list = {
 		if (_player_uid == _uid) then {
 			_result set [count(_result), _vehicle_data];
 		};
-	} forEach _data_value;
+	} forEach _data_values;
 	
 	(_result)
 };

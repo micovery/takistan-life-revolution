@@ -4,6 +4,8 @@ clear_new_actions =
 {
 	if (isNil "new_actions" || typeName new_actions != "ARRAY") exitWith {};
 	
+	private["_action_number","_target"];
+	
 	{
 		_action_number = _x select 0;
 		_target = _x select 1;

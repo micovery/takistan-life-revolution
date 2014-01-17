@@ -1,5 +1,6 @@
 #include "Awesome\Functions\macro.h"
 
+private["_art","_moneh"];
 _art  = ((_this select 3) select 0);
 _moneh = [player, 'money'] call INV_GetItemAmount;
 
@@ -23,8 +24,10 @@ if (_art == "slave") exitWith {
 
 	[player, 'money', -(slave_cost)] call INV_AddInventoryItem;
 
-	player groupChat format[localize "STRS_slave_gekauft", rolestring, strM(slave_cost)];
-
+	player groupChat format[localize "STRS_slave_gekauft", strM(slave_cost)];
+	
+	private["_arbeiternummer", "_slavenumber", "_slavename", "_civ"];
+	
 	_arbeiternummer   = localslavecounter;
 	localslavecounter = localslavecounter + 1;
 	localslave        = localslave + 1;
@@ -32,8 +35,9 @@ if (_art == "slave") exitWith {
 	_slavename        = player;
 	_civ 		  = civslavearray select round random(count civslavearray - 1);
 
-	call compile format [
+	[] call compile format [
 		'
+		private["_slavename"];
 		_slavename = "%3" createUnit [getmarkerpos "terrorist", group player, "%1slave%2 = this; this setVehicleVarName ""%1slave%2"";"]; 
 		_slavename = %1slave%2;
 		_slavename setpos getmarkerpos "terrorist"
@@ -51,8 +55,9 @@ if (_art == "slave") exitWith {
 
 	processInitCommands;
 
-	call compile format ["arbeitergeld%1 = 0;", _arbeiternummer];
-
+	[] call compile format ["arbeitergeld%1 = 0;", _arbeiternummer];
+	
+	private["_slavemoney","_exitvar","_a1","_action"];
 	_slavemoney = 0;
 	_exitvar = 0;
 	_a1 = 0;
@@ -72,8 +77,7 @@ if (_art == "slave") exitWith {
 				sleep 2; 
 				if (!isnull _slavename) then {
 					player groupChat localize "STRS_slave_tot";
-				}
-				else {
+				} else {
 					player groupChat "A slave you owned has been set free! you are now wanted.";
 					[player, "(human-trafficking)", slave_cost, 150, false] call player_update_warrants;
 				}; 
@@ -108,6 +112,7 @@ if (_art == "slave") exitWith {
 };
 
 if (_art == "money") exitWith {
+	private["_arbeiternummer", "_arbeitergeld"];
 	_arbeiternummer = (_this select 3) select 1;
 	_arbeitergeld   = call compile format ["arbeitergeld%1;", _arbeiternummer];
 

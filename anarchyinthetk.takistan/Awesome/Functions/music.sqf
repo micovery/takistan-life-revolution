@@ -2,7 +2,7 @@ music_array = [];
 music_arrayCount = 0;
 
 music_compileList = {
-		private["_config", "_i", "_count"];
+		private["_config", "_i", "_count", "_trackTitle"];
 		_config = configFile >> "cfgMusic";
 		_count = count _config;
 		for [{_i = 0}, {_i < _count}, {_i = _i + 1}] do {

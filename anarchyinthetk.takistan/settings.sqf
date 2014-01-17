@@ -1,3 +1,4 @@
+private["_art","_zusatzString","_i"];
 _art = _this select 0;
 _zusatzString = "";
 if ((count _this)>1) then {_zusatzString = _this select 1;};

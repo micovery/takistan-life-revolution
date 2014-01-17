@@ -55,8 +55,6 @@ Jail setTriggerStatements ["this", "", ""];
 A_DYNO_OM	= compile (preprocessfilelinenumbers "ca\modules\dyno\data\scripts\objectMapper.sqf");
 A_DYNO_OG	= compile (preprocessfilelinenumbers "ca\modules\dyno\data\scripts\objectGrabber.sqf");
 
-EH_handleDamage = compile (preprocessFileLineNumbers "Awesome\EH\EH_handleDamageVeh.sqf");
-
 A_HALO_VEHICLE = objNull;
 
 M_smoke = "SmokeShell";

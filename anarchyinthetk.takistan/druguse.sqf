@@ -1,3 +1,4 @@
+private["_obj","_list","_count","_arr","_num","_i","_j"];
 while {true} do {
 	for [{_i=0}, {_i < (count drugsellarray)}, {_i=_i+1}] do {
 		_obj 	= drugsellarray select _i;

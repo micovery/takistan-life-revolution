@@ -1,9 +1,11 @@
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+
 
 INV_Heal = {
 	private["_paramedic","_medic","_damage","_legs"];
 	
 	_paramedic = ("paramedic_license" call INV_HasLicense);
-	_medic = ((getNumber(configFile >> "CfgVehicles" >> (typeOf player) >> "attendant")) == 1);
+	_medic = [player] call FA_isMedic;
 	
 	_damage = 0.3;
 	
@@ -19,7 +21,22 @@ INV_Heal = {
 	_legs = (_this getVariable ["legs", 0]) > 0;
 	
 	if ((_paramedic && _legs) && ((damage _this) <= _damage)) exitwith {
-			format['%1 setHit ["legs", 0];', _this] call broadcast;
+			
+			format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
+			player groupChat "Healing...";
+			SleepWait(5)
+			
+			if (_this == player) then {
+					_this setHit["legs",0];
+				}else{
+					format['
+						if(local %1)then{
+								%1 setHit ["legs", 0];
+								%1 groupchat "You have been healed by %2-%3";
+							};
+					', _this, player, name(player)] call broadcast;
+				};
+			
 			_this setVariable ["legs", 0, true];
 			player groupChat "Legs healed, but nothing more can be done with the medkit";
 			true
@@ -33,9 +50,9 @@ INV_Heal = {
 	if(_this == player) exitWith {
 		format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 		player groupChat format[localize "STRS_inv_items_medikit_benutzung"];
-		sleep 5;
+		SleepWait(5)
 		player setdamage _damage;
-		format['%1 setHit ["legs", 0];', _this] call broadcast;
+		player setHit ["legs", 0];
 		_this setVariable ["legs", 0, true];
 		player groupChat format[localize "STRS_inv_items_medikit_fertig"];
 		true
@@ -43,9 +60,16 @@ INV_Heal = {
 	
 	format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 	player groupChat "Healing...";
-	sleep 5;
+	SleepWait(5)
 	_this setdamage _damage;
-	format['%1 setHit ["legs", 0];', _this] call broadcast;
+	
+	format['
+	if(local %1)then{
+			%1 setHit ["legs", 0];
+			%1 groupchat "You have been healed by %2-%3";
+		};
+	', _this, player, name(player)] call broadcast;
+	
 	_this setVariable ["legs", 0, true];
 
 	true
@@ -421,7 +445,7 @@ INV_GetObjectTax = {
 
 // Fuction Add Percent (Taxes)
 INV_AddPercent = {
-	private ["_worth", "_percent", "_result"];
+	private ["_worth", "_percent", "_round", "_result"];
 	_worth    = _this select 0;
 	_percent = _this select 1;
 	_round  = true;
@@ -479,7 +503,7 @@ INV_UnitArmed = {if (count (weapons _this - nonlethalweapons) > 0) then {true}el
 
 //Function Item Taxes
 INV_GetItemTax = {
-	private ["_type", "_item", "_result"];
+	private ["_type", "_item", "_result", "_cost"];
 	_type = _this call INV_GetItemType;
 	_cost = _this call INV_GetItemBuyCost;
 	[_cost, (_type call INV_GetObjectTax)] call INV_AddPercent;
@@ -540,7 +564,7 @@ INV_GetScriptFromClass_Weap = {
 
 // Get item Array
 INV_GetItemArray = {
-	private ["_c", "_Fobjarray"];
+	private ["_c", "_Fobjarray", "_Nname"];
 	_Fobjarray = [];
 	if ((typeName _this) == "STRING") then {
 			_Nname = format["A_MS_%1", _this];

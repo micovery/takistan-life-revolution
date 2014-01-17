@@ -1,4 +1,4 @@
-private["_arr"];
+private["_arr","_i","_item","_anzahl","_anzeigename"];
 _arr = _this select 0;
 if (!(isNil "_arr")) then {_arr = (missionNamespace getVariable [_arr, []]);} else {_arr = [];};
 if (!(createDialog "INV_list")) exitWith {hint "Dialog Error!";};

@@ -1,6 +1,7 @@
 // Drugs Scripts
 // drugs.sqf
 
+private["_art"];
 _art = _this select 0;
 
 if (_art == "init") then {
@@ -10,6 +11,7 @@ if (_art == "init") then {
 };
 
 if (_art == "use") then {
+	private["_item","_anzahl","_endeZeit","_position","_weite","_x","_y","_z","_w1","_w2","_w3","_f1","_f2","_f3","_g1","_g2","_g3","_v1","_v2","_v3","_force"];
 	_item   = _this select 1;
 	_anzahl = _this select 2;
 	if (INV_drogenusesperre == 1) exitWith {player groupChat localize "STRS_inv_item_druguse_toomany";};

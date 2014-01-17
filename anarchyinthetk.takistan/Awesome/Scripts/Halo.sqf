@@ -1,3 +1,5 @@
+private["_this","_unit","_height"];
+
 _this = call compile (_this select 3);
 
 _unit = _this select 0;

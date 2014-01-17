@@ -70,7 +70,6 @@ if !(isServer && isDedicated) then
 				(player getVariable ["isstunned", false]) ||
 				(player getVariable ["restrained", false]) ||
 				((player distance _object) > 15) ||
-		//		(player getVariable ["FA_inAgony", false]) ||
 				false
 			)
 		};

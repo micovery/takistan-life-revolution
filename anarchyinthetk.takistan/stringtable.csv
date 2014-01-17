@@ -22,7 +22,7 @@ STRS_dead_player_is_dead_civ,You are dead,
 STRS_dead_player_is_dead_cop,You are dead,
 STRS_slave_zuviele,You cannot buy any more slaves!!,
 STRS_slave_nomoney,You cannot afford a slave...Maybe you should be a slave!.,
-STRS_slave_gekauft," ""%1"," you have bought a slave for $%2. Take him to a workplace and he will earn you money."" "
+STRS_slave_gekauft, "You have bought a slave for $%1. Take him to a workplace and he will earn you money."
 STRS_slave_moneyaction,Take the profit this slave has made you.,
 STRS_slave_tot,One of your slaves has died! Protect them in future!,
 STRS_slave_geldabnahme_ja,This slave has earned you $%1.,
@@ -651,7 +651,7 @@ STRS_inv_items_refuel_refueled,You refueled your vehicle
 STRS_inventar_repair_repaired,You repaired this vehicle.
 STRS_inv_items_repair_wrongvcl,You need a large repair kit for this vehicle.
 STRS_inv_item_medikit,Medikit
-STRS_inv_item_medikit_info,The medic kit restores the Health back to 100%. Just use it.
+STRS_inv_item_medikit_info, "The medkit will restore health to: 70% by default, 90% if you have the paramedic license, 100% if you have a medic skin. If you have the paramedic license it will also fix legs. Select who to use it on (including yourself) then click use."
 STRS_inv_items_medikit_nichtverletzt,You are not injured.
 STRS_inv_items_medikit_benutzung,Wait five seconds until you are healed.
 STRS_inv_items_medikit_fertig,You are healed again.

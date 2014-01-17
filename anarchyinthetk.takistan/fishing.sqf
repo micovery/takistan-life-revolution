@@ -1,6 +1,6 @@
 // this is the fishing.sqf file, called when using fishing pole
 
-private ["_fishingarray"];
+private ["_fishingarray", "_art"];
 
 _art = _this select 0;
 
@@ -8,7 +8,8 @@ if(iscop)exitwith{};
 
 if (_art == "use") then {
 	if(working) exitwith {};
-
+	
+	private["_item","_anzahl","_isInArea"];
 	_item   = _this select 1;
 	_anzahl = _this select 2;
 
@@ -21,7 +22,8 @@ if (_art == "use") then {
 			_fishingarray = _x
 		};
 	} forEach fishingarray;
-
+	
+	private["_resource", "_max", "_infos", "_name"];
 	_resource = _fishingarray select 1;
 	_max      = _fishingarray select 2;
 	_infos    = _resource call INV_GetItemArray;
@@ -33,6 +35,7 @@ if (_art == "use") then {
 	};
 
 	if(_item == "fishingpole") then {
+		private["_i", "_amount", "_avail"];
 		totalamount=0;
 		_max = 3;
 		(format ["%1 switchmove ""%2"";", player, "AwopPercMstpSgthWnonDnon_end"]) call broadcast;

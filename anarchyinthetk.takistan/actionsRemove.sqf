@@ -1,6 +1,7 @@
 if(A_running) exitwith {};
 A_running = true;
 
+private["_role"];
 _role = Player;
 _role RemoveAction action1;
 _role RemoveAction action2;

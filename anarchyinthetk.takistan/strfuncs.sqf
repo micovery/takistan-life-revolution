@@ -155,7 +155,7 @@ ISSE_str_Pos = {
 };
 
 ISSE_str_Replace = {
-	private["_str", "_strArr", "_search", "_searchArr", "_replace", "_replaceArr", "_re", "_SubStr1", "_SubStr2"];
+	private["_str", "_strArr", "_search", "_searchArr", "_replace", "_replaceArr", "_re", "_SubStr1", "_SubStr2", "_found"];
 
 	_str = _this select 0;
 	_strArr = (_this select 1) call isse_str_StrToArr;

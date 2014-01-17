@@ -104,7 +104,7 @@ gangs_uids_2_names = {
 	private["_i"];
 	_i = 0;
 	while {_i < (count _players) } do {
-		private["_player", "_player_name"];
+		private["_player", "_player_name","_name"];
 		_player = _players select _i;
 		_name = (name _player);
 		_names = _names + [_name];
@@ -157,7 +157,7 @@ gangs_lookup_player_name = {
 		_cgang = _x;
 		_cgang_members = _cgang select gang_members;
 		
-		private["_names"];
+		private["_names","_uids_list"];
 		_uids_list = _cgang_mambers;
 		_names = [_cgang_mambers] call gangs_uids_2_names;
 		
@@ -755,7 +755,7 @@ gang_restore_member_group = {
 	_member = [_member_uid] call player_lookup_gang_uid;
 	if (isNil "_member") exitWith {};
 	
-	private["_side"];
+	private["_side","_group"];
 	_side = [_member] call player_side;
 	_group = [_member] call player_get_saved_group;
 	
@@ -846,6 +846,7 @@ gang_leader_uid = {
 };
 
 gang_flag_add_position = {
+	private["_pos1","_pos2"];
 	_pos1 = _this select 0;
 	_pos2 = _this select 1;
 	[(_pos1 select 0) + (_pos2 select 0), (_pos1 select 1) + (_pos2 select 1), (_pos1 select 2) + (_pos2 select 2)]
@@ -890,7 +891,7 @@ gang_flag_reset_offset = {
 };
 
 gang_flag_setup = {
-	private ["_banner", "_anchor"];
+	private ["_banner", "_anchor","_offset"];
 	
 	_anchor = _this select 0;
 	_banner = _anchor getVariable "banner";

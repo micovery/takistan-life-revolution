@@ -59,7 +59,7 @@ A_impound = {
 	};
 	
 A_impound_vacant = {
-		private["_vc"];
+		private["_vcl"];
 		_vcl = _this select 0;
 		[_vcl] spawn A_impound;
 		format['hintSilent format["%1 has been vacant for too long and impounded",  %1]', _vcl] call broadcast;
@@ -217,6 +217,7 @@ A_impound_buy = {
 		
 		player groupChat format["Please wait while your vehicle is retrieved ..."];
 		
+		private["_vehicle"];
 		_vehicle = ObjNull;
 		_vehicle = _this select 0;
 		

@@ -1,3 +1,4 @@
+private["_this","_art","_vcl","_playtime","_lichtstaerke","_shortdur","_longdur"];
 _this = _this select 3;
 _art  = _this select 0;
 _vcl  = vehicle player;
@@ -6,10 +7,10 @@ _lichtstaerke = 0.3;
 _shortDur     = 0.72;
 _longDur      = 4.87;
 
-if (_art == "activate") then
-{
-	if (isNil "SIREN_SirenePlaying") then
-	{
+if (_art == "activate") then {
+	private["_turnOn"];
+
+	if (isNil "SIREN_SirenePlaying") then {
 		SIREN_SirenePlaying = false;
 	};
 
@@ -18,29 +19,20 @@ if (_art == "activate") then
 	SIREN_SirenePlaying = true;
 	_turnOn       = false;
 
-	if (call compile format["isNil(""%1_Sirene_on"")", _vcl]) then
-	{
+	if ([] call compile format["isNil(""%1_Sirene_on"")", _vcl]) then {
 		_turnOn = true;
-	}
-	else
-	{
-		if (call compile format["not(%1_Sirene_on)", _vcl]) then
-		{
+	} else {
+		if ([] call compile format["not(%1_Sirene_on)", _vcl]) then {
 			_turnOn = true;
-		}
-		else
-		{
+		} else {
 			_turnOn = false;
 		};
 	};
 
-	if (_turnOn) then
-	{
+	if (_turnOn) then {
 		format ["[0,0,0,[""client"", %1]] execVM ""siren.sqf"";", player] call broadcast;
 		titletext["Siren on", "PLAIN DOWN"];
-	}
-	else
-	{
+	} else {
 		call compile format["%1_Sirene_on = false; publicVariable ""%1_Sirene_on"";", _vcl];
 		titletext["Siren off", "PLAIN DOWN"];
 	};
@@ -52,6 +44,7 @@ if (_art == "activate") then
 
 if (_art == "client") then
 {
+	private["_vcl","_driver","_starttime","_light1","_light2","_lichtscript"];
 	_vcl         = vehicle (_this select 1);
 	_driver      = driver _vcl;
 	_starttime   = time;
@@ -101,6 +94,7 @@ if (_art == "client") then
 
 if (_art == "licht") then
 {
+	private["_light1","_light2"];
 	_vcl    = _this select 1;
 	_light1 = ((_this select 2) select 0);
 	_light2 = ((_this select 2) select 1);

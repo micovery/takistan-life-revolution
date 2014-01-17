@@ -58,6 +58,6 @@ A_DK_operation = {
 	waituntil {animationstate _player != "AinvPknlMstpSlayWrflDnon_healed2"};
 	keyblock = false;
 	
-	_player setDamage 0;
+	[_player] call FA_fHeal;
 	
 };

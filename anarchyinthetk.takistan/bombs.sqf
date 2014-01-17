@@ -1,3 +1,4 @@
+private["_art"];
 _art = _this select 0;
 
 if (_art == "init") then {
@@ -7,12 +8,13 @@ if (_art == "init") then {
     if (time > 120) then {
 		INV_BombGetServerArray = true;
 		publicVariable "INV_BombGetServerArray";
-    } 
-    else {
+    }else{
 		INV_BombGetServerArray = false;
     };
 
     INV_BombSpawn = {
+		private["_men1", "_men2", "_men3", "_has_admin_camera"];
+		
         if ((typeName _this) == "OBJECT") then {
             if (not(isNull _this)) then {
                 if (((getPosATL _this) select 2) < 5) then {
@@ -56,8 +58,7 @@ if (_art == "init") then {
                     } forEach _men2;
                 };
             };
-        } 
-        else {
+        }else{
             createVehicle ["Bo_GBU12_LGB", (_this), [], 0, "NONE"];
             //if (player distance _this < 25) then {player setdamage 1;}; // All players within 25m die instantly
             _men2 = nearestObjects[_this, ["Man", "LandVehicle", "Air"], 25];
@@ -151,6 +152,7 @@ if (_art == "init") then {
 };
 
 if (_art == "server") then {
+	private["_lastLength", "_skipWait", "_array", "_id", "_vehicle", "_name", "_status", "_settings", "_i"];
     _lastLength = 0;
 
     while {true} do {
@@ -204,6 +206,7 @@ if (_art == "server") then {
                 };
 
                 case "geschwindigkeitsbombe": {
+					private["_active","_speed","_newtime"];
                     _active = (_settings select 1);
                     _speed  = speed _vehicle;
                     if ((_active) and (_speed < (_settings select 0))) then { 
@@ -242,6 +245,7 @@ if (_art == "server") then {
 };
 
 if (_art == "client") then {
+	private["_a1","_a2","_a3","_a4","_a5","_v","_skipWait","_array","_i","_vehicle","_item","_actionArr","_id","_j"];
     _a1=0; _a2=0; _a3=0; _a4=0; _a5=0; _v=0;
     while {true} do {
         _skipWait = false;
@@ -298,6 +302,7 @@ if (_art == "client") then {
 };
 
 if (_art == "use") then {
+	private["_item","_anzahl"];
     _item   = _this select 1;
     _anzahl = _this select 2;
         
@@ -345,6 +350,7 @@ if (_art == "use") then {
 };
 
 if (_art == "plant") then {
+	private["_item","_id","_vcl","_settings","_exit","_explosion"];
     _item = _this select 1;
     _id = format["%1_%2", player, round(time)];
     _vcl = vehicle player;
@@ -378,6 +384,7 @@ if (_art == "plant") then {
 };
 
 if (_art == "config") then {
+	private["_art","_name","_id", "_sliderpos", "_vehicle"];
     _art  = _this select 1;
     _name = _this select 2;
     _id   = _this select 3;

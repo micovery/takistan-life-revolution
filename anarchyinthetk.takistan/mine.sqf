@@ -19,7 +19,7 @@ _isInArea = false;
 } forEach miningarray;
 
 private [
-		"_resource", "_max", "_infos", "_name", "_LN", "_total", "_amount", "_avail",
+		"_resource", "_max", "_infos", "_name", "_LN", "_total", "_amount", "_avail", "_space",
 		"_shovel", "_pick", "_hammer", 
 		"_workT", "_anim", "_animS", "_max", "_loop", "_weight"
 	];	

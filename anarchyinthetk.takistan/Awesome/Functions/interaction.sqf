@@ -121,10 +121,6 @@ interact_arrest_player = {
 		player groupChat format["%1-%2 is not restrained!", _victim, (name _victim)];
 	};
 	
-	if (_victim getVariable ["FA_inAgony", false]) then {
-		player groupChat format["%1-%2 must be healed!", _victim, (name _victim)];
-	};
-	
 	if ([_victim] call player_get_arrest) exitWith {
 		player groupChat format["%1 is already under arrest!", _victim];
 	};
@@ -228,21 +224,12 @@ interact_toggle_restrains = {
 	if ([_victim, "restrained"] call player_get_bool) then {
 		[_victim, "restrained", false] call player_set_bool;
 		
-		if (_victim getVariable ["FA_inAgony", false]) then {
-			_victim playActionNow "agonyStart";
-			_victim setUnitPos "DOWN";
-		};
-		
 		_message = format["%1-%2 was unrestrained by %3", _victim, _victim_name, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	} else {
 		
 		private["_exit"];
 		_exit = false;
-		
-		if !(_victim getVariable ["FA_inAgony", false]) then {
-			_exit = !([_victim] call player_vulnerable);
-		};
 		
 		if _exit exitwith{
 				player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];

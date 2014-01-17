@@ -1,4 +1,3 @@
-
 petrol_refuel_tank = {
 	private ["_fuel", "_fuelstartposition", "_liter_price", "_percent_refueled"];
 	
@@ -123,7 +122,7 @@ petrol_get_refuel_action = {
 };
 
 petrol_set_refuel_action = {
-	private["_action"];
+	private["_action", "_vehicle"];
 	_vehicle = _this select 0;
 	_action = _this select 1;
 	
@@ -146,7 +145,7 @@ petrol_add_refuel_action = {
 	if (_refuel_cost <= 0) exitWith {};
 	if (([_vehicle] call petrol_get_refueling)) exitWith {};
 	
-	
+	private["_refuel_action"];
 	_refuel_action = _vehicle addAction [format["Fill gas tank for $%1", _refuel_cost], "noscript.sqf", format["[%1] call petrol_refuel_tank", _liter_price], 1];
 	
 	[_vehicle, _refuel_action] call petrol_set_refuel_action;
@@ -154,7 +153,7 @@ petrol_add_refuel_action = {
 };
 
 petrol_remove_refuel_action = {
-		private["_vehicle"];
+		private["_vehicle","_refuel_action"];
 		
 		_vehicle = call petrol_get_refuel_vehicle;
 		if (isNull _vehicle) exitWith {};

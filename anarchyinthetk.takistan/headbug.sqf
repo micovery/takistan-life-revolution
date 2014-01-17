@@ -1,6 +1,6 @@
-
 if([player, "isstunned"] call player_get_bool) exitWith {};
 
+private["_stunned","_restrained"];
 _stunned = [player, "isstunned"] call player_get_bool;
 _restrained = [player, "restrained"] call player_get_bool;
 
@@ -14,6 +14,9 @@ if( (typeName _restrained == "BOOL") ) then {
 
 if(vehicle player != player) exitWith {hint "You must be on foot"};
 titleCut ["","black faded", 0];
+
+private["_pos","_dir","_vec","_vecs","_freeseats"];
+
 _pos = position player;
 _dir = direction player;
 _vec = objNull;

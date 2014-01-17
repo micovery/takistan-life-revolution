@@ -1,3 +1,4 @@
+private["_effekt", "_ParticleParams", "_RandomParams", "_obj", "_pos", "_rauch", "_object", "_helligkeit", "_farbe", "_light"];
 _effekt = _this select 0;
 _ParticleParams = [["\Ca\Data\ParticleEffects\FireandSmokeAnim\SmokeAnim.p3d",8,1,8],  "", "Billboard", 1, 37, [0, 0, 29],[0, 0, 0.09],0,11.0,9,0.075,[1, 1.5, 6, 22],[[0.1, 0.1, 0.1, 1], [0.15, 0.15, 0.15 , 0.7], [0.2,0.2,0.2,0.5], [0.3,0.3,0.3,0]], [0.08],1,0,"","", ""];
 _RandomParams = [5,[0, 0, 0],[0.25, 0.25, 0.25],1,0.5,[0.1,0.1,0.1,0.1],1,0];

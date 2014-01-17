@@ -32,7 +32,7 @@ if (C_Side != _shopaside) then {
 	_exit = true;
 };
 
-private["_i"];
+private["_i", "_license", "_haslic_i"];
 _i = 0;
 while { _i < (count _shopalic) } do {
 	_license = (_shopalic select _i);

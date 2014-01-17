@@ -1,6 +1,6 @@
 
 P_Dialog_Full = {
-	private ["_cam", "_IA", "_index", "_item", "_cost", "_lic", "_armorb", "_armors", "_texts", "_class", "_cfg", "_pack", "_DFML", "_n", "_c", "_veh", "_selected_maps"];
+	private ["_cam", "_IA", "_index", "_item", "_cost", "_lic", "_armorb", "_armors", "_texts", "_class", "_cfg", "_pack", "_DFML", "_n", "_c", "_veh", "_selected_maps","_t_cfg","_t_count"];
 
 	disableSerialization;
 	
@@ -38,6 +38,7 @@ P_Dialog_Full = {
 	_cam cameraEffect ["internal", "front"];
 	
 	_texts = [];
+	
 	//_texts		= C_selectedarray select 10;
 	_t_cfg			= getArray (configFile >> "CfgVehicles" >> P_Preview_Class >> "hiddenselections");
 	_t_count		= count _t_cfg;

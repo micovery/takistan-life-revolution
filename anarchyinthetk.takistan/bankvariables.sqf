@@ -26,7 +26,7 @@ robenable                    = true;
 
 if (isServer) then {
 
-	private["_file"];
+	private["_file","_fileLoad"];
 	
 	donators0	= [];
 	donators1	= [];
@@ -39,7 +39,7 @@ if (isServer) then {
 	if (_file != "") then {
 		_fileLoad = preProcessFileLineNumbers _file;
 		if (_fileLoad != "") then {
-			call compile _fileLoad;
+			[] call compile _fileLoad;
 		};
 	};
 	

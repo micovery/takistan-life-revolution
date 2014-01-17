@@ -158,6 +158,7 @@ stats_build_save_request = {
 };
 
 stats_save_request_send = {
+	private["_request"];
 	_request = _this call stats_build_save_request;
 	if (isNil "_request") exitWith {};
 
@@ -186,10 +187,10 @@ stats_human_side = {
 	_ch1 = (_data select 1);
 	_ch2 = (_data select 2);
 	
-	if (_ch1 == ASCII_P && _ch2 == ASCII_F) exitWith { east};
-	if (_ch1 == ASCII_I && _ch2 == ASCII_V) exitWith { civilian };
-	if (_ch1 == ASCII_N && _ch2 == ASCII_S) exitWith { resistance };
-	if (_ch1 == ASCII_O && _ch2 == ASCII_P) exitWith { west };
+	if (_ch1 == ASCII_P && _ch2 == ASCII_F) exitWith { east};			// o pf
+	if (_ch1 == ASCII_I && _ch2 == ASCII_V) exitWith { civilian };		// c iv
+	if (_ch1 == ASCII_N && _ch2 == ASCII_S) exitWith { resistance };	// i ns
+	if (_ch1 == ASCII_O && _ch2 == ASCII_P) exitWith { west };			// c op
 	
 	 sideUnknown
 };
@@ -212,7 +213,7 @@ stats_get_faction = {
 
 
 stats_get_uid = {
-	private["_object"];
+	private["_object","_uid"];
 	_object = _this select 0;
 	
 	_uid = _object getVariable "stats_uid";
@@ -740,7 +741,7 @@ stats_get_mission_variable = {
 };
 
 stats_server_wipe_player_data = {
-	private["_player_variable"]; 
+	private["_player_variable","_player"]; 
 	_player_variable = _this select 0;
 	_player = [_player_variable] call stats_get_mission_variable;
 	if (isNil "_player") exitWith {};
@@ -782,7 +783,7 @@ stats_client_setup = {
 	uiSleep 1;
 	
 	private["_uid"];
-	_uid = call stats_client_wait_uid;
+	_uid = [] call stats_client_wait_uid;
 	
 	["Fetching client stats from server ... "] call stats_client_update_loading_title;
 	[0.6] call stats_client_update_loading_progress;

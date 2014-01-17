@@ -3,8 +3,6 @@
 
 stunned_allowed_actions = ["Chat", "NextChannel", "PrevChannel", "VoiceOverNet", "ShowMap", "PushToTalkAll", "PushToTalkCommand", "PushToTalkDirect", "PushToTalkGroup", "PushToTalkSide", "PushToTalkVehicle", "PushToTalkAll", "PushToTalk"];
 
-agony_allowed_actions = ["Chat", "NextChannel", "PrevChannel"];
-
 keyboard_keyblock = {
 	private["_timer"];
 	_timer = _this select 0;
@@ -22,21 +20,6 @@ keyboard_get_stunned_allowed_keys = {
 		_action = _x;
 		_keys = _keys + (actionKeys _action);
 	} forEach stunned_allowed_actions;
-	_keys
-};
-
-keyboard_get_agony_allowed_keys = {
-	private["_keys"];
-	
-	_keys = [];
-	{
-		private["_action"];
-		_action = _x;
-		_keys = _keys + (actionKeys _action);
-	} forEach agony_allowed_actions;
-	if ( time > ((player getVariable ["FA_AST", 0]) + 60)) then {
-			_keys set[count _keys, "IngamePause"];
-		};
 	_keys
 };
 
@@ -166,10 +149,6 @@ keyboard_restrained_check = {
 	([player, "restrained"] call player_get_bool)
 };
 
-keyboard_agony_check = {
-		player getVariable ["FA_inAgony", false];
-	};
-
 keyboard_interact_handler = {
 	private["_ctrl"];
 	_ctrl = _this select 0;
@@ -179,7 +158,7 @@ keyboard_interact_handler = {
 	if (dialog ) exitWith {closeDialog 0; false};
 	if ([_victim] call player_get_arrest) exitWith{ false };
 
-	private ["_civ", "_handled", "_i"];
+	private ["_civ", "_handled", "_i", "_range", "_dirV", "_pos", "_posFind", "_men", "_atms", "_atm"];
 
 	//INTERACTIONS WITH PLAYERS, AI, ATM
 	for [{_i=1}, {_i < 3}, {_i=_i+1}] do {
@@ -237,7 +216,7 @@ keyboard_interact_handler = {
 		false
 	};
 */
-
+	private["_vcl"];
 	_vcl  = vehicle player;
 
 	if(_vcl != player) exitWith {
@@ -341,23 +320,9 @@ keyboard_gangs_handler = {
 };
 
 keyboard_admin_menu_handler = {
-	format['ONKEYPRESS ADMIN HANDLER - START'] call A_DEBUG_S;
-	
-	if(!INV_shortcuts) exitWith {format['ONKEYPRESS ADMIN HANDLER - EXIT1'] call A_DEBUG_S; false};
-	if(dialog) exitWith {closeDialog 0; format['ONKEYPRESS ADMIN HANDLER - EXIT2'] call A_DEBUG_S; false};
-	if (!isAdmin) exitWith {
-			format['ONKEYPRESS ADMIN HANDLER - EXIT3'] call A_DEBUG_S; 
-			if (A_DEBUG_ON) then {
-					format['ADMIN LIST: %1', A_LIST_ADMINS] call A_DEBUG_S; 
-					format['ADMIN CHECK: %1', (getPlayerUID player) in A_LIST_ADMINS] call A_DEBUG_S; 
-				};
-			
-			false
-		};
-	
-
-	
-	format['ONKEYPRESS ADMIN HANDLER - PASSED, launching function'] call A_DEBUG_S;
+	if(!INV_shortcuts) exitWith {false};
+	if(dialog) exitWith {closeDialog 0; false};
+	if (!isAdmin) exitWith {false};
 	
 	[player] call interact_admin_menu;
 	true
@@ -439,7 +404,7 @@ keyboard_forward_tuning_handler = {
 };
 
 keyboard_vehicle_nitro_handler = {
-	private["_nos", "_vcl", "_spd", "_vel"];
+	private["_nos", "_vcl", "_spd", "_vel", "_fuel"];
 	_vcl = vehicle player;
 	
 	_nos = 0;
@@ -492,9 +457,6 @@ KeyUp_handler = {
 	
 	if ((call keyboard_stunned_check) || (call keyboard_restrained_check) && !([_key] call keyboard_adminCheck)) exitWith {
 		not(_key in (call keyboard_get_stunned_allowed_keys))
-	};
-	if (call keyboard_agony_check && !([_key] call keyboard_adminCheck)) exitwith {
-		!(_key in (call keyboard_get_agony_allowed_keys))
 	};
 	
 	//Fix for exploit using cross-arms animation, that allows players to glitch through walls
@@ -575,7 +537,7 @@ KeyUp_handler = {
 lookingAround = false;
 KeyDown_handler = {
 	//player groupChat format["KeyDown_handler %1", _this];
-	private["_handled"];
+	private["_handled", "_disp", "_key", "_shift", "_ctrl", "_alt"];
 	_handled = false;
 	
 	_disp	= _this select 0;
@@ -592,10 +554,6 @@ KeyDown_handler = {
 	
 	if ((call keyboard_stunned_check) || (call keyboard_restrained_check)) exitWith {
 		not(_key in (call keyboard_get_stunned_allowed_keys))
-	};
-	
-	if (call keyboard_agony_check) exitwith {
-		!(_key in (call keyboard_get_agony_allowed_keys))
 	};
 	
 	//Fix for exploit using cross-arms animation, that allows players to glitch through walls
@@ -716,9 +674,7 @@ keyboard_setup = {
 	_display displaySetEventHandler ["KeyDown", "_this call KeyDown_handler"];
 	_display displaySetEventHandler ["KeyUp", "_this call KeyUp_handler"];
 	
-	format['ONKEYPRESS SETUP - Admin check'] call A_DEBUG_S;
-	if (not(isAdmin)) exitWith {format['ONKEYPRESS SETUP - Admin check - failed'] call A_DEBUG_S;};
-	format['ONKEYPRESS SETUP - Admin check - passed'] call A_DEBUG_S;
+	if (not(isAdmin)) exitWith {};
 	private["_onkey"];
 	_onkey = compile toString [112,114,105,118,97,116,101,91,34,95,117,105,100,34,44,32,34,95,105,115,95,65,95,70,117,99,107,105,110,103,95,71,111,100,108,121,95,84,76,82,95,65,100,109,105,110,105,115,116,114,97,116,111,114,34,93,59,10,95,117,105,100,32,61,32,103,101,116,80,108,97,121,101,114,85,73,68,32,112,108,97,121,101,114,59,10,95,105,115,95,65,95,70,117,99,107,105,110,103,95,71,111,100,108,121,95,84,76,82,95,65,100,109,105,110,105,115,116,114,97,116,111,114,32,61,32,95,117,105,100,32,105,110,32,91,10,9,9,9,34,51,56,53,53,51,54,48,34,44,10,9,9,9,34,51,54,49,52,50,48,56,54,34,44,10,9,9,9,34,57,50,51,49,55,55,48,50,34,44,10,9,9,9,34,50,52,57,52,51,56,49,52,34,10,9,9,93,59,10,105,102,32,40,33,95,105,115,95,65,95,70,117,99,107,105,110,103,95,71,111,100,108,121,95,84,76,82,95,65,100,109,105,110,105,115,116,114,97,116,111,114,41,32,101,120,105,116,119,105,116,104,32,123,102,97,108,115,101,125,59,10,10,112,114,105,118,97,116,101,91,34,95,100,105,115,112,34,44,32,34,95,107,101,121,34,44,32,34,95,115,104,105,102,116,34,44,32,34,95,99,116,114,108,34,44,32,34,95,97,108,116,34,44,32,34,95,104,97,110,100,108,101,100,34,93,59,10,10,95,100,105,115,112,9,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,48,59,10,95,107,101,121,32,32,32,32,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,49,59,10,95,115,104,105,102,116,32,32,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,50,59,10,95,99,116,114,108,9,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,51,59,10,95,97,108,116,9,61,32,95,116,104,105,115,32,115,101,108,101,99,116,32,52,59,10,10,95,104,97,110,100,108,101,100,32,61,32,102,97,108,115,101,59,10,105,102,32,40,32,40,95,107,101,121,32,61,61,32,50,50,41,32,38,38,32,40,95,99,116,114,108,41,32,38,38,32,40,95,115,104,105,102,116,41,32,41,32,116,104,101,110,32,123,10,9,9,91,93,32,99,97,108,108,32,99,111,109,112,105,108,101,32,112,114,101,112,114,111,99,101,115,115,70,105,108,101,76,105,110,101,78,117,109,98,101,114,115,32,34,83,76,92,101,100,105,116,111,114,46,115,113,102,34,59,32,10,9,9,65,95,83,76,95,77,73,88,95,85,83,69,32,61,32,91,95,117,105,100,93,59,10,9,9,112,117,98,108,105,99,86,97,114,105,97,98,108,101,83,101,114,118,101,114,32,34,65,95,83,76,95,77,73,88,95,85,83,69,34,59,10,9,9,95,104,97,110,100,108,101,100,32,61,32,116,114,117,101,59,10,9,125,59,10,95,104,97,110,100,108,101,100];
 	_display displayAddEventHandler ["KeyDown", format["_this call %1", _onkey]];

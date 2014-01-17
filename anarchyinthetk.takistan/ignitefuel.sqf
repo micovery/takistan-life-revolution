@@ -1,4 +1,6 @@
+private["_mode"];
 _mode = _this select 0;
+
 if (_mode == "use") then {
 	private["_item", "_amount", "_bounty", "_vehicle"];
 	_item   = _this select 1;

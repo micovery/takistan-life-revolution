@@ -158,12 +158,6 @@ action54 = _role addAction
 
 //===================================== CONVOY CASH ===================================================
 action56 = _role addAction ["Steal police payroll","noscript.sqf",'convoy_cash=false; publicvariable "convoy_cash"; _cash = (playersNumber west)* govconvoybonus; [player, "money", _cash] call INV_AddInventoryItem; [player, "(convoy-heist)", _cash, 10, false] call player_update_warrants;  player groupchat format["You stole $%1!", _cash];',1,false,true,"","_driver = driver convoy_truck; (player distance convoy_truck) <= 7 && convoy_cash && not([player] call player_cop) && (not(alive _driver) || (isNull _driver))"];
-//action57 =  nil;
-//action58 =  nil;
-//action59 = nil;
-//action60 = nil;
-//======================================== WORKERS =====================================================
-//_role addaction [format ["Hire a worker ($%1)", huren_cost],"worker.sqf", ["holen"],1,false,true,"","(player distance workplace_getjobflag_1 <= 5 or player distance workplace_getjobflag_2 <= 5 or player distance workplace_getjobflag_3 <= 5) and isciv"];
 //======================================= WORKPLACE ====================================================
 action61 = _role addaction ["Get courier job","delivery.sqf", ["getajob_delivery"],1,false,true,"","(player distance workplace_getjobflag_1 <= 5 or player distance workplace_getjobflag_2 <= 5 or player distance workplace_getjobflag_3 <= 5) and isciv"];
 action62 = _role addaction ["Cancel delivery mission","delivery.sqf", ["cancel"],1,false,true,"","(player distance workplace_getjobflag_1 <= 5 or player distance workplace_getjobflag_2 <= 5 or player distance workplace_getjobflag_3 <= 5) and isciv and alreadygotaworkplacejob == 1"];

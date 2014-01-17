@@ -1,12 +1,15 @@
 // Alcohol Effects
 
+private["_art"];
 _art = _this select 0;
 if (_art == "init") then {
 	INV_alkoholusesperre = 0;
 	INV_alkohol_usesperre = FALSE;
 	INV_AlkoholCounter = 0;
 };
-	if (_art == "use") then {
+
+if (_art == "use") then {	
+	private["_item","_anzahl","_endeZeit","_fadeInTime","_fadeOutTime","_faded","_v1","_v2","_v3","_v1add","_v2add"];
 		_item   = _this select 1;
 		_anzahl = _this select 2;
 		if (INV_alkoholusesperre == 1) exitWith {player groupChat localize "STRS_inv_item_druguse_toomany";};

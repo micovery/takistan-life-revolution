@@ -1,5 +1,5 @@
- private["_art"];
- _art = _this select 0;
+private["_art"];
+_art = _this select 0;
 
 if (_art == "use") then {
 
@@ -14,7 +14,7 @@ if (_art == "use") then {
 		player groupchat "Some supernatural force prevents you from detonating a bomb in this holy place!"
 	};
 
-	private["_item","_anzahl","_weapon","_magazine", "_nearby"];
+	private["_item","_anzahl","_weapon","_magazine", "_nearby", "_i", "_dam"];
 	_item   = _this select 1;
 	_anzahl = _this select 2;
 //	"hint localize ""STRS_inv_item_selbstmordbombe_globalmsg"";" call broadcast;
@@ -34,8 +34,7 @@ if (_art == "use") then {
 	if (
 			!(alive player) ||
 			([player, "isstunned"] call player_get_bool) ||
-			([player, "restrained"] call player_get_bool) ||
-			(player getVariable ["FA_inAgony", false])
+			([player, "restrained"] call player_get_bool)
 		) exitWith {
 			[player, _item, -1] call INV_AddInventoryItem;
 			player groupChat format["The bomb failed to work"];
@@ -60,8 +59,7 @@ if (_art == "use") then {
 	if (
 			(alive player) &&
 			(!(([player, "isstunned"] call player_get_bool))) &&
-			(!([player, "restrained"] call player_get_bool)) &&
-			(!(player getVariable ["FA_inAgony", false]))
+			(!([player, "restrained"] call player_get_bool))
 		) then {
 			player fire [currentWeapon player];
 		}else{

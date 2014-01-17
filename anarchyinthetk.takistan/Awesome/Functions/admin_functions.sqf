@@ -105,7 +105,9 @@ admin_actions_list = {
 			[40,20] call time_reset;
 		}],
 		["MOTD (use input field)", {
-			custom_motd = _inputText;
+			private["_text"];
+			_text = _this select 2;
+			custom_motd = _text;
 			publicVariable "custom_motd";
 		}],
 		["Delete Target (Man)", {

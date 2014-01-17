@@ -1,8 +1,10 @@
 #include "Awesome\Functions\macro.h"
 
+private["_art"];
 _art = _this select 0;
 
 if (_art == "init") then {
+	private["_sleepTime"];
     INV_hunger         = 25;
     INV_HungerProSek   = 0.010;
     INV_HungerSchaden  = 0.1;
@@ -84,6 +86,7 @@ if (_art == "init") then {
 
 
 if (_art == "use") then {
+	private["_item", "_anzahl", "_hungerStillen", "_amount"];
     _item   = _this select 1;
     _anzahl = _this select 2;
     _hungerStillen = 0;

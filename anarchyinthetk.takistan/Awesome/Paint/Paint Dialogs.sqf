@@ -1,3 +1,4 @@
+private["_location"];
 _location = (_this select 3) select 0;
 
 if ((vehicle player) == player) exitwith {player groupchat "P ERROR: NOT IN VEHICLE";};

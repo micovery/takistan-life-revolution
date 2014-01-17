@@ -1,4 +1,5 @@
 // new version of assassin mission with vip and guards armed, car,  new spawn locations, bug fixes and more stability by Scripter Eddie Vedder
+private["_secondcounter", "_minutecounter", "_art"];
 _secondcounter = 0;
 _minutecounter = 0;
 _art = (_this select 3) select 0;
@@ -8,6 +9,7 @@ if (isNil "workplacejob_assassin_serverarray") then {workplacejob_assassin_serve
 if (_art == "serverloop") then {
 	while {true} do {
 		private["_i"];
+		_i = 0;
 		while { _i < (count workplacejob_assassin_serverarray) } do {
 			if (isNull ((workplacejob_assassin_serverarray select _i) select 0)) then {
 				if (!(isNull ((workplacejob_assassin_serverarray select _i) select 1))) then {
@@ -36,6 +38,8 @@ if (_art == "getajob_assassin") then {
 	if(workplacejob_assassion_failed) exitWith {
 		player groupChat "You have failed an assassination recently, maybe you'll be hired again later.";
 	};
+	
+	private["_array","_city","_pos","_radius","_a1","_group"];
 
 	_array  = [[VIPspawn1, 10], [VIPspawn2, 10], [VIPspawn3, 10], [VIPspawn4, 10], [VIPspawn5, 10]];
 	_city   = (floor(random(count _array)));
@@ -110,14 +114,15 @@ if (_art == "getajob_assassin") then {
 	};
 
 	format["workplacejob_assassin_serverarray = workplacejob_assassin_serverarray + [[%1, VIPtarget]];", player] call broadcast;
-
+	
+	private["_markerobj", "_markername", "_markerobj"];
+	
 	_markerobj = createMarker ["targetmarker",[0,0]];
-	_markername= "targetmarker";
+	_markername = "targetmarker";
 	_markerobj setMarkerShape "ICON";
 	"targetmarker" setMarkerType "Marker";
 	"targetmarker" setMarkerColor "ColorRed";
 	"targetmarker" setMarkerText "Assassination target";
-	_markername SetMarkerPos _start;
 
 	workplacejob_assassin_active = true; publicvariable "workplacejob_assassin_active";
 

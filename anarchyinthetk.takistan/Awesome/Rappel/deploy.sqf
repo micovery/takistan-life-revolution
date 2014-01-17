@@ -12,11 +12,12 @@ if ((_height > 100) || (_height < 25)) exitwith {
 	
 _playervehclass = toUpper(typeof _vehicle);
 
+private["_flagclass","_flagPos","_flagtexture"];
 _flagClass = "FlagCarrier";
 _flagPos = [0,0,0];
 _flagTexture = "";
 
-
+private["_attachX","_attachY","_attachZB","_attachZM","_attachZA"];
 _attachX = 0;
 _attachY = 0;
 _attachZB = -3;
@@ -34,6 +35,7 @@ _attachY = switch _playervehclass do {
 		default {0};
 	};
 
+private["_i","_stringVariable","_flag","_attach","_Z"];
 for [{_i = 0}, {_i <= 15}, {_i = _i + 1}] do {
 		_stringVariable = format["A_R_rope%1", _i];
 		

@@ -97,7 +97,7 @@ mounted_passthrough_keys = [];
 
 mounted_set_heading =
 {
-	private["_direction", "_angle", "_pitch"];
+	private["_direction", "_angle", "_pitch", "_object", "_data", "_vecdx", "_vecdy", "_vecdz", "_vecux", "_vecuy", "_vecuz"];
 	
 	_object = _this select 0;
 	_data = _this select 1;
@@ -149,7 +149,7 @@ mounted_lookup_class = {
 };
 
 mounted_lookup_class_slot = {
-	private["_class", "_slot_anme"];
+	private["_class", "_slot_anme","_slot_id"];
 	_class = _this select 0;
 	_slot_id = _this select 1;
 	
@@ -190,7 +190,7 @@ mounted_get_occupants = {
 	_occupants = [];
 	
 	{
-		private["_slot", "_slot_id", "_occupant"];
+		private["_slot", "_slot_id", "_occupant", "_slod_id"];
 		_slot = _x;
 		_slod_id = _slot select mounted_slot_id;
 		_occupant = [_vehicle, _slod_id] call mounted_get_slot_occupant;
@@ -252,7 +252,7 @@ mounted_slot_wait = {
 };
 
 mounted_board_slot = {
-	private["_player", "_vehicle"];
+	private["_player", "_vehicle", "_slot_id"];
 	_player = _this select 0;
 	_vehicle = _this select 1;
 	_slot_id = _this select 2;
@@ -265,7 +265,7 @@ mounted_board_slot = {
 //	if (isNil "_slot_entry") exitWith {};
 	if ((typeName _slot_entry) != "ARRAY") exitwith {};
 	
-	private["_offset", "_heading", "_blocked_actions", "_blocked_keys", "_default_action"];
+	private["_offset", "_heading", "_blocked_actions", "_blocked_keys", "_default_action", "_direction_min", "_direction_max"];
 	_offset = ((_slot_entry select mounted_slot_offset) select mounted_slot_offset_data);
 	_heading = ((_slot_entry select mounted_slot_heading) select mounted_slot_heading_data);
 	_blocked_actions = (_slot_entry select mounted_slot_blocked_actions);
@@ -398,6 +398,7 @@ mounted_vehicle_unlocked = {
 
 
 mounted_add_actions = {
+	private["_vehicle"];
 	_vehicle = _this select 0;
 	//player groupChat format["Adding actions!"];
 	if (isNil "_vehicle") exitWith {};
@@ -471,7 +472,7 @@ mounted_keyUpHandler = {
 	_control = _this select 3;
 	_alt = _this select 4;
 	
-	private["_player", "_vehicle", "_slot_id"];
+	private["_player", "_vehicle", "_slot_id", "_blocked_keys"];
 	
 	_player = _data select 0;
 	_vehicle = _data select 1;
@@ -504,7 +505,7 @@ mounted_keyDownHandler = {
 	_control = _this select 3;
 	_alt = _this select 4;
 	
-	private["_player", "_vehicle", "_slot_id"];
+	private["_player", "_vehicle", "_slot_id", "_blocked_keys"];
 	
 	_player = _data select 0;
 	_vehicle = _data select 1;
@@ -540,7 +541,7 @@ mounted_keyDownHandler = {
 };
 
 mounted_setup_keyDown = {
-	private["_data"];
+	private["_data", "_display"];
 	_data = _this;
 	
 	disableSerialization;
@@ -552,6 +553,7 @@ mounted_setup_keyDown = {
 
 mounted_remove_keyDown = {
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if (not(isnil "mounted_keyDownHandler_id")) then {
 		_display displayRemoveEventHandler  ["keyDown", mounted_keyDownHandler_id];
@@ -566,7 +568,7 @@ mounted_remove_keyDown = {
 mounted_setup_keyUp = {
 	private["_data"];
 	_data = _this;
-	
+	private["_display"];
 	disableSerialization;
     _display = findDisplay 46;
 	if ( isnil "mounted_keyUpHandler_id" ) then {
@@ -576,6 +578,7 @@ mounted_setup_keyUp = {
 
 mounted_remove_keyUp = {
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if (not(isnil "mounted_keyUpHandler_id")) then {
 		_display displayRemoveEventHandler  ["keyUp", mounted_keyUpHandler_id];
@@ -585,7 +588,7 @@ mounted_remove_keyUp = {
 
 
 mounted_mouseMoving_handler = {
-	private["_data", "_player", "_vehicle", "_slot_id", "_mouse_delta"];
+	private["_data", "_this", "_player", "_vehicle", "_slot_id", "_mouse_delta", "_r_delta"];
 	
 	_data = _this select 1;
 	_this = _this select 0;
@@ -649,6 +652,7 @@ mounted_setup_mouseMoving = {
 	private["_data"];
 	_data = _this;
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if ( isnil "mounted_mouseMoving_id" ) then {
 		mounted_mouseMoving_id = _display displayAddEventHandler  ["mouseMoving", format["[_this, %1] call mounted_mouseMoving_handler", _data]];
@@ -657,6 +661,7 @@ mounted_setup_mouseMoving = {
 
 mounted_remove_mouseMoving = {
 	disableSerialization;
+	private["_display"];
     _display = findDisplay 46;
 	if (not(isnil "mounted_mouseMoving_id")) then {
 		_display displayRemoveEventHandler  ["mouseMoving", mounted_mouseMoving_id];

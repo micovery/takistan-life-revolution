@@ -20,7 +20,7 @@ C_Dialog_Choice = {
 
 
 C_Dialog_Full = {
-	private ["_cam", "_IA", "_index", "_item", "_cost", "_lic", "_armorb", "_armors", "_texts", "_class", "_cfg", "_pack", "_DFML", "_n", "_c", "_t_cfg", "_t_count", "_selected_maps"];
+	private ["_cam", "_IA", "_index", "_item", "_cost", "_lic", "_armorb", "_armors", "_texts", "_class", "_cfg", "_pack", "_DFML", "_n", "_c", "_t_cfg", "_t_count", "_past_item", "_selected_maps"];
 
 	disableSerialization;
 	

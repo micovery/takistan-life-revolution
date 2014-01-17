@@ -5,6 +5,7 @@ if (!(createDialog "animationsdialog")) exitWith
 	hint "Dialog Error!";
 };
 
+private["_index"];
 {
 	_index = lbAdd [1, (_x select 3)];
 	lbSetData [1, _index, (_x select 1)];

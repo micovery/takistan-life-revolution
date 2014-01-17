@@ -1,6 +1,6 @@
 
 setPitchBank = {
-	private ["_obj","_pitch","_bank","_yaw","_vdir","_vup","_s ign","_rotate"];
+	private ["_obj","_pitch","_bank","_yaw","_vdir","_vup","_s ign","_rotate","_sign"];
 
 	_obj = _this select 0;
 	_pitch = _this select 1;

@@ -1,3 +1,4 @@
+private["_target","_n","_exitvar","_i"];
 _target = (crew _this) select 0;
 _n 	= 10;
 _exitvar = false;

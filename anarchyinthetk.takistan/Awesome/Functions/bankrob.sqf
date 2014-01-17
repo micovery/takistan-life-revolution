@@ -56,7 +56,6 @@ bankRob_rob = {
 				|| ((damage _player) != _damage) 
 				|| (_player getVariable ["isstunned", false]) 
 				|| (_player getVariable ["isstunned", false])
-				|| (_player getVariable ["FA_inAgony", false])
 				) then {
 					_i = 6;
 					_interupt = true;
@@ -225,7 +224,7 @@ bankRob_safeFake = {((random 1) <= bankRob_fakeChance)};
 
 // Get closest safe
 bankRob_nearestSafe = {
-		private["_player", "_pos", "_safe", "_safes"];
+		private["_player", "_pos", "_posZ", "_safe", "_safes", "_safePos", "_safeZ", "_maxZ", "_minZ"];
 		_player = _this select 0;
 		_pos = getPosATL _player;
 		_posZ = _pos select 2;

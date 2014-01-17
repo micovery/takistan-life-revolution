@@ -507,7 +507,7 @@ player createDiaryRecord ["donations",
 [
 "Donations",
 "
-Donate at http://www.takistanliferevolution.com for extra starting money! More donator rewards coming soon, special shops and private houses!<br/>
+Donate at http://www.takistanliferevolution.com for extra starting money! More donator rewards coming soon<br/>
 <br/>
 "
 ]
