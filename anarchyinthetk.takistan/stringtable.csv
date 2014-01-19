@@ -1,7 +1,7 @@
 LANGUAGE, English
 STRM_briefing_name,Takistan Life: Revolution OA
 STRM_mission_description,Life RPG created by the Arma 2 Community
-STRS_hints_vehicle_information,VEHICLE INFORMATION:\n\nName: %4\nType: %1\ndirection: %2°\nHeight ASL: %3m\nDriver: %5\nFree Cargo: %6\nlength: %7m
+STRS_hints_vehicle_information,VEHICLE INFORMATION:\n\nName: %4\nType: %1\ndirection: %2ï¿½\nHeight ASL: %3m\nDriver: %5\nFree Cargo: %6\nlength: %7m
 STRS_functions_crimelog_msg12,Speeding
 STRS_anfang_laden,Loading.....\nPlease Wait
 STRS_anfang_02,"Welcome to Takistan Life: Revolution, an RPG mission. \n\n Feel free to copy or edit our mission file. \n\n This is an international server, everyone is welcome."
@@ -605,9 +605,11 @@ STRD_inv_description_close,Close
 STRD_inv_description_itemmenu_title,Buy Items
 STRD_inv_description_itemmenu_title2,Sell Items
 STRD_inv_description_inventar_use,Use
+STRD_inv_description_adventar_delete,Delete
 STRD_inv_description_buyitem_close,Close
 STRD_inv_description_inventar_drop,Drop
 STRD_inv_description_inventar_schluessel_uebergabe,Give to player
+STRD_inv_description_adventar_forcegive,Give to player
 STRD_inv_description_inventar_item,Item:
 STRD_inv_description_inventar_amount,Amount:
 STRD_inv_description_inventar_addinfo,Additional Information:
