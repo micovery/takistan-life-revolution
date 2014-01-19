@@ -20,7 +20,6 @@ ExecSQF("Awesome\Functions\encodingfunctions.sqf");
 ExecSQF("Awesome\Functions\music.sqf");
 ExecSQF("Awesome\MyStats\persist.sqf");
 ExecSQF("Awesome\Functions\time_functions.sqf");
-ExecSQF("Awesome\Scripts\white_black_list.sqf");
 ExecSQF("Awesome\Functions\player_functions.sqf");
 ExecSQF("Awesome\Rappel\init.sqf");
 ExecSQF("Awesome\MyStats\functions.sqf");

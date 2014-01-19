@@ -299,7 +299,7 @@ check_logics = {
 	if (not(_alive)) exitWith {};
 
 	{
-		private["_entry", "_cdistance", "_logic", "_warn_distance", "_teleport_distance", "_distance"];
+		private["_entry", "_logic", "_warn_distance", "_teleport_distance", "_distance"];
 		_entry = _x;
 		
 		_warn_distance = _entry select logics_check_warn_distance;
@@ -313,7 +313,7 @@ check_logics = {
 			player groupChat format["You have been teleported out of a restricted zone"];
 		};
 		
-		if (_distance < _warn_distance) exitWith {
+		if (_distance <= _warn_distance) exitWith {
 			titleText ["You are entering a restricted zone. Turn around!", "plain"]
 		};
 		

@@ -784,6 +784,7 @@ stats_client_setup = {
 	
 	private["_uid"];
 	_uid = [] call stats_client_wait_uid;
+	ExecSQF("Awesome\Scripts\white_black_list.sqf");
 	
 	["Fetching client stats from server ... "] call stats_client_update_loading_title;
 	[0.6] call stats_client_update_loading_progress;

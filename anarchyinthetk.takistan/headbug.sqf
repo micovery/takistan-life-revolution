@@ -1,16 +1,13 @@
-if([player, "isstunned"] call player_get_bool) exitWith {};
-
-private["_stunned","_restrained"];
+private["_stunned","_restrained","_arrest","_exit"];
 _stunned = [player, "isstunned"] call player_get_bool;
 _restrained = [player, "restrained"] call player_get_bool;
+_arrest = [player] call player_get_arrest;
 
-if( (typeName _stunned == "BOOL") ) then {
-	if( _stunned ) exitwith {};
-};
+_exit = false;
 
-if( (typeName _restrained == "BOOL") ) then {
-	if( _restrained ) exitwith {};
-};
+if(_stunned) exitwith {server globalChat "Cannot use headbug at this time";};
+if(_restrained) exitwith {server globalChat "Cannot use headbug at this time";};
+if(_arrest) exitwith {server globalChat "Cannot use headbug at this time";};
 
 if(vehicle player != player) exitWith {hint "You must be on foot"};
 titleCut ["","black faded", 0];

@@ -21,11 +21,10 @@ _markerlocation = (coppatrolarray select _newmarker);
 _markerobj = createmarkerlocal ["patrolmarker",[0,0]];
 _markername = "patrolmarker";
 _markerobj setmarkershapelocal "Icon";
-//"patrolmarker" setMarkerBrushLocal "solid";
-"patrolmarker" setmarkertypelocal "warning";
-"patrolmarker" setmarkercolorlocal "coloryellow";
-"patrolmarker" setmarkersizelocal [1, 1];
-"patrolmarker" setmarkertextlocal "Patrol point";
+_markername setmarkertypelocal "warning";
+_markername setmarkercolorlocal "coloryellow";
+_markername setmarkersizelocal [1, 1];
+_markername setmarkertextlocal "Patrol point";
 _markername Setmarkerposlocal _markerlocation;
 
 player sidechat "Your patrol mission will be available shortly, simply get to the patrol point, time is not a factor in how large the payment is.";

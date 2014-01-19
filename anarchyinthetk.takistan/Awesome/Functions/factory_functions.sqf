@@ -1320,6 +1320,10 @@ factory_hire_workers = {
 		player groupChat format["%1-%2, your %3 has already reached maximum of %4 workers", _player, (name _player), _factory_name, _max];
 	};
 	
+	if ((_workers + _workers_count) > maxfacworkers) exitwith {
+		player groupChat format['%1-%2, You cannot buy this many workers', _player, (name _player)];
+	};
+	
 	private["_money", "_total_cost"];
 	_money = [_player, "money"] call INV_GetItemAmount;
 	_total_cost = (_workers_count * _workers_cost);

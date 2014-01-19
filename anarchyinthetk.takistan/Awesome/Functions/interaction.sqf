@@ -227,9 +227,10 @@ interact_toggle_restrains = {
 		_message = format["%1-%2 was unrestrained by %3", _victim, _victim_name, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	} else {
-		
 		private["_exit"];
 		_exit = false;
+		
+		_exit = !([_victim] call player_vulnerable);
 		
 		if _exit exitwith{
 				player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];
