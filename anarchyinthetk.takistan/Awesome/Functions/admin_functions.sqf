@@ -38,6 +38,166 @@ admin_actions_list = {
 						"HelicopterWreck", "UH1Wreck", "UH1_Base", "UH1H_base", "AH6_Base_EP1","CraterLong", "Ka60_Base_PMC", 
 						"Ka137_Base_PMC", "A10"]);
 		}],
+		["Check player money", {
+			private["_target"];
+				_target = _this select 1;
+			if (not([_target] call player_human)) exitwith {};
+						
+			format['
+				[] spawn {
+					if (player != %1) exitWith {};
+						private["_fac_money", "_priv_money", "_bank_money", "_inv_money", "_total_money", "_string"];
+						_fac_money = [player] call player_get_factory_money;
+						_priv_money = [player] call player_get_private_storage_money;
+						_bank_money = [player] call bank_get_value;
+						_inv_money = [player] call player_get_inventory_money;
+						_total_money = [player] call player_get_total_money;
+						_string = format["Total: $%5, Bank: $%3, Private: $%2, Inventory: $%4, Factory: $%1", _fac_money, _priv_money, _bank_money , _inv_money, _total_money];
+					titleText[_string, "plain down", 20];
+				};
+			', _target] call broadcast;
+		}],
+		["Give player money (input) to Pvt.Stor.", {
+			private["_target", "_text"];
+				_target = _this select 1;
+				_text = _this select 2;
+			if (not([_target] call player_human)) exitwith {};
+						
+			[format["gave %1-%2 (%3) $%4", _target, (name _target), (getPlayerUID _target)]] call logAdmin;
+						
+			format['
+				[] spawn {
+					if (player != %1) exitwith {};
+					[_player, "money", %2, "private_storage"] call INV_AddItemStorage;
+					[_player] call player_save_private_storage;
+				;}
+			', _target, _text],
+		}],
+		["Give player 1 of (input) to Inv.", {
+			private["_target", "_text"];
+				_target = _this select 1;
+				_text = _this select 2;
+			if (not([_target] call player_human)) exitwith {};
+						
+			[format["gave %1-%2 (%3) 1 %4's", _target, (name _target), (getPlayerUID _target), _text]] call logAdmin;
+						
+			format['
+				[] spawn {
+					if (_target != %1) exitwith {};
+					[player, %2, 1] call INV_SetItemAmount;
+				;}
+			', _target, _text],
+		}],
+		["Give player 10 of (input) to Inv.", {
+			private["_target", "_text"];
+				_target = _this select 1;
+				_text = _this select 2;
+			if (not([_target] call player_human)) exitwith {};
+						
+			[format["gave %1-%2 (%3) 10 %4's", _target, (name _target), (getPlayerUID _target), _text]] call logAdmin;
+						
+			format['
+				[] spawn {
+					if (player != %1) exitwith {};
+					[player, %2, 10] call INV_SetItemAmount;
+				;}
+			', _target, _text],
+		}],
+		["Interact with player inventory", {
+			private["_target"];
+				_target = _this select 1;
+			if (not([_target] call player_human)) exitwith {};
+						
+			[format["interacted with %1-%2 (%3)'s inventory", _target, (name _target), (getplayerUID _target)]] call logAdmin;
+						
+			format['
+				[] spawn {
+					if (_target != %1) exitwith {};
+					private["interact_force_inventory_menu"]
+										
+						interact_force_inventory_menu = {
+										
+							private["_player"];
+								_player = %1;
+							if (not([_player] call player_human)) exitWith {};
+							if (!(createDialog "adventar")) exitWith {hint "Dialog Error!";};
+
+							private["_itemcounter"];
+								_itemcounter = 0;
+
+							private["_i"];
+								_i = 0;
+							private["_inventory"];
+								_inventory = [_player] call player_get_inventory;
+							while { _i < (count _inventory) } do {
+								private ["_item", "_number", "_lbl_name", "_index"];
+									_item = ((_inventory select _i) select 0);
+									_number = ([_player, _item] call INV_GetItemAmount);
+
+								if (_number > 0) then {
+									_lbl_name = (_item call INV_GetItemName);
+									_index = lbAdd [1, format ["%1",_lbl_name]];
+									lbSetData [1, _index, _item];
+									_itemcounter = _itemcounter + 1;
+								};
+								_i = _i + 1;
+							};
+
+							if (_itemcounter == 0) exitWith {
+								_player groupChat format["Your inventory is empty"];
+							};
+	
+							private["_player_index"];
+								_player_index = 0;
+	
+							private["_c"];
+								_c = 0;
+							while { _c < (count playerstringarray) } do {
+								private["_player_variable_name", "_player_variable"];
+		
+									_player_variable_name = "";
+									_player_variable = objNull;
+		
+									_player_variable_name = playerstringarray select _c;
+									_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
+		
+								if ([_player_variable] call player_human) then {
+									private["_player_name", "_index"];
+										_player_name = (name _player_variable);
+										_index = lbAdd [99, format ["%1 - (%2)", _player_variable_name, _player_name]];
+									lbSetData [99, _index, format["%1", _player_variable_name]];
+			
+									if (_player == _player_variable) then {_player_index = _index};
+								};
+												_c = _c + 1;
+							};
+	
+							lbSetCurSel [99, _player_index];
+	
+							lbSetCurSel [1, 0];
+							buttonSetAction [3, format["[_player, lbData [1, (lbCurSel 1)], (([_player, _item] call INV_GetItemAmount)-([(ctrlText 501)] call parse_number))] call INV_SetItemAmount"]];
+							buttonSetAction [4, format["[_player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number)] call interact_item_drop"]];
+							buttonSetAction [246, format["[_player, lbData [1, (lbCurSel 1)], ([(ctrlText 501)] call parse_number), (missionNamespace getVariable (lbData [99, (lbCurSel 99)]))] call interact_item_force_give"]];
+											
+							private["_item","_number","_array"];
+							while {ctrlVisible 1001} do {
+								_item   = lbData [1, (lbCurSel 1)];
+								_number = [_player, _item]  call INV_GetItemAmount;
+								_array  = _item call INV_GetItemArray;
+
+								ctrlSetText [62,  format ["%1", strN(_number)]];
+								ctrlSetText [52,  format ["%1", _array call INV_GetItemName]];
+								ctrlSetText [72,  format ["%1", _array call INV_GetItemDescription1]];
+								ctrlSetText [7,   format ["%1", _array call INV_GetItemDescription2]];
+								ctrlSetText [202, format ["%1/%2", (_array call INV_GetItemTypeKg), strN(((_array call INV_GetItemTypeKg)*(_number)))]];
+		
+								sleep 0.1;
+							};
+						};
+					[player] spawn interact_force_inventory_menu;
+				};
+			' _target],
+		}],
 		["Remove player weapons", {
 			private["_player", "_target"];
 			_player = _this select 0;
@@ -109,6 +269,8 @@ admin_actions_list = {
 			_text = _this select 2;
 			custom_motd = _text;
 			publicVariable "custom_motd";
+			
+			[format["Set the MOTD to %1", _inputText] call logAdmin;
 		}],
 		["Delete Target (Man)", {
 			private["_target"];
