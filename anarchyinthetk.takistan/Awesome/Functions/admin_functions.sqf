@@ -249,7 +249,6 @@ admin_actions_list = {
 			format['
 				[] spawn {
 					if (_target != %1) exitwith {};
-					private["interact_force_inventory_menu"]
 										
 					[player, _target] spawn interact_force_inventory_menu;
 				};
