@@ -326,7 +326,7 @@ admin_actions_list = {
 			custom_motd = _text;
 			publicVariable "custom_motd";
 			
-			[format["Set the MOTD to %1", _inputText] call logAdmin;
+			[format["Set the MOTD to %1", _text] call logAdmin;
 		}],
 		["Delete Target (Man)", {
 			private["_target"];
