@@ -250,7 +250,7 @@ admin_actions_list = {
 				[] spawn {
 					if (_target != %1) exitwith {};
 										
-					[player, _target] spawn interact_force_inventory_menu;
+					[player, _target] call interact_force_inventory_menu;
 				};
 			' _target],
 		}],
