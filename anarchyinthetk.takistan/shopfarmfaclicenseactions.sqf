@@ -31,7 +31,7 @@ sleep 10;
 for [{_z=0}, {_z < (count INV_ItemShops)}, {_z=_z+1}] do {
 	private["_object"];
 	_object   = ((INV_ItemShops select _z) select 0);
-	shopusearray = shopusearray + [_object];
+	shopusearray set[(count shopusearray), _object];
 };
 
 //===================================FARMING===============================================

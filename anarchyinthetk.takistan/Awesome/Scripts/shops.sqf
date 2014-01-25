@@ -360,8 +360,7 @@ _sv =
 		//["M1114_AGS_ACR", -1, -1],
 		["BAF_Jackal2_L2A1_D", -1, -1],
 		["ArmoredSUV_PMC", -1, -1],
-		["LandRover_SPG9_TK_EP1", -1, -1],
-		["LAV25_HQ", -1, -1]
+		["LandRover_SPG9_TK_EP1", -1, -1]
 	];
 
 //SOBR Air Shop
@@ -1106,7 +1105,7 @@ _ihvy =
 
 _iair = 
 	[
-		["An2_TK_EP1", -1, -1]
+		["An2_TK_Ind", -1, -1]
 	];
 
 _rgs = 
@@ -1269,13 +1268,12 @@ _rhvy =
 		["GAZ_Vodnik", -1, -1],
 		["GAZ_Vodnik_MedEvac", -1, -1],
 		["UAZ_SPG9_INS", -1, -1],
-		["BRDM2_HQ_TK_GUE_EP1", -1, -1],
-		["BTR90_HQ", -1, -1]
+		["BRDM2_HQ_TK_GUE_EP1", -1, -1]
 	];
 
 _rair = 
 	[
-		["An2_TK_EP1", -1, -1],
+		["An2_TK_Opf", -1, -1],
 		["L39_TK_EP1", -1, -1]
 	];
 
@@ -1298,7 +1296,7 @@ _as_2 =
 		["Offroad_DSHKM_Gue", 5, 5],
 		["Pickup_PK_GUE", 5, 5],
 		["GAZ_Vodnik", 5, 5],
-		["An2_TK_EP1", 5, 5],
+		["An2_TK_Ind", 5, 5],
 		["UH1H_TK_EP1", 5, 5]
 	];
 
@@ -1636,8 +1634,8 @@ INV_ItemShops = [
 
 		[terrorshop,"Terrorist Shop",tgunbox,dummyobj,_terrorshop_buy,_terrorshop_buy,true],
 
-		[vipbox,"Illegal Weapon Shop",vipbox,dummyobj,_smgrw,_smgrw,true],
-		[vipcar,"Stolen Vehicles",dummyobj,vipcarspawn,_smgrveh,_smgrveh,true],
+		[illBox,"Illegal Weapon Shop",illBox,dummyobj,_smgrw,_smgrw,true],
+		[illcar,"Stolen Vehicles",dummyobj,illcarspawn,_smgrveh,_smgrveh,true],
 
 		[fishmonger,"Sell to Fishmonger",dummyobj,dummyobj,_fm,_fm,true],
 

@@ -1,12 +1,6 @@
 if !(isClient) exitwith {};
 
 #define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
-
-private["_i","_var"];
-for [{_i = 0}, {_i <= 15}, {_i = _i + 1}] do {
-		_var = format["A_R_rope%1", _i];
-		missionNamespace setVariable [_var, objNull];
-	};
 	
 
 A_R_vehicles = ["MH6J_EP1", "UH1H_TK_GUE_EP1", "UH60M_EP1", "UH60M_MEV_EP1", "MH60S", "BAF_Merlin_HC3_D", "CH_47F_EP1", "Mi17_UN_CDF_EP1", "Ka60_PMC"];
@@ -14,6 +8,7 @@ A_R_vehicles = ["MH6J_EP1", "UH1H_TK_GUE_EP1", "UH60M_EP1", "UH60M_MEV_EP1", "MH
 A_R_DEPLOY_V = "A_R_DEPLOYED";
 A_R_DEPLOYID_V = "A_R_DEPLOYED_ID";
 A_R_DROPID_V = "A_R_DROP_ID";
+A_R_RAPPEL_V = "A_R_RAPPEL";
 A_R_RAPPELID_V = "A_R_RAPPEL_ID";
 
 
@@ -82,11 +77,11 @@ A_R_LOOP_P = {
 					};
 				
 				if (_speedOver && _deployed) then {
-						[] call A_R_DROP;
+						[_veh] call A_R_DROP;
 						hint "You are going over 5 kmph, dropping rope";
 					}else{
 						if (_heightBreak && _deployed) then {
-								[] call A_R_DROP;
+								[_veh] call A_R_DROP;
 								hint "You are not in the correct height range of 25-100 meters, dropping rope";
 							};
 					};
@@ -94,7 +89,7 @@ A_R_LOOP_P = {
 				SleepWait(3)
 			};
 			
-		[] call A_R_DROP;
+		[_veh] call A_R_DROP;
 		_veh setVariable [A_R_DEPLOYID_V, -1, false];
 		_veh setVariable [A_R_DROPID_V, -1, false];
 		_veh removeAction _actionId_Drop;
@@ -138,8 +133,12 @@ A_R_LOOP_C = {
 	};
 
 A_R_DROP = {
-		(_this select 0) setVariable [A_R_DEPLOY_V, false, true];
-		{deleteVehicle _x} forEach [A_R_rope1, A_R_rope2, A_R_rope3, A_R_rope4, A_R_rope5, A_R_rope6, A_R_rope7, A_R_rope8, A_R_rope9, A_R_rope10, A_R_rope11, A_R_rope12, A_R_rope13, A_R_rope14, A_R_rope15];
+		private["_veh"];
+		_veh = _this select 0;
+		
+		_veh removeAction (_veh getVariable [A_R_DROPID_V, -1]);
+		
+		_veh setVariable [A_R_DEPLOY_V, false, true];
 	};
 
 

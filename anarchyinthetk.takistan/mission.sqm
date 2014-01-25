@@ -135,7 +135,7 @@ class Mission
 				items=118;
 				class Item0
 				{
-					position[]={1508.2833,31.206871,18887.383};
+					position[]={3213.9202,54.426163,15274.315};
 					id=0;
 					side="LOGIC";
 					vehicle="Logic";
@@ -153,7 +153,7 @@ class Mission
 					vehicle="TK_CIV_Takistani03_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag7";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item2
 				{
@@ -165,7 +165,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="butcher";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item3
 				{
@@ -177,7 +177,7 @@ class Mission
 					vehicle="TK_CIV_Takistani01_EP1";
 					skill=0.60000002;
 					text="shop1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item4
 				{
@@ -189,7 +189,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="fuelshop5";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item5
 				{
@@ -201,7 +201,7 @@ class Mission
 					vehicle="TK_CIV_Woman01_EP1";
 					skill=0.60000002;
 					text="airshop3";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move"";this disableAI ""anim"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item6
 				{
@@ -213,7 +213,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="terrorshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item7
 				{
@@ -225,7 +225,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="tairshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item8
 				{
@@ -237,7 +237,7 @@ class Mission
 					vehicle="TK_CIV_Takistani02_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag8";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item9
 				{
@@ -249,7 +249,7 @@ class Mission
 					vehicle="TK_CIV_Takistani02_EP1";
 					skill=0.60000002;
 					text="fuelshop9";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item10
 				{
@@ -261,7 +261,7 @@ class Mission
 					vehicle="TK_CIV_Takistani02_EP1";
 					skill=0.60000002;
 					text="fuelshop2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item11
 				{
@@ -273,7 +273,7 @@ class Mission
 					vehicle="Profiteer2_EP1";
 					skill=0.60000002;
 					text="gunshop1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item12
 				{
@@ -285,7 +285,7 @@ class Mission
 					vehicle="Citizen1";
 					skill=0.60000002;
 					text="Furnace";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item13
 				{
@@ -297,7 +297,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag10";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item14
 				{
@@ -309,7 +309,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="weaponfactory";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item15
 				{
@@ -321,7 +321,7 @@ class Mission
 					vehicle="TK_CIV_Worker01_EP1";
 					skill=0.60000002;
 					text="Glassblower";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 					description="Glassblower";
 				};
 				class Item16
@@ -334,7 +334,7 @@ class Mission
 					vehicle="Functionary1_EP1";
 					skill=0.60000002;
 					text="OilSell1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item17
 				{
@@ -346,7 +346,7 @@ class Mission
 					vehicle="TK_CIV_Takistani01_EP1";
 					skill=0.60000002;
 					text="hostage";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item18
 				{
@@ -358,7 +358,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="fishmonger";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item19
 				{
@@ -370,7 +370,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="butcher_1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item20
 				{
@@ -382,7 +382,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="fuelshop8";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item21
 				{
@@ -394,19 +394,19 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="ItemFabrik_1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item22
 				{
-					position[]={3098.8818,65.204239,9977.8682};
-					azimut=199.05099;
+					position[]={3098.5574,61.170238,9975.2012};
+					azimut=199;
 					special="NONE";
 					id=692;
 					side="CIV";
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="carshop5";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item23
 				{
@@ -418,7 +418,7 @@ class Mission
 					vehicle="Functionary2_EP1";
 					skill=0.60000002;
 					text="equipshop4";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.7];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.07] execvm 'effects.sqf';";
 				};
 				class Item24
 				{
@@ -429,8 +429,8 @@ class Mission
 					side="CIV";
 					vehicle="Citizen4";
 					skill=0.60000002;
-					text="vipcar";
-					init="this setpos [8954.4424,5258.0435,2];this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					text="illcar";
+					init="this setPosATL [8954.4424,5258.0435,2]; this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item25
 				{
@@ -442,7 +442,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="fuelshop6";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item26
 				{
@@ -454,7 +454,7 @@ class Mission
 					vehicle="Functionary1_EP1";
 					skill=0.60000002;
 					text="licenseflag6";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item27
 				{
@@ -466,7 +466,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="carshop8";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item28
 				{
@@ -478,7 +478,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag5";
-					init="call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""; this disableAI ""move""; this disableAI ""anim""; this allowdamage false;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item29
 				{
@@ -490,7 +490,7 @@ class Mission
 					vehicle="Rita_Ensler_EP1";
 					skill=1;
 					text="pub2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item30
 				{
@@ -502,7 +502,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="carshop4";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item31
 				{
@@ -514,7 +514,7 @@ class Mission
 					vehicle="TK_CIV_Takistani05_EP1";
 					skill=0.60000002;
 					text="fuelshop3";
-					init="this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) - 0.01];this disableAI ""move""; this disableAI ""anim"";  this allowdamage false; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""; ";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item32
 				{
@@ -526,7 +526,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="fuelshop7";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item33
 				{
@@ -538,7 +538,7 @@ class Mission
 					vehicle="GUE_Soldier_1";
 					skill=0.60000002;
 					text="hashbar";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item34
 				{
@@ -550,7 +550,7 @@ class Mission
 					vehicle="RUS_Soldier1";
 					skill=0.60000002;
 					text="russmuggler";
-					init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this; this setpos [3206.0144, 3531.3718, 2.1003468];";
+					init="this setPosATL [3206.0144, 3531.3718, 2.1003468]; this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item35
 				{
@@ -562,7 +562,7 @@ class Mission
 					vehicle="TK_GUE_Soldier_Sniper_EP1";
 					skill=0.60000002;
 					text="assassin";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item36
 				{
@@ -574,7 +574,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="Oil_2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item37
 				{
@@ -586,7 +586,7 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="fuelshop4";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item38
 				{
@@ -598,7 +598,7 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="truckshop2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item39
 				{
@@ -610,7 +610,7 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="airshop2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item40
 				{
@@ -622,7 +622,7 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="equipshop6";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item41
 				{
@@ -634,7 +634,7 @@ class Mission
 					vehicle="TK_CIV_Woman02_EP1";
 					skill=0.60000002;
 					text="pub3";
-					init="this allowdamage false; this setpos [8433.9424, 2530.9377, 4.0424557]; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move"";";
+					init="this allowdamage false; this setPosATL [8433.9424, 2530.9377, 4.0424557]; ['light', this, 0.03] execvm 'effects.sqf';this disableAI ""move"";";
 				};
 				class Item42
 				{
@@ -646,7 +646,7 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="licenseflag5";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item43
 				{
@@ -658,31 +658,31 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="shop2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item44
 				{
-					position[]={8459.3623,307.21695,2462.4585};
-					azimut=-191.554;
+					position[]={8460.1748,307.50208,2465.0083};
+					azimut=-94.912483;
 					special="NONE";
 					id=81;
 					side="EAST";
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="tuning2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item45
 				{
-					position[]={8460.2461,307.10715,2459.7664};
-					azimut=220.72;
+					position[]={8460.5488,307.20398,2461.1787};
+					azimut=273.33292;
 					special="NONE";
 					id=216;
 					side="EAST";
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="carshop3";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item46
 				{
@@ -694,7 +694,7 @@ class Mission
 					vehicle="TK_Soldier_EP1";
 					skill=0.60000002;
 					text="redairveh";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item47
 				{
@@ -706,7 +706,7 @@ class Mission
 					vehicle="TK_Soldier_Crew_EP1";
 					skill=0.60000002;
 					text="redhvyveh";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item48
 				{
@@ -718,7 +718,7 @@ class Mission
 					vehicle="TK_Soldier_Crew_EP1";
 					skill=0.60000002;
 					text="redltveh";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item49
 				{
@@ -730,7 +730,7 @@ class Mission
 					vehicle="TK_Soldier_EP1";
 					skill=0.60000002;
 					text="redhelishop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item50
 				{
@@ -742,7 +742,7 @@ class Mission
 					vehicle="Soldier_Pilot_PMC";
 					skill=0.60000002;
 					text="inshelishop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item51
 				{
@@ -754,7 +754,7 @@ class Mission
 					vehicle="TK_GUE_Soldier_TL_EP1";
 					skill=0.60000002;
 					text="inshvyveh";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item52
 				{
@@ -766,7 +766,7 @@ class Mission
 					vehicle="GUE_Soldier_1";
 					skill=0.60000002;
 					text="insvehshop";
-					init="removeallweapons this;this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.7];this disableAI ""move"";this disableAI ""anim"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item53
 				{
@@ -778,7 +778,7 @@ class Mission
 					vehicle="GUE_Soldier_1";
 					skill=0.60000002;
 					text="atmins";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item54
 				{
@@ -790,7 +790,7 @@ class Mission
 					vehicle="TK_GUE_Soldier_EP1";
 					skill=0.60000002;
 					text="insgunshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item55
 				{
@@ -802,7 +802,7 @@ class Mission
 					vehicle="GUE_Soldier_1";
 					skill=0.60000002;
 					text="inssupplyshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item56
 				{
@@ -814,7 +814,7 @@ class Mission
 					vehicle="TK_CIV_Takistani05_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag3";
-					init="call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""; this disableAI ""move""; this disableAI ""anim""; this allowdamage false;";
+					init="['light', this, 0.03] execvm 'effects.sqf'; this disableAI ""move""; this disableAI ""anim""; this allowdamage false;";
 				};
 				class Item57
 				{
@@ -826,7 +826,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="carshop6";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item58
 				{
@@ -838,7 +838,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="carshop7";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item59
 				{
@@ -850,7 +850,7 @@ class Mission
 					vehicle="Functionary1_EP1";
 					skill=0.60000002;
 					text="equipshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [getPosATL this select 0, getPosATL this select 1, 0.1];";
 				};
 				class Item60
 				{
@@ -862,7 +862,7 @@ class Mission
 					vehicle="Functionary2";
 					skill=0.60000002;
 					text="university";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item61
 				{
@@ -874,7 +874,7 @@ class Mission
 					vehicle="TK_CIV_Takistani05_EP1";
 					skill=0.60000002;
 					text="storage";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item62
 				{
@@ -886,7 +886,7 @@ class Mission
 					vehicle="Profiteer2_EP1";
 					skill=0.60000002;
 					text="carshop1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item63
 				{
@@ -898,7 +898,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="cparts";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item64
 				{
@@ -910,7 +910,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="Oil_1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item65
 				{
@@ -922,7 +922,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag6";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item66
 				{
@@ -934,7 +934,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="fuelshop1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item67
 				{
@@ -946,7 +946,7 @@ class Mission
 					vehicle="TK_CIV_Takistani03_EP1";
 					skill=0.60000002;
 					text="cdrugsell";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item68
 				{
@@ -958,7 +958,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="ldrugsell";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item69
 				{
@@ -970,7 +970,7 @@ class Mission
 					vehicle="TK_CIV_Takistani05_EP1";
 					skill=0.60000002;
 					text="RingShop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0.1];";
 				};
 				class Item70
 				{
@@ -982,7 +982,7 @@ class Mission
 					vehicle="TK_CIV_Takistani01_EP1";
 					skill=0.60000002;
 					text="truckshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item71
 				{
@@ -994,7 +994,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="tuning1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item72
 				{
@@ -1006,7 +1006,7 @@ class Mission
 					vehicle="RU_Secretary3";
 					skill=0.60000002;
 					text="licenseflag2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item73
 				{
@@ -1018,7 +1018,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="rathaus";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item74
 				{
@@ -1030,7 +1030,7 @@ class Mission
 					vehicle="Soldier_Crew_PMC";
 					skill=0.60000002;
 					text="pmccar";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item75
 				{
@@ -1042,7 +1042,7 @@ class Mission
 					vehicle="TK_CIV_Takistani03_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item76
 				{
@@ -1054,7 +1054,7 @@ class Mission
 					vehicle="TK_CIV_Takistani01_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag4";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item77
 				{
@@ -1066,7 +1066,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="Diamond_1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 					description="Diamond_1";
 				};
 				class Item78
@@ -1079,7 +1079,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="mdrugsell";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item79
 				{
@@ -1091,7 +1091,7 @@ class Mission
 					vehicle="UN_CDF_Soldier_Guard_EP1";
 					skill=0.60000002;
 					text="bailflag";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item80
 				{
@@ -1103,7 +1103,7 @@ class Mission
 					vehicle="TK_CIV_Takistani02_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item81
 				{
@@ -1115,7 +1115,7 @@ class Mission
 					vehicle="Dr_Annie_Baker_EP1";
 					skill=0.60000002;
 					text="hpcar";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item82
 				{
@@ -1127,7 +1127,7 @@ class Mission
 					vehicle="Dr_Hladik_EP1";
 					skill=0.60000002;
 					text="tdoc";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item83
 				{
@@ -1139,7 +1139,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="shop3";
-					init="this allowdamage false;this disableAI ""move"";this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0.1];";
 				};
 				class Item84
 				{
@@ -1151,7 +1151,7 @@ class Mission
 					vehicle="Secretary1";
 					skill=0.60000002;
 					text="licenseflag3";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0.1];";
 				};
 				class Item85
 				{
@@ -1163,7 +1163,7 @@ class Mission
 					vehicle="TK_CIV_Takistani01_EP1";
 					skill=0.60000002;
 					text="hdrugsell";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item86
 				{
@@ -1175,7 +1175,7 @@ class Mission
 					vehicle="Functionary2_EP1";
 					skill=0.60000002;
 					text="equipshop7";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [getPosATL this select 0, getPosATL this select 1, 0.1];";
 				};
 				class Item87
 				{
@@ -1187,7 +1187,7 @@ class Mission
 					vehicle="TK_CIV_Woman03_EP1";
 					skill=0.60000002;
 					text="mainbank";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item88
 				{
@@ -1199,7 +1199,7 @@ class Mission
 					vehicle="TK_CIV_Takistani05_EP1";
 					skill=0.60000002;
 					text="tuning3";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0.1];";
 				};
 				class Item89
 				{
@@ -1211,7 +1211,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="carshop2";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item90
 				{
@@ -1227,7 +1227,7 @@ class Mission
 					{
 						"impound"
 					};
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item91
 				{
@@ -1239,7 +1239,7 @@ class Mission
 					vehicle="Pilot_EP1";
 					skill=0.60000002;
 					text="airshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item92
 				{
@@ -1251,7 +1251,7 @@ class Mission
 					vehicle="TK_CIV_Takistani05_EP1";
 					skill=0.60000002;
 					text="workplacejob_deliveryflag9";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item93
 				{
@@ -1263,7 +1263,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="shop4";
-					init="this allowdamage false;this disableAI ""move"";this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 1.0];";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item94
 				{
@@ -1275,7 +1275,7 @@ class Mission
 					vehicle="TK_CIV_Takistani01_EP1";
 					skill=0.60000002;
 					text="pub1";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0.1]";
 				};
 				class Item95
 				{
@@ -1287,7 +1287,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="resourcesell";
-					init="call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""; this disableAI ""move""; this disableAI ""anim""; this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) - 0.01];";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
 				};
 				class Item96
 				{
@@ -1299,7 +1299,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="shop2export";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item97
 				{
@@ -1311,7 +1311,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="shop4export";
-					init="call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";  this disableAI ""move"";  this disableAI ""anim""; this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.01];";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item98
 				{
@@ -1323,7 +1323,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="shop1export";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item99
 				{
@@ -1335,7 +1335,7 @@ class Mission
 					vehicle="TK_CIV_Takistani04_EP1";
 					skill=0.60000002;
 					text="shop3export";
-					init="call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";  this disableAI ""move"";  this disableAI ""anim""; this allowdamage false;this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.01];";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item100
 				{
@@ -1347,7 +1347,7 @@ class Mission
 					vehicle="US_Soldier_Pilot_EP1";
 					skill=0.60000002;
 					text="copair";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item101
 				{
@@ -1359,7 +1359,7 @@ class Mission
 					vehicle="US_Soldier_Light_EP1";
 					skill=0.60000002;
 					text="swatcar";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item102
 				{
@@ -1371,7 +1371,7 @@ class Mission
 					vehicle="US_Soldier_Light_EP1";
 					skill=0.60000002;
 					text="copcar";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item103
 				{
@@ -1383,7 +1383,7 @@ class Mission
 					vehicle="US_Pilot_Light_EP1";
 					skill=0.60000002;
 					text="swatair";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item104
 				{
@@ -1395,7 +1395,7 @@ class Mission
 					vehicle="TK_GUE_Bonesetter_EP1";
 					skill=0.60000002;
 					text="insairveh";
-					init="removeallweapons this;this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.7];this disableAI ""move"";this disableAI ""anim"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item105
 				{
@@ -1407,7 +1407,7 @@ class Mission
 					vehicle="TK_CIV_Worker02_EP1";
 					skill=0.60000002;
 					text="atmpf";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item106
 				{
@@ -1419,7 +1419,7 @@ class Mission
 					vehicle="RU_Soldier";
 					skill=0.60000002;
 					text="redsupplyshop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.7];this disableAI ""move"";this disableAI ""anim"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item107
 				{
@@ -1431,7 +1431,7 @@ class Mission
 					vehicle="TK_Aziz_EP1";
 					skill=0.60000002;
 					text="redgunshop";
-					init="removeallweapons this;this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.7];this disableAI ""move"";this disableAI ""anim"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item108
 				{
@@ -1443,7 +1443,7 @@ class Mission
 					vehicle="Soldier_Pilot_PMC";
 					skill=0.60000002;
 					text="pmcair";
-					init="this allowdamage false;this setpos [6167.3223, 11606.787, 5];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false;this setPosATL [6167.3223, 11606.787, 5]; ['light', this, 0.03] execvm 'effects.sqf'; this disableAI 'move'; this disableAI 'anim'; this allowdamage false; removeallweapons this;";
 				};
 				class Item109
 				{
@@ -1455,11 +1455,11 @@ class Mission
 					vehicle="TK_CIV_Woman03_EP1";
 					skill=0.60000002;
 					text="mainbankShop";
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item110
 				{
-					position[]={1449.6754,38.523487,18939.064};
+					position[]={3210.3391,58.499039,15296.979};
 					id=773;
 					side="LOGIC";
 					vehicle="logic";
@@ -1469,7 +1469,7 @@ class Mission
 				};
 				class Item111
 				{
-					position[]={1365.0299,35.637917,18881.652};
+					position[]={2709.8674,58.570515,15290.451};
 					id=43;
 					side="LOGIC";
 					vehicle="Logic";
@@ -1486,7 +1486,7 @@ class Mission
 					vehicle="Doctor";
 					skill=1;
 					text="Doctor1";
-					init="this allowdamage false; this setposATL [getposATL this select 0, getposATL this select 1, (getposATL this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
 				};
 				class Item113
 				{
@@ -1498,7 +1498,7 @@ class Mission
 					vehicle="Doctor";
 					skill=1;
 					text="Doctor2";
-					init="this allowdamage false; this setposATL [getposATL this select 0, getposATL this select 1, (getposATL this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; removeallweapons this; [] call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item114
 				{
@@ -1510,7 +1510,7 @@ class Mission
 					vehicle="Doctor";
 					skill=1;
 					text="Doctor3";
-					init="this allowdamage false; this setposATL [getposATL this select 0, getposATL this select 1, (getposATL this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; removeallweapons this; [] call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item115
 				{
@@ -1522,7 +1522,7 @@ class Mission
 					vehicle="Doctor";
 					skill=1;
 					text="Doctor4";
-					init="this allowdamage false; this setposATL [getposATL this select 0, getposATL this select 1, (getposATL this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; removeallweapons this; [] call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item116
 				{
@@ -1534,7 +1534,7 @@ class Mission
 					vehicle="Doctor";
 					skill=1;
 					text="Doctor5";
-					init="this allowdamage false; this setposATL [getposATL this select 0, getposATL this select 1, (getposATL this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; removeallweapons this; [] call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item117
 				{
@@ -1546,7 +1546,7 @@ class Mission
 					vehicle="Doctor";
 					skill=1;
 					text="Doctor6";
-					init="this allowdamage false; this setposATL [getposATL this select 0, getposATL this select 1, (getposATL this select 2) + 0.1];this disableAI ""move""; this disableAI ""anim""; removeallweapons this; [] call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 			};
 		};
@@ -2621,7 +2621,7 @@ class Mission
 					vehicle="Logic";
 					skill=0.60000002;
 					text="banklogic";
-					init="(nearestObject [getpos this, ""Land_A_Office01_EP1""]) allowdamage false;";
+					init="(nearestObject [(getPosATL this), ""Land_A_Office01_EP1""]) allowdamage false;";
 				};
 				class Item5
 				{
@@ -2643,7 +2643,7 @@ class Mission
 					side="LOGIC";
 					vehicle="Logic";
 					skill=0.60000002;
-					text="vipcarspawn";
+					text="illcarspawn";
 				};
 				class Item7
 				{
@@ -2811,7 +2811,7 @@ class Mission
 				};
 				class Item22
 				{
-					position[]={5926.9126,83.040001,11891.735};
+					position[]={5924.7759,83.040359,11893.419};
 					azimut=872.40552;
 					special="NONE";
 					id=88;
@@ -4927,7 +4927,7 @@ class Mission
 				items=1;
 				class Item0
 				{
-					position[]={1617.1456,13.378574,18816.145};
+					position[]={3322.7815,52.757996,15203.077};
 					azimut=654.83301;
 					special="NONE";
 					id=1621;
@@ -4936,7 +4936,7 @@ class Mission
 					leader=1;
 					skill=0.60000002;
 					text="cam_sec_opf_1";
-					init="this setpos [6532.1299, 1955.374, 0.090830959];";
+					init="this setPosATL [6532.1299, 1955.374, 0.090830959];";
 				};
 			};
 		};
@@ -5209,7 +5209,7 @@ class Mission
 					leader=1;
 					skill=0.60000002;
 					text="pmcladder";
-					init="this setpos [6155.1538, 11597.422, -2];this allowdamage false;";
+					init="this setPosATL [6155.1538, 11597.422, -2]; this allowdamage false;";
 				};
 			};
 		};
@@ -5446,7 +5446,7 @@ class Mission
 					{
 						"impound_1"
 					};
-					init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this disableAI ""move""; this disableAI ""anim""; this allowdamage false; removeallweapons this;";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 			};
 		};
@@ -5484,7 +5484,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="atm1";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item1
 		{
@@ -5593,7 +5593,7 @@ class Mission
 			vehicle="Misc_cargo_cont_tiny";
 			skill=0.60000002;
 			text="safe1";
-			init="this setpos [6509.7944, 11326.705, 2.85]; this allowdamage false;";
+			init="this setPosATL [6509.7944, 11326.705, 2.85]; this allowdamage false;";
 		};
 		class Item10
 		{
@@ -5605,7 +5605,7 @@ class Mission
 			vehicle="Misc_cargo_cont_tiny";
 			skill=0.60000002;
 			text="safe2";
-			init="this setpos [6514.8384, 11331.731, 2.85]; this allowdamage false;";
+			init="this setPosATL [6514.8384, 11331.731, 2.85]; this allowdamage false;";
 		};
 		class Item11
 		{
@@ -5617,7 +5617,7 @@ class Mission
 			vehicle="Misc_cargo_cont_tiny";
 			skill=0.60000002;
 			text="safe3";
-			init="this setpos [6523.71, 11340.56, 2.85]; this allowdamage false;";
+			init="this setPosATL [6523.71, 11340.56, 2.85]; this allowdamage false;";
 		};
 		class Item12
 		{
@@ -5699,7 +5699,7 @@ class Mission
 		};
 		class Item18
 		{
-			position[]={6003.0464,87.602417,11537.473};
+			position[]={6002.0049,87.461975,11536.752};
 			azimut=225.33299;
 			id=56;
 			side="EMPTY";
@@ -5772,7 +5772,7 @@ class Mission
 		};
 		class Item24
 		{
-			position[]={1483.4972,24.798693,18842.189};
+			position[]={3189.1331,45.897675,15229.122};
 			special="NONE";
 			id=64;
 			side="EMPTY";
@@ -5783,7 +5783,7 @@ class Mission
 		};
 		class Item25
 		{
-			position[]={-12394.401,425.9689,13298.668};
+			position[]={3199.0261,44.015034,15218.233};
 			special="NONE";
 			id=65;
 			side="EMPTY";
@@ -5846,7 +5846,6 @@ class Mission
 			vehicle="HeliHCivil";
 			leader=1;
 			skill=0.60000002;
-			init=" this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 8];this allowdamage false;";
 		};
 		class Item31
 		{
@@ -5893,7 +5892,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="atm4";
-			init="this allowdamage false; this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.10];";
+			init="this allowdamage false;";
 		};
 		class Item35
 		{
@@ -5905,7 +5904,7 @@ class Mission
 			vehicle="HeliHCivil";
 			leader=1;
 			skill=0.60000002;
-			init=" this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 8]; call compile ""[""""light"""", this, 0.2] execvm """"effects.sqf"""";"";this allowdamage false;";
+			init="['light', this, 0.02] execvm 'effects.sqf';";
 		};
 		class Item36
 		{
@@ -5950,7 +5949,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="copbank";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item40
 		{
@@ -6086,7 +6085,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="wfgunbox";
-			init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.1];clearMagazineCargo this; clearWeaponCargo this;";
+			init="this allowdamage false; clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item53
 		{
@@ -6134,7 +6133,7 @@ class Mission
 			azimut=246.72984;
 			id=159;
 			side="EMPTY";
-			vehicle="Land_CncBlock_Stripes";
+			vehicle="Land_CncBlock";
 			skill=0.60000002;
 			init="this allowdamage false;";
 		};
@@ -6144,7 +6143,7 @@ class Mission
 			azimut=-112.45788;
 			id=160;
 			side="EMPTY";
-			vehicle="Land_CncBlock_Stripes";
+			vehicle="Land_CncBlock";
 			skill=0.60000002;
 			init="this allowdamage false;";
 		};
@@ -6903,7 +6902,7 @@ class Mission
 			vehicle="UNBasicAmmunitionBox_EP1";
 			skill=0.60000002;
 			text="pmcbox";
-			init="this allowdamage false;clearMagazineCargo this; clearWeaponCargo this;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) - 0.01];this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0.00]; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false; clearMagazineCargo this; clearWeaponCargo this; this setPosATL [(getPosATL this select 0), (getPosATL this select 1), (getPosATL this select 2) - 0.01]; ['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item133
 		{
@@ -7164,7 +7163,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="atm5";
-			init="this allowdamage false; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false; ['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item159
 		{
@@ -10200,7 +10199,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="gunbox1";
-			init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 0];clearMagazineCargo this; clearWeaponCargo this;";
+			init="this allowdamage false;this setPosATL [getPosATL this select 0, getPosATL this select 1, (getPosATL this select 2) + 0];clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item460
 		{
@@ -10358,7 +10357,7 @@ class Mission
 			azimut=-198.34727;
 			id=618;
 			side="EMPTY";
-			vehicle="Land_CncBlock_Stripes";
+			vehicle="Land_CncBlock";
 			skill=0.60000002;
 			init="this allowdamage false;";
 		};
@@ -10383,7 +10382,7 @@ class Mission
 			vehicle="BAF_VehicleBox";
 			skill=1;
 			text="redgunbox";
-			init="this allowdamage false;clearMagazineCargo this; clearWeaponCargo this; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;clearMagazineCargo this; clearWeaponCargo this; ['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item478
 		{
@@ -10406,7 +10405,7 @@ class Mission
 			vehicle="USVehicleBox_EP1";
 			skill=1;
 			text="insgunbox";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""; clearMagazineCargo this; clearWeaponCargo this;";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf'; clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item480
 		{
@@ -10729,7 +10728,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="adminbank";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";this setPos [(getPos this select 0),(getPos this select 1),0];";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';this setPosATL [(getPosATL this select 0),(getPosATL this select 1),0];";
 		};
 		class Item511
 		{
@@ -10761,7 +10760,7 @@ class Mission
 			vehicle="FlagCarrierTKMilitia_EP1";
 			skill=0.60000002;
 			text="slaveflag";
-			init="this allowdamage false; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""";
+			init="this allowdamage false; ['light', this, 0.03] execvm 'effects.sqf'";
 		};
 		class Item514
 		{
@@ -10771,7 +10770,7 @@ class Mission
 			vehicle="FlagCarrierINDFOR_EP1";
 			skill=0.60000002;
 			text="civbackup";
-			init="this allowdamage false; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""";
+			init="this allowdamage false; ['light', this, 0.03] execvm 'effects.sqf'";
 		};
 		class Item515
 		{
@@ -10781,7 +10780,7 @@ class Mission
 			vehicle="FlagCarrierUNO_EP1";
 			skill=0.60000002;
 			text="copbackup";
-			init="this allowdamage false; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""";
+			init="this allowdamage false; ['light', this, 0.03] execvm 'effects.sqf'";
 		};
 		class Item516
 		{
@@ -10792,7 +10791,7 @@ class Mission
 			vehicle="FlagCarrierTakistanKingdom_EP1";
 			skill=0.60000002;
 			text="Vehiclefactory";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item517
 		{
@@ -10803,7 +10802,7 @@ class Mission
 			vehicle="FlagCarrierOPFOR_EP1";
 			skill=0.60000002;
 			text="redbackup";
-			init="this allowdamage false; call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";""";
+			init="this allowdamage false; ['light', this, 0.03] execvm 'effects.sqf'";
 		};
 		class Item518
 		{
@@ -10885,7 +10884,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="equipbox4";
-			init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 1.2];clearMagazineCargo this; clearWeaponCargo this;";
+			init="this allowdamage false;this setPosATL [getPosATL this select 0, getPosATL this select 1, 0];clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item526
 		{
@@ -10921,7 +10920,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="equipbox6";
-			init="this allowdamage false;this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 1.2];clearMagazineCargo this; clearWeaponCargo this;";
+			init="this allowdamage false; this setPosATL [getPosATL this select 0, getPosATL this select 1, 0];clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item529
 		{
@@ -11192,7 +11191,7 @@ class Mission
 			side="EMPTY";
 			vehicle="FlagCarrierTakistanKingdom_EP1";
 			skill=0.2;
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item557
 		{
@@ -11201,7 +11200,7 @@ class Mission
 			side="EMPTY";
 			vehicle="FlagCarrierTakistanKingdom_EP1";
 			skill=0.2;
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item558
 		{
@@ -11230,7 +11229,7 @@ class Mission
 			side="EMPTY";
 			vehicle="FlagCarrierTakistanKingdom_EP1";
 			skill=0.2;
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item561
 		{
@@ -11239,7 +11238,7 @@ class Mission
 			side="EMPTY";
 			vehicle="FlagCarrierTakistanKingdom_EP1";
 			skill=0.2;
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item562
 		{
@@ -11817,7 +11816,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate4";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item619
 		{
@@ -11828,7 +11827,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate5";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item620
 		{
@@ -11839,7 +11838,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate6";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item621
 		{
@@ -11850,7 +11849,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate1";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item622
 		{
@@ -11861,7 +11860,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate3";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item623
 		{
@@ -11872,7 +11871,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate2";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item624
 		{
@@ -13444,7 +13443,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate7";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item782
 		{
@@ -13455,7 +13454,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate8";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item783
 		{
@@ -13466,7 +13465,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate9";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item784
 		{
@@ -13477,7 +13476,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate10";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item785
 		{
@@ -13488,7 +13487,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate11";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item786
 		{
@@ -13499,7 +13498,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate12";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item787
 		{
@@ -14660,7 +14659,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate18";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item903
 		{
@@ -14671,7 +14670,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate17";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item904
 		{
@@ -14682,7 +14681,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate16";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item905
 		{
@@ -14693,7 +14692,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate15";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item906
 		{
@@ -14704,7 +14703,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate14";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item907
 		{
@@ -14715,7 +14714,7 @@ class Mission
 			vehicle="Land_CncBlock";
 			skill=0.2;
 			text="cgate13";
-			init="this allowDamage False; this setPos [(getPos this select 0),(getPos this select 1),-5]; ";
+			init="this allowDamage False; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-5]; ";
 		};
 		class Item908
 		{
@@ -16689,7 +16688,7 @@ class Mission
 			leader=1;
 			skill=0.2;
 			text="ps_4_flag1";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item1097
 		{
@@ -17334,7 +17333,7 @@ class Mission
 			vehicle="HeliHCivil";
 			leader=1;
 			skill=0.60000002;
-			init=" this setpos [getpos this select 0, getpos this select 1, (getpos this select 2) + 8];this allowdamage false;";
+			init=" this setPosATL [getPosATL this select 0, getPosATL this select 1, (getPosATL this select 2) + 8];this allowdamage false;";
 		};
 		class Item1151
 		{
@@ -17344,7 +17343,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1152
 		{
@@ -17354,7 +17353,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1153
 		{
@@ -17364,7 +17363,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1154
 		{
@@ -17374,7 +17373,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1155
 		{
@@ -17384,7 +17383,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1156
 		{
@@ -17394,7 +17393,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1157
 		{
@@ -17404,7 +17403,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1158
 		{
@@ -17414,7 +17413,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1159
 		{
@@ -17424,7 +17423,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1160
 		{
@@ -17434,7 +17433,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1161
 		{
@@ -17444,7 +17443,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1162
 		{
@@ -17454,7 +17453,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1163
 		{
@@ -17464,7 +17463,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1164
 		{
@@ -17492,7 +17491,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1167
 		{
@@ -17502,7 +17501,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1168
 		{
@@ -17512,7 +17511,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1169
 		{
@@ -17522,7 +17521,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1170
 		{
@@ -17532,7 +17531,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1171
 		{
@@ -17542,7 +17541,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1172
 		{
@@ -17552,7 +17551,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1173
 		{
@@ -17562,7 +17561,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1174
 		{
@@ -17572,7 +17571,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1175
 		{
@@ -17582,7 +17581,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1176
 		{
@@ -17592,7 +17591,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1177
 		{
@@ -17602,7 +17601,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1178
 		{
@@ -17612,7 +17611,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1179
 		{
@@ -17622,7 +17621,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1180
 		{
@@ -17632,7 +17631,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1181
 		{
@@ -17642,7 +17641,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1182
 		{
@@ -17652,7 +17651,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1183
 		{
@@ -17662,7 +17661,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1184
 		{
@@ -17672,7 +17671,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1185
 		{
@@ -17682,7 +17681,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1186
 		{
@@ -17692,7 +17691,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1187
 		{
@@ -17702,7 +17701,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1188
 		{
@@ -17712,7 +17711,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1189
 		{
@@ -17722,7 +17721,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1190
 		{
@@ -17732,7 +17731,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1191
 		{
@@ -17742,7 +17741,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1192
 		{
@@ -17752,7 +17751,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1193
 		{
@@ -17762,7 +17761,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1194
 		{
@@ -17888,7 +17887,7 @@ class Mission
 			vehicle="UNBasicAmmunitionBox_EP1";
 			skill=0.2;
 			text="equipbox";
-			init="this setpos [5713.2227, 8905.7861, 1.3756262]; this allowdamage false;clearMagazineCargo this; clearWeaponCargo this;";
+			init="this setPosATL [5713.2227, 8905.7861, 1.3756262]; this allowdamage false;clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item1207
 		{
@@ -17919,7 +17918,7 @@ class Mission
 			vehicle="RUSpecialWeaponsBox";
 			skill=0.2;
 			text="rusgunbox";
-			init="this setpos [3205.6614, 3534.2019, 0.70016241]; this allowdamage false; clearMagazineCargo this; clearWeaponCargo this;";
+			init="this setPosATL [3205.6614, 3534.2019, 0.70016241]; this allowdamage false; clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item1210
 		{
@@ -17939,8 +17938,8 @@ class Mission
 			side="EMPTY";
 			vehicle="UNBasicAmmunitionBox_EP1";
 			skill=0.2;
-			text="vipbox";
-			init="this setpos [8953.4648,5260.1401,0.7];this allowdamage false; clearMagazineCargo this; clearWeaponCargo this;";
+			text="illbox";
+			init="this setPosATL [8953.4648,5260.1401,0.7];this allowdamage false; clearMagazineCargo this; clearWeaponCargo this;";
 		};
 		class Item1212
 		{
@@ -17961,7 +17960,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_OPF_1";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1214
 		{
@@ -17992,7 +17991,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_CIV_1";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1217
 		{
@@ -18023,7 +18022,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_PMC_1";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1220
 		{
@@ -18054,7 +18053,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_CIV_2";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1223
 		{
@@ -18085,7 +18084,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_UN_1";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1226
 		{
@@ -18116,7 +18115,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_INS_1";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1229
 		{
@@ -18130,104 +18129,104 @@ class Mission
 		};
 		class Item1230
 		{
-			position[]={1619.1847,11.876926,18802.906};
+			position[]={3324.8206,52.622234,15189.839};
 			azimut=52.8666;
 			id=1515;
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10421.613, 10325.757, -0.18383324];";
+			init="this allowdamage false; this setPosATL [10421.613, 10325.757, -0.18383324];";
 		};
 		class Item1231
 		{
-			position[]={1619.4679,11.431865,18797.164};
+			position[]={3325.1038,52.655273,15184.097};
 			azimut=-37.316601;
 			id=1516;
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10421.896, 10320.013, -0.15180351];";
+			init="this allowdamage false; this setPosATL [10421.896, 10320.013, -0.15180351];";
 		};
 		class Item1232
 		{
-			position[]={1615.3761,10.919672,18796.145};
+			position[]={3321.012,53.083523,15183.077};
 			azimut=50.537998;
 			id=1517;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10417.806, 10318.994, -2.1636317];";
+			init="this allowdamage false; this setPosATL [10417.806, 10318.994, -2.1636317];";
 		};
 		class Item1233
 		{
-			position[]={1613.964,11.459602,18804.414};
+			position[]={3319.5999,53.150467,15191.347};
 			azimut=-39.203098;
 			id=1518;
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10416.394, 10327.264, -0.16716745];";
+			init="this allowdamage false; this setPosATL [10416.394, 10327.264, -0.16716745];";
 		};
 		class Item1234
 		{
-			position[]={1614.2316,10.865225,18797.637};
+			position[]={3319.8674,53.182228,15184.569};
 			azimut=52.577702;
 			id=1519;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10416.66, 10320.486, -2.1629755];";
+			init="this allowdamage false; this setPosATL [10416.66, 10320.486, -2.1629755];";
 		};
 		class Item1235
 		{
-			position[]={1613.089,10.810797,18799.125};
+			position[]={3318.7249,53.280323,15186.058};
 			azimut=52.577702;
 			id=1520;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10415.519, 10321.975, -2.1732898];";
+			init="this allowdamage false; this setPosATL [10415.519, 10321.975, -2.1732898];";
 		};
 		class Item1236
 		{
-			position[]={1612.0577,10.800418,18800.469};
+			position[]={3317.6936,53.349854,15187.401};
 			azimut=52.577702;
 			id=1521;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10414.487, 10323.32, -2.1658695];";
+			init="this allowdamage false; this setPosATL [10414.487, 10323.32, -2.1658695];";
 		};
 		class Item1237
 		{
-			position[]={1615.7511,10.874544,18794.207};
+			position[]={3321.387,53.067272,15181.14};
 			azimut=-6.7761898;
 			id=1522;
 			side="EMPTY";
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_SECRET_KSK";
-			init="this allowdamage false; this setpos [10418.18, 10317.056, -0.0014672652];";
+			init="this allowdamage false; this enableSimulation false; this setPosATL [10418.18, 10317.056, -0.0014672652];";
 		};
 		class Item1238
 		{
-			position[]={1616.7062,10.961217,18793.91};
+			position[]={3322.342,52.976013,15180.843};
 			azimut=-36.223801;
 			id=1523;
 			side="EMPTY";
 			vehicle="Land_CncBlock";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10418.98, 10316.916, -0.10354872];";
+			init="this allowdamage false; this setPosATL [10418.98, 10316.916, -0.10354872];";
 		};
 		class Item1239
 		{
-			position[]={1615.7491,10.915257,18795.148};
+			position[]={3321.385,53.056828,15182.081};
 			azimut=-37.915798;
 			id=1524;
 			side="EMPTY";
 			vehicle="Land_CncBlock";
 			skill=0.2;
-			init="this allowdamage false; this setpos [10418.222, 10317.889, -0.088238776];";
+			init="this allowdamage false; this setPosATL [10418.222, 10317.889, -0.088238776];";
 		};
 		class Item1240
 		{
@@ -19096,7 +19095,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1327
 		{
@@ -19106,7 +19105,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1328
 		{
@@ -19116,7 +19115,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1329
 		{
@@ -19126,7 +19125,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1330
 		{
@@ -19136,7 +19135,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1331
 		{
@@ -19146,7 +19145,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1332
 		{
@@ -19156,7 +19155,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1333
 		{
@@ -19177,7 +19176,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_TER_1";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1335
 		{
@@ -19191,104 +19190,104 @@ class Mission
 		};
 		class Item1336
 		{
-			position[]={1620.7042,14.327463,18820.133};
+			position[]={3326.3401,52.343613,15207.065};
 			azimut=25.115;
 			id=1622;
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6535.7617, 1958.8875, -0.18383324];";
+			init="this allowdamage false; this setPosATL [6535.7617, 1958.8875, -0.18383324];";
 		};
 		class Item1337
 		{
-			position[]={1622.1886,13.674015,18814.484};
+			position[]={3327.8245,52.223297,15201.417};
 			azimut=-67.318001;
 			id=1623;
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6537.2461, 1953.2395, -0.25249141];";
+			init="this allowdamage false; this setPosATL [6537.2461, 1953.2395, -0.25249141];";
 		};
 		class Item1338
 		{
-			position[]={1613.9816,12.907393,18815.082};
+			position[]={3319.6174,53.101543,15202.015};
 			azimut=115.159;
 			id=1624;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6529.0386, 1953.8362, -2.1636317];";
+			init="this allowdamage false; this setPosATL [6529.0386, 1953.8362, -2.1636317];";
 		};
 		class Item1339
 		{
-			position[]={1612.673,12.492777,18813.273};
+			position[]={3318.3088,53.252842,15200.206};
 			azimut=-6.7761898;
 			id=1625;
 			side="EMPTY";
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_SECRET_OPF";
-			init="this allowdamage false; this setpos [6527.7295, 1952.0264, -0.0014672652];";
+			init="this allowdamage false; this enableSimulation false; this setPosATL [6527.7295, 1952.0264, -0.0014672652];";
 		};
 		class Item1340
 		{
-			position[]={1612.9425,12.416384,18812.602};
+			position[]={3318.5784,53.233761,15199.534};
 			azimut=21.871099;
 			id=1626;
 			side="EMPTY";
 			vehicle="Land_CncBlock";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6528, 1951.3549, -0.13960996];";
+			init="this allowdamage false; this setPosATL [6528, 1951.3549, -0.13960996];";
 		};
 		class Item1341
 		{
-			position[]={1616.9484,12.67398,18811.422};
+			position[]={3322.5842,52.818047,15198.354};
 			azimut=25.115;
 			id=1627;
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6532.0054, 1950.1748, 3.0517578e-005];";
+			init="this allowdamage false; this setPosATL [6532.0054, 1950.1748, 3.0517578e-005];";
 		};
 		class Item1342
 		{
-			position[]={1613.2628,12.613266,18813.66};
+			position[]={3318.8987,53.195763,15200.593};
 			azimut=22.0511;
 			id=1628;
 			side="EMPTY";
 			vehicle="Land_CncBlock";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6528.3198, 1952.4131, -0.14017251];";
+			init="this allowdamage false; this setPosATL [6528.3198, 1952.4131, -0.14017251];";
 		};
 		class Item1343
 		{
-			position[]={1614.8175,13.265745,18816.867};
+			position[]={3320.4534,52.990253,15203.8};
 			azimut=115.159;
 			id=1629;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6529.8745, 1955.621, -2.1782594];";
+			init="this allowdamage false; this setPosATL [6529.8745, 1955.621, -2.1782594];";
 		};
 		class Item1344
 		{
-			position[]={1615.5128,13.539229,18818.301};
+			position[]={3321.1487,52.903942,15205.233};
 			azimut=115.159;
 			id=1630;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6530.5698, 1957.0558, -2.1299288];";
+			init="this allowdamage false; this setPosATL [6530.5698, 1957.0558, -2.1299288];";
 		};
 		class Item1345
 		{
-			position[]={1616.3605,13.850425,18819.734};
+			position[]={3321.9963,52.799427,15206.667};
 			azimut=115.159;
 			id=1631;
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setpos [6531.417, 1958.4879, -2.1121843];";
+			init="this allowdamage false; this setPosATL [6531.417, 1958.4879, -2.1121843];";
 		};
 		class Item1346
 		{
@@ -19382,7 +19381,7 @@ class Mission
 		};
 		class Item1355
 		{
-			position[]={1494.024,23.825386,18842.469};
+			position[]={3199.6604,45.779434,15229.401};
 			id=1641;
 			side="EMPTY";
 			vehicle="FlagCarrierWhite_EP1";
@@ -19459,7 +19458,7 @@ class Mission
 			leader=1;
 			skill=0.60000002;
 			text="pmcairspawn";
-			init="this setPosATL [6162.8,11591.8,5.3]; this allowdamage false;this hideObject true;";
+			init="this setPosATL [6162.8,11591.8,5.3]; this allowdamage false; this hideObject true;";
 			synchronizations[]={1665};
 		};
 		class Item1363
@@ -19471,7 +19470,7 @@ class Mission
 			vehicle="FlagCarrierTakistanKingdom_EP1";
 			skill=0.60000002;
 			text="Aircraftfactory";
-			init="this allowdamage false;call compile ""[""""light"""", this, 0.03] execvm """"effects.sqf"""";"";";
+			init="this allowdamage false;['light', this, 0.03] execvm 'effects.sqf';";
 		};
 		class Item1364
 		{
@@ -19482,7 +19481,7 @@ class Mission
 			vehicle="Baseball";
 			skill=0.60000002;
 			text="mosquelamp";
-			init="this setpos [5655.2417, 8894.0166, 3];this enableSimulation false;call compile ""[""""light"""", this, 0.04] execvm """"effects.sqf"""";"";";
+			init="this setPosATL [5655.2417, 8894.0166, 3]; this enableSimulation false; ['light', this, 0.04] execvm 'effects.sqf';";
 		};
 		class Item1365
 		{
@@ -19492,7 +19491,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1366
 		{
@@ -19502,7 +19501,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1367
 		{
@@ -19512,7 +19511,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1368
 		{
@@ -19522,7 +19521,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1369
 		{
@@ -19532,7 +19531,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1370
 		{
@@ -19542,7 +19541,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1371
 		{
@@ -19552,7 +19551,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1372
 		{
@@ -19573,7 +19572,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_SECRET_INS";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1374
 		{
@@ -19593,7 +19592,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1376
 		{
@@ -19603,7 +19602,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1377
 		{
@@ -19613,7 +19612,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1378
 		{
@@ -19623,7 +19622,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1379
 		{
@@ -19633,7 +19632,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1380
 		{
@@ -19643,7 +19642,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1381
 		{
@@ -19653,7 +19652,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1382
 		{
@@ -19674,7 +19673,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_SECRET_FR";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1384
 		{
@@ -19694,7 +19693,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1386
 		{
@@ -19704,7 +19703,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1387
 		{
@@ -19714,7 +19713,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317]; ";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317]; ";
 		};
 		class Item1388
 		{
@@ -19724,7 +19723,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Land_HBarrier_large";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-0.1];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-0.1];";
 		};
 		class Item1389
 		{
@@ -19734,7 +19733,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1390
 		{
@@ -19744,7 +19743,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1391
 		{
@@ -19754,7 +19753,7 @@ class Mission
 			side="EMPTY";
 			vehicle="Concrete_Wall_EP1";
 			skill=0.2;
-			init="this allowdamage false; this setPos [(getPos this select 0),(getPos this select 1),-2.1636317];";
+			init="this allowdamage false; this setPosATL [(getPosATL this select 0),(getPosATL this select 1),-2.1636317];";
 		};
 		class Item1392
 		{
@@ -19775,7 +19774,7 @@ class Mission
 			vehicle="Barrel5";
 			skill=0.2;
 			text="CS_SECRET_BAF";
-			init="this allowdamage false;";
+			init="this allowdamage false; this enableSimulation false;";
 		};
 		class Item1394
 		{
@@ -20406,7 +20405,7 @@ class Mission
 			side="EMPTY";
 			vehicle="USMC_WarfareBFieldhHospital";
 			skill=1;
-			init="this allowDamage false;";
+			init="this addEventHandler ['handleDamage', {0}];";
 		};
 		class Item1457
 		{
@@ -20417,7 +20416,7 @@ class Mission
 			side="EMPTY";
 			vehicle="INS_WarfareBFieldhHospital";
 			skill=1;
-			init="this allowDamage false;";
+			init="this addEventHandler ['handleDamage', {0}];";
 		};
 		class Item1458
 		{
@@ -20428,7 +20427,7 @@ class Mission
 			side="EMPTY";
 			vehicle="RU_WarfareBFieldhHospital";
 			skill=1;
-			init="this allowDamage false;";
+			init="this addEventHandler ['handleDamage', {0}];";
 		};
 		class Item1459
 		{
@@ -20439,7 +20438,7 @@ class Mission
 			side="EMPTY";
 			vehicle="GUE_WarfareBFieldhHospital";
 			skill=1;
-			init="this allowDamage false;";
+			init="this addEventHandler ['handleDamage', {0}];";
 		};
 		class Item1460
 		{
@@ -20450,7 +20449,7 @@ class Mission
 			side="EMPTY";
 			vehicle="CDF_WarfareBFieldhHospital";
 			skill=1;
-			init="this allowDamage false;";
+			init="this addEventHandler ['handleDamage', {0}];";
 		};
 	};
 	class Markers
@@ -22044,8 +22043,8 @@ class Mission
 		class Item178
 		{
 			position[]={8956.0762,269.92862,5261.7549};
-			name="viparea";
-			text="VIP Area";
+			name="illarea";
+			text="Ill Area";
 			markerType="ELLIPSE";
 			type="mil_box";
 			colorName="ColorBlack";
@@ -22056,7 +22055,7 @@ class Mission
 		class Item179
 		{
 			position[]={8956.2646,268.98804,5262.8984};
-			name="vipareaname";
+			name="illareaname";
 			text=" Smuggler";
 			type="hd_flag";
 			colorName="ColorRed";
@@ -22164,7 +22163,7 @@ class Mission
 		};
 		class Item190
 		{
-			position[]={3098.8823,65.212173,9977.9678};
+			position[]={3098.7329,61.429222,9976.5742};
 			name="carshop_2_1_1_1";
 			text="Car Shop 5";
 			type="mil_flag";
@@ -22488,7 +22487,7 @@ class Mission
 		};
 		class Item224
 		{
-			position[]={1527.7164,39.185429,18947.205};
+			position[]={3233.3528,62.514297,15334.138};
 			name="dontgoheremkr";
 			text=" FORBIDDEN";
 			markerType="ELLIPSE";
@@ -22499,7 +22498,7 @@ class Mission
 		};
 		class Item225
 		{
-			position[]={1526.1959,38.10323,18939.166};
+			position[]={3231.8323,61.842392,15326.099};
 			name="gamelogicmkrwarning";
 			text=" Game Logic Area - STAY OUT";
 			type="mil_warning";
@@ -22525,25 +22524,25 @@ class Mission
 		};
 		class Item228
 		{
-			position[]={1520.3737,22.939857,18848.822};
+			position[]={3226.01,46.025154,15235.755};
 			name="C_SPAWN_WEST";
 			type="Empty";
 		};
 		class Item229
 		{
-			position[]={1536.1598,21.628864,18848.871};
+			position[]={3241.7961,45.743267,15235.804};
 			name="C_SPAWN_EAST";
 			type="Empty";
 		};
 		class Item230
 		{
-			position[]={1522.5162,18.638203,18832.492};
+			position[]={3228.1526,43.706535,15219.425};
 			name="C_SPAWN_GUER";
 			type="Empty";
 		};
 		class Item231
 		{
-			position[]={1540.192,17.81146,18831.943};
+			position[]={3245.8284,44.044865,15218.876};
 			name="C_SPAWN_CIV";
 			type="Empty";
 		};
@@ -23509,7 +23508,7 @@ class Mission
 		class Item326
 		{
 			position[]={3209.9978,329.09311,3534.5596};
-			name="vipareaname_1";
+			name="illareaname_1";
 			text="Arms Dealer";
 			type="hd_flag";
 			colorName="ColorRed";
@@ -24055,7 +24054,7 @@ class Mission
 		};
 		class Item25
 		{
-			position[]={6172.6079,60.042042,11184.541};
+			position[]={6171.8486,60.035145,11184.668};
 			a=30;
 			b=10;
 			angle=124;

@@ -14,7 +14,7 @@ titleCut ["","black faded", 0];
 
 private["_pos","_dir","_vec","_vecs","_freeseats"];
 
-_pos = position player;
+_pos = getPosATL player;
 _dir = direction player;
 _vec = objNull;
 
@@ -33,6 +33,6 @@ waitUntil {vehicle player != player};
 unassignVehicle player;
 player action ["Eject",vehicle player];
 waitUntil {vehicle player == player};
-player setpos _pos;
-player setdir _dir;
+player setPosATL _pos;
+player setDir _dir;
 titleCut["", "BLACK in",2];

@@ -23,8 +23,6 @@ if (_art == "bail") then {
 	};
 };
 
-
-
 if (_art == "spielerliste") then {
 
 	if (!(createDialog "liste_1_button")) exitWith {hint "Dialog Error!";};
@@ -37,17 +35,21 @@ if (_art == "spielerliste") then {
 	lbClear 1;
 	lbClear (_DFML displayCtrl 1);
 	
-	private["_total_money", "_private_money", "_factory_money", "_cash", "_bank","_trennlinie"];
+	private["_total_money", "_private_money", "_factory_money", "_cash", "_bank","_trennlinie", "_playTime"];
 	_total_money = [player] call player_get_total_money;
 	_private_money = [player] call player_get_private_storage_money;
 	_factory_money = [player] call player_get_factory_money;
 	_cash = [player, 'money'] call INV_GetItemAmount;
 	_bank = [player] call bank_get_value;
+	
+	_playTime = ([player] call ftf_getPlayTime) / 3600;
+	
 	_trennlinie = "---------------------------------------------";
 	(_DFML displayCtrl 1) 	lbAdd format ["Date:     %3.%2.%1", (date select 0), (date select 1), (date select 2)];
 	(_DFML displayCtrl 1)	lbAdd format ["Runtime: %1 minutes", (round(time/60))];
 	(_DFML displayCtrl 1)	lbAdd _trennlinie;
 	(_DFML displayCtrl 1)	lbAdd localize "STRS_statdialog_playerinfo";
+	(_DFML displayCtrl 1)	lbAdd format ["Playtime: %1 Hours", _playTime];
 	(_DFML displayCtrl 1)	lbAdd format ["Total money: $%1", strM(_total_money)];
 	(_DFML displayCtrl 1)	lbAdd format ["Money: $%2", localize "STRS_statdialog_health", strM(_cash)];
 	(_DFML displayCtrl 1)	lbAdd format ["Savings: $%2", localize "STRS_statdialog_health", strM(_bank)];

@@ -77,7 +77,7 @@ class FSM
       name = "Select";
       itemno = 2;
       init = /*%FSM<STATEINIT""">*/"_delay = _logic getvariable ""delay"";" \n
-       "_center = _logic getvariable ""center"";" \n
+       "_center = _logic getvariable [""center"", objNull];" \n
        "if (isnull _center) then {_center = cameraon};" \n
        "_particleEffects = _logic getvariable ""particleEffects"";" \n
        "_isSnow = 0 in _particleEffects;" \n
@@ -421,7 +421,7 @@ class FSM
     {
       name = "Refresh";
       itemno = 12;
-      init = /*%FSM<STATEINIT""">*/"_center = _logic getvariable ""center"";" \n
+      init = /*%FSM<STATEINIT""">*/"_center = _logic getvariable [""center"", objnull];" \n
        "if (isnull _center) then {_center = cameraon};" \n
        "" \n
        "_ppos = position _center;" \n

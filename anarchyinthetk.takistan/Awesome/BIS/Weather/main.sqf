@@ -39,7 +39,7 @@ _particleEffects = if (isnil {_logic getvariable "particleEffects"}) then {[0,1,
 _logic setvariable ["particleEffects",_particleEffects,true];
 
 //--- Center
-_center = if (isnil {_logic getvariable "center"}) then {objnull} else {_logic getvariable "center";};
+_center = _logic getvariable ["center", objnull];
 _logic setvariable ["center",_center,true];
 
 ///////////////////////////////////////////////////////////////////////////////////

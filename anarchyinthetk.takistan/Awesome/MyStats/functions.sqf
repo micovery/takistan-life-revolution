@@ -356,6 +356,7 @@ stats_server_player_disconnected = {
 	[_player] call gang_player_disconnected;
 	[_uid, _player] call ftf_disconnected;
 	[_player] spawn bankRob_disconnect;
+	[_player] spawn player_resrain_disconnect;
 	diag_log format["%1,%2,%3 - disconnected saving end", _player, _name, _uid];
 	
 
@@ -391,6 +392,7 @@ stats_load_core_libraries = {
 	[] call player_save_side_gear_setup;
 	[] call player_init_arrays;
 	ExecSQF("broadcast.sqf");
+	ExecSQF("Awesome\Scripts\white_black_list.sqf");
 	
 	_h = [] execVM "Awesome\Clothes\Clothes.sqf";
 	waitUntil {scriptDone _h};
@@ -784,7 +786,6 @@ stats_client_setup = {
 	
 	private["_uid"];
 	_uid = [] call stats_client_wait_uid;
-	ExecSQF("Awesome\Scripts\white_black_list.sqf");
 	
 	["Fetching client stats from server ... "] call stats_client_update_loading_title;
 	[0.6] call stats_client_update_loading_progress;

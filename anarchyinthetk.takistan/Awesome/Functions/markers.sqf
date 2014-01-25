@@ -85,7 +85,7 @@ marker_loop_draw = {
 	
 	private["_player_variable_name", "_player_variable"];
 	_player_variable_name = _local_marker;
-	_player_variable = missionNamespace getVariable _player_variable_name;
+	_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 
 	if (not([_player_variable] call player_exists)) exitWith {
 		_local_marker setMarkerAlphaLocal 0;

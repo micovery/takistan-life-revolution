@@ -114,6 +114,7 @@ admin_actions_list = {
 			private["_target"];
 			_target = cursorTarget;
 			if (not(isNil "_target")) then {
+				if (isPlayer _target) exitwith {};
 				if (typeName _target == "OBJECT") then {
 					if (_target isKindOf "Man" && not([_target] call object_shop)) then {
 						[_target] call C_delete;

@@ -23,8 +23,15 @@ _exit = false;
 {
 	private["_y"];
 	_y = _x select 5;
-	if (	(_unit distance (getPosATL _y)) <= 10	) then {_exit = true;};
+	if ((_unit distance (getPosATL _y)) <= 10) then {_exit = true;};
 } forEach Clothing_Shops;
+
+if !_exit then {
+		_exit = [_unit] call player_get_arrest;
+	};
+
+if _exit exitwith {};
+
 
 
 private["_nvcls"];
@@ -44,7 +51,7 @@ if (_projectile == "B_9x19_SD") then {
 		_distance = _source distance _unit;
 		_veh = vehicle _unit;
 		_inveh = ( (_veh iskindof "ATV_Base_EP1") ||  (_veh iskindof "Motorcycle") );	
-		[2, _unit, _source, _distance, _select, _damage, _veh, _inveh] execVM "Awesome\Scripts\Stun.sqf";
+		[_unit, _source, _distance, _select, _damage, _veh, _inveh] spawn stun_gun_impact;
 	};
 };
 
@@ -55,7 +62,7 @@ if ((_projectile == "B_12Gauge_74Slug") ) then {
 		_distance = _source distance _unit;
 		_veh = vehicle _unit;
 		_inveh = ( (_veh iskindof "ATV_Base_EP1") ||  (_veh iskindof "Motorcycle") );	
-		[2, _unit, _source, _distance, _select, _damage, _veh, _inveh] execVM "Awesome\Scripts\Stun.sqf";
+		[_unit, _source, _distance, _select, _damage, _veh, _inveh] spawn stun_gun_impact;
 	};
 };
 	

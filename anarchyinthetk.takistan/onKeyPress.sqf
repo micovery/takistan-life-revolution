@@ -254,7 +254,7 @@ keyboard_cop_siren_handler = {
 keyboard_stun_handler = {
 	if(!INV_shortcuts) exitWith {false};
 	player setVariable ["armed", true];
-	[3, player] execVM "Awesome\Scripts\Stun.sqf";
+	[player] spawn stun_punch;
 	true
 };
 

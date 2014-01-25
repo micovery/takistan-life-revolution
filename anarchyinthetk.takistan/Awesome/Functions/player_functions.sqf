@@ -11,7 +11,7 @@ player_exists = {
 	private["_player"];
 	_player = _this select 0;
 	if (isNil "_player") exitWith {false};
-	if (typeName _player != "OBJECT") exitWith {false};
+	if ((typeName _player) != "OBJECT") exitWith {false};
 	if (isNull _player) exitWith {false};
 	true
 };
@@ -755,6 +755,28 @@ player_disconnect_setPrison = {
 	
 };
 
+player_inPrison = {
+	private["_player","_trigger","_list","_inJail"];
+	_player = _this select 0;
+	
+	_trigger = JailTrigger1;
+	_list = list _trigger;
+	
+	if !(_player in _list) exitwith {false};
+	
+	_inJail = false;
+	{
+		_trigger = _x;
+		_list = list _trigger;
+		
+		if (_player in _list) exitwith {
+				_inJail = true;
+			};
+	} forEach [JailTrigger2, JailTrigger3, JailTrigger4];
+	
+	_inJail
+};
+
 player_prison_time = {
 	private["_player", "_minutes"];
 	_player = _this select 0;
@@ -836,13 +858,13 @@ player_prison_reset = {
 player_prison_release = {
 	private["_player"];
 	_player = _this select 0;
-	_player setPosATL getMarkerPos "jail_freemarker";	
+	_player setPosATL (getMarkerPos "jail_freemarker");	
 	_player setdamage 0; 
 };
 
 
 player_prison_loop = { _this spawn {
-	private["_player", "_time_left", "_bail_left"];
+	private["_player", "_time_left", "_bail_left", "_exit"];
 	_player = _this select 0;
 	_time_left = _this select 1;
 	_bail_left = _this select 2;
@@ -863,7 +885,7 @@ player_prison_loop = { _this spawn {
 	_time_original = _time_left;
 	
 	//move player to prison
-	_player setPos (getMarkerPos "prisonspawn");
+	_player setPosATL (getMarkerPos "prisonspawn");
 	_player setDamage 0;
 	
 	//mark as arrested and clear warrants
@@ -872,6 +894,8 @@ player_prison_loop = { _this spawn {
 	[_player, "restrained", false] call player_set_bool;
 	[_player, "stunned", false] call player_set_bool;
 	
+	_exit = false;
+	SleepWait(3)
 	
 	while {_time_left >= 0 && _bail_left >= 0} do {
 		_bail_left = floor(((_time_left/_time_original)) * ([_player] call player_get_bail));
@@ -907,36 +931,52 @@ player_prison_loop = { _this spawn {
 			_message = format["%1-%2 has been set free by the authorities", _player, _player_name];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 			*/
+			player_prison_releasing = true;
 			[_player] call player_prison_reset;
 			[_player] call player_prison_release;
+			
+			SleepWait(3)
+			player_prison_releasing = false;
 		};
 		
-		//PLAYER HAS ESCAPED PRISON
-		if (((player distance prison_logic) >= 100) && ((vehicle player) == player)) then {
-			private["_message"];
-			_message = format["%1-%2 attempted to escape from prison !", _player, _player_name];
-			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-			player setPosATL (getPosATL prison_logic);
+		if !([(vehicle _player)] call player_inPrison) then {
+			//PLAYER HAS ATTEMPTED ESCAPING PRISON
+			if (((vehicle _player) == _player) || !((vehicle _player) isKindOf "Air")) then {
+					private["_message"];
+					_message = format["%1-%2 attempted to escape from prison !", _player, _player_name];
+					format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+					if ((vehicle _player) != _player) then {moveOut _player};
+					_player setVelocity [0,0,0];
+					_player setPosATL (getPosATL prison_logic);
+				}else{
+					//PLAYER HAS ESCAPED PRISON
+					if (((getPosATL (vehicle _player)) select 2) >= 5) then {
+							private["_message"];
+							_message = format["%1-%2 has pulled a daring escape from prison >_< !", _player, _player_name];
+							format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+							
+							[_player, false] call player_set_arrest;
+							[_player, "jailtimeleft", 0] call player_set_scalar;
+							[_player, 0] call player_set_bail;
+							[_player, "(prison-break)", 20000, 200, false] call player_update_warrants;
+							_exit = true;
+						};
+				};
 		};
-		
-		//PLAYER HAS ESCAPED PRISON
-		if ((player distance prison_logic) >= 100) exitWith {
-			private["_message"];
-			_message = format["%1-%2 has pulled a daring escape from prison >_< !", _player, _player_name];
-			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-			[_player, false] call player_set_arrest;
-			[_player, "jailtimeleft", 0] call player_set_scalar;
-			[_player, 0] call player_set_bail;
-			[_player, "(prison-break)", 20000, 200, false] call player_update_warrants;
-		};
+		if _exit exitwith {};
 		
 		//PLAYER HAS SERVED HIS FULL SENTNECE
 		if (_time_left <= 0 ) exitWith {
 			private["_message"];
 			_message = format["%1-%2 has been released from prison, after serving a %3 minute/s sentence", _player, _player_name, round(_time_original/60)];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+			
+			player_prison_releasing = true;
 			[_player] call player_prison_reset;
 			[_player] call player_prison_release;
+			
+			SleepWait(3)
+			player_prison_releasing = false;
 		};
 		
 		//PLAYER HAS PAID THE FULL BAIL
@@ -944,12 +984,17 @@ player_prison_loop = { _this spawn {
 			private["_message"];
 			_message = format["%1-%2 has been relased from prison, after paying bail", _player, _player_name];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
+			
+			player_prison_releasing = true;
 			[_player] call player_prison_reset;
 			[_player] call player_prison_release;
+			
+			SleepWait(3)
+			player_prison_releasing = false;
 		};
 		
 		_time_left  = _time_left - 1;
-		sleep 1;
+		SleepWait(1)
 	};
 };};
 
@@ -960,7 +1005,7 @@ player_prison_convict = {
 
 	if (isNil "_player") exitWith {};
 	if (_player != player) exitWith {};
-	if (not([_player] call player_human)) exitWith {};
+	if (!([_player] call player_human)) exitWith {};
 
 	private["_time_left", "_bail_left"];
 	_time_left = round([_player, "jailtimeleft"] call player_get_scalar);
@@ -1113,7 +1158,7 @@ player_prison_roe = { _this spawn {
 		};
 		
 		//PLAYER HAS ESCAPED PRISON
-		if ((_player distance CopPrison) >= 100) then {
+		if !([_player] call player_inPrison) then {
 			private["_message"];
 			_message = format["%1-%2 attempted to escape from prison with %3 minute/s left on his sentence", _player, (name _player), strN(round(_time_left/60))];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
@@ -1124,11 +1169,16 @@ player_prison_roe = { _this spawn {
 	
 		//PLAYER HAS SERVED HIS FULL SENTNECE
 		if (_time_left <= 0 ) exitWith {
+			player_prison_releasing = true;
+		
 			[_player, "roeprisontime", 0] call player_set_scalar;
 			[_player, "roeprison", false] call player_set_bool;
 			_message = format["%1-%2 has been set free, after serving %3 minute/s", _player, (name _player), strN(round(_time_original/60))];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 			_player setPosATL (getPosATL CopPrisonAusgang);
+			
+			SleepWait(3)
+			player_prison_releasing = false;
 		};
 		
 		_time_left  = _time_left - 1;
@@ -2675,11 +2725,12 @@ player_reset_prison = {
 		
 		[_player, "RobberDisconnect", false] call player_set_bool;
 	}else{
-		if (([_player, "restrained"] call player_get_bool) && not(iscop)) then {
+		if (([_player, "restrained"] call player_get_bool) && !(iscop) && ([_player, "restrainDisconnect"] call player_get_bool)) then {
 			private["_message"];
 			_message = format["%1-%2 aborted while restrained, he has been sent to prison", _player, (name _player)];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 			
+			[_player, "restrainDisconnect", false] call player_set_bool;
 			[_player, 15] call player_prison_time;
 			[_player, 100] call player_prison_bail;
 			[_player] call player_prison_convict;
@@ -2928,7 +2979,25 @@ player_escape_menu_spawn = {
 	};
 
 player_escape_menu_abortCheck = {
-		if ( time < ((player getVariable ["robTime", -600]) + (60 * 3)) ) then{(60 * 3)}else{if (time < (lastShot + 60))then{60}else{5}}
+		private["_shotTime","_return"];
+		_shotTime = lastShot + 60;
+		
+		_return = 1;
+		_return = if ( time < ((player getVariable ["robTime", -600]) + (60 * 3)) ) then{
+				round(((player getVariable "robTime") + (60 * 3)) - time)
+			}else{
+				if (lastShot == 0) then {
+						3
+					}else{
+						if (time < _shotTime) then {
+								round(_shotTime - time)
+							}else{
+								3
+							};
+					};
+			};
+			
+		(_return max 3)
 	};
 	
 player_init_civilian_stats = {
@@ -3150,6 +3219,16 @@ player_vehicleGrabKiller = {
 	if !(isNull _unit) exitwith {_unit};
 	
 	_unit
+};
+
+player_resrain_disconnect = {
+	private["_player", "_robAbort"];
+	_player = _this select 0;
+	
+	if ([_player, "restrained"] call player_get_bool) exitwith {
+			[_player, "restrainDisconnect", true] call player_set_bool;
+		};
+
 };
 
 

@@ -72,9 +72,10 @@ camera_move_pos_vector = {
 
 
 camera_next_target = {
-	private["_direction", "_target"];
-	_direction = _this select 0;
-	_target = _this select 1;
+	private["_player", "_direction", "_target"];
+	_player = _this select 0;
+	_direction = _this select 1;
+	_target = _this select 2;
 	
 	private["_units"];
 	_units = playableUnits;
@@ -104,7 +105,8 @@ camera_update_target = {
 	private["_handled"];
 	_handled = false;
 	if (_shift && _key in (actionKeys "NextChannel")) then {
-		_target = [+1, _target] call camera_next_target;
+		player setVariable ["camera_pos", nil];
+		_target = [_player, +1, _target] call camera_next_target;
 		player groupChat format["Camera target set to %1-%2", _target, (name _target)];
 		private["_pos"];
 		_pos = if (isNil "_previous_target") then {nil} else {[_player] call camera_get_position};
@@ -118,7 +120,8 @@ camera_update_target = {
 	};
 	
 	if (_shift && _key in (actionKeys "PrevChannel")) then {
-		_target = [-1, _target] call camera_next_target;
+		player setVariable ["camera_pos", nil];
+		_target = [_player, -1, _target] call camera_next_target;
 		player groupChat format["Camera target set to %1-%2", _target, (name _target)];
 		private["_pos"];
 		_pos = if (isNil "_previous_target") then {nil} else {[_player] call camera_get_position};
@@ -134,6 +137,8 @@ camera_update_target = {
 	if (_shift && _key in (actionKeys "Chat")) then {
 		player groupChat format["Detaching form camera target"];
 
+		private["_camera"];
+		_camera = _player getVariable "camera";
 		detach _camera;
 		_player setVariable ["camera_target", nil];
 		
@@ -315,7 +320,11 @@ camera_save_position = {
 	private["_player", "_position"];
 	_player = _this select 0;
 	_position = _this select 1;
-	_player setVariable ["camera_pos", _position];
+	if ((typeName _position) == "STRING") then {
+			_player setVariable ["camera_pos", nil];
+		}else{
+			_player setVariable ["camera_pos", _position];
+		};
 };
 
 camera_set_position = {
@@ -334,9 +343,8 @@ camera_set_position = {
 	if (isNil "_camera") exitWith {};
 	
 	if (isNil "_target") then {
-		_camera setPos _position;
-	}
-	else {
+		_camera setPosATL _position;
+	} else {
 		_camera attachTo [(vehicle _target), _position];
 	};
 };
@@ -681,19 +689,30 @@ camera_save_heading = {
 	private["_player", "_heading"];
 	_player = _this select 0;
 	_heading = _this select 1;
-	_player setVariable ["camera_heading", _heading];
+	if ((typeName _heading) == "STRING") then {
+			_player setVariable ["camera_heading", nil];
+		}else{
+			_player setVariable ["camera_heading", _heading];
+		};
 };
 
 camera_get_heading = {
 	private["_player"];
 	_player = _this select 0;
 	
-	private["_camera"];
-	_camera = _player getVariable "camera";
-	
 	private["_heading"];
-	_heading = _player getVariable "camera_heading";
-	_heading = if (isNil "_heading") then {[_player, [0,0,0]] call camera_heading_modelToWorld} else {_heading};
+//	_heading = _player getVariable ["camera_heading", ([_player, [0,0,0]] call camera_heading_modelToWorld)];
+//	_heading
+// Doesn't work, nil won't make it return default
+//	(_player getVariable ["camera_heading", ([_player, [0,0,0]] call camera_heading_modelToWorld)])
+	
+	_heading = [];
+	_headingVar = _player getVariable "camera_heading";
+	_heading = if (isNil "_headingVar") then {
+			[_player, [0,0,0]] call camera_heading_modelToWorld
+		}else{
+			_headingVar
+		};
 	_heading
 };
 
@@ -795,8 +814,8 @@ camera_create = {
 	showCinemaBorder false;
 	_player setVariable ["camera", _camera];
 	_player setVariable ["camera_target", nil];
-	[_player, nil] call camera_set_heading;
-	[_player, nil] call camera_set_position;
+	[_player, ""] call camera_set_heading;
+	[_player, ""] call camera_set_position;
 	[_player] call camera_map_close;
 	[_player, 0] call camera_set_velocity;
 	[_player, 1] call camera_set_max_velocity;
@@ -890,9 +909,7 @@ camera_toggle = {
 		[] call camera_setup_mouseButtonClick;
 		[] call camera_setup_MouseZChanged;
 		[_player] call camera_create;
-
-	}
-	else {
+	} else {
 		player groupChat format["Disabling camera!"];
 		[] call camera_remove_mouseMoving;
 		[] call camera_remove_keyDown;

@@ -50,18 +50,23 @@ interact_ai = {
 	
 	private["_handled"];
 	if((_target in pmc_shop_list)) exitWith {
-		if (not([_player] call player_civilian)) exitWith {
+		if (!([_player] call player_civilian)) exitWith {
 			hint "You cannot access PMC Shops: Not a civilian";
 			false
 		};
 
-		if (not([_player] call player_pmc_whitelist)) exitWith {
+		if (!([_player] call player_pmc_whitelist)) exitWith {
 			hint "You cannot access PMC Shops: Not in whitelist";
 			false
 		};
 
 		if ([_player] call player_pmc_blacklist) exitWith {
 			hint "You cannot access PMC Shops: In blacklist";
+			false
+		};
+		
+		if !("pmc_license_journeyman" call INV_HasLicense) exitWith {
+			hint "You cannot access PMC Shops: No Journeyman License";
 			false
 		};
 
@@ -2810,7 +2815,7 @@ interact_admin_menu = {
 			%1, 
 			(lbData[admin_actions_list_id, lbCurSel admin_actions_list_id]), 
 			(ctrlText admin_input_field_id), 
-			(missionNamespace getVariable (lbData [admin_player_list_id, lbCurSel admin_player_list_id]))
+			(missionNamespace getVariable [(lbData [admin_player_list_id, lbCurSel admin_player_list_id]), objNull])
 		] call admin_activate_command;
 	', _player]]; 
 };

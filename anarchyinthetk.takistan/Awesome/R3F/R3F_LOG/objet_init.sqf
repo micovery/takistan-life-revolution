@@ -57,7 +57,7 @@ if (	({_objet isKindOf _x} count R3F_LOG_CFG_objets_deplacables > 0)	) then
 	_objet addAction [("<t color=""#dddd00"">" + STR_R3F_LOG_action_deplacer_objet + "</t>"), "Awesome\R3F\R3F_LOG\objet_deplacable\deplacer.sqf", nil, 5, false, true, "", "R3F_LOG_objet_addAction == _target && R3F_LOG_action_deplacer_objet_valide && !(_target getVariable ['lockedDown', false]) && !([_this] call player_get_arrest)"];
 	
 	_objet addAction [("<t color=""#dddd00"">" + "Lockdown this object" + "</t>"), "Awesome\R3F\R3F_LOG\lock\lock.sqf", nil, 5, false, true, "", "(R3F_LOG_objet_addAction == _target) && R3F_LOG_action_deplacer_objet_valide && !(_target getVariable ['lockedDown', false]) && !([_this] call player_get_arrest)"];
-	_objet addAction [("<t color=""#dddd00"">" + "Unlock this object" + "</t>"), "Awesome\R3F\R3F_LOG\lock\unlock.sqf", nil, 5, false, true, "", "(R3F_LOG_objet_addAction == _target) && R3F_LOG_action_deplacer_objet_valide && (_target getVariable ['lockedDown', true]) && !([_this] call player_get_arrest)"];
+	_objet addAction [("<t color=""#dddd00"">" + "Unlock this object" + "</t>"), "Awesome\R3F\R3F_LOG\lock\unlock.sqf", nil, 5, false, true, "", "(R3F_LOG_objet_addAction == _target) && R3F_LOG_action_deplacer_objet_valide && (_target getVariable ['lockedDown', false]) && !([_this] call player_get_arrest)"];
 };
 
 if ({_objet isKindOf _x} count R3F_LOG_CFG_objets_remorquables > 0) then

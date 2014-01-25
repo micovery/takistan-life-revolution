@@ -1,7 +1,7 @@
 if !(isServer) exitwith {};
 
 if ((isNil "A_AI_ARRAY")) then {
-	A_AI_ARRAY = [university, storage, rathaus, bailflag, assassin, hostage, impoundbuy1, impoundbuy2, shop1export, shop2export, shop3export, shop4export, civ_logicunit, licenseflag6];
+	A_AI_ARRAY = [university, storage, rathaus, bailflag, assassin, hostage, impoundbuy1, impoundbuy2, shop1export, shop2export, shop3export, shop4export, licenseflag6];
 		
 	{
 		private["_shop"];
@@ -10,10 +10,14 @@ if ((isNil "A_AI_ARRAY")) then {
 	} forEach INV_ItemShops;
 	
 	{
+		private["_doc"];
+		_doc = _x select 0;
+		A_AI_ARRAY set [count A_AI_ARRAY, _doc];
+	} forEach A_DK_Array;
+	
+	{
 		private["_shop"];
 		_shop = _x select 0;
-		A_AI_ARRAY set [count A_AI_ARRAY, _shop];
-		_shop = _x select 5;
 		A_AI_ARRAY set [count A_AI_ARRAY, _shop];
 	} forEach Clothing_Shops;
 		
@@ -69,6 +73,8 @@ if ((isNil "A_AI_ARRAY")) then {
 	{
 		[_x] joinSilent (group server);
 	} forEach A_AI_ARRAY;
+	
+	publicVariable "A_AI_ARRAY";
 	
 	private["_file", "_fileLoad"];
 	

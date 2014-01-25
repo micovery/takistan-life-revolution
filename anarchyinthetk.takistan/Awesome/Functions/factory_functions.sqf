@@ -81,6 +81,8 @@ factory_globals = {
 		"AK_47_S",
 		"Sa58P_EP1",
 		"Sa58V_EP1",
+		"Sa58V_CCO_EP1",
+		"Sa58V_RCO_EP1",
 		"Rnd_762x39_AK47",
 		"Rnd_762x39_SA58",
 		"LeeEnfield",

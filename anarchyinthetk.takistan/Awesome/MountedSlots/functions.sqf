@@ -216,7 +216,7 @@ mounted_slot_wait = {
 
 		//player groupChat format["Wait complete _notAlive = %1, _notInMountedSlot = %2", not(alive _player), not(_player getVariable "inMountedSlot")];
 		_player setVariable ["inMountedSlot", false, true];
-		_player setVariable ["mountedVehicle", nil, true];
+		_player setVariable ["mountedVehicle", objNull, true];
 		
 		private["_occupant"];
 		_occupant = [_vehicle, _slot_id] call mounted_get_slot_occupant;
@@ -306,7 +306,7 @@ mounted_unboard_slot = {
 	};
 	
 	_player setVariable ["inMountedSlot", false, true];
-	_player setVariable ["mountedVehicle", nil, true];
+	_player setVariable ["mountedVehicle", objNull, true];
 
 };
 

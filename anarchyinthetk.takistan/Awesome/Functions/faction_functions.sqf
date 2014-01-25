@@ -76,8 +76,6 @@ ftf_faction_allowed = {
 	if (not([_player] call player_human)) exitWith {false};
 	_uid = getPlayerUID _player;
 	
-//	waitUntil{alive _player};
-	
 	if (isCiv) exitWith {true};
 	
 	//Reducing traffic by setting local if loaded
@@ -113,6 +111,24 @@ ftf_faction_allowed = {
 		(true)
 	};
 	false
+};
+
+ftf_getPlayTime = {
+	private["_player", "_uid", "_return", "_playTime", "_joinTime", "_timearray"];
+	_player = _this select 0;
+	_uid = getPlayerUID _player;
+	
+	_return = 0;
+	_playTime = [_player, "playtime"] call player_get_scalar;
+	
+	_timearray = server getVariable ["player_time_array", []];
+	_joinTime = 0;
+	{
+		if ((_x select 0) == _uid) exitWith {_jointime = _x select 1;};
+	} foreach _timearray;
+	
+	_return = _playTime + (time - _joinTime);
+	_return
 };
 
 ftf_init = {

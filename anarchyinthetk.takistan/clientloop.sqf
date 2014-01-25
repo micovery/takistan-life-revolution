@@ -65,9 +65,9 @@ check_armed_vehicle = {
 	_vehicle = (vehicle player);
 	_in_vehicle = (_vehicle != _player);
 	
-	if (not(_in_vehicle)) then {
-		_vehicle = [_player] call mounted_player_get_vehicle;
-	};
+	if (!(_in_vehicle)) then {
+			_vehicle = [_player] call mounted_player_get_vehicle;
+		};
 	
 	if (isNull _vehicle) exitWith {false};
 	
@@ -297,7 +297,7 @@ check_logics = {
 	_alive = alive player;
 	
 	if (not(_alive)) exitWith {};
-
+	
 	{
 		private["_entry", "_logic", "_warn_distance", "_teleport_distance", "_distance"];
 		_entry = _x;
@@ -307,6 +307,7 @@ check_logics = {
 		_logic = _entry select logics_check_object;
 		_distance = player distance _logic;
 		
+		if ((vehicle player) == headbugbus) exitwith {};
 		
 		if (_distance <= _teleport_distance) exitWith {
 			[player] call player_teleport_spawn;
@@ -508,28 +509,13 @@ check_restrains = {
 	};};};
 };
 
-check_respawn_time = {
-// Disabled until it has a possible use
-/* 
-	if (not(alive player)) exitWith {};
-	private["_interval"];
-	_interval = 30;
-	if (not((round(time) % _interval) == 0)) exitWith {};
-	if (([player, "extradeadtime"] call player_get_scalar) <= 0) exitwith {
-			[player, "extradeadtime", 0] call player_set_scalar;
-		};
-	if ((([player, "extradeadtime"] call player_get_scalar) - _interval) <= 0) exitwith {
-			[player, "extradeadtime", 0] call player_set_scalar;
-		};
-	[player, "extradeadtime", -(_interval)] call player_update_scalar;
-*/
-};
-
 check_insideJail = {
 	private["_player", "_trigger", "_list", "_inJail"];
 	
 	_player = player;
 	
+	if (missionNamespace getVariable ["player_inJail_checking", false]) exitwith {};
+	if (missionNamespace getVariable ["player_prison_releasing", false]) exitwith {};
 	if ([_player] call player_get_arrest) exitwith {};
 	if (isCop && ([_player, "roeprison"] call player_get_bool)) exitwith {};
 	if (((getPosATL _player) select 2) > 5) exitwith {};
@@ -551,14 +537,30 @@ check_insideJail = {
 	} forEach [JailTrigger2, JailTrigger3, JailTrigger4];
 	
 	if _inJail then {
-			player groupchat "You have 30 seconds to leave the Jail";
-			SleepWait(30)
-			if !(_player in (list JailTrigger1)) exitwith {};
-			if (({_player in (list _x)} count [JailTrigger2, JailTrigger3, JailTrigger4]) == 0) exitwith {};
-			if (((getPosATL _player) select 2) > 5) exitwith {};
-			if ((vehicle _player) != _player) exitwith {};
-			player groupchat "You have been removed from Jail";
-			player setPosATL (getPosATL CopPrisonAusgang);
+			player_inJail_checking = true;
+			[_player] spawn {
+					private["_player","_exit"];
+					_player = _this select 0;
+					_exit = false;
+					
+					_player groupchat "You have 30 seconds to leave the Jail";
+					SleepWait(30)
+					
+					if (missionNamespace getVariable ["player_prison_releasing", false]) then {_exit = true;};
+					if ([_player] call player_get_arrest) exitwith {_exit = true;};
+					if !(_player in (list JailTrigger1)) exitwith {_exit = true;};
+					if (({_player in (list _x)} count [JailTrigger2, JailTrigger3, JailTrigger4]) == 0) exitwith {_exit = true;};
+					if (((getPosATL _player) select 2) > 5) exitwith {_exit = true;};
+					if ((vehicle _player) != _player) exitwith {_exit = true;};
+					
+					if !_exit then {
+							_player groupchat "You have been removed from Jail";
+							_player setPosATL (getPosATL CopPrisonAusgang);
+						};
+					
+					SleepWait(3)
+					player_inJail_checking = false;
+				};
 		};
 };
 
@@ -580,7 +582,6 @@ client_loop = {
 		[] call check_camera;
 		[] call check_bases;
 		[] call check_static_weapons;
-		[] call check_respawn_time;
 		[] call check_smoke_grenade;
 		[] call check_droppable_items;
 		[] call check_restrains;

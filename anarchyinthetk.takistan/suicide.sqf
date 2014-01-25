@@ -1,14 +1,27 @@
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+
 private["_art"];
 _art = _this select 0;
 
 if (_art == "use") then {
 
-	private["_inVehicle"];
+	private["_inVehicle","_mounted","_exit"];
+	
 	_inVehicle = ((vehicle player) != player);
-
 	if (_inVehicle) exitwith {
 			player groupChat format["You cannot use the suicide bomb in a vehicle"];
 		};
+		
+	_mounted = [player] call mounted_player_get_vehicle;
+	_exit = false;
+	if !(isNil "_mounted") then {
+			if !(isNull _mounted) then {
+					_exit = true;
+					player groupChat format["You cannot use the suicide bomb in a vehicle"];
+				};
+		};
+	if _exit exitwith {};
+
 		
 	if ((player distance (getmarkerpos "respawn_civilian")) < 130) exitWith {
 		player groupchat "Some supernatural force prevents you from detonating a bomb in this holy place!"
@@ -28,15 +41,17 @@ if (_art == "use") then {
 	
 	for [{_i=10}, {_i >= 0}, {_i=_i-1}] do {
 		titletext [format ["Bombcountdown: -->*%1*<--", _i],"plain"];
-		sleep 1;
+		SleepWait(1)
 	};
-
+	
+	[player, _item, -1] call INV_AddInventoryItem;
 	if (
 			!(alive player) ||
 			([player, "isstunned"] call player_get_bool) ||
-			([player, "restrained"] call player_get_bool)
+			([player, "restrained"] call player_get_bool) ||
+			!((vehicle player) == player) ||
+			!(isNull([player] call mounted_player_get_vehicle))
 		) exitWith {
-			[player, _item, -1] call INV_AddInventoryItem;
 			player groupChat format["The bomb failed to work"];
 			titleText ["", "plain"];
 		};
@@ -54,7 +69,7 @@ if (_art == "use") then {
 	
 	reload player;
 	
-	sleep 3;
+	SleepWait(3)
 	
 	if (
 			(alive player) &&
@@ -68,6 +83,4 @@ if (_art == "use") then {
 	
 	player removeMagazine _magazine;
 	player removeWeapon _weapon;
-	
-	[player, _item, -1] call INV_AddInventoryItem;
 };

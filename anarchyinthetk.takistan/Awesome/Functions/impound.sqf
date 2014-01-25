@@ -90,10 +90,10 @@ A_impound_action = {
 				player groupchat "the vehicle is already impounded!"
 			};
 
-/*		if(_vcl iskindof "air")exitwith { 
+		if(_vcl iskindof "air")exitwith { 
 				player groupchat "you cannot impound this vehicle!"
 			};
-*/		
+		
 		if ( ({_vcl in (list _x)} count INV_VehiclePark) > 0 ) exitwith {
 				player groupchat "this vehicle is in a carpark. you cannot impound it!"
 			};

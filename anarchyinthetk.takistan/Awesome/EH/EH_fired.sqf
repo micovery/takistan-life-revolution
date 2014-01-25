@@ -58,7 +58,7 @@ if (
 		((_magazine == "15Rnd_9x19_M9SD") && ((_weapon == "M9") || (_weapon == "M9SD")))
 		|| ((_magazine == "8Rnd_B_Beneli_74Slug") && (_weapon == "M1014"))
 	) then {
-		[1, _unit] execVM "Awesome\Scripts\Stun.sqf"; 		
+		[_unit] spawn stun_tazer;	
 	};
 
 ///////////////

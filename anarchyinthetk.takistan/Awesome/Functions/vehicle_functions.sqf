@@ -520,43 +520,43 @@ vehicle_set_modifications = {
 		case "Ka60_GL_PMC": {
 			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
 			_vehicle removeweapon "57mmLauncher";
+			
+			{_vehicle addmagazine "60Rnd_CMFlareMagazine";}forEach[1];
 			_vehicle addweapon "CMFlareLauncher";
-			_vehicle addmagazine "60Rnd_CMFlareMagazine";
+			
+			{_vehicle addmagazine "100Rnd_762x51_M240";}forEach[1,2,3,4];
 			_vehicle addweapon "M240_veh";
-			_vehicle addmagazine "100Rnd_762x51_M240";
-			_vehicle addmagazine "100Rnd_762x51_M240";
-			_vehicle addmagazine "100Rnd_762x51_M240";
-			_vehicle addmagazine "100Rnd_762x51_M240";
-			_vehicle addmagazine "100Rnd_762x51_M240";
 		};
 		case "AH6J_EP1": {
 			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
 			_vehicle removeweapon "FFARLauncher_14";
+			
+			{_vehicle addmagazine "60Rnd_CMFlareMagazine";}forEach[1];
 			_vehicle addweapon "CMFlareLauncher";
-			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
 		case "An2_TK_Cop": {
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			{_vehicle addmagazine "250Rnd_127x99_M3P";}forEach[1,2,3];
 			_vehicle addweapon "M3P";
-			_vehicle addmagazine "250Rnd_127x99_M3P";
-			_vehicle addmagazine "250Rnd_127x99_M3P";
-			_vehicle addmagazine "250Rnd_127x99_M3P";
-			_vehicle addweapon "TwinM134";
-			_vehicle addmagazine "2000Rnd_762x51_M134";
+			
+			{_vehicle addmagazine "1200Rnd_762x51_M240";}forEach[1,2];
+			_vehicle addweapon "M240BC_veh";
 		};
-		case "An2_TK_EP1": {
+		case "An2_TK_Opf": {
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
-			_vehicle addweapon "DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addweapon "TwinVickers";
-			_vehicle addmagazine "500Rnd_TwinVickers";
-			_vehicle addmagazine "500Rnd_TwinVickers";
-			_vehicle addmagazine "500Rnd_TwinVickers";
-			_vehicle addmagazine "500Rnd_TwinVickers";
+			{_vehicle addmagazine "500Rnd_145x115_KPVT";}forEach[1,2,3,4];
+			_vehicle addweapon "KPVT";
+			
+			{_vehicle addmagazine "150Rnd_127x108_KORD";}forEach[1,2,3,4,5];
+			_vehicle addweapon "KORD";
+		};
+		case "An2_TK_Ind": {
+			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
+			{_vehicle addmagazine "100Rnd_762x54_PK";}forEach[1,2,3,4,5,6,7,8,9,10];
+			_vehicle addweapon "PKTBC_veh";
+			
+			{_vehicle addmagazine "6Rnd_Grenade_Camel";}forEach[1,2];
+			_vehicle addweapon "CamelGrenades";
 		};
 		case "L39":{
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
@@ -1131,6 +1131,8 @@ vehicle_list = {
 vehicle_clean_checkTime = 5 * 60;
 vehicle_clean_triggerOn = "trigger_on";
 
+vehicle_clean_ignore = ["headbugbus"];
+
 vehicle_clean_time = {
 	private["_vehicle", "_type", "_delay"];
 	_vehicle = _this select 0;
@@ -1157,8 +1159,10 @@ vehicle_clean_getArray = {
 		{
 			if !(isNull _x) then {
 					if (alive _x) then {
-							_vehicleArray set[_aCount, _x];
-							_aCount = _aCount + 1;
+							if !(toLower(str(_x)) in vehicle_clean_ignore) then {
+									_vehicleArray set[_aCount, _x];
+									_aCount = _aCount + 1;
+								};
 						};
 				};
 		} forEach _classEntities;
