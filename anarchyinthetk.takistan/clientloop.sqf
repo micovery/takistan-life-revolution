@@ -368,11 +368,32 @@ check_bases = {
 
 
 check_static_weapons = {
-	private["_vehicle","_isStatic"];
+	private["_vehicle","_isStatic","_attachedTo"];
 	_vehicle = (vehicle player);
 	_isStatic = (_vehicle isKindOf "StaticWeapon");
-	if (not(_isStatic)) exitWith {};
-	
+	if (!(_isStatic)) exitWith {};
+	if (_vehicle getVariable ["attached", false]) then {
+			moveOut player;
+			player setVelocity[0,0,0];
+			
+			_attachedTo = _vehicle getVariable ["attachedTo", objNull];
+			_backToSpawn = false;
+			if (isNil "_attachedTo") then {
+				_backToSpawn = true;
+			}else{
+				if (isNull _attachedTo) then {
+					_backToSpawn = true;
+				}else{
+					player setPosATL (getPosATL _attachedTo);
+					player groupChat "STATIC LOADING ERROR: Reverted back to vehicle";
+				};
+			};
+			
+			if _backToSpawn then {
+				player setPosATL ([player] call respawn_location);
+				player groupChat "STATIC LOADING ERROR: Reverted back to spawn";
+			};
+		};
 	_vehicle lock false;
 };
 

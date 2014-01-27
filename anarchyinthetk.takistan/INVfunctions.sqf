@@ -172,8 +172,12 @@ INV_GetStorageAmount = {
 	_arrname  = _this select 2;
 	
 	[_object, _arrname] call INV_CheckArray;
+	
+	
+	
 	private["_Array"];
-	_Array = _object getVariable _arrname;
+	_array = [];
+	_Array = _object getVariable [_arrname, []];
 	
 	private["_Result", "_i"];
 	_Result = 0;

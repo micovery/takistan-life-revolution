@@ -1,15 +1,17 @@
 #include "Awesome\Functions\macro.h"
 
-private["_art","_moneh"];
+private["_art"];
 _art  = ((_this select 3) select 0);
-_moneh = [player, 'money'] call INV_GetItemAmount;
 
 if (_art == "slave") exitWith {
 
 	if (localslave >= maxslave) exitWith {
 		role groupChat localize "STRS_slave_zuviele"
 	};
-
+	
+	private["_moneh"];
+	_moneh = [player, 'money'] call INV_GetItemAmount;
+	
 	if (_moneh < slave_cost) exitWith {
 		role groupChat localize "STRS_slave_nomoney"
 	};

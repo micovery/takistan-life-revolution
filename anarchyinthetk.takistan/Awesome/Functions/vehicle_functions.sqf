@@ -119,9 +119,13 @@ vehicle_get_var = {
 	if (isNil "_variable_type") exitWith {};
 	if ((typeName _variable_name) != "STRING") exitWith {};
 	if ((typeName _variable_type) != "STRING") exitWith {};
+	
 	_variable_value = _vehicle getVariable _variable_name;
 	_variable_value = if(isNil "_variable_value") then { "" } else { _variable_value };
 	_variable_value = if ((typeName _variable_value) != _variable_type) then { "" } else { _variable_value };
+	
+	format['vehicle_get_var: %1-%2-%3-%4', _vehicle, _variable_name, _variable_type, _variable_value] call A_DEBUG_S;
+	
 	
 /*	_variable_value = "failure";
 	if !(isNil {_vehicle getVariable _variable_name}) then {
@@ -130,7 +134,9 @@ vehicle_get_var = {
 					_variable_value = "failure";
 				};
 		};
-*/
+*/	
+	
+	
 	
 	_variable_value
 };
@@ -418,8 +424,8 @@ vehicle_init_stats = {
 	private["_vehicle"];
 	
 	_vehicle = _this select 0;
-	if (isNil "_vehicle") exitWith {};
-	if (typeName _vehicle != "OBJECT") exitWith {};
+	if (isNil "_vehicle") exitWith {false};
+	if (typeName _vehicle != "OBJECT") exitWith {false};
 	
 	private["_driver", "_velocity", "_position_atl", "_vector_direction", "_vector_up", "_fuel", "_damage", "_engine_state", "_weapons", "_magazines", "_speed", "_nitro"];
 	
@@ -433,8 +439,35 @@ vehicle_init_stats = {
 	_engine_state = [_vehicle, "engine_state"] call vehicle_get_bool;
 	_weapons = [_vehicle, "weapons"] call vehicle_get_array;
 	_magazines= [_vehicle, "magazines"] call vehicle_get_array;
-	_speed = _vehicle getVariable ["tuning", 0]; [_vehicle, "tuning"] call vehicle_get_scalar;
-	_nitro = _vehicle getVariable ["nitro", 0];
+	
+	_speed = [_vehicle, "tuning"] call vehicle_get_scalar;
+	_nitro =[_vehicle, "nitro"] call vehicle_get_scalar;
+	
+	if ((typeName _speed) != "SCALAR") then {
+		_speed = 0;
+	}else{
+		if ((_speed <= -1) || (_speed >= 6)) then {
+			_speed = 0;
+		};
+	};
+	
+	if ((typeName _nitro) != "SCALAR") then {
+		_nitro = 0;
+	}else{
+		if !(_nitro in [0,1]) then {
+			_nitro = 0;
+		};
+	};
+	
+	if ((typeName _vector_direction) != "ARRAY") exitwith {
+			format['vehicle_init_stats: _vector_direction-%1, error', _vector_direction] call A_DEBUG_S;
+			false
+		};
+	if ((typeName _position_atl) != "ARRAY") exitwith {
+			format['vehicle_init_stats: _position_atl-%1, error', _position_atl] call A_DEBUG_S;
+			false
+		};
+	
 	
 	private["_gear"];
 	_gear = [];
@@ -451,8 +484,10 @@ vehicle_init_stats = {
 	_vehicle engineOn _engine_state;
 	_vehicle setDamage _damage;
 	_vehicle setFuel _fuel;
-	_vehicle setVariable ["tuning", _speed];
-	_vehicle setVariable ["nitro", _nitro];
+	_vehicle setVariable ["tuning", _speed, true];
+	_vehicle setVariable ["nitro", _nitro, true];
+	
+	true
 };
 
 vehicle_set_modifications = {
@@ -544,7 +579,7 @@ vehicle_set_modifications = {
 		};
 		case "An2_TK_Opf": {
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
-			{_vehicle addmagazine "500Rnd_145x115_KPVT";}forEach[1,2,3,4];
+			{_vehicle addmagazine "500Rnd_145x115_KPVT";}forEach[1,2];
 			_vehicle addweapon "KPVT";
 			
 			{_vehicle addmagazine "150Rnd_127x108_KORD";}forEach[1,2,3,4,5];
@@ -555,7 +590,7 @@ vehicle_set_modifications = {
 			{_vehicle addmagazine "100Rnd_762x54_PK";}forEach[1,2,3,4,5,6,7,8,9,10];
 			_vehicle addweapon "PKTBC_veh";
 			
-			{_vehicle addmagazine "6Rnd_Grenade_Camel";}forEach[1,2];
+			{_vehicle addmagazine "6Rnd_Grenade_Camel";}forEach[1,2,3,4];
 			_vehicle addweapon "CamelGrenades";
 		};
 		case "L39":{
@@ -754,8 +789,7 @@ vehicle_recreate = {
 	private["_vehicle"];
 	private["_vehicle"];
 	_vehicle = missionNamespace getVariable _name;
-	if (not(isNil "_vehicle")) exitWith {_vehicle};
-	if (not(isNil "_vehicle")) exitWith {_vehicle};
+	if (!(isNil "_vehicle")) exitWith {_vehicle};
 	
 	private["_data"];
 	//player groupChat format["Recreating _name = %1", _name];
@@ -764,7 +798,16 @@ vehicle_recreate = {
 	[_vehicle, _name] call vehicle_set_init;	
 	[_data, _vehicle] call stats_compile_sequential;
 	sleep 1;
-	[_vehicle] call vehicle_init_stats;
+	
+	private["_return"];
+	_return = false;
+	_return = [_vehicle] call vehicle_init_stats;
+	if !(_return) exitwith {
+			player groupChat format['ERROR IN LOADING SAVED VEHICLE'];
+			[_vehicle, 0] spawn vehicle_despawn;
+			objNull
+		};
+	
 	private["_item_name"];
 	_item_name = [_vehicle, "item_name"] call vehicle_get_string;
 	[_vehicle, _item_name, true] call vehicle_set_modifications;

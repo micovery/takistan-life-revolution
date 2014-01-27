@@ -113,6 +113,7 @@ bankRob_victimEnd = {
 	_success = _this select 0;
 	_money = _this select 1;
 	
+	if !(isServer) exitwith {};
 	if !(ALL_LOADING_DONE) exitwith {};
 	
 	if !(_success) exitwith {
@@ -400,7 +401,7 @@ bankRob_returnLost = {
 	} forEach _lossArray;
 	
 	_player setVariable [bankRob_v_localLoss, [], false];
-	format['%1 setVariable [bankRob_v_localLoss, []]', _player] call broadcast_server;
+	format['%1 setVariable [bankRob_v_localLoss, [], false]', _player] call broadcast_server;
 };
 
 // Add stolen amount

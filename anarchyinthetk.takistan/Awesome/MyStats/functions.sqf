@@ -1,4 +1,5 @@
 #define ExecSQF(FILE) [] call compile preprocessFileLineNumbers FILE
+#define ExecSQFwait(FILE) private["_handler"]; _handler = [] spawn (compile (preprocessFileLineNumbers FILE)); waitUntil{scriptDone _handler};
 #include "constants.h"
 #include "ASCII.h"
 
@@ -428,8 +429,8 @@ stats_server_setup = {
 	["restart_count", _restart_count] call stats_server_save;
 	
 	[] call stats_load_core_libraries;
+	ExecSQFwait("Awesome\Clothes\C_shop.sqf");
 	
-
 	server setVariable ["stats_server_setup_complete", true, true];
 };
 

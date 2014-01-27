@@ -1,9 +1,8 @@
-private["_this","_art","_moneh"];
+private["_this","_art"];
 _this = _this select 3;
 _art  = _this select 0;
-_moneh = [player, 'money'] call INV_GetItemAmount;
 
-private["_spielernum", "_kandidatnum", "_waehlernum", "_item", "_mag", "_weap", "_vcl", "_bank", "_i", "_arr"];
+private["_spielernum", "_kandidatnum", "_waehlernum", "_item", "_mag", "_weap", "_vcl", "_bank", "_i", "_arr", "_newArray"];
 
 if (_art == "ClientWahlc") then {
 	if (isNil("WahlChief")) then { WahlChief = false;};
@@ -24,8 +23,11 @@ if (_art == "ServerChief") then {
 		_arr = (WahlArrayc select _i);
 		if (_waehlernum in _arr) exitWith {_arr = _arr - [_waehlernum];	WahlArrayc SET [_i, _arr];};
 	};
-
-	WahlArrayc SET [_kandidatnum, ((WahlArrayc select _kandidatnum )+ [_waehlernum])];
+	
+	_newArray = (WahlArrayc select _kandidatnum);
+	_newArray set[count _newArray, _waehlernum];
+	
+//	WahlArrayc SET [_kandidatnum, ((WahlArrayc select _kandidatnum )+ [_waehlernum])];
 };
 
 

@@ -450,14 +450,18 @@ A_WBL_F_LOAD_S = {
 			_array = [];
 		
 			_out = "stdio" callExtension format["read(%1,%2)", _file, _i];
-
+			
+			if (_out == "") then {
+					_true = false;
+					_text = "[]";
+				};
 			while {_true} do {
 				_text = _text + _out;
 				_i = _i + 1;
 				_out = "stdio" callExtension format["read(%1,%2)", _file, _i];
-				if (_out == "") then {_true = false};
+				_true = (_out != "");
 			};
-				
+			
 			_array = [] call compile _text;
 			
 			missionNamespace setVariable [_variable, []];

@@ -895,7 +895,8 @@ player_prison_loop = { _this spawn {
 	[_player, "stunned", false] call player_set_bool;
 	
 	_exit = false;
-	SleepWait(3)
+	
+	waitUntil {[(vehicle _player)] call player_inPrison};
 	
 	while {_time_left >= 0 && _bail_left >= 0} do {
 		_bail_left = floor(((_time_left/_time_original)) * ([_player] call player_get_bail));
@@ -1242,11 +1243,11 @@ player_lookup_name = {
 player_lookup_gang_uid = {
 	private["_player_gang_uid"];
 	_player_gang_uid = _this select 0;
-	if (isNil "_player_gang_uid") exitWith {nil};
-	if (typeName _player_gang_uid != "STRING") exitWith {nil};
+	if (isNil "_player_gang_uid") exitWith {objNull};
+	if (typeName _player_gang_uid != "STRING") exitWith {objNull};
 	
 	private["_player"];
-	_player = nil;
+	_player = objNull;
 	
 	{
 		private["_unit", "_unit_gang_uid"];
@@ -1752,6 +1753,7 @@ player_load_side_vehicle = {
 	private["_vehicle"];
 	_vehicle = [_vehicle_name, _vehicle_class] call vehicle_recreate;
 	if (isNil "_vehicle") exitWith {false};
+	if (isNull _vehicle) exitwith {false};
 	
 	private["_active_driver_uid", "_saved_driver_uid", "_player_uid", "_distance"];
 	_player_uid = [_player] call stats_get_uid;
@@ -2767,6 +2769,7 @@ player_get_saved_group = {
 	
 	private["_group"];
 	_group = _player getVariable "saved_group";
+	_group = if(isNil "_group")then{""}else{_group};
 	(_group)
 };
 

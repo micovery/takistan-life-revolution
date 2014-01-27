@@ -8,12 +8,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if (R3F_LOG_mutex_local_verrou) then
-{
+if (R3F_LOG_mutex_local_verrou) then {
 	player globalChat STR_R3F_LOG_mutex_action_en_cours;
-}
-else
-{
+} else {
 	R3F_LOG_mutex_local_verrou = true;
 	
 	#include "dlg_constantes.h"
@@ -28,28 +25,27 @@ else
 	
 	// Recherche d'un objet du type demandé
 	_objet_a_decharger = objNull;
-	for [{_i = 0}, {_i < count _objets_charges}, {_i = _i + 1}] do
-	{
-		if (typeOf (_objets_charges select _i) == _type_objet_a_decharger) exitWith
-		{
+	for [{_i = 0}, {_i < count _objets_charges}, {_i = _i + 1}] do {
+		if (typeOf (_objets_charges select _i) == _type_objet_a_decharger) exitWith {
 			_objet_a_decharger = _objets_charges select _i;
 		};
 	};
 	
-	if !(isNull _objet_a_decharger) then
-	{
+	if !(isNull _objet_a_decharger) then {
 		// On mémorise sur le réseau le nouveau contenu du transporteur (càd avec cet objet en moins)
 		_objets_charges = _objets_charges - [_objet_a_decharger];
 		_transporteur setVariable ["R3F_LOG_objets_charges", _objets_charges, true];
 		
 		detach _objet_a_decharger;
 		
-		if ({_objet_a_decharger isKindOf _x} count R3F_LOG_CFG_objets_deplacables > 0) then
-		{
+		if (_objet_a_decharger isKindOf "StaticWeapon") then {									
+				_objet_a_decharger setVariable ["attached", false, true];
+				_objet setVariable ["attachedTo", objNull, true];
+			};
+		
+		if ({_objet_a_decharger isKindOf _x} count R3F_LOG_CFG_objets_deplacables > 0) then {
 			[_objet_a_decharger] execVM "Awesome\R3F\R3F_LOG\objet_deplacable\deplacer.sqf";
-		}
-		else
-		{
+		} else {
 			private ["_dimension_max"];
 			_dimension_max = (((boundingBox _objet_a_decharger select 1 select 1) max (-(boundingBox _objet_a_decharger select 0 select 1))) max ((boundingBox _objet_a_decharger select 1 select 0) max (-(boundingBox _objet_a_decharger select 0 select 0))));
 			
@@ -67,9 +63,7 @@ else
 			
 			player globalChat STR_R3F_LOG_action_decharger_fait;
 		};
-	}
-	else
-	{
+	} else {
 		player globalChat STR_R3F_LOG_action_decharger_deja_fait;
 	};
 	

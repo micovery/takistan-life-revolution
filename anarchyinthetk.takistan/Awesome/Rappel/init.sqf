@@ -137,23 +137,5 @@ A_R_DROP = {
 		_veh = _this select 0;
 		
 		_veh removeAction (_veh getVariable [A_R_DROPID_V, -1]);
-		
 		_veh setVariable [A_R_DEPLOY_V, false, true];
 	};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

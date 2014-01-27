@@ -273,7 +273,7 @@ class Mission
 					vehicle="Profiteer2_EP1";
 					skill=0.60000002;
 					text="gunshop1";
-					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0];";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 0.1];";
 				};
 				class Item12
 				{
@@ -1006,7 +1006,7 @@ class Mission
 					vehicle="RU_Secretary3";
 					skill=0.60000002;
 					text="licenseflag2";
-					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf'; this setPosATL [getPosATL this select 0, getPosATL this select 1, 0.1];";
 				};
 				class Item73
 				{
@@ -1017,7 +1017,7 @@ class Mission
 					side="CIV";
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
-					text="rathaus";
+					text="govMan";
 					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; ['light', this, 0.03] execvm 'effects.sqf';";
 				};
 				class Item74
@@ -1263,7 +1263,7 @@ class Mission
 					vehicle="TK_CIV_Takistani06_EP1";
 					skill=0.60000002;
 					text="shop4";
-					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim';";
+					init="this allowdamage false; removeallweapons this; this disableAI 'move'; this disableAI 'anim'; this setPosATL [(getPosATL this) select 0, (getPosATL this) select 1, 1]";
 				};
 				class Item94
 				{
@@ -19169,7 +19169,7 @@ class Mission
 		};
 		class Item1334
 		{
-			position[]={12833.181,125.84751,10941.593};
+			position[]={12833.12,125.8419,10941.613};
 			azimut=342.32141;
 			id=1619;
 			side="EMPTY";
@@ -20512,7 +20512,7 @@ class Mission
 		class Item6
 		{
 			position[]={6151.5796,66.839645,10432.537};
-			name="rathausmarker";
+			name="govManmarker";
 			text="Takistan Government Complex";
 			type="Faction_TKG_EP1";
 			b=0.60000002;
@@ -24024,8 +24024,8 @@ class Mission
 		};
 		class Item23
 		{
-			position[]={6158.3071,60.052975,11174.363};
-			a=12;
+			position[]={6159.2573,60.065613,11174.809};
+			a=13;
 			b=16;
 			angle=124;
 			rectangular=1;
@@ -24039,7 +24039,7 @@ class Mission
 		};
 		class Item24
 		{
-			position[]={6177.3945,59.827263,11204.677};
+			position[]={6177.0146,59.835152,11203.031};
 			a=11;
 			b=17;
 			angle=124;
@@ -24054,9 +24054,9 @@ class Mission
 		};
 		class Item25
 		{
-			position[]={6171.8486,60.035145,11184.668};
+			position[]={6170.8994,60.008217,11185.972};
 			a=30;
-			b=10;
+			b=12;
 			angle=124;
 			rectangular=1;
 			activationBy="ANY";

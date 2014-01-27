@@ -132,8 +132,10 @@ gangs_uids_2_players = {
 		_uid = _uids_list select _i;
 		private["_player"];
 		_player = [_uid] call player_lookup_gang_uid;
-		if (not(isNil "_player")) then {
-			_players = _players + [_player];
+		if !(isNil "_player") then {
+			if !(isNull _player) then {
+				_players = _players + [_player];
+			};
 		};
 		_i = _i + 1;
 	};
@@ -267,6 +269,7 @@ gang_update_leader = {
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
 	if (isNil "_gang") exitWith {};
+	if ((typeName _gang) == "STRING") exitWith {};
 	
 	private["_leader_uid"];
 	_leader_uid = [_gang_id] call gang_leader_uid;
@@ -285,9 +288,11 @@ gang_update_leader = {
 		_members joinSilent _group;
 	};
 	
-	if ([_leader] call player_exists) then {
-		player groupChat format["making %1 leader of %2", _leader, _group];
-		_group selectLeader _leader;
+	if !(isNil "_leader") then {
+		if !(isNull _leader) then {
+			player groupChat format["making %1 leader of %2", _leader, _group];
+			_group selectLeader _leader;
+		};
 	};
 	
 };
@@ -313,7 +318,8 @@ gang_schedule_deletion = { _this spawn {
 	
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
-	if (isNil "_gang") exitWith {};
+	if (isNil "_gang") exitwith {};
+	if ((typeName _gang) == "STRING") exitWith {};
 	
 	//some-one else has joined the gang while it was scheduled for deletion
 	private["_gang_members"];
@@ -700,14 +706,14 @@ gang_recreate_group = {
 	if (isNil "_side") exitWith {grpNull};
 	if (typeName _side != "SIDE") exitWith {grpNull};
 	
-	private["_original_group"];
-	_original_group = _group;
+//	private["_original_group"];
+//	_original_group = _group;
 	
 	_group = if (isNil "_group") then {createGroup _side} else {_group};
 	_group = if (typeName _group != "GROUP") then {createGroup _side} else {_group};
 	_group = if (isNull _group) then {createGroup _side} else {_group};
 	
-	player groupChat format["_original_group = %1, _group = %2", _original_group, _group];
+//	player groupChat format["_original_group = %1, _group = %2", _original_group, _group];
 	
 	(_group)
 };
@@ -722,6 +728,7 @@ gang_add_member = { _this spawn {
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
 	if (isNil "_gang") exitWith {};
+	if ((typeName _gang) == "STRING") exitWith {};
 	
 	private["_player_uid"];
 	[_player, (group _player)] call player_set_saved_group;
@@ -733,7 +740,7 @@ gang_add_member = { _this spawn {
 	private["_members", "_group"];
 	_group = _gang select gang_group;
 	//recreate the group if it does not exist
-	_group = [_side, _group] call gang_recreate_group;
+	_group = [_side, if(isNil "_group")then{nil}else{_group}] call gang_recreate_group;
 	_gang set [gang_group, _group];
 	
 	_members = _gang select gang_members;
@@ -754,13 +761,16 @@ gang_restore_member_group = {
 	private["_member"];
 	_member = [_member_uid] call player_lookup_gang_uid;
 	if (isNil "_member") exitWith {};
+	if (isNull _member) exitwith {};
 	
 	private["_side","_group"];
 	_side = [_member] call player_side;
 	_group = [_member] call player_get_saved_group;
 	
+	_group = if (isNil "_group")then{nil}else{if((typeName _group) == "STRING")then{nil}else{_group}};
+	
 	//recreate the group if it does not exist
-	_group = [_side, _group] call gang_recreate_group;
+	_group = [_side, if(isNil "_group")then{nil}else{_group}] call gang_recreate_group;
 	
 	[_member] joinSilent _group;
 	_group selectLeader _member;
@@ -777,7 +787,7 @@ gang_remove_member = { _this spawn {
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
 	if (isNil "_gang") exitWith {};
-	
+	if ((typeName _gang) == "STRING") exitWith {};
 
 	
 	private["_members"];
@@ -811,6 +821,7 @@ gang_make_leader = { _this spawn {
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
 	if (isNil "_gang") exitWith {};
+	if ((typeName _gang) == "STRING") exitWith {};
 	
 	private["_members"];
 	_members = _gang select gang_members;
@@ -835,6 +846,7 @@ gang_leader_uid = {
 	private["_gang"];
 	_gang = [_gang_id] call gangs_lookup_id;
 	if (isNil "_gang") exitWith {""};
+	if ((typeName _gang) == "STRING") exitWith {""};
 	
 	private["_gang_members"];
 	_gang_members = _gang select gang_members;

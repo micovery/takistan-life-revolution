@@ -9,10 +9,26 @@ if(_art == "use")then {
 if(_vcl == player)exitwith{player groupchat "you must be in a vehicle"};
 if(!(_vcl iskindof "car"))exitwith{player groupchat "you cannot tune this vehicle"};
 
-if (({_vcl isKindOf _x} count ["BRDM2_Base","BTR90_Base","LAV25_Base","HMMWV_M1151_M2_DES_Base_EP1","StrykerBase_EP1"]
-) > 0) exitwith {player groupchat "you cannot tune this vehicle"};
+if (
+		(({_vcl isKindOf _x} count ["BRDM2_Base","BTR90_Base","LAV25_Base","HMMWV_M1151_M2_DES_Base_EP1","StrykerBase_EP1"]) > 0)
+	) exitwith {player groupchat "you cannot tune this vehicle"};
+	
+private["_exit"];
+_item = toLower(_item);
+_exit = false;
 
+if (_item in ["supgrade4","supgrade5"]) then {
+	if (
+		(({_vcl isKindOf _x} count ["ArmoredSUV_Base_PMC"]) > 0)
+	) then {
+		player groupchat "This tune cannot be used on this vehicle";
+		_exit = true;
+	};
+};
 
+if _exit exitwith {};
+
+			
 
 [player, _item, -1] call INV_AddInventoryItem;
 

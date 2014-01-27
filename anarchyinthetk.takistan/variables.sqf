@@ -129,16 +129,11 @@ backup_cop_weapons      =
     "ItemRadio",
     "ItemCompass",
     "ItemWatch",
-    "M9",
     "m16a4"
 ];
 
 backup_cop_magazines    =
 [
-    "15Rnd_9x19_M9",
-    "15Rnd_9x19_M9",
-    "15Rnd_9x19_M9SD",
-    "15Rnd_9x19_M9SD",
     "30Rnd_556x45_Stanag",
     "30Rnd_556x45_Stanag",
     "30Rnd_556x45_Stanag",
@@ -157,13 +152,10 @@ backup_opf_weapons      =
     "ItemRadio",
     "ItemCompass",
     "ItemWatch",
-    "Makarov",
     "AK_74_GL_kobra"
 ];
 backup_opf_magazines    =
 [
-    "8Rnd_9x18_Makarov",
-    "8Rnd_9x18_Makarov",
     "30Rnd_545x39_AK",
     "30Rnd_545x39_AK",
     "30Rnd_545x39_AK",
@@ -314,7 +306,7 @@ MayorExtraPay            = 5000;
 private["_i"];
 _i = 0;
 while { _i < (count playerstringarray) } do {
-	WahlArray = WahlArray + [ [] ];
+	WahlArray set[(count WahlArray), []];
 	_i = _i + 1;
 };
 
@@ -326,7 +318,7 @@ chiefExtraPay            = 10000;
 private["_i"];
 _i = 0;
 while { _i < (count playerstringarray) } do {
-	WahlArrayc = WahlArrayc + [ [] ];
+	WahlArrayc set[(count WahlArrayc), []];
 	_i = _i + 1;
 };
 

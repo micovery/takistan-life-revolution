@@ -73,6 +73,13 @@ if !(isServer && isDedicated) then
 				false
 			)
 		};
+		
+	R3F_LOG_FNCT_STATICCHECK = {
+		private["_object"];
+		_object = _this select 0;
+		if !(_object isKindOf "StaticWeapon") exitwith {true};
+		(count(crew _object) == 0)
+	};
 	
 	/** Indique quel est l'objet concerné par les variables d'actions des addAction */
 	R3F_LOG_objet_addAction = objNull;

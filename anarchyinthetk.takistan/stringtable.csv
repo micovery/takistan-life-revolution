@@ -283,7 +283,7 @@ STRS_prison_freenow,The Civ is free now.
 STRS_pimp_vclsell_toofast,You are going too fast to sell the vehicle
 STRS_pimp_vclsell,You sold the vehicle for $%1.
 STRM_mission_marker_arbeiter,Worker
-STRM_mission_marker_rathaus,City Hall
+STRM_mission_marker_govMan,City Hall
 STRM_mission_marker_deliverypoint1,Delivery 1
 STRM_mission_marker_deliverypoint2,Delivery 2
 STRM_mission_marker_deliverypoint3,Delivery 3

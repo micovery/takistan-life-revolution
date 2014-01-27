@@ -49,11 +49,7 @@ CIVILIAN setFriend [RESISTANCE, 0];
 
 ExecSQF("Awesome\Scripts\optimize_1.sqf");
 
-["init"] execVM "bombs.sqf";
-if (isServer) then {
-		["server"] execVM "bombs.sqf";
-	};
-
+["init"] spawn A_SCRIPT_BOMBS;
 ExecSQF("Awesome\Functions\interaction.sqf");
 ExecSQF("triggers.sqf");
 
@@ -81,7 +77,6 @@ ExecSQF("Awesome\Functions\money_functions.sqf");
 ExecSQF("Awesome\Functions\gang_functions.sqf");
 ExecSQF("Awesome\Functions\convoy_functions.sqf");
 ExecSQF("Awesome\Functions\factory_functions.sqf");
-ExecSQF("setPitchBank.sqf");
 
 if (isClient) then {
 		[0.6] call stats_client_update_loading_progress;
@@ -135,6 +130,5 @@ if (isServer) then {
 	ExecSQFspawn("druguse.sqf");
 	ExecSQFspawn("drugreplenish.sqf");
 	ExecSQFspawn("Awesome\Scripts\hunting.sqf");
-	ExecSQFspawn("setObjectPitches.sqf");
 	ExecSQFspawn("stationrobloop.sqf");
 };

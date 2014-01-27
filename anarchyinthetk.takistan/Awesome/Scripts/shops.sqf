@@ -346,7 +346,6 @@ _ca =
 //Cop SOBR Vehicle Shop
 _sv = 
 	[
-		["LandRover_MG_TK_EP1", -1, -1],
 		["M113_UN_EP1", -1, -1],
 		["M113Ambul_UN_EP1", -1, -1],
 		["HMMWV", -1, -1],
@@ -358,9 +357,7 @@ _sv =
 		["HMMWV_M1151_M2_CZ_DES_EP1", -1, -1],
 		//["M1114_DSK_ACR", -1, -1],
 		//["M1114_AGS_ACR", -1, -1],
-		["BAF_Jackal2_L2A1_D", -1, -1],
-		["ArmoredSUV_PMC", -1, -1],
-		["LandRover_SPG9_TK_EP1", -1, -1]
+		["BAF_Jackal2_L2A1_D", -1, -1]
 	];
 
 //SOBR Air Shop

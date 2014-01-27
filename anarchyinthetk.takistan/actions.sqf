@@ -104,16 +104,16 @@ action25 = _role addaction ["Set slave free","noscript.sqf",'_slave = (nearestob
 //================================== COP CHIEF ELECTION ===============================================
 action43 = _role addaction ["Elect a Chief","maindialogs.sqf",["chief"],1,false,true,"","player distance copbank < 7"];
 //==================================== MAYOR ELECTION =================================================
-action44 = _role addaction ["Elect a President","maindialogs.sqf",["wahlen"],1,false,true,"","player distance rathaus <= 3"];
+action44 = _role addaction ["Elect a President","maindialogs.sqf",["wahlen"],1,false,true,"","player distance govMan <= 3"];
 //===================================== MAYOR ACTIONS =================================================
-action45 = _role addaction ["Change the Law","maindialogs.sqf",["gesetz"],1,false,true,"","player distance rathaus <= 3 and isMayor"];
-action46 = _role addaction ["Change taxes","maindialogs.sqf",["steuern"],1,false,true,"","player distance rathaus <= 3 and isMayor"];
+action45 = _role addaction ["Change the Law","maindialogs.sqf",["gesetz"],1,false,true,"","player distance govMan <= 3 and isMayor"];
+action46 = _role addaction ["Change taxes","maindialogs.sqf",["steuern"],1,false,true,"","player distance govMan <= 3 and isMayor"];
 //===================================== BUY HIDEOUT ===================================================
-//_role addaction [format["Buy Hideout ($%1)", hideoutcost],"noscript.sqf",'if( [player, "money"] call INV_GetItemAmount < hideoutcost)exitwith{player groupchat "not enough money"};[player, "money", -hideoutcost] call INV_AddInventoryItem;[player, "hideout", 1] call INV_AddInventoryItem;player groupchat format["you bought a hideout for $%1", hideoutcost];',1,false,true,"","player distance rathaus <= 3 and isciv"];
+//_role addaction [format["Buy Hideout ($%1)", hideoutcost],"noscript.sqf",'if( [player, "money"] call INV_GetItemAmount < hideoutcost)exitwith{player groupchat "not enough money"};[player, "money", -hideoutcost] call INV_AddInventoryItem;[player, "hideout", 1] call INV_AddInventoryItem;player groupchat format["you bought a hideout for $%1", hideoutcost];',1,false,true,"","player distance govMan <= 3 and isciv"];
 //===================================== BUY INSURANCE ===================================================
 action47 = _role addaction [format["Buy bank insurance ($%1)", ("bankversicherung" call INV_GetItemBuyCost)],"noscript.sqf",'[player] call interact_buy_insurance;', 1 , false,true,"","(!interact_buy_item_active && (player distance copbank <= 3 or player distance licenseflag5 <= 3 or player distance licenseflag6 <= 3 or player distance storage <= 7))"];
 //======================================= CRIMELOG ====================================================
-action48 = _role addaction ["Crime Log","maindialogs.sqf",["coplog"],1,false,true,"","player distance rathaus <= 3"];
+action48 = _role addaction ["Crime Log","maindialogs.sqf",["coplog"],1,false,true,"","player distance govMan <= 3"];
 //======================================== SLAVES =====================================================
 action49 = _role addaction [format ["Buy Slave ($%1)", slave_cost],"slaves.sqf", ["slave"],1,false,true,"","!currecciv and player distance slaveflag <= 10 and isciv"];
 //==================================== PRIVATE STORAGE ================================================

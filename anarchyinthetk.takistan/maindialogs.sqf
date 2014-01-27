@@ -514,9 +514,11 @@ if (_art == "chief") then {
 	for [{_c=0}, {_c < (count playerstringarray)}, {_c=_c+1}] do {
 		private["_player_variable_name", "_player_variable"];
 		_player_variable_name = playerstringarray select _c;
-		_player_variable = missionNamespace getVariable _player_variable_name;
+		_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
 	
-		if (([_player_variable] call player_exists)) then {
+//		if (([_player_variable] call player_exists)) then {
+		if !(isNil "_player_variable") then {
+		if !(isNull _player_variable) then {
 			private["_player_cop"];
 			_player_cop = [_player_variable] call player_cop;
 			if (not(_player_cop)) exitWith {};
@@ -525,6 +527,7 @@ if (_art == "chief") then {
 			_player_name = (name _player_variable);
 			_index = lbAdd [1, format ["%1 - (%2)", _player_variable_name, _player_name]];
 			lbSetData [1, _index, format["%1", _c]];
+		};
 		};
 	};
 };

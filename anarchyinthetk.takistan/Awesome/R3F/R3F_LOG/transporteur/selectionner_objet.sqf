@@ -4,12 +4,9 @@
  * @param 0 l'objet à sélectionner
  */
 
-if (R3F_LOG_mutex_local_verrou) then
-{
+if (R3F_LOG_mutex_local_verrou) then {
 	player globalChat STR_R3F_LOG_mutex_action_en_cours;
-}
-else
-{
+} else {
 	R3F_LOG_mutex_local_verrou = true;
 	
 	R3F_LOG_objet_selectionne = _this select 0;

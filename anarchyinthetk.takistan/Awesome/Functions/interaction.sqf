@@ -363,7 +363,7 @@ interact_president_elect = { _this spawn {
 	_next_election_str = if ((typeName _next_election) == "STRING") then { format["The results will be announced in %1 minute/s", _next_election]} else {""};
 	
 	player groupChat format["You voted for %1-%2. %3", _target, (name _target), _next_election_str];
-	format['if (isServer) then { [%1, %2] call interact_president_update_votes;}',_voter_number, _candidate_number] call broadcast;
+	format['[%1, %2] call interact_president_update_votes;',_voter_number, _candidate_number] call broadcast_server;
 
 	WahlSperre = true;
 	sleep _sleep_time;
@@ -374,7 +374,7 @@ interact_president_elect = { _this spawn {
 interact_president_update_votes = {
 	private["_voter_number", "_candidate_number"];
 	
-	if (not(isServer)) exitWith {};
+	if (!(isServer)) exitWith {};
 	_voter_number = _this select 0;
 	_candidate_number = _this select 1;
 	
@@ -399,7 +399,12 @@ interact_president_update_votes = {
 	};
 
 	//then add the voter to this candidate's array of voters
-	WahlArray SET [_candidate_number, ((WahlArray select _candidate_number ) + [_voter_number])];
+	// Does not need to back to main array, this is a direct link
+	private["_newArray"];
+	_newArray = (WahlArray select _candidate_number);
+	_newArray set[count _newArray, _voter_number];
+	
+//	WahlArray set[_candidate_number, _newArray];
 };
 
 
@@ -448,9 +453,9 @@ interact_president_change_taxes = {
 	publicVariable   "bank_tax";
 	
 	format['
-		%1 call item_setup_taxes;
+		[true] call item_setup_taxes;
 		hint "The President has changed the tax rates!";
-	', [true]] call broadcast;
+	'] call broadcast;
 };
 
 civilian_camera_cost_per_second = 1000000;
@@ -1472,10 +1477,10 @@ interact_side_ai_class = {
 };
 
 interact_recruit_ai_receive = {
-	if (not(isServer)) exitWith {};
+	if (!(isServer)) exitWith {};
 	private["_player"];
 	
-	player groupChat format["interact_recruit_ai_receive %1", _this];
+//	player groupChat format["interact_recruit_ai_receive %1", _this];
 	
 	_player = _this select 0;
 	if (not([_player] call player_human)) exitWith {};
@@ -1549,7 +1554,7 @@ interact_recruit_ai = { _this spawn {
 	[_player, 'money', -(_price)] call INV_AddInventoryItem;
 	player groupChat "Recruiting soldier";
 
-	format['[%1] call interact_recruit_ai_receive;', _player] call broadcast;
+	format['[%1] call interact_recruit_ai_receive;', _player] call broadcast_server;
 	sleep 1;
 	interact_recruit_ai_busy = false;
 };};
@@ -1709,8 +1714,6 @@ interact_generate_storage_list_code = {
 	_object = _this select 0;
 	_storage = _this select 1;
 	
-	format['interact_generate_storage_list_code: Starting, %1, %2', _object, _storage] call A_DEBUG_S;
-	
 	if (isNil "_object") exitWith {{}};
 	if (isNil "_storage") exitWith {{}};
 	if (typeName _object != "OBJECT") exitWith {{}};
@@ -1735,10 +1738,6 @@ interact_generate_storage_list_code = {
 		} forEach (%1 getVariable "%2");
 		(_entries)
 	', _object, _storage];
-	
-	format['interact_generate_storage_list_code: %1', _code] call A_DEBUG_S;
-	
-	format['interact_generate_storage_list_code: Ending'] call A_DEBUG_S;
 	
 	_code
 };
