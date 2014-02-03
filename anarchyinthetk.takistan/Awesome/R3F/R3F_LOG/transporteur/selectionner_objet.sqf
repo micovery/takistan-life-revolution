@@ -1,9 +1,3 @@
-/**
- * Sélectionne un objet à charger dans un transporteur
- * 
- * @param 0 l'objet à sélectionner
- */
-
 if (R3F_LOG_mutex_local_verrou) then {
 	player globalChat STR_R3F_LOG_mutex_action_en_cours;
 } else {

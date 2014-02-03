@@ -155,11 +155,11 @@ mounted_lookup_class_slot = {
 	
 	private["_entry"];
 	_entry = [_class] call mounted_lookup_class;
-//	if (isNil "_entry") exitWith {nil};
-	if ((typeName _entry) != "ARRAY") exitwith {};
+	if (isNil "_entry") exitWith {""};
+	if ((typeName _entry) != "ARRAY") exitwith {""};
 	
-	if (isNil "_slot_id") exitWith {};
-	if (typeName _slot_id != "STRING") exitWith {};
+	if (isNil "_slot_id") exitWith {""};
+	if (typeName _slot_id != "STRING") exitWith {""};
 	
 	private["_slot_entry"];
 	_slot_entry = "";
@@ -180,6 +180,9 @@ mounted_get_occupants = {
 	private["_vehicle", "_class"]; 
 	_vehicle = _this select 0;
 	
+	if (isNil "_vehicle") exitwith {[]};
+	if (isNull _vehicle) exitwith {[]};
+	
 	_class = (typeOf _vehicle);
 	private["_entry"];
 	_entry = [_class] call mounted_lookup_class;
@@ -196,7 +199,7 @@ mounted_get_occupants = {
 		_occupant = [_vehicle, _slod_id] call mounted_get_slot_occupant;
 		if (!(isNil "_occupant")) then {
 				if (!(isNull _occupant)) then {
-						_occupants = _occupants + [_occupant];
+						_occupants set[(count _occupants), _occupant];
 					};
 			};
 	} forEach (_entry select mounted_slots);
@@ -212,7 +215,7 @@ mounted_slot_wait = {
 		_slot_id = _this select 2;
 		
 		//player groupChat format["Waiting for death"];
-		waitUntil { not(alive _player) || not(_player getVariable "inMountedSlot")};
+		waitUntil { !(alive _player) || !(_player getVariable "inMountedSlot")};
 
 		//player groupChat format["Wait complete _notAlive = %1, _notInMountedSlot = %2", not(alive _player), not(_player getVariable "inMountedSlot")];
 		_player setVariable ["inMountedSlot", false, true];
@@ -233,7 +236,7 @@ mounted_slot_wait = {
 			_class = typeOf _vehicle;
 			_slot_entry = [_class, _slot_id] call mounted_lookup_class_slot;
 		//	if (not(isNil "_slot_entry")) then {
-			if ((typeName _slot_entry) != "ARRAY") then {
+			if ((typeName _slot_entry) == "ARRAY") then {
 				private["_exit"];
 				_exit = (_slot_entry select mounted_slot_exit) select mounted_slot_exit_data;
 				[_player, _vehicle, _exit] call mounted_attach;
@@ -279,6 +282,13 @@ mounted_board_slot = {
 	_player playActionNow _default_action;
 	_player groupChat format["You have boarded a mounted slot in this vehicle. Use Control + E to exit"];
 	
+	if (_vehicle isKindOf "helicopter") then {
+		if (({_vehicle isKindOf _x} count A_R_vehicles) > 0) then {
+			_player groupChat format["This slot can be rappeled from, Use Shift + E to rappel if rope is deployed."];
+		};
+	};
+	
+	
 	_player setVariable ["inMountedSlot", true, true];
 	_player setVariable ["mountedVehicle", _vehicle, true];
 	[_vehicle, _slot_id, _player] call mounted_set_slot_occupant;
@@ -289,7 +299,6 @@ mounted_board_slot = {
 	[_player, _vehicle, _slot_id, _direction_min, _direction_max] call mounted_setup_mouseMoving;
 	[_player, _vehicle, _slot_id] call mounted_slot_wait;
 	titleText ["", "BLACK IN", 2];
-	
 };
 
 mounted_unboard_slot = {
@@ -307,10 +316,37 @@ mounted_unboard_slot = {
 	
 	_player setVariable ["inMountedSlot", false, true];
 	_player setVariable ["mountedVehicle", objNull, true];
-
+	
+	
+	
 };
 
+mounted_unboard_slot_force = {
+	private["_player"];
+	_player = _this select 0;
+	
+	_player setVariable ["inMountedSlot", false, true];
+	_player setVariable ["mountedVehicle", objNull, true];
+};
 
+mounted_unboard_slot_rappel = {
+	private["_player", "_vehicle", "_slot_id","_class", "_slot_entry", "_exit"];
+	_player = _this select 0;
+	_vehicle = _this select 1;
+	_slot_id = _this select 2;
+	
+	player groupChat "Dropping...";
+	
+	[_player] call mounted_unboard_slot_force;
+	
+	_class = typeOf _vehicle;
+	_slot_entry = [_class, _slot_id] call mounted_lookup_class_slot;
+	_exit = (_slot_entry select mounted_slot_exit) select mounted_slot_exit_data;
+	
+	waitUntil {((getPosATL _player) distance (_vehicle ModelToWorld _exit)) <= 0.1};
+	
+	[0,0,0,[_vehicle, true]] spawn (compile (preprocessFileLineNumbers "Awesome\Rappel\rappel.sqf"));
+};
 
 mounted_get_slot_occupant = {
 	private["_vehicle", "_slot_id"];
@@ -343,11 +379,17 @@ mounted_set_slot_occupant = {
 	if (typeName _slot_id != "STRING") exitWith {};
 	if (isNil "_vehicle") exitWith {};
 	
-	private["_occupant"];
-	//player groupChat format["typeName _occupant = %1", (typeName _occupant)];
-	if (typeName _occupant == "OBJECT") then {
-		_occupant = if (isNull _occupant) then { nil } else { _occupant };
+	_occupant = if (isNil "_occupant") then {
+		objNull
+	}else{
+		if (typeName _occupant == "OBJECT") then {
+			if (isNull _occupant) then { objNull } else { _occupant }
+		}else{
+			objNull
+		}
 	};
+	
+	//player groupChat format["typeName _occupant = %1", (typeName _occupant)];
 	
 	//player groupChat format["_vehicle = %1, _slot_id = %2, _occupant = %3", _vehicle, _slot_id, _occupant];
 	_vehicle setVariable [_slot_id, _occupant, true];
@@ -518,11 +560,25 @@ mounted_keyDownHandler = {
 		true
 	};
 	
-	if (_key == DIK_E && _control) then {
+	if (_key == DIK_E && _control && !_shift) then {
 		if (speed _vehicle > 30) exitWith {
 			player groupChat format["%1-%2, you cannot exit the vehicle. It's moving too fast", _player, (name _player)];
 		};
 		_data call mounted_unboard_slot;
+	};
+	if (_key == DIK_E && _shift && !_control) then {
+		
+		if !(_vehicle isKindOf "helicopter") exitwith {
+			player groupChat format["%1-%2, you cannot rappel out of this vehicle", _player, (name _player)];
+		};
+		if (({_vehicle isKindOf _x} count A_R_vehicles) <= 0) exitwith {
+			player groupChat format["%1-%2, you cannot rappel out of this helicopter", _player, (name _player)];
+		};
+		if !(_vehicle getVariable [A_R_DEPLOY_V, false]) exitwith {
+			player groupChat format["%1-%2, you cannot rappel out of this helicopter, ropes not deployed", _player, (name _player)];
+		};
+		
+		_data spawn mounted_unboard_slot_rappel;
 	};
 	
 	if (_key in (actionKeys "ReloadMagazine")) then {

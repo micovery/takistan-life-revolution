@@ -1,13 +1,3 @@
-/**
- * Décharger un objet d'un transporteur - appelé deuis l'interface listant le contenu du transporteur
- * 
- * Copyright (C) 2010 madbull ~R3F~
- * 
- * This program is free software under the terms of the GNU General Public License version 3.
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 if (R3F_LOG_mutex_local_verrou) then {
 	player globalChat STR_R3F_LOG_mutex_action_en_cours;
 } else {

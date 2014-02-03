@@ -67,7 +67,7 @@ ExecSQF("Awesome\Functions\quicksort.sqf");
 ExecSQF("INVvars.sqf");
 ExecSQF("Awesome\Shops\functions.sqf");
 ExecSQF("Awesome\Functions\bankfunctions.sqf");
-ExecSQF("bankvariables.sqf");
+ExecSQFwait("bankvariables.sqf");
 ExecSQF("execlotto.sqf");
 ExecSQF("initWPmissions.sqf");
 ExecSQF("gfx.sqf");

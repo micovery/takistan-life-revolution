@@ -187,7 +187,7 @@ petrol_check_actions = {
 
 petrol_actions_loop = {
 	private["_count"];
-	{_x setFuelCargo 0} foreach (nearestobjects [getpos copbase1, ["Land_Ind_FuelStation_Feed_Ep1"], 6000]);
+	{_x setFuelCargo 0} foreach (nearestobjects [getPosATL copbase1, ["Land_Ind_FuelStation_Feed_Ep1"], 6000]);
 	_count = count GasStationArray;
 	while {true} do {
 		call petrol_check_actions;

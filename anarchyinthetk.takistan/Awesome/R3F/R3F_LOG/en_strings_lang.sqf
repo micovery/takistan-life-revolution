@@ -1,7 +1,4 @@
-﻿/*
- * Alternative to stringtable.csv which is simpler to install for the mission maker.
- * Alternative au stringtable.csv qui est plus simple à installer pour le créateur de mission.
- */
+﻿// Alternative to stringtable.csv which is simpler to install for the mission maker.
 
 STR_R3F_LOG_action_heliporter = "Lift the object";
 STR_R3F_LOG_action_heliporter_fait = "Object ""%1"" attached.";

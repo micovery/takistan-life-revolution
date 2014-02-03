@@ -12,27 +12,36 @@ if(_arrest) exitwith {server globalChat "Cannot use headbug at this time";};
 if(vehicle player != player) exitWith {hint "You must be on foot"};
 titleCut ["","black faded", 0];
 
-private["_pos","_dir","_vec","_vecs","_freeseats"];
-
+private["_pos","_dir"];
 _pos = getPosATL player;
 _dir = direction player;
-_vec = objNull;
 
-_vecs = nearestObjects [getpos player, ["Car","Tank","Air","Ship"], 10];
-
-if(count _vecs >0) then {
-	_vec = _vecs select 0;
-	_freeseats = _vec emptyPositions "cargo";
-	if(_freeseats > 0) then {player moveincargo _vec};
+private["_exit"];
+_exit = false;
+if (isNil "headbugbus") then {
+		headbugbus = objNull;
+	}else{
+		if !(isNull headbugbus) then {
+			_exit = true;
+		};
+	};
+if _exit exitwith {
+	server globalChat "HEADBUG ERROR";
+	titleCut["", "BLACK in",2];
 };
-
-if(vehicle player != player) exitWith {titleCut["", "BLACK in",2]};
+	
+headbugbus = "Ikarus_TK_CIV_EP1" createVehicleLocal [-10,-10,0];
 
 player moveincargo headbugbus;
-waitUntil {vehicle player != player};
+waitUntil {(vehicle player) != player};
+
 unassignVehicle player;
 player action ["Eject",vehicle player];
-waitUntil {vehicle player == player};
+waitUntil {(vehicle player) == player};
+
 player setPosATL _pos;
 player setDir _dir;
+
+deleteVehicle headbugbus;
+
 titleCut["", "BLACK in",2];

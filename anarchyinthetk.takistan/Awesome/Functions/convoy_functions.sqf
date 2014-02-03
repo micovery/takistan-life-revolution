@@ -209,7 +209,7 @@ convoy_mission_check_targets = {
 				} foreach (units _group);
 			};
 		};
-	} foreach (nearestObjects [getPos _truck, ["Man"], 150]);
+	} foreach (nearestObjects [getPosATL _truck, ["Man"], 150]);
 };
 
 convoy_mission_check_state = {
@@ -280,7 +280,7 @@ convoy_mission_check_complete = {
 			if ([_unit] call player_cop) exitWith {
 				convoy_complete_side = west;
 			};
-		} foreach (nearestObjects [getpos _truck,["Man"], 60]);
+		} foreach (nearestObjects [getPosATL _truck,["Man"], 60]);
 		true
 	};
 	

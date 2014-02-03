@@ -260,7 +260,7 @@ bankRob_safeInUse = {
 		
 		_safe setVariable [bankRob_v_inUse, "", false];
 		
-		missionNamespace setVariable [bankRob_pv_checkUse, [player, _safe]];
+		missionNamespace setVariable [bankRob_pv_checkUse, [str(player), _safe]];
 		publicVariableServer bankRob_pv_checkUse;
 		
 		waitUntil {((typeName (_safe getVariable [bankRob_v_inUse, ""])) == "BOOL")};
@@ -277,9 +277,12 @@ bankRob_safeSetTime = {
 	
 // Server side of safe in use check
 bankRob_safeInUse_s = {
-	private["_player", "_safe", "_timeUse", "_timeCheck"];
-	_player = _this select 0;
+	private["_playerStr", "_player", "_safe", "_timeUse", "_timeCheck"];
+	_playerStr = _this select 0;
 	_safe = _this select 1;
+	
+	_player = missionNamespace getVariable [_playerStr, objNull];
+	if (isNull _player) exitwith {format['bankRob_safeInUse_s, Player is Null, %1', _this] call A_DEBUG_S;};
 	
 	_timeUse = 0;
 	_timeUse = _safe getVariable [bankRob_v_useTime, 0];
@@ -338,15 +341,18 @@ bankRob_addLosses = {
 	
 	player setVariable [bankRob_v_localLoss, _currentLoss, false];
 	
-	missionNamespace setVariable [bankRob_pv_lossAdd, [player, _currentLoss]];
+	missionNamespace setVariable [bankRob_pv_lossAdd, [str(player), _currentLoss]];
 	publicVariableServer bankRob_pv_lossAdd;
 };
 
 // Adds losses to global array on server
 bankRob_addLosses_s = {
-	private["_player", "_loss", "_array"];
-	_player = _this select 0;
+	private["_playerStr", "_player", "_loss", "_array"];
+	_playerStr = _this select 0;
 	_loss = _this select 1;
+	
+	_player = missionNamespace getVariable [_playerStr, objNull];
+	if (isNull _player) exitwith {format['bankRob_addLosses_s, Player is Null, %1', _this] call A_DEBUG_S;};
 	
 	_array = _player getVariable [bankRob_v_localLoss, []];
 	{
@@ -460,4 +466,13 @@ bankRob_disconnect = {
 			[_player, bankRob_v_robDisc, true] call player_set_bool;
 			format['server globalChat "%1-%2 was a robber and disconnected too early, money returned";', _player, (name _player)] call broadcast;
 		};
+};
+
+// Checks if user can access the bank
+bankRob_bankUsable = {
+	private["_player", "_robAbort"];
+	_player = _this select 0;
+	_robAbort = _player getVariable [bankRob_v_robbed, 0];
+	
+	!( ((time - _robAbort) < (60 * 3)) && (_robAbort > 0) )
 };

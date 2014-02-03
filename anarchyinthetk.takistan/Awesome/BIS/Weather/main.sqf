@@ -11,7 +11,6 @@ scriptName "Weather\data\scripts\main.sqf";
 */
 private["_logic", "_logicFnc", "_debug", "_intensity", "_delay", "_particleEffects", "_center"];
 _logic = _this select 0;
-_logic setpos [1,1,1];
 
 //--- Execute Functions
 if (isnil "bis_fnc_init") then {

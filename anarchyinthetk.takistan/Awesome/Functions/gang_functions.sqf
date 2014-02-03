@@ -135,6 +135,7 @@ gangs_uids_2_players = {
 		if !(isNil "_player") then {
 			if !(isNull _player) then {
 				_players = _players + [_player];
+				_players set[(count _players), _player];
 			};
 		};
 		_i = _i + 1;

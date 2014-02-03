@@ -208,7 +208,7 @@ if (_art == "spielerliste") then {
 	(_DFML displayCtrl 1) lbAdd "B A N K:";
 //	(_DFML displayCtrl 1) lbAdd (format ["Est. total funds in the main bank safe's: $%1", strM(robpoolsafe1 + robpoolsafe2 + robpoolsafe3)]);
 
-	if(!local_useBankPossible)then{(_DFML displayCtrl 1) lbAdd (format ["Bank lockout time remaining: %1 seconds.", round rblock])};
+	if !([player] call bankRob_bankUsable)then{(_DFML displayCtrl 1) lbAdd (format ["Bank lockout time remaining: %1 seconds.", round rblock])};
 
 	(_DFML displayCtrl 1) lbAdd _trennlinie;
 	(_DFML displayCtrl 1) lbAdd (format ["W O R K P L A C E S"]);

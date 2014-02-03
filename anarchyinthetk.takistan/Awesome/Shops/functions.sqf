@@ -563,7 +563,7 @@ shop_buy_item_validate_data = {
 	_license_2 = _data select shop_buy_item_license_2;
 	_logic = _data select shop_buy_item_logic;
 	
-	_near_vehicles = if (isNil "_logic") then { [] } else { nearestobjects [getpos _logic, ["Ship","car","motorcycle","truck"], 3] };
+	_near_vehicles = if (isNil "_logic") then { [] } else { nearestobjects [getPosATL _logic, ["Ship","car","motorcycle","truck"], 3] };
 	_near_vehicles_count = if (isNil "_near_vehicles") then { 0 } else { count _near_vehicles };
 	_supply = [_item, _shop_id] call INV_GetStock;
 	_max_stock = [_item, _shop_id] call INV_GetMaxStock;
@@ -840,6 +840,10 @@ shop_sell_item_validate_data = {
 		ctrlSetText [sellButton_idc, _sell_label];
 	};
 	
+	if(toLower(_item) in ["handy"]) exitWith {
+		["You cannot sell this item", _quiet] call shop_set_status_message; ""
+	};
+	
 	if(not(_type in _sellableItems)) exitWith {
 		["The item you have selected to sell, is not an item that can be sold", _quiet] call shop_set_status_message; ""
 	};
@@ -859,7 +863,6 @@ shop_sell_item_validate_data = {
 	if (_isItem && _amount > _item_count) exitWith {
 		["You are trying to sell more than the amount of items you have", _quiet] call shop_set_status_message; ""
 	};
-	
 	
 	if (_isMagazine && _magazine_count == 0) exitWith {
 		["You do not have any of the selected magazine/ammunition to sell", _quiet] call shop_set_status_message; ""
@@ -1103,7 +1106,7 @@ shop_sell_item = {
 	_price = [(_data select shop_sell_item_price)] call decode_number;
 	_shop_id = _data select shop_sell_item_shop_id;
 	
-	call shop_play_animation;
+	[] call shop_play_animation;
 	
 	//keep track of wh has sold drugs
 	if (_isDrug) then {
@@ -1192,7 +1195,7 @@ shop_sell_vehicle = {
 		_vehicle = _vehicles select 0;
 	};
 	
-	if ((count (crew _vehicle)) > 0) exitwith {player groupchat "Vehicle is not empty"; false};
+	if (((count (crew _vehicle)) > 0)||(count([_vehicle] call mounted_get_occupants) > 0)) exitwith {player groupchat "Vehicle is not empty"; false};
 	
 	[_player, _vehicle] call vehicle_remove;
 	if (isNil "_vehicle") exitWith { false };
@@ -1296,7 +1299,7 @@ shop_sell_gear = {
 	_amount = _data select shop_sell_item_amount;
 	_type = _data select shop_sell_item_type;
 	
-	call shop_play_animation;
+	[] call shop_play_animation;
 	
 	_i = _amount;
 	//for weapon, and backpack, it's always one item 
@@ -1336,7 +1339,7 @@ shop_buy_item = {
 		[_shop_id, _total_due] call shop_distribute_drug_sale;
 	};
 	
-	call shop_play_animation;
+	[] call shop_play_animation;
 	[player, _item, _amount, ([player] call player_inventory_name)] call INV_CreateItem;
 	player groupChat format["You bought %1 %2 for $%3", _amount, _item_name, strM(_total_due)];
 };
@@ -1364,7 +1367,7 @@ shop_buy_gear_item = {
 	_in_hands = _data select shop_buy_item_in_hands;
 	
 	if (_in_hands) then {
-		call shop_play_animation;
+		[] call shop_play_animation;
 	};
 	
 	[_class, _amount, _crate, _in_hands] spawn _function;

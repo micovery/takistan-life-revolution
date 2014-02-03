@@ -1,4 +1,4 @@
-private["_unit", "_select", "_damage", "_source", "_projectile"];
+private["_unit", "_select", "_damage", "_source", "_projectile", "_distance", "_nvcls","_veh","_inveh", "_reduce","_source_cop", "_weapon", "_exit"];
 _unit 			= _this select 0;
 _select			= _this select 1;
 _damage			= _this select 2;
@@ -6,63 +6,84 @@ _source			= _this select 3;
 _projectile		= _this select 4;
 
 
-private["_distance"];
 _distance 		= 0;
 
+
+format['EH_handleDamage: Starting, %1', _this] call A_DEBUG_S;
 
 if( ((_unit distance getmarkerpos "respawn_west" < 100))  || 
 	((_unit distance getmarkerpos "respawn_east" < 100)) || 
 	((_unit distance getmarkerpos "respawn_guerrila" < 100)) || 
 	(_unit distance getmarkerpos "respawn_civilian" < 100)
-	) exitwith {};
+	) exitwith {
+		format['EH_handleDamage: Exit 1'] call A_DEBUG_S;
+	};
 
-
-private["_exit"];
 _exit = false;
 
 {
 	private["_y"];
 	_y = _x select 5;
-	if ((_unit distance (getPosATL _y)) <= 10) then {_exit = true;};
+	if ((_unit distance (getPosATL _y)) <= 10) then {_exit = true; format['EH_handleDamage: Exit 2'] call A_DEBUG_S;};
 } forEach Clothing_Shops;
 
 if !_exit then {
-		_exit = [_unit] call player_get_arrest;
+	_exit = if isCop then {
+		 [_unit, "roeprison"] call player_get_bool
+	}else{
+		[_unit] call player_get_arrest
 	};
-
-if _exit exitwith {};
-
-
-
-private["_nvcls"];
-_nvcls = nearestObjects [getpos _unit, ["LandVehicle"], 5];
-
-private["_veh","_inveh", "_reduce"];
-_reduce = false;
-
-private["_source_cop", "_weapon"];
-_source_cop = ([_source] call player_cop);
-_weapon = currentWeapon _source;
-
-if (_projectile == "B_9x19_SD") then {
-	sleep 1;
-	if ( (((_weapon == "M9") || (_weapon == "M9SD")) && _source_cop) ) then {
-		_reduce = true;
-		_distance = _source distance _unit;
-		_veh = vehicle _unit;
-		_inveh = ( (_veh iskindof "ATV_Base_EP1") ||  (_veh iskindof "Motorcycle") );	
-		[_unit, _source, _distance, _select, _damage, _veh, _inveh] spawn stun_gun_impact;
+	
+	if _exit then {
+		format['EH_handleDamage: Exit 3'] call A_DEBUG_S;
 	};
 };
 
-if ((_projectile == "B_12Gauge_74Slug") ) then {
-	sleep 1;
+if _exit exitwith {
+	format['EH_handleDamage: Exit Passed'] call A_DEBUG_S;
+};
+
+format['EH_handleDamage: Exit Checks passed'] call A_DEBUG_S;
+
+
+_nvcls = nearestObjects [getPosATL _unit, ["LandVehicle"], 5];
+
+_reduce = false;
+
+_source_cop = [_source] call player_cop;
+_weapon = currentWeapon _source;
+
+if (_projectile == "B_9x19_SD") then {
+	if ( (((_weapon == "M9") || (_weapon == "M9SD")) && _source_cop) ) then {
+		_reduce = true;
+		_distance = _source distance _unit;
+		_mounted = false;
+		_veh = vehicle _unit;
+		if (_veh == _unit) then {
+			if !(isNull ([_unit] call mounted_player_get_vehicle)) then {
+				_veh = [_unit] call mounted_player_get_vehicle;
+				_mounted = true;
+			};
+		};
+		_inveh = ((_veh iskindof "ATV_Base_EP1") ||  (_veh iskindof "Motorcycle")) || _mounted;	
+		[_unit, _source, _distance, _select, _damage, _veh, _inveh, _mounted] spawn stun_gun_impact;
+	};
+};
+
+if (_projectile == "B_12Gauge_74Slug") then {
 	if ( ((_weapon == "M1014") && _source_cop) ) then {	
 		_reduce = true;
 		_distance = _source distance _unit;
+		_mounted = false;
 		_veh = vehicle _unit;
-		_inveh = ( (_veh iskindof "ATV_Base_EP1") ||  (_veh iskindof "Motorcycle") );	
-		[_unit, _source, _distance, _select, _damage, _veh, _inveh] spawn stun_gun_impact;
+		if (_veh == _unit) then {
+			if !(isNull ([_unit] call mounted_player_get_vehicle)) then {
+				_veh = [_unit] call mounted_player_get_vehicle;
+				_mounted = true;
+			};
+		};
+		_inveh = ((_veh iskindof "ATV_Base_EP1") ||  (_veh iskindof "Motorcycle")) || _mounted;	
+		[_unit, _source, _distance, _select, _damage, _veh, _inveh, _mounted] spawn stun_gun_impact;
 	};
 };
 	

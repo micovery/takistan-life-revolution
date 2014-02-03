@@ -257,7 +257,7 @@ vehicle_GetIn_handler = {
 		
 	};
 	
-	_this spawn A_R_LOOP;
+	[_vehicle, _position, _player] spawn A_R_LOOP;
 };
 
 
@@ -548,19 +548,36 @@ vehicle_set_modifications = {
 		case "ArmoredSUV_PMC": {
 			[_vehicle] call armored_suv_close_minigun;
 		};
-		case "Ka60_PMC": {
-			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
-			_vehicle removeweapon "57mmLauncher";
+		case "Pchela1T": {
+			{_vehicle addmagazine "100Rnd_762x54_PK";}forEach[1,2,3];
+			_vehicle addweapon "Pecheneg";
 		};
-		case "Ka60_GL_PMC": {
+		case "Ka60_PMC": {
 			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
 			_vehicle removeweapon "57mmLauncher";
 			
 			{_vehicle addmagazine "60Rnd_CMFlareMagazine";}forEach[1];
 			_vehicle addweapon "CMFlareLauncher";
 			
-			{_vehicle addmagazine "100Rnd_762x51_M240";}forEach[1,2,3,4];
-			_vehicle addweapon "M240_veh";
+			{_vehicle addmagazine "2000Rnd_762x51_M134";}forEach[1];
+			_vehicle addweapon "M134";
+		};
+		case "Ka60_GL_PMC": {
+			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
+			_vehicle removeMagazinesTurret ["14Rnd_57mm",[-1]];
+		};
+		case "UH1Y": {
+			if(!(_silent)) then { hint "Reconfiguring helicopter armament..."; };
+			_vehicle removeMagazinesTurret ["14Rnd_FFAR",[-1]];
+		};
+		case "AW159_Lynx_BAF": {
+			if(!(_silent)) then { hint "Reconfiguring helicopter armament..."; };
+			
+			_vehicle removeMagazinesTurret ["12Rnd_CRV7",[-1]];
+			_vehicle removeMagazinesTurret ["1200Rnd_20mm_M621",[-1]];
+			
+			{_vehicle addMagazineTurret ["200Rnd_762x54_GPMG", [0]];}forEach[1,2,3,4];
+			_vehicle addWeapon "BAF_L7A2";
 		};
 		case "AH6J_EP1": {
 			if(not(_silent)) then { hint "Reconfiguring helicopter armament..."; };
@@ -865,6 +882,7 @@ vehicle_exists = {
 	_vehicle = _this select 0;
 	if (isNil "_vehicle") exitWith {false};
 	if (typeName _vehicle != "OBJECT") exitWith {false};
+	if (isNull _vehicle) exitwith {false};
 	true
 };
 
@@ -949,12 +967,12 @@ vehicle_reset_gear = {
 
 vehicle_unflip = {
 	private["_vcl"];
-	_vcl = (nearestobjects [getpos player, ["LandVehicle"], 10] select 0);
+	_vcl = (nearestobjects [getPosATL player, ["LandVehicle"], 10] select 0);
 	//if (_vcl == "") exitwith {player groupchat "No vehicles in range";};
 	if (([player, _vcl] call vehicle_owner)) then {
-		if (({(alive _x) && (isPlayer _x)} count crew _vcl) > 0) exitWith {player groupChat "The vehicle is not empty!";};
+		if ((({(alive _x) && (isPlayer _x)} count crew _vcl) > 0)||((count ([_vcl] call mounted_get_occupants)) > 0)) exitWith {player groupChat "The vehicle is not empty!";};
 
-		player groupChat "Turning your vehicle over, wait 10 seconds within 10meters.";
+		player groupChat "Turning your vehicle over, wait 10 seconds within 10 meters.";
 		sleep 10;
 
 		if (player distance _vcl <= 10) then {
@@ -976,7 +994,7 @@ vehicle_cop_tuning = {
 	_vehicle = _this select 0;
 	
 	if(!(_vehicle iskindof "car"))exitwith{};
-	if (({_vehicle isKindOf _x} count ["BRDM2_Base","BTR90_Base","LAV25_Base","HMMWV_M1151_M2_DES_Base_EP1","StrykerBase_EP1"]) > 0) exitwith {};
+	if (({_vehicle isKindOf _x} count ["StrykerBase_EP1"]) > 0) exitwith {};
 	
 	_vehicle setVariable ["tuning", 2, true];
 };
@@ -991,18 +1009,18 @@ vehicle_toggle_lock = {
 	_stateV = "";
 	_stateV = if(_state)then{"pv_vehUnlock"}else{"pv_vehLock"};
 	
-	missionNamespace setVariable [_stateV, _vehicle];
+	missionNamespace setVariable [_stateV, str(_vehicle)];
 	publicVariable _stateV;
 	_vehicle lock !(_state);
 	
 	_state
 };
 
-pv_vehLock = objNull;
-"pv_vehLock" addPublicVariableEventHandler {(_this select 1) lock true;};
+pv_vehLock = "objNull";
+"pv_vehLock" addPublicVariableEventHandler {(missionNamespace getVariable[(_this select 1),objNull]) lock true;};
 
-pv_vehUnlock = objNull;
-"pv_vehUnlock" addPublicVariableEventHandler {(_this select 1) lock false;};
+pv_vehUnlock = "objNull";
+"pv_vehUnlock" addPublicVariableEventHandler {(missionNamespace getVariable[(_this select 1),objNull]) lock false;};
 
 vehicle_owner = {
 	private["_player", "_vehicle"];
@@ -1170,11 +1188,20 @@ vehicle_list = {
 	_vehicles
 };
 
+vehicle_getCrew = {
+	private["_vehicle","_creW","_mounted"];
+	_vehicle = _this select 0;
+	_crew = crew _vehicle;
+	_mounted = [_vehicle] call mounted_get_occupants;
+	{_crew set[(count _crew), _x]} forEach _mounted;
+	
+	_crew
+};
 
 vehicle_clean_checkTime = 5 * 60;
 vehicle_clean_triggerOn = "trigger_on";
 
-vehicle_clean_ignore = ["headbugbus"];
+vehicle_clean_ignore = [];
 
 vehicle_clean_time = {
 	private["_vehicle", "_type", "_delay"];
@@ -1251,8 +1278,9 @@ vehicle_clean_check = {
 	
 	_vehicle = _this select 0;
 	
-	if (_vehicle getVariable [vehicle_clean_triggerOn, false])exitwith{};
-	if (({(alive _x)&& (isPlayer _x)} count (crew _vehicle)) != 0)exitwith {};
+	if (_vehicle getVariable [vehicle_clean_triggerOn, false]) exitwith{};
+	if (({(alive _x)&& (isPlayer _x)} count (crew _vehicle)) != 0) exitwith{};
+	if ((count ([_vehicle] call mounted_get_occupants)) > 0) exitwith{};
 	
 	if ([_vehicle] call A_impound_check) exitwith {
 			_this call vehicle_clean_check_impound;
@@ -1349,7 +1377,7 @@ vehicle_clean_trigCheck = {
 				if (alive _vehicle) then {
 						_return = true;
 					}else{
-						if (( {(alive _x) && (isPlayer _x)}count (crew _vehicle)) > 0) then {
+						if ((({(alive _x) && (isPlayer _x)}count(crew _vehicle)) > 0)||((count ([_vehicle] call mounted_get_occupants)) > 0)) then {
 								_return = true;
 							}else{
 								private["_nearbyHumans"];
@@ -1399,6 +1427,6 @@ vehicle_clean_trigOn = {
 };
 
 
-call vehicle_load;
-call vehicle_save_gear_setup;
+[] call vehicle_load;
+[] call vehicle_save_gear_setup;
 vehicle_functions_defined = true;

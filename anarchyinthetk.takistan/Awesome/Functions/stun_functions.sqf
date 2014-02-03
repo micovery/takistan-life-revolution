@@ -9,7 +9,7 @@ stun_tazer = {
 };
 
 stun_gun_impact = {
-	private ["_unit", "_shooter", "_distance", "_selection", "_damage", "_veh", "_inveh", "_armor", "_pass"];
+	private ["_unit", "_shooter", "_distance", "_selection", "_damage", "_veh", "_inveh", "_mounted", "_armor", "_restrained", "_pass"];
 
 	_unit = _this select 0;
 	_shooter = _this select 1;
@@ -18,6 +18,7 @@ stun_gun_impact = {
 	_damage = _this select 4;
 	_veh = _this select 5;
 	_inveh = _this select 6;
+	_mounted = _this select 7;
 	
 	if !(alive _unit) exitwith {};
 	
@@ -27,9 +28,10 @@ stun_gun_impact = {
 	if (_unit distance getMarkerpos "respawn_civilian" < 100) exitwith {};
 
 	_armor = _unit getvariable "stun_armor";
+	_restrained = [_unit, "restrained"] call player_get_bool;
 	
 	_pass = [];
-	_pass = [_unit, _shooter, _selection, _damage, _armor, _veh, _inveh, _distance];
+	_pass = [_unit, _shooter, _selection, _damage, _armor, _veh, _inveh, _mounted, _restrained, _distance];
 	
 	if (_selection == "") exitwith {};
 	if (_damage < 0.1) exitwith {};
@@ -69,6 +71,7 @@ stun_punch = {
 	_man = _men select 0;
 	
 	if (isNull _man) exitwith {};
+	if !(isNull ([_man] call mounted_player_get_vehicle)) exitwith {};
 	_aiArray = missionNamespace getVariable ["A_AI_ARRAY", []];
 	if (_man in _aiArray) exitWith {};
 	
@@ -97,7 +100,7 @@ stun_punch = {
 };
 
 stun_shot_close = {
-	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh","_distance"];
+	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh", "_mounted", "_restrained", "_distance"];
 
 	_unit = _this select 0;
 	_shooter = _this select 1;
@@ -106,7 +109,9 @@ stun_shot_close = {
 	_armor = _this select 4;
 	_veh = _this select 5;
 	_inveh = _this select 6;
-	_distance = _this select 7;
+	_mounted = _this select 7;
+	_restrained = _this select 8;
+	_distance = _this select 9;
 	
 	[_unit, _shooter] spawn stun_broadcast;
 	
@@ -126,16 +131,23 @@ stun_shot_close = {
 		StunActiveTime = StunActiveTime + StunTimePerHit;
 
 		if (_inveh) then {
-			_unit action ["eject", _veh];
-			sleep 0.01;
+			if _mounted then {
+				[_unit] call mounted_unboard_slot_force;
+				sleep 0.1;
+			}else{
+				_unit action ["eject", _veh];
+				sleep 0.01;
+			};
 		};
-					
-		if ([_unit] call is_prone) then {
-			format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_unit] call broadcast;
-		} else {
-			format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
+		
+		if (((_veh == _unit) || _inveh) && !_restrained) then {
+			if ([_unit] call is_prone) then {
+				format['%1 switchmove "AdthPpneMstpSlowWrflDf_1";',_unit] call broadcast;
+			} else {
+				format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
+			};
 		};
-				
+		
 		if (isPlayer _unit) then {
 			[_unit] spawn stun_effects_full;
 		} else {
@@ -151,11 +163,13 @@ stun_shot_close = {
 				_unit action ["eject", _veh];
 				sleep 0.01;	
 			};
-
-			if ([_unit] call is_prone) then {
-				format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
-			} else {
-				format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH7BRICHO";',_unit] call broadcast;
+			
+			if (((_veh == _unit) || _inveh) && !_restrained) then {
+				if ([_unit] call is_prone) then {
+					format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
+				} else {
+					format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH7BRICHO";',_unit] call broadcast;
+				};
 			};
 
 			if (isPlayer _unit) then {
@@ -168,7 +182,7 @@ stun_shot_close = {
 };
 
 stun_shot_far = {
-	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh", "_distance"];
+	private ["_unit", "_shooter", "_selection", "_damage", "_armor", "_veh", "_inveh", "_mounted", "_restrained", "_distance"];
 
 	_unit = _this select 0;
 	_shooter = _this select 1;
@@ -177,7 +191,9 @@ stun_shot_far = {
 	_armor = _this select 4;
 	_veh = _this select 5;
 	_inveh = _this select 6;
-	_distance = _this select 7;
+	_mounted = _this select 7;
+	_restrained = _this select 8;
+	_distance = _this select 8;
 
 	[_unit, _shooter] spawn stun_broadcast;
 	
@@ -195,16 +211,23 @@ stun_shot_far = {
 	
 	if ((_armor != "full") && (_armor != "light") ) then {
 		StunActiveTime = StunActiveTime + StunTimelight;
-			
-		if (_inveh) then {	
-			_unit action ["eject", _veh];
-			sleep 0.01;
+		
+		if (_inveh) then {
+			if _mounted then {
+				[_unit] call mounted_unboard_slot_force;
+				sleep 0.1;
+			}else{
+				_unit action ["eject", _veh];
+				sleep 0.01;
+			};
 		};
-
-		if ([_unit] call is_prone) then {
-			format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
-		} else {
-			format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH7BRICHO";',_unit] call broadcast;
+		
+		if (((_veh == _unit) || _inveh) && !_restrained) then {
+			if ([_unit] call is_prone) then {
+				format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
+			} else {
+				format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH7BRICHO";',_unit] call broadcast;
+			};
 		};
 
 		if (isPlayer _unit) then {
@@ -220,11 +243,13 @@ stun_shot_far = {
 				_unit action ["eject", _veh];
 				sleep 0.01;		
 			};
-					
-			if ([_unit] call is_prone) then {
-				format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
-			} else {
-				format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH7BRICHO";',_unit] call broadcast;
+			
+			if (((_veh == _unit) || _inveh) && !_restrained) then {
+				if ([_unit] call is_prone) then {
+					format['%1 switchmove "adthpercmstpslowwrfldnon_4";',_unit] call broadcast;
+				} else {
+					format['%1 switchmove "AMELPERCMSTPSNONWNONDNON_ZASAH7BRICHO";',_unit] call broadcast;
+				};
 			};
 
 			if (isPlayer _unit) then {
@@ -856,8 +881,11 @@ stun_effects_full = {
 	_unit = _this select 0;
 	
 	if (stunloop) exitwith {};
+	stunloop = true;
 	
 	[_unit, "isstunned", true] call player_set_bool;
+	
+	_unit setUnconscious true;
 	
 	if (isPlayer _unit) then {
 		"dynamicBlur" ppEffectEnable true;
@@ -894,14 +922,13 @@ stun_effects_full = {
 			[_unit, "isstunned", false] call player_set_bool;
 			format['%1 switchmove "amovppnemstpsnonwnondnon";',_unit] call broadcast;
 		};
-	} 
-	else {
+	} else {
+		_unit setUnconscious false;
 		[_unit, "isstunned", false] call player_set_bool;
 		if ([_unit] call is_prone) then {
 				format['%1 switchmove "amovppnemstpsnonwnondnon";',_unit] call broadcast;
 			};
 	};
-
 };
 
 stun_drop_weapons = {

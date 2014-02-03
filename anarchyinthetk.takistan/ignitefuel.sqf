@@ -20,7 +20,14 @@ if (_mode == "use") then {
 	if ( ((_vehicle distance (getmarkerpos "respawn_east")) < 100) ) exitwith { player groupChat "You are not allowed to use a lighter inside the opfor spawn"; };
 	if ( ((_vehicle distance (getmarkerpos "respawn_guerrila")) < 100) ) exitwith { player groupChat "You are not allowed to use a lighter inside the insurgent spawn"; };
 	
-	lighterUsed = [_vehicle, crew _vehicle, time];
+	private["_crew","_mounted"];
+	_crew = crew _vehicle;
+	_mounted = [_vehicle] call mounted_get_occupants;
+	{
+		_crew set[count _crew, _x];
+	} forEach _mounted;
+	
+	lighterUsed = [_vehicle, _crew, time];
 	_vehicle setDamage 0.95;
 	player groupchat localize "STRS_inv_items_ignite_ignite";
 	[player, _item, -1] call INV_AddInventoryItem;

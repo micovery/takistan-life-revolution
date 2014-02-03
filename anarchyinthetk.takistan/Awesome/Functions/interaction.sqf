@@ -92,12 +92,12 @@ interact_atm = {
 	if ([_target] call player_human) exitWith {false};
 	if (not(_target in bankflagarray)) exitWith {false};
 	
-	if(!local_useBankPossible) exitWith {
+	if !([_player] call bankRob_bankUsable) exitWith {
 		hint "The ATM rejected your card";
 		false
 	};
 	
-	call interact_atm_menu;
+	[_player] call interact_atm_menu;
 	true
 };
 
@@ -168,6 +168,7 @@ interact_arrest_player = {
 		[_victim, 0] call player_set_bounty;
 	};
 	
+	[format['player setUnconscious false;'],_victim] call broadcast_client;
 	format['[%1, %2] call player_prison_time;', _victim, _minutes] call broadcast;
 	format['[%1, %2] call player_prison_bail;', _victim, _bail_percent] call broadcast;
 	format['[%1] call player_prison_convict;', _victim] call broadcast;
@@ -225,9 +226,15 @@ interact_toggle_restrains = {
 		player groupChat format["%1-%2 is in a vehicle!", _victim, _victim_name];
 	};
 	
+	if !(isNull ([_victim] call mounted_player_get_vehicle)) then {
+		player groupChat format["%1-%2 is in a mounted slot!", _victim, _victim_name];
+	};
+	
 	private["_message"];
 	if ([_victim, "restrained"] call player_get_bool) then {
 		[_victim, "restrained", false] call player_set_bool;
+		
+		[format['player setUnconscious false;'],_victim] call broadcast_client;
 		
 		_message = format["%1-%2 was unrestrained by %3", _victim, _victim_name, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
@@ -241,6 +248,7 @@ interact_toggle_restrains = {
 				player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];
 			};
 		
+		[format['player setUnconscious true;'],_victim] call broadcast_client;
 		[_victim, "restrained", true] call player_set_bool;
 		_message = format["%1-%2 was restrained by %3", _victim, _victim_name, (name _player)];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
@@ -802,11 +810,11 @@ interact_atm_menu = { _this spawn {
 	private["_player"];
 	
 	_player = _this select 0;
-	if (not([_player] call player_human)) exitWith {};
+	if (!([_player] call player_human)) exitWith {};
 	if (_player != player) exitWith {};
 
-	if !(local_useBankPossible)  exitWith {
-		player groupChat format ["You robbed the bank a few minutes ago. You can not use it for %1 minutes after you robbed it.", strM(local_robbsperre_zeit)];
+	if !([_player] call bankRob_bankUsable)  exitWith {
+		player groupChat format ["You robbed the bank a few minutes ago. You can not use it for %1 minutes after you robbed it.", strM(3)];
 	};
 
 	if (!(createDialog "bank")) exitWith {hint "Dialog Error!";};
@@ -2797,7 +2805,7 @@ interact_admin_menu = {
 	[admin_player_list_id] call DialogAllPlayersList;
 	
 	private["_actions"];
-	_actions = call admin_actions_list;
+	_actions = [] call admin_actions_list;
 	
 	{
 		private["_text", "_code", "_index"];
@@ -3035,7 +3043,7 @@ interact_item_drop = {_this spawn {
 		player groupChat "You cannot use your inventory now";
 	};
 	
-	if(not(isNull (nearestobjects[getPos _player, droppableitems, 1] select 0))) exitWith {
+	if(not(isNull (nearestobjects[getPosATL _player, droppableitems, 1] select 0))) exitWith {
 		player groupChat "You cannot drop items on top of each other. move and try again.";
 	};
 	
@@ -3164,7 +3172,7 @@ interact_item_give = { _this spawn {
 
 	private["_near_players", "_minimum_distance"];
 	_minimum_distance = 20;
-	_near_players = nearestObjects [getPos _player, ["LandVehicle", "Air", "Man"], _minimum_distance];
+	_near_players = nearestObjects [getPosATL _player, ["LandVehicle", "Air", "Man"], _minimum_distance];
 
 	if (not(_target in _near_players) and (_player distance _target > _minimum_distance)) exitWith {
 		player groupChat format["You have to be within at least %1 meters from the selected player", _minimum_distance];

@@ -79,7 +79,7 @@ _gs =
 //Binocular, GPS, lockpick, Fuelline, Stone
 _es = 
 	[
-		["handy", 80, 80],
+		["handy", -1, -1],
 		["Binocular", 80, 80],
 		["GPS", 40, 80],
 		["lockpick", 30, 30],
@@ -373,7 +373,8 @@ _sa =
 		["UH60M_EP1", -1, -1],
 		["CH_47F_EP1", -1, -1],
 		["UH60M_MEV_EP1", -1, -1],
-		["Ka60_PMC", -1, -1]
+		["UH1Y", -1, -1],
+		["AW159_Lynx_BAF", -1, -1]
 	];
 
 // PMC land vehicles
@@ -399,6 +400,7 @@ _pmcair =
 	[
 		["MH6J_EP1", -1, -1],
 		["Ka60_PMC", -1, -1],
+		["Ka60_GL_PMC", -1, -1],
 		["UH60M_MEV_EP1", -1, -1],
 		["BAF_Merlin_PMC", -1, -1]
 	];
@@ -1271,6 +1273,7 @@ _rhvy =
 _rair = 
 	[
 		["An2_TK_Opf", -1, -1],
+		["Pchela1T", -1, -1],
 		["L39_TK_EP1", -1, -1]
 	];
 
@@ -1673,10 +1676,27 @@ INV_ItemShops = [
 		[mainbankShop,"Bank Insurance",dummyobj,dummyobj,_bank,_bank,true]
 	];
 
+INV_ItemShops_IgnoreObjects = [];
+
+{
+	private["_array","_shop","_Spawn1","_Spawn2"];
+	_array = _x;
+	_shop = _array select 0;
+	_Spawn1 = _array select 1;
+	_Spawn2 = _array select 2;
+	if !(_shop in INV_ItemShops_IgnoreObjects) then {
+			INV_ItemShops_IgnoreObjects set[(count INV_ItemShops_IgnoreObjects), _shop];
+		};
+	if !(_Spawn1 in INV_ItemShops_IgnoreObjects) then {
+			INV_ItemShops_IgnoreObjects set[(count INV_ItemShops_IgnoreObjects), _Spawn1];
+		};
+	if !(_Spawn2 in INV_ItemShops_IgnoreObjects) then {
+			INV_ItemShops_IgnoreObjects set[(count INV_ItemShops_IgnoreObjects), _Spawn2];
+		};
+} forEach INV_ItemShops;
 
 
-
-//buidld the INV_ItemMaxStocks array
+//build the INV_ItemMaxStocks array
 if (isServer) then {
 	INV_ItemMaxStocks = [];
 	private["_i"];
@@ -1702,7 +1722,7 @@ if (isServer) then {
 	publicVariable "INV_ItemMaxStocks";
 };
 
-//buidld the INV_ItemStocks array
+//build the INV_ItemStocks array
 if (isServer) then {
 	INV_ItemStocks = [];
 	private["_i"];

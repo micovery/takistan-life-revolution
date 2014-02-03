@@ -1,9 +1,9 @@
-startmoneh                   = if(debug)then{1000000000}else{50000};
-donatormoneh                 = startmoneh * 5; //(250k)
-silvermoneh                  = donatormoneh * 2; //(500k)
-goldmoneh                    = donatormoneh * 3; //(750k)
-platinummoneh                = donatormoneh * 4 ; //(1 million)
-adminmoneh                   = donatormoneh * 12;  //(3 million)
+startmoneh					= if(debug)then{1000000000}else{50000};
+donatormoneh				= startmoneh * 5; //(250k)
+silvermoneh					= donatormoneh * 2; //(500k)
+goldmoneh					= donatormoneh * 3; //(750k)
+platinummoneh				= donatormoneh * 4 ; //(1 million)
+adminmoneh					= donatormoneh * 12;  //(3 million)
 
 robb_timeSperre              = 1200;
 local_useBankPossible        = true;
@@ -16,16 +16,15 @@ stolencash                   = 0;
 Maxbankrobpercentlost        = 0.05;
 MaxbankrobpercentlostA       = 0.10;
 MaxbankrobpercentlostB       = 0.20;
-if(isnil "bank_tax") then{
-bank_tax                     = 5;
+if(isNil "bank_tax") then{
+	bank_tax				= 5;
+	publicVariable	"bank_tax";
 };
-publicVariable   "bank_tax";
 zinsen_prozent               = 1;
 zinsen_dauer                 = 1200;
 robenable                    = true;
 
 if (isServer) then {
-
 	private["_file","_fileLoad"];
 	
 	donators0	= [];
@@ -50,7 +49,6 @@ if (isServer) then {
 	server setVariable ["donators4", donators4, true];
 	sleep 0.5;
 	server setVariable ["DONATOR_LOAD", true, true];
-
 } else {
 	private["_timeout"];
 	_timeout = time + 5;
@@ -94,15 +92,15 @@ carshoparray             = [carshop1, carshop2, carshop3, carshop4, carshop5, ca
 speedcamarray            = [speed1,speed2,speed3,speed4,speed5];
 drugsellarray            = [mdrugsell,cdrugsell,ldrugsell,hdrugsell];
 GasStationArray          = [
-    (nearestobject[getpos fuelshop1, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop2, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop3, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop4, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop5, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop6, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop7, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop8, "Land_Ind_FuelStation_Feed_Ep1"]),
-    (nearestobject[getpos fuelshop9, "Land_Ind_FuelStation_Feed_Ep1"])
+    (nearestobject[getPosATL fuelshop1, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop2, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop3, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop4, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop5, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop6, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop7, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop8, "Land_Ind_FuelStation_Feed_Ep1"]),
+    (nearestobject[getPosATL fuelshop9, "Land_Ind_FuelStation_Feed_Ep1"])
 ];
 
 

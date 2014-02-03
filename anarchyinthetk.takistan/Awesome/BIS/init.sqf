@@ -22,7 +22,11 @@ ExecSQF("\ca\Modules\MP\data\scripts\MPframework.sqf")
 
 
 if (isServer) then {
-		SpawnExecSQF([A_BIS_LOGIC], "ca\modules\functions\main.sqf")
+//		SpawnExecSQF([A_BIS_LOGIC], "ca\modules\functions\main.sqf")
+		[] spawn {
+				waituntil {!isnil "BIS_MPF_InitDone"};
+				[nil, nil, "per", rEXECVM,"ca\Modules\Functions\init.sqf"] call RE;
+			};
 		SpawnExecSQF([A_BIS_LOGIC], "Awesome\BIS\weather\main.sqf")
 	}else{
 		[] exec "Awesome\BIS\clouds\system.sqs";

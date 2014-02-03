@@ -621,7 +621,7 @@ STRS_inv_inventar_uebergabe_success_self,You gave %1 %2 units of %3.
 STRS_inv_inventar_uebergabe_schluessel_success,You got a key from another player. The Key is now on your Keychain.
 STRS_inv_inventar_uebergabe_schluessel_success_self,You gave the Key for the Vehicle to the selected player (It has been removed from your keychain).
 STRS_item_moneh,Money
-STRS_item_moneh_info,"Buy licenses, vehicles, weapons, drugs and other items! Note that you can not carry more than $999,999."
+STRS_item_moneh_info,"Buy licenses, vehicles, weapons, drugs and other items!"
 STRS_inventar_moneh,You cannot use money. If you buy something
 STRS_inv_item_defuser,Defuser
 STRS_inv_item_defuser_info,With this device you can defuse Satchel Charges and Mines.

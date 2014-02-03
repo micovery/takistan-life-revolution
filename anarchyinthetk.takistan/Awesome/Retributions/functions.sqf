@@ -469,7 +469,7 @@ determine_retribution = {
 get_near_vehicle_driver =  {
 	private["_driver", "_near_vehicles"];
 	_driver = objNull;
-	_near_vehicles = nearestObjects [getpos player, ["LandVehicle"], 20];
+	_near_vehicles = nearestObjects [getPosATL player, ["LandVehicle"], 20];
 	//player groupChat format["Near VEHS: %1", _near_vehicles];
 	{
 		if ((speed _x > 10) and (not(isNull(driver _x)))) exitWith {

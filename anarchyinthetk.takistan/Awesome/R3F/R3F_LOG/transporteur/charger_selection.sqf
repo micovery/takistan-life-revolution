@@ -1,15 +1,3 @@
-/**
- * Charger l'objet sélectionné (R3F_LOG_objet_selectionne) dans un transporteur
- * 
- * @param 0 le transporteur
- * 
- * Copyright (C) 2010 madbull ~R3F~
- * 
- * This program is free software under the terms of the GNU General Public License version 3.
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 if (R3F_LOG_mutex_local_verrou) then {
 	player globalChat STR_R3F_LOG_mutex_action_en_cours;
 } else {
@@ -22,8 +10,7 @@ if (R3F_LOG_mutex_local_verrou) then {
 	
 	if (!(isNull _objet) && !(_objet getVariable "R3F_LOG_disabled")) then {
 		if ([_objet] call R3F_LOG_FNCT_STATICCHECK) then {
-			if (isNull (_objet getVariable "R3F_LOG_est_transporte_par") && (isNull (_objet getVariable "R3F_LOG_est_deplace_par") || (!alive (_objet getVariable "R3F_LOG_est_deplace_par")))) then
-			{
+			if (isNull (_objet getVariable "R3F_LOG_est_transporte_par") && (isNull (_objet getVariable "R3F_LOG_est_deplace_par") || (!alive (_objet getVariable "R3F_LOG_est_deplace_par")))) then {
 				private ["_objets_charges", "_chargement_actuel", "_cout_capacite_objet", "_chargement_maxi"];
 				
 				_objets_charges = _transporteur getVariable "R3F_LOG_objets_charges";
@@ -64,7 +51,7 @@ if (R3F_LOG_mutex_local_verrou) then {
 						player globalChat STR_R3F_LOG_action_charger_selection_en_cours;
 						
 						if (_objet isKindOf "StaticWeapon") then {	
-								missionNamespace setVariable ["pv_vehLock", _objet];
+								missionNamespace setVariable ["pv_vehLock", str(_objet)];
 								publicVariable "pv_vehLock";
 								_objet lock true;
 							};
@@ -87,7 +74,7 @@ if (R3F_LOG_mutex_local_verrou) then {
 						player globalChat format [STR_R3F_LOG_action_charger_selection_fait, getText (configFile >> "CfgVehicles" >> (typeOf _objet) >> "displayName")];
 						
 						if (_objet isKindOf "StaticWeapon") then {	
-								missionNamespace setVariable ["pv_vehLock", _objet];
+								missionNamespace setVariable ["pv_vehLock",str( _objet)];
 								publicVariable "pv_vehUnlock";
 								_objet lock false;
 								

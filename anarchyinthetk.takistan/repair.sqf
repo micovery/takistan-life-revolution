@@ -3,7 +3,7 @@ _art = _this select 0;
 
 if (_art == "use") then {
 
-	_vcl = (nearestobjects [getpos player, ["LandVehicle", "Air", "ship"], 10] select 0);
+	_vcl = (nearestobjects [getPosATL player, ["LandVehicle", "Air", "ship"], 10] select 0);
 
 	if (player != vehicle player) exitWith {player groupChat "You must be outside the vehicle to repair it";};
 	if !(alive _vcl) exitwith {player groupChat "Vehicle is destroyed";};

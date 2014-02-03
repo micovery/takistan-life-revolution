@@ -4,7 +4,7 @@ _art = _this select 0;
 if (_art == "use") then {
 	private["_item", "_vcl"];
 	_item = _this select 1;
-	_vcl = (nearestobjects [getpos player, ["LandVehicle", "Air"], 15] select 0);
+	_vcl = (nearestobjects [getPosATL player, ["LandVehicle", "Air"], 15] select 0);
 
 	if (player != vehicle player) exitWith {player groupChat "You must be outside the vehicle to repair it";};
 	if (player distance _vcl > 10) exitWith {player groupChat "You are too far away to repair the vehicle";};

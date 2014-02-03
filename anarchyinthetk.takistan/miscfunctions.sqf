@@ -221,7 +221,7 @@ buildings_list = {
 buildings_protect = {
 	{
 		_x allowDamage false;
-	} foreach (call buildings_list);
+	} foreach ([] call buildings_list);
 };
 
 format_integer = {

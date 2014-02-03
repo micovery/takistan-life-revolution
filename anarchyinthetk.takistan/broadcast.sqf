@@ -40,10 +40,22 @@ broadcast_client = {
 	_client = _this select 1;
 	if (isNil "_code") exitWith {};
 	if (typeName _code != "STRING") exitWith {};
-	if ((typeName _client) == "OBJECT") then {_client = owner _client};
-	if ((typeName _client) != "SCALAR") exitwith {};
+	missionNamespace setVariable [c2c_server_broadcast_buffer, [_code, str(_client)]];
+	publicVariableServer c2c_server_broadcast_buffer;
+};
+
+broadcast_receive_c2c = {
+	private["_value","_code","_clientS","_client","_owner"];
+	_code = (_this select 1) select 0;
+	_clientS = (_this select 1) select 1;
+	if (isNil "_code") exitWith{};
+	if (typeName _code != "STRING") exitWith {};
+	_client = missionNamespace getVariable [_clientS, objNull];
+	if (isNull _client) exitwith {};
+	_owner = owner _client;
+	
 	missionNamespace setVariable [player_broadcast_buffer, _code];
-	_client publicVariableClient player_broadcast_buffer;
+	_owner publicVariableClient player_broadcast_buffer;
 };
 
 broadcast_setup = {
@@ -59,6 +71,9 @@ broadcast_setup = {
 	
 	
 	player_broadcast_buffer = [_player_number] call broadcast_make_key;
+	
+	c2c_server_broadcast_buffer = "c2c_server";
+	c2c_server_broadcast_buffer addPublicVariableEventHandler {_this call broadcast_receive_c2c;};
 	
 	private["_i"];
 	_i = 0;

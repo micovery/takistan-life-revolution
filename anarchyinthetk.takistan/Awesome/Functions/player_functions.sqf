@@ -1069,7 +1069,7 @@ player_near_side = {
 			};
 		};
 	} 
-	forEach (nearestobjects[(getpos _player), ["Man"], _distance]);
+	forEach (nearestobjects[(getPosATL _player), ["Man"], _distance]);
 	
 	_near_side_players
 };
@@ -1923,7 +1923,7 @@ player_exit_vehicle = {
 		_vehicle engineOn _engine_state;
 	};
 	
-	if (not(alive _player)) then {
+	if (!(alive _player)) then {
 		_player setPos [-1,-1,-1];
 	};
 };
@@ -2228,7 +2228,7 @@ player_dead_camera_blackout_message = {
 	_extradeadtime = [player, "extradeadtime"] call player_get_scalar;
 	_selfkilled = [player, "selfkilled"] call player_get_scalar;
 	_deadtimes = [player, "deadtimes"] call player_get_scalar;
-	_message = format["You have now died %1 time(s) and suicided %2 time(s) and have to wait extra %3 seconds to respawn.", _deadtimes, _selfkilled, _extradeadtime];
+	_message = format["You have now died %1 time(s) and suicided %2 time(s), you must wait %3 seconds to respawn.", _deadtimes, _selfkilled, _extradeadtime];
 
 	_message
 };
@@ -2298,7 +2298,7 @@ player_dead_camera = {
 	private["_jailtimeleft", "_min_dead_time"];
 	_min_dead_time = [] call player_minimum_dead_time;
 	_jailtimeleft = [_player, "jailtimeleft"] call player_get_scalar;
-	if (_jailtimeleft > _min_dead_time) then { 
+	if ((_jailtimeleft > _min_dead_time) && !isCop) then { 
 		_jailtimeleft = _jailtimeleft - _min_dead_time;
 		[_player, "jailtimeleft", _jailtimeleft] call player_set_scalar;
 		player groupChat format["Your prison sentence has been reduced by %1 second/s", _min_dead_time];
@@ -2737,14 +2737,14 @@ player_reset_prison = {
 			[_player, 100] call player_prison_bail;
 			[_player] call player_prison_convict;
 		}else { 
-			if (([_player] call player_get_arrest) && not(iscop))then {
+			if (([_player] call player_get_arrest) && !(iscop))then {
 				private["_message"];
 				_message = format["%1-%2 has been sent to prison to complete his previous sentence", _player, (name _player)];
 				format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 				[_player] call player_prison_convict;
 			}else {
 				if ([_player, "roeprison"] call player_get_bool) then {
-				[_player] call player_prison_roe;
+					[_player] call player_prison_roe;
 				};	
 			};
 		};
@@ -2833,7 +2833,7 @@ player_intro_text = {_this spawn {
 	];
 
 	private["_delay"];
-	_delay = 5;
+	_delay = 8;
 	
 	{
 		private["_message"];
@@ -3231,7 +3231,6 @@ player_resrain_disconnect = {
 	if ([_player, "restrained"] call player_get_bool) exitwith {
 			[_player, "restrainDisconnect", true] call player_set_bool;
 		};
-
 };
 
 

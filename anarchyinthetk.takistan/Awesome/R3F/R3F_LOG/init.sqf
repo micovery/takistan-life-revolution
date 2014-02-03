@@ -1,34 +1,13 @@
-/**
- * Script principal qui initialise le système de logistique
- * 
- * Copyright (C) 2010 madbull ~R3F~
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "config.sqf"
 
-if (isServer) then
-{
+if (isServer) then {
 	// On crée le point d'attache qui servira aux attachTo pour les objets à charger virtuellement dans les véhicules
 	R3F_LOG_PUBVAR_point_attache = "HeliHEmpty" createVehicle [0, 0, 0];
 	publicVariable "R3F_LOG_PUBVAR_point_attache";
 };
 
 // Un serveur dédié n'en a pas besoin
-if !(isServer && isDedicated) then
-{
+if !(isServer && isDedicated) then {
 	// Le client attend que le serveur ai créé et publié la référence de l'objet servant de point d'attache
 	waitUntil {!isNil "R3F_LOG_PUBVAR_point_attache"};
 	
@@ -103,5 +82,5 @@ if !(isServer && isDedicated) then
 	R3F_LOG_action_selectionner_objet_charge_valide = false;
 	
 	/** Ce fil d'exécution permet de diminuer la fréquence des vérifications des conditions normalement faites dans les addAction (~60Hz) */
-	execVM "Awesome\R3F\R3F_LOG\surveiller_conditions_actions_menu.sqf";
+	[] execVM "Awesome\R3F\R3F_LOG\surveiller_conditions_actions_menu.sqf";
 };

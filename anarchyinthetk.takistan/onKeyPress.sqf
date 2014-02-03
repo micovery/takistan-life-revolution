@@ -67,7 +67,7 @@ keyboard_tlr_keys_handler = {
 keyboard_lock_unlock_handler = {
 	if(not(INV_shortcuts)) exitWith { false };
 	private["_vehicles"];
-	_vehicles = nearestObjects [getpos player, ["LandVehicle", "Air", "ship"], 10];
+	_vehicles = nearestObjects [getPosATL player, ["LandVehicle", "Air", "ship"], 10];
 	if (not((count _vehicles ) > 0)) exitWith {};
 	
 	private["_player"];
@@ -99,7 +99,7 @@ keyboard_trunk_handler = {
 	if(dialog) exitWith {closeDialog 0; false };
 
 	private["_vcls", "_vcl"];
-	_vcls = nearestobjects [getpos player, ["LandVehicle", "Air", "ship", "TKOrdnanceBox_EP1"], 25];
+	_vcls = nearestobjects [getPosATL player, ["LandVehicle", "Air", "ship", "TKOrdnanceBox_EP1"], 25];
 	_vcl = _vcls select 0;
 	
 	if !(alive _vcl) exitwith {

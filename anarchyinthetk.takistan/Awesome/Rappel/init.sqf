@@ -3,7 +3,7 @@ if !(isClient) exitwith {};
 #define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 	
 
-A_R_vehicles = ["MH6J_EP1", "UH1H_TK_GUE_EP1", "UH60M_EP1", "UH60M_MEV_EP1", "MH60S", "BAF_Merlin_HC3_D", "CH_47F_EP1", "Mi17_UN_CDF_EP1", "Ka60_PMC"];
+A_R_vehicles = ["MH6J_EP1", "UH1H_BASE", "UH1Y", "AW159_LYNX_BAF", "UH60_Base", "KA60_BASE_PMC"];
 
 A_R_DEPLOY_V = "A_R_DEPLOYED";
 A_R_DEPLOYID_V = "A_R_DEPLOYED_ID";
@@ -19,7 +19,9 @@ A_R_LOOP = {
 		
 		if (player != _unit) exitwith {};
 		if !(_veh isKindOf "helicopter") exitwith {};
-		if !((toUpper(typeOf _veh)) in A_R_vehicles) exitwith {};
+		
+//		if !((toUpper(typeOf _veh)) in A_R_vehicles) exitwith {};
+		if (({_veh isKindOf _x} count A_R_vehicles) <= 0) exitwith {};
 		
 		if ((_this select 1) == "driver") then {
 				[_veh] spawn A_R_LOOP_P;
@@ -116,7 +118,7 @@ A_R_LOOP_C = {
 				
 				if (_deployed) then {
 						if (_actionId_rappel < 0) then {
-								_actionId_rappel = _veh addAction ["Rappel from Chopper", "Awesome\Rappel\repel.sqf", "", 0, false, false, "", ""];
+								_actionId_rappel = _veh addAction ["Rappel from Chopper", "Awesome\Rappel\rappel.sqf", [_veh, false], 0, false, false, "", ""];
 								_veh setVariable [A_R_RAPPEL_V, _actionId_rappel, false];
 							};
 						
@@ -137,5 +139,6 @@ A_R_DROP = {
 		_veh = _this select 0;
 		
 		_veh removeAction (_veh getVariable [A_R_DROPID_V, -1]);
+		_veh setVariable [A_R_DROPID_V, -1, false];
 		_veh setVariable [A_R_DEPLOY_V, false, true];
 	};

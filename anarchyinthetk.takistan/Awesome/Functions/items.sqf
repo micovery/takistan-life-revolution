@@ -61,7 +61,7 @@ item_lockpick_use = {
 		player groupChat "You cannot lockpick this vehicle yet";
 	};
 			
-	if (({(alive _x)&&(isPlayer _x)} count (crew _vehicle)) > 0) exitwith {
+	if ((({(alive _x)&&(isPlayer _x)} count (crew _vehicle)) > 0)||((count ([_vehicle] call mounted_get_occupants)) > 0)) exitwith {
 		player groupChat "You cannot lockpick while people are inside";
 	};
 	

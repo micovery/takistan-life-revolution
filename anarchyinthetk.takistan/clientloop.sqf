@@ -54,7 +54,7 @@ check_armed_mounted = {
 		};
 	} forEach _occupants;
 	
-	not(isNil "_armed_occupant")
+	!(isNil "_armed_occupant")
 };
 
 
@@ -307,8 +307,6 @@ check_logics = {
 		_logic = _entry select logics_check_object;
 		_distance = player distance _logic;
 		
-		if ((vehicle player) == headbugbus) exitwith {};
-		
 		if (_distance <= _teleport_distance) exitWith {
 			[player] call player_teleport_spawn;
 			player groupChat format["You have been teleported out of a restricted zone"];
@@ -440,7 +438,7 @@ check_droppable_items = {
 	_current_object = if (isNil "_current_object") then {objNull} else {_current_object};
 	
 	private["_objects", "_near_object"];
-	_objects = nearestObjects [getPos _player, droppableitems, 5];
+	_objects = nearestObjects [getPosATL _player, droppableitems, 5];
 	//player groupChat format["_objects = %1", _objects];
 	_near_object = if (count _objects == 0) then {objNull} else {_objects select 0};
 	

@@ -33,7 +33,7 @@ if (_art == "activate") then {
 		format ["[0,0,0,[""client"", %1]] execVM ""siren.sqf"";", player] call broadcast;
 		titletext["Siren on", "PLAIN DOWN"];
 	} else {
-		call compile format["%1_Sirene_on = false; publicVariable ""%1_Sirene_on"";", _vcl];
+		[] call compile format["%1_Sirene_on = false; publicVariable ""%1_Sirene_on"";", _vcl];
 		titletext["Siren off", "PLAIN DOWN"];
 	};
 
@@ -42,8 +42,7 @@ if (_art == "activate") then {
 	SIREN_SirenePlaying = false;
 };
 
-if (_art == "client") then
-{
+if (_art == "client") then {
 	private["_vcl","_driver","_starttime","_light1","_light2","_lichtscript"];
 	_vcl         = vehicle (_this select 1);
 	_driver      = driver _vcl;
@@ -89,24 +88,20 @@ if (_art == "client") then
 	terminate _lichtscript;
 	deleteVehicle _light1;
 	deleteVehicle _light2;
-	call compile format["%1_Sirene_on = nil;", _vcl];
+	[] call compile format["%1_Sirene_on = nil;", _vcl];
 };
 
-if (_art == "licht") then
-{
+if (_art == "licht") then {
 	private["_light1","_light2"];
 	_vcl    = _this select 1;
 	_light1 = ((_this select 2) select 0);
 	_light2 = ((_this select 2) select 1);
 
 	while {true} do {
-		if (player in _vcl) then
-		{
+		if (player in _vcl) then {
 			_light1 setLightBrightness (_lichtstaerke / 2);
 			_light2 setLightBrightness (_lichtstaerke / 2);
-		}
-		else
-		{
+		} else {
 			_light1 setLightBrightness _lichtstaerke;
 			_light2 setLightBrightness _lichtstaerke;
 		};

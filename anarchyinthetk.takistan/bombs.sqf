@@ -24,7 +24,7 @@ if (_art == "init") then {
                     // _this setDamage 1;
                         
                     if (!(_this isKindOf "Man")) then {
-                        _men1 = (crew _this); 
+                        _men1 = [_this] call vehicle_getCrew; 
                         {
  
                             _has_admin_camera = _x getVariable ["has_admin_camera", false];
@@ -45,7 +45,7 @@ if (_art == "init") then {
                         };
                         
                         if(!(_x isKindOf "Man")) then {
-                            _men3 = crew _x;
+                            _men3 = [_x] call vehicle_getCrew;
                             {
                                 _has_admin_camera = _x getVariable "has_admin_camera";
                                 if ( !(isnil "_has_admin_camera") && _has_admin_camera) then {
@@ -67,7 +67,7 @@ if (_art == "init") then {
                 _x setDamage 1;
                         
                 if(!(_x isKindOf "Man")) then {
-					_men3 = crew _x;
+					_men3 = [_x] call vehicle_getCrew;
 					{
 						_x setDamage 1;
 					} forEach _men3;

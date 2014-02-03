@@ -30,7 +30,6 @@ A_impound = {
 		
 		_vcl = _this select 0;
 		
-	
 		if(!alive _vcl)exitwith{deleteVehicle _vcl;};	
 		if([str(_vcl)] call A_impound_check)exitwith{};
 		
@@ -39,6 +38,11 @@ A_impound = {
 		{
 			_x action ["Eject",_vcl];
 		} forEach _crew;
+		
+		_mounted = [_vcl] call mounted_get_occupants;
+		{
+			[_x] call mounted_unboard_slot_force;
+		} forEach _mounted;
 		
 		sleep 0.1;
 		
@@ -82,10 +86,10 @@ A_impound_action = {
 				deleteVehicle _vcl; 
 			};
 		
-		if ((count crew _vcl) > 0) exitWith {
+		if (((count crew _vcl) > 0)||((count ([_vcl] call mounted_get_occupants)) > 0)) exitWith {
 				player groupChat "The vehicle is not empty!"
 			};
-
+		
 		if([_vcl] call A_impound_check)exitwith{
 				player groupchat "the vehicle is already impounded!"
 			};

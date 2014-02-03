@@ -49,7 +49,6 @@ C_Dialog_Full = {
 	["light", C_Preview_Unit, 0.01] execvm "effects.sqf";
 	
 	[C_Preview_Unit] call player_reset_gear;
-	C_Preview_Unit allowDamage false;
 	doStop C_Preview_Unit;
 	
 	C_T_P = [];
@@ -525,7 +524,6 @@ C_Preview = {
 	["light", C_Preview_Unit, 0.01] execvm "effects.sqf";
 	
 	[C_Preview_Unit] call player_reset_gear;
-	C_Preview_Unit allowDamage false;
 	doStop C_Preview_Unit;
 	
 	C_T_P = [];
