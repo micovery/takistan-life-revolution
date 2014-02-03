@@ -614,6 +614,7 @@ vehicle_set_modifications = {
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
 			_vehicle removeweapon "GSh23L_L39";
 			_vehicle removeweapon "57mmLauncher";
+			
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
@@ -621,6 +622,7 @@ vehicle_set_modifications = {
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
 			_vehicle removeweapon "GSh23L_L39";
 			_vehicle removeweapon "57mmLauncher";
+			
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
@@ -628,25 +630,18 @@ vehicle_set_modifications = {
 			if(not(_silent)) then { hint "Reconfiguring plane armament...";};
 			_vehicle removeweapon "GSh23L_L39";
 			_vehicle removeweapon "57mmLauncher";
+			
 			_vehicle addweapon "CMFlareLauncher";
 			_vehicle addmagazine "60Rnd_CMFlareMagazine";
 		};
 		case "BTR40_MG_TK_INS_EP1": {
 			if(not(_silent)) then { hint "Reconfiguring vehicle armament...";};
-			_vehicle removemagazine "50Rnd_127x107_DSHKM";
-			_vehicle removemagazine "50Rnd_127x107_DSHKM";
-			_vehicle removemagazine "50Rnd_127x107_DSHKM";
-			_vehicle removemagazine "50Rnd_127x107_DSHKM";
-			_vehicle removemagazine "50Rnd_127x107_DSHKM";
-			_vehicle removemagazine "50Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
-			_vehicle addmagazine "150Rnd_127x107_DSHKM";
+			{_vehicle removemagazine "50Rnd_127x107_DSHKM";}forEach[1,2,3,4,5,6];
+			{_vehicle addmagazine "150Rnd_127x107_DSHKM";}forEach[1,2,3];
 		};
 		case "Ka137_MG_PMC": {
 			if(not(_silent)) then { hint "Reconfiguring vehicle armament...";};
-			_vehicle removemagazine "200Rnd_762x54_PKT";
-			_vehicle removemagazine "200Rnd_762x54_PKT";
+			{_vehicle removemagazine "200Rnd_762x54_PKT";}forEach[1,2];
 			_vehicle addmagazine "1500Rnd_762x54_PKT";
 		};
 	};
