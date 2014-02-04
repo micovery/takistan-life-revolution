@@ -2783,6 +2783,7 @@ player_spawn = {
 	if (typeName _first_time != "BOOL") exitWith {};
 	
 	waitUntil { alive _player };
+	_player setUnconscious false;
 	
 	if (!(_first_time)) then {
 		[_player] call player_reset_gear;

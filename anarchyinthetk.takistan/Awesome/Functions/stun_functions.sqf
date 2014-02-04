@@ -919,6 +919,7 @@ stun_effects_full = {
 	
 	if ( typeName _restrained_q ==  "BOOL") then {
 		if (!_restrained_q) then {
+			_unit setUnconscious false;
 			[_unit, "isstunned", false] call player_set_bool;
 			format['%1 switchmove "amovppnemstpsnonwnondnon";',_unit] call broadcast;
 		};
