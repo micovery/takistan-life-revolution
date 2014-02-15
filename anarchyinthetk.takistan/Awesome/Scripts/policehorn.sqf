@@ -10,7 +10,7 @@ if (HORN_Playing || _isbike || !_isdriver) exitWith {};
 HORN_Playing = true;
 
 format["
-
+if !(missionNamespace getVariable [""player_rejoin_camera_complete"", true])exitwith{};
 _vehicle = %1;
 _distance = player distance _vehicle;
 

@@ -143,11 +143,11 @@ factory_globals = {
 		"HandGrenade_East",
 		"PipeBomb",
 		"selbstmordbombe"
-		//"fernzuenderbombe",
-		//"zeitzuenderbombe",
-		//"aktivierungsbombe",
-		//"geschwindigkeitsbombe",
-		//"fernzuender"
+//		"fernzuenderbombe",
+//		"zeitzuenderbombe",
+//		"aktivierungsbombe",
+//		"geschwindigkeitsbombe",
+//		"fernzuender"
 	];
 
 	private["_terrorfactory"];
@@ -243,7 +243,6 @@ factory_globals = {
 		"nitro",
 		"lockpick",
 		"medikit",
-		"lighter",
 		"defuser",
 		"fernzuender",
 		"vclammo",

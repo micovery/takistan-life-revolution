@@ -2,9 +2,9 @@ stun_tazer = {
 	private ["_unit"];
 	_unit = _this select 0;
 	if !(alive _unit) exitwith {};
-	if(not(isCop)) exitWith {};
+	if(!(isCop)) exitWith {};
 	if (((currentWeapon _unit) == "M9") || ((currentWeapon _unit) == "M9SD")) then {
-		format["%1 say ""tazer"";", _unit] call broadcast;
+		format["if (missionNamespace getVariable [""player_rejoin_camera_complete"", true])then{%1 say ""tazer"";};", _unit] call broadcast;
 	};
 };
 
@@ -570,6 +570,7 @@ stun_hands_prone = {
 	if (!stunning) exitwith {};
 	
 	_man setdamage (_damage + _idamage);
+	[_man] call player_client_saveDamage;
 	
 	if (!alive _man) then {
 		if (isPlayer _man) then {
@@ -678,6 +679,7 @@ stun_hands_front = {
 	if (!stunning) exitwith {};
 
 	_man setdamage (_damage + _idamage);
+	[_man] call player_client_saveDamage;
 	
 	if (!alive _man) then {
 		if (isPlayer _man) then {
@@ -779,6 +781,7 @@ stun_hands_back = {
 	if (!stunning) exitwith {};
 	
 	_man setdamage (_damage + _idamage);
+	[_man] call player_client_saveDamage;
 	
 	if (not(alive _man)) then {
 		if (isPlayer _man) then {

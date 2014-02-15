@@ -1,5 +1,5 @@
-A_fnc_EH_hDamage		= compile (preprocessFileLineNumbers "Awesome\EH\Eh_handleDamage.sqf");
-A_fnc_EH_hDamageV		= compile (preprocessFileLineNumbers "Awesome\EH\Eh_handleDamageVeh.sqf");
+A_fnc_EH_hDamage		= compile (preprocessFileLineNumbers "Awesome\EH\Eh_handledamage.sqf");
+A_fnc_EH_hDamageV		= compile (preprocessFileLineNumbers "Awesome\EH\Eh_handledamageVeh.sqf");
 A_fnc_EH_fired			= compile (preprocessfileLineNumbers "Awesome\EH\EH_fired.sqf");
 A_fnc_EH_firedV			= compile (preprocessfileLineNumbers "Awesome\EH\EH_fired_vehicle.sqf");
 A_fnc_EH_wa				= compile (preprocessfileLineNumbers "Awesome\EH\EH_weaponassembled.sqf");
@@ -14,7 +14,7 @@ A_fnc_EH_init = {
 		
 		_unit addEventHandler ["fired", {_this spawn A_fnc_EH_fired}];
 		_unit addEventHandler ["WeaponAssembled", {_this spawn A_fnc_EH_wa}];
-		_unit addEventHandler ["handleDamage",	{_this spawn A_fnc_EH_hDamage; 0}];
+		_unit addEventHandler ["handleDamage",	{_this call A_fnc_EH_hDamage}];
 
 		_unit addMPEventHandler ["MPKilled", {_this call player_handle_mpkilled}];
 		_unit addMPEventHandler ["MPRespawn", {_this call player_handle_mprespawn}];

@@ -474,6 +474,80 @@ player_reset_warrants = {
 	[_player, 0, true] call player_update_wantedtype;
 };
 
+player_shotRecently = {
+	private["_player"];
+	_player = _this select 0;
+	if (_player != player) exitwith {};
+	
+	private["_shot"];
+	_shot = missionNamespace getVariable ["lastShot", -1];
+	if (_shot > 0) then {
+		((time - _shot) <= 60) 
+	}else{
+		false
+	};
+};
+
+player_illSkin = {
+	private["_player"];
+	_player = _this select 0;
+	if (_player != player) exitwith {false};
+	if (([_player] call player_human_side) != civilian) exitwith {false};
+	private["_class"];
+	_class = typeOf _player;
+	(_class in terror_skin_list)
+};
+
+player_illVeh = {
+	private["_player"];
+	_player = _this select 0;
+	if (_player != player) exitwith {false};
+	if (([_player] call player_human_side) != civilian) exitwith {false};
+	
+	private["_veh"];
+	_veh = objNull;
+	_veh = if (count _this > 1) then {
+		 _this select 1
+	}else{
+		vehicle _player
+	};
+	if (isNull _veh) exitwith {false};
+	if (_veh == _player) exitwith {false};
+	
+	private["_vehSide"];
+	_vehSide = [_veh, "spawnedSide"] call vehicle_get_string;
+	(_vehSide != "Civilian")
+};
+
+player_collateralVehicle = {
+	private["_player","_vehicle"];
+	_player = _this select 0;
+	_vehicle = _this select 1;
+	_crew = if ((count _this) > 2)then{_this select 2}else{crew _vehicle};
+	if (_player == _vehicle) exitwith {false};
+	
+	private["_crim","_opf","_ins"];
+	_crim = false;
+	_opf = false;
+	_ins = false;
+	
+	{
+		private["_unit","_side"];
+		_unit = _x;
+		_side = [_unit] call stats_get_faction;
+		if ((([_unit] call player_get_bounty) > 0) && (([_unit] call player_get_wantedtype) >= 200)) then {
+			_crim = true;
+		};
+		if (_side == "Opfor")then {
+			_opf = true;
+		};
+		if (_side == "Insurgent")then {
+			_ins = true;
+		};
+	} forEach _crew;
+	
+	(_crim || _opf || _ins)
+};
 
 player_armed = {
 	private["_player"];
@@ -482,14 +556,27 @@ player_armed = {
 };
 
 player_vehicle_armed = {
-		private["_unit", "_vehicle"];
+		private["_unit","_vehicle","_return"];
 		_unit = _this select 0;
-		_vehicle = vehicle _unit;
-		if (_unit == _vehicle) then {
-				false
-			}else{
-				((count (configFile >> (typeOf _vehicle) >> "turrets")) > 0)
+		_vehicle = if (count _this > 1)then{_this select 1}else{vehicle _unit};
+		_return = false;
+		
+		if (_unit == _vehicle) exitwith {_return};
+		
+		private["_class","_turrets"];
+		_class = configFile >> "CfgVehicles" >> (typeOf _vehicle) >> "turrets";
+		_turrets = [_class, []] call findTurrets_Recurse; 
+		_turrets set[(count _turrets), [-1]];
+		
+		{
+			private["_path"];
+			_path = _x;
+			if ((count (_vehicle weaponsTurret _path)) > 0) then {
+				_return = true;
 			};
+		} forEach _turrets;
+		
+		_return
 	};
 
 player_update_armed = {
@@ -527,7 +614,16 @@ player_set_armed = {
 	_player setVariable ["armed", _armed, true];
 };
 
-
+player_armedBefore = {
+	private["_player"];
+	_player = _this select 0;
+	_armedTime = _player getVariable ["armedTime", -1];
+	if (_armedTime <= 0) then {
+		false
+	}else{
+		((time - _armedTime) < 60)
+	};
+};
 
 player_update_scalar = {
 	private["_player", "_variable_name", "_variable_value"];
@@ -856,10 +952,19 @@ player_prison_reset = {
 };
 
 player_prison_release = {
-	private["_player"];
+	private["_player","_marker"];
 	_player = _this select 0;
-	_player setPosATL (getMarkerPos "jail_freemarker");	
-	_player setdamage 0; 
+	
+	_marker = "jail_freemarker";
+	_marker = switch true do {
+			case isOpf: {"respawn_east"};
+			case isIns: {"respawn_guerrila"};
+			case isCop: {"respawn_west"};
+			default {"jail_freemarker"};
+		};
+	
+	_player setPosATL (getMarkerPos _marker);	
+	[_player] call FA_fHeal;
 };
 
 
@@ -885,8 +990,10 @@ player_prison_loop = { _this spawn {
 	_time_original = _time_left;
 	
 	//move player to prison
+	detach _player;
+	moveOut _player;
 	_player setPosATL (getMarkerPos "prisonspawn");
-	_player setDamage 0;
+	[_player] call FA_fHeal;
 	
 	//mark as arrested and clear warrants
 	[_player] call player_reset_warrants;
@@ -908,6 +1015,7 @@ player_prison_loop = { _this spawn {
 		};
 		
 		hintsilent format["Time until release\n%1 seconds\nBail left to pay\n$%2", _time_left, strM(_bail_left)];
+		
 		//PLAYER DISAPPEARED ...
 		if (isNull(_player)) exitWith { 
 			private["_message"];
@@ -916,13 +1024,17 @@ player_prison_loop = { _this spawn {
 		};
 		
 		//PLAYER DIED
-		if (not(alive _player)) exitWith {
+		if (!(alive _player)) exitWith {
 			private["_message"];
 			_message = format["%1-%2 has died while in prison",_player, _player_name];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 			[_player, "jailtimeleft", _time_left] call player_set_scalar;
 			[_player, _bail_left] call player_set_bail;
 			[_player, true] call player_set_arrest;
+			
+			waitUntil{alive _player};
+			_player setPosATL (getMarkerPos "prisonspawn");
+			waitUntil {[(vehicle _player)] call player_inPrison};
 		};
 		
 		//PLAYER HAS BEEN SET FREE
@@ -983,7 +1095,7 @@ player_prison_loop = { _this spawn {
 		//PLAYER HAS PAID THE FULL BAIL
 		if (_bail_left <= 0 && _time_left > 0 ) exitWith {
 			private["_message"];
-			_message = format["%1-%2 has been relased from prison, after paying bail", _player, _player_name];
+			_message = format["%1-%2 has been released from prison, after paying bail", _player, _player_name];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 			
 			player_prison_releasing = true;
@@ -1134,8 +1246,14 @@ player_prison_roe = { _this spawn {
 	format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 	
 	[_player, "roeprison", true] call player_set_bool;
+	
+	detach _player;
+	moveOut _player;
+	[_player] call FA_fHeal;
 	_player setPosATL (getPosATL CopPrison);
-	[_player] call player_reset_gear;
+	[_player] call player_reset_gear;	
+	
+	waitUntil {[(vehicle _player)] call player_inPrison};
 	
 	private["_time_original"];
 	_time_original = _time_left;
@@ -1154,8 +1272,12 @@ player_prison_roe = { _this spawn {
 		};
 		
 		//PLAYER DIED
-		if (not(alive _player)) exitWith {
+		if (!(alive _player)) exitWith {
 			[_player, "roeprisontime", _time_left] call player_set_scalar;
+			
+			waitUntil{alive _player};
+			_player setPosATL (getPosATL CopPrison);
+			waitUntil {[(vehicle _player)] call player_inPrison};
 		};
 		
 		//PLAYER HAS ESCAPED PRISON
@@ -1176,7 +1298,8 @@ player_prison_roe = { _this spawn {
 			[_player, "roeprison", false] call player_set_bool;
 			_message = format["%1-%2 has been set free, after serving %3 minute/s", _player, (name _player), strN(round(_time_original/60))];
 			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-			_player setPosATL (getPosATL CopPrisonAusgang);
+//			_player setPosATL (getPosATL CopPrisonAusgang);
+			_player setPosATL (getMarkerPos "respawn_west");
 			
 			SleepWait(3)
 			player_prison_releasing = false;
@@ -1221,7 +1344,7 @@ player_lookup_name = {
 	if (typeName _name != "STRING") exitWith {nil};
 	
 	private["_player"];
-	_player = nil;
+	_player = objNull;
 	{
 		private["_player_variable_name", "_player_variable"];
 		_player_variable_name = _x;
@@ -1234,7 +1357,7 @@ player_lookup_name = {
 				_player = _player_variable;
 			};
 		};
-		if (not(isNil "_player")) exitWith {};
+		if (!(isNull _player)) exitWith {};
 	} forEach playerstringarray;
 	_player
 };
@@ -1518,6 +1641,7 @@ player_reset_gear = {
 	_player = _this select 0;
 	if (not([_player] call player_exists)) exitWith {};
 	
+	{player removeMagazine _x} forEach (magazines player);
 	removeAllWeapons _player;
 	removeBackpack _player;
 };
@@ -1617,8 +1741,7 @@ player_save_side_gear = {
 	side_gear_request_buffer = [_player];
 	if (isServer) then {
 		["", side_gear_request_buffer] call side_gear_request_receive;
-	}
-	else {
+	} else {
 		publicVariable "side_gear_request_buffer";
 	};
 };
@@ -1662,7 +1785,11 @@ player_load_side_position = {
 };
 
 
-
+player_client_saveDamage = {
+	private["_player"];
+	_player = _this select 0;
+	format['[%1] call player_save_side_damage;', _player] call broadcast_server;
+};
 
 player_save_side_damage = {
 	private["_player"];
@@ -1915,8 +2042,7 @@ player_exit_vehicle = {
 	_vehicle lock false;
 	if (_immediate) then {
 		moveOut _player;
-	}
-	else {
+	} else {
 		private["_engine_state"];
 		_engine_state =  isEngineOn _vehicle;
 		_player action ["Eject", _vehicle];
@@ -2029,7 +2155,7 @@ player_rejoin_camera_movement = {
 	_camera camPrepareFOV 1;
 	
 	
-	if (not(sunOrMoon > 0)) then {
+	if (!(sunOrMoon > 0)) then {
 		camUseNVG true;
 	};
 	
@@ -2307,7 +2433,7 @@ player_dead_camera = {
 	
 	_end_time = time + _delay;
 	[_end_time] spawn player_rejoin_camera_text;
-	[_end_time] call player_rejoin_camera_movement;
+	[_end_time] spawn player_rejoin_camera_movement;
 };
 
 
@@ -2655,7 +2781,7 @@ player_continuity = {
 		[_player] call player_load_side_gear;
 		[_player] call player_load_side_damage;
 		
-		if (not([_player] call player_load_side_vehicle)) then {
+		if (!([_player] call player_load_side_vehicle)) then {
 			[_player] call player_load_side_position;
 		};
 		_player allowDamage true;
@@ -2685,15 +2811,9 @@ player_despawn = {
 	if (isNull _unit) exitWith {};
 	if (isNil "_delay") exitWith {};
 	if (typeName _delay != "SCALAR") exitWith {};
-	
-	
-//	_delay = ((_delay - 5) max (0));
-//	diag_log format["player_despawn waiting %1, %2", _unit, _delay];
-//	[_delay] call isleep;
 
 	SleepWait(_delay)
-	
-	//diag_log format["player_despawn hiding %1", _unit];
+
 	private["_HBA"];
 	_HBA = 0;
 	for [{_HBA = 0}, {_HBA < 5}, {_HBA = _HBA + 1}] do {
@@ -2701,13 +2821,8 @@ player_despawn = {
 			SleepWait(1)
 		};
 
-//	diag_log format["player_despawn deleting %1", _unit];
-//	_unit setPos [-1,-1,-1];
-	
-//	if (isServer) then {
-			deleteVehicle _unit;
-//		};
-	};
+	deleteVehicle _unit;
+};
 
 
 player_reset_prison = {
@@ -2804,8 +2919,6 @@ player_spawn = {
 	//mark the player alive when we are done with the dead camera
 	[_player, false] call player_set_dead;
 	[_player] call name_tags_3d_controls_setup;
-	
-	restrain_respawn = false;
 };
 
 
@@ -3043,7 +3156,7 @@ player_init_stats = {
 	role = _player;
 	INV_hunger = 25;
 	alreadygotaworkplacejob = 0;
-	respawnButtonPressed = 0;
+	respawnButtonPressed = -1;
 	demerits = if ("car" call INV_haslicense) then {10} else {demerits};
 	[_player, "isstunned", false] call player_set_bool;
 	[_player, "restrained", false] call player_set_bool;
@@ -3069,13 +3182,18 @@ player_handle_mpkilled = { _this spawn {
 		};
 	if (str(_unit) != str(player)) exitWith {};
 	
-	private["_player"];
+	if (missionNamespace getVariable ["mpKilledRunning", false]) exitwith {};
+	mpKilledRunning = true;
+	
+	private["_player", "_veh"];
 	_player = player;
+	_veh = _unit getVariable ["inVehicle", objNull];
 	
 	[_player] call player_save_side_gear;
 	[_player] call player_save_side_inventory;
 	
-	[_killer, _player] call victim;
+	[_player, true] call player_set_dead;
+	[_killer, _player, _veh] call victim;
 
 	[_player] call player_reset_gear;
 	[_player] call player_drop_inventory;
@@ -3083,6 +3201,8 @@ player_handle_mpkilled = { _this spawn {
 	[_player] call player_reset_stats;
 	[_player] call player_dead_camera;
 	[_player] call name_tags_3d_controls_setup;
+	
+	mpKilledRunning = false;
 };};
 
 // MP event handler here will make it only run on the machine the unit is local to
@@ -3096,6 +3216,7 @@ player_handle_mprespawn = { _this spawn {
 		};
 	if (!(str(_unit) == str(player))) exitWith {};
 	
+	[_unit] call player_client_saveDamage;
 	[_unit, false] spawn player_spawn;
 };};
 
@@ -3174,53 +3295,67 @@ player_sideNear = {
 };
 
 player_vehicleGrabKiller = {
-	private["_vehicle", "_unit", "_driver", "_gunner", "_commander", "_crew"];
+	private["_vehicle", "_unit", "_driver", "_crew", "_check"];
 	_vehicle = _this select 0;
 	
-	if !(({_vehicle isKindOf _x} count ["Car","Mortocycle","Tank","Plane","Helicopter"]) > 0)exitwith{objNull};
+	if !(({_vehicle isKindOf _x} count ["Car","Motorcycle","Tank","StaticWeapon","Air","Ship"]) > 0)exitwith{objNull};
 	
 	_unit = objNull;
 	
 	_driver = objNull;
-	_gunner = objNull;
-	_commander = objNull;
 	_crew = [];
-
+	_check = [];
 	
 	_driver = driver _vehicle;
-	_gunner = gunner _vehicle;
-	_commander = commander _vehicle;
 	_crew = crew _vehicle;
 	
-
-	
-	_driver = driver _vehicle;
-	_gunner = gunner _vehicle;
-	_commander = commander _vehicle;
-	_crew = crew _vehicle;
-	
-
-	
-	if !(isNull _driver) then {
-			if (isPlayer _driver) then {
-					_unit = _driver;
+	{
+		private["_crewM","_role","_path"];
+		_crewM = _x;
+		_role = assignedVehicleRole _crewM;
+		_path = [-1];
+		if ((_role select 0) == "driver") then {
+			if (count(_vehicle weaponsTurret _path) > 0) then {
+				_check set[(count _check), [_crewM, _path]];
+			};
+		}else{
+			if ((_role select 0) == "turret") then {
+				_path = _role select 1;
+				if (count(_vehicle weaponsTurret _path) > 0) then {
+					_check set[(count _check), [_crewM, _path]];
 				};
+			};
 		};
-	if !(isNull _unit) exitwith {_unit};
+	} forEach _crew;
 	
-	if !(isNull _gunner) then {
-			if (isPlayer _gunner) then {
-					_unit = _gunner;
-				};
-		};
-	if !(isNull _unit) exitwith {_unit};
 	
-	if !(isNull _commander) then {
-			if (isPlayer _commander) then {
-					_unit = _commander;
+	{
+		private["_exit","_man","_path","_isPlayer","_isPlayerL","_group","_leader"];
+		_man = _x select 0;
+		_path = _x select 1;
+		
+		_isPlayer = [_man] call player_human;
+		
+		_exit = false;
+		if !(isNull _man) then {
+			if (_isPlayer) then {
+				_unit = _man;
+				_exit = true;
+			}else{
+				_group = group _man;
+				_leader = leader _group;
+				_isPlayerL = [_leader] call player_human;
+				if (_isPlayerL) then {
+					_unit = _leader;
+				}else{
+					if !(isNull _unit) then {
+						_unit = _leader;
+					};
 				};
+			};
 		};
-	if !(isNull _unit) exitwith {_unit};
+		if _exit exitwith {};
+	} forEach _check;
 	
 	_unit
 };

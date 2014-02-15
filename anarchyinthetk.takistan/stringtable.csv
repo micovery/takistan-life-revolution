@@ -630,7 +630,7 @@ STRS_inv_items_defuser_failed,You made a mistake while defusing the bomb and it 
 STRS_inv_items_defuser_nobomb,No Bomb to defuse.
 STRS_inv_item_OilBarrel,Full of oil
 STRS_inv_item_lighter,Lighter
-STRS_inv_item_lighter_info,hmm i wonder if i can use this to set a cars fuel on fire
+STRS_inv_item_lighter_info,hmm i wonder if i can use this to set a cars fuel on fire. Disabled
 STRS_inv_item_repairkit,Repair Kit
 STRS_inv_item_repairkit_info,Use it within a vehicle to repair the vehicle. You have to be the driver
 STRS_inv_item_fuelcut,Fuel line cutter
@@ -790,7 +790,7 @@ STRS_inv_item_nahrung_verhungern,You are starving.
 STRS_inv_item_drink_verthirstn,You are Dehydrated.
 STRS_inv_item_drink_gegessen,You Drank something you are now %1/100 thirsty.
 STRS_inv_item_selbstmordbombe,Suicide Bomb
-STRS_inv_item_selbstmordbombe_info,When you are using this item
+STRS_inv_item_selbstmordbombe_info, Suicide bomb - when used there is a direct yell displayed to nearby players and if cops are nearby you will go wanted. Get through the timer and when it is armed fire the bomb - you only have a small window.
 STRS_inv_item_selbstmordbombe_globalmsg,Allah Hu Akbar infidels
 STRS_bank_rob_titlemsg,$$$$WARNING$$$$ Someone is robbing the bank $$$$WARNING$$$$
 STRS_bank_rob_titlemsg_known,$$$$WARNING$$$$ %1-%2 is robbing the bank $$$$WARNING$$$$

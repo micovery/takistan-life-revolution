@@ -1,6 +1,7 @@
 private["_action", "_minearray", "_item", "_number"];
 
 _action = _this select 0;
+if (player != (vehicle player)) exitwith {player groupChat "You cannot use this in a vehicle"};
 if (_action != "use") exitWith {};
 if (working) exitWith {};
 

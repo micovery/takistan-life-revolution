@@ -1,7 +1,5 @@
 #include "Awesome\Functions\macro.h"
 
-//Modded For TL:R by M5iC
-
 private["_type","_item","_chance","_maxzahl","_anzahl","_stock"];
 _type    = ((_this select 3)select 0);
 _item    = _this select 0;
@@ -21,7 +19,6 @@ if ( (_chance > (random 100)) ) then {
 	_anzahl = (ceil(random(_maxzahl)));
 
 	if(_item == "perch") then {
-
 		_stock = ["perch", (shop1 call INV_GetShopNum)] call INV_GetStock;
 		_stock = _stock + (["perch", (shop2 call INV_GetShopNum)] call INV_GetStock);
 		_stock = _stock + (["perch", (shop3 call INV_GetShopNum)] call INV_GetStock);
@@ -74,18 +71,17 @@ if ( (_chance > (random 100)) ) then {
 		if ([player, _item, _anzahl] call INV_AddInventoryItem) then { 
 			if(_anzahl == 0) exitWith {};
 			player groupChat format[localize "STRS_inv_buyitems_get_erhalten", strN(_anzahl), (_item call INV_GetItemName)];
-		} 
-		else {
+		} else {
 			player groupChat localize "STRS_inv_buyitems_get_zuschwer";
 		};
-	} 
-	else { if ([(vehicle player), _item, _anzahl, ([(vehicle player)] call vehicle_storage_name)] call INV_AddItemStorage) then {
-		if(_anzahl == 0) exitWith {};
-		player groupChat format[localize "STRS_inv_buyitems_get_erhalten", strN(_anzahl), (_item call INV_GetItemName)];
-	}	
-	else {
-		player groupChat localize "STRS_inv_buyitems_get_zuschwer";
-	};};
+	} else { 
+		if ([(vehicle player), _item, _anzahl, ([(vehicle player)] call vehicle_storage_name)] call INV_AddItemStorage) then {
+			if(_anzahl == 0) exitWith {};
+			player groupChat format[localize "STRS_inv_buyitems_get_erhalten", strN(_anzahl), (_item call INV_GetItemName)];
+		} else {
+			player groupChat localize "STRS_inv_buyitems_get_zuschwer";
+		};
+	};
 };
 
 sleep 0.1;

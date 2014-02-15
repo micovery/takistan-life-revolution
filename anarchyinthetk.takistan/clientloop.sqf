@@ -2,6 +2,14 @@
 #include "Awesome\Functions\macro.h"
 if (not(isNil "client_loop_functions_defined")) exitWith {};
 
+check_rating = {
+	private["_player","_rating"];
+	_player = player;
+	
+	_rating = rating _player;
+	if (_rating < 0) then {player addRating -(_rating)};
+};
+
 player_is_armed = false;
 check_armed_player = {
 	private["_player"];
@@ -10,19 +18,10 @@ check_armed_player = {
 	if ((primaryWeapon _player) != "") exitWith {true};
 	if ((secondaryWeapon _player) != "") exitWith {true};
 	
-	//check if player is gunner
-	private["_vehicle", "_in_vehicle", "_is_commander", "_is_driver", "_is_gunner"];
-	_vehicle = (vehicle _player);
-	_is_driver = (driver(_vehicle) == _player);
-	_in_vehicle = (_vehicle != _player);
-	_is_commander = (commander(_vehicle) == _player) && not(_is_driver);
-	_is_gunner = (gunner(_vehicle) == _player);
-	if (_in_vehicle && (_is_gunner || _is_commander))  exitWith { true };
-	
 	//Check if player has a suicide vest or similar bomb
 	private["_armed_items"];
 	//Remote bomb, timed bomb, activated bomb (ied), speed bomb, suicide vest, lighter
-	_armed_items = ["fernzuenderbombe", "zeitzuenderbombe", "aktivierungsbombe", "geschwindigkeitsbombe", "selbstmordbombe", "lighter"];
+	_armed_items = ["fernzuenderbombe", "zeitzuenderbombe", "aktivierungsbombe", "geschwindigkeitsbombe", "selbstmordbombe"];
 	if([_player, _armed_items] call INV_HasItem) exitWith { true };
 	
 	//check if player has pistol
@@ -117,14 +116,38 @@ check_armed = {
 	
 	//player groupChat format["_armed_vehicle = %1, _armed_player = %2, _was_stunning = %3", _armed_vehicle, _armed_player, _was_stunning];
 	
-	private["_armed"];
+	
+	private["_before","_armed"];
+	_before = _player getVariable ["armed", false];
 	_armed = _armed_vehicle || _armed_player || _was_stunning;
+	
+	if (!_armed && _before) then {
+		_player setVariable ["armedTime", time, true];
+	}else{
+		if (_armed && !_before) then {
+			_player setVariable ["armedTime", time, true];
+		};
+	};
+	
 	[_player, _armed] call player_update_armed;
 	_player setVariable ["armed", _armed];
 	_armed
 };
 
-
+check_inVehicle = {
+	private["_player"];
+	_player = player;
+	if !(alive _player) exitwith {};
+	if ([_player] call player_get_dead) exitWith {};
+	
+	private["_vehicle"];
+	_vehicle = vehicle _player;
+	if (isNull _vehicle) then {
+		_player setVariable ["inVehicle", objNull, false];
+	}else{
+		_player setVariable ["inVehicle", _vehicle, false];
+	};
+};
 
 compare_array = {
 	private["_a", "_b"];
@@ -160,7 +183,7 @@ check_inventory = {
 	private["_player"];
 	_player = player;
 	
-	call check_keychain;
+	[] call check_keychain;
 };
 
 
@@ -583,12 +606,27 @@ check_insideJail = {
 		};
 };
 
+check_falling = {
+	if (player != (vehicle player)) exitwith {};
+	
+	private["_unit","_vel","_velZ"];
+	_unit = player;
+	_vel = velocity _unit;
+	_velZ = _vel select 2;
+	
+	if ((_velZ >= 8) || (_velZ <= -8)) then {
+		falling = time;
+	};
+};
+
 client_loop = {
 	private ["_client_loop_i"];
 	_client_loop_i = 0; 
 
 	while {_client_loop_i < 5000} do {
+		[] call check_rating; 
 		[player] call check_armed;
+		[] call check_inVehicle;
 		[] call check_money;
 		[] call check_bank;
 		[] call check_actions;
@@ -605,7 +643,9 @@ client_loop = {
 		[] call check_droppable_items;
 		[] call check_restrains;
 		[] call check_insideJail;
+		[] call check_falling;
 		sleep 0.5;
+		enableEngineArtillery false; 
 		disableuserinput false;
 		_client_loop_i = _client_loop_i + 1;
 	};

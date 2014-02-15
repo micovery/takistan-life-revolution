@@ -175,9 +175,10 @@ player createDiaryRecord ["controls",
 	Cops can set bounties, release jailed civilians and more. When accessed in a vehicle, choosing Sat Cam in cop menu gives an overhead satellite view of the map.
 	<br/>
 	<br>
-	Ctrl + F (in a vehicle): Toggle Siren On/Off (cops only)<br/>
-	Ctrl + G (in a vehicle as driver): Turn on/off speedgun (cops only)<br/>
-	Ctrl + H (in a vehicle): Activate Police Horn (cops only)<br/>
+	Cop Only<br/>
+	Ctrl + F (in a vehicle): Toggle Siren On/Off<br/>
+	Ctrl + G (in a vehicle as driver): Turn on/off Speed Radar<br/>
+	Ctrl + H (in a vehicle): Activate Police Horn<br/>
 	Police can turn on a siren while driving vehicles to signal to civilians to pull over.<br>
 	<br>
 	<br/>
@@ -243,7 +244,7 @@ player createDiaryRecord ["stun",
 	Full- Protects whole body<br/>
 	<br/>
 	Stun rounds will not effect cops<br/>
-	You will only be ejected from a vehicle if shot with a stun round if you are on a vehicle like a bike or atv<br/>
+	You will only be ejected from a vehicle if shot with a stun round if you are on a vehicle like a bike or atv, or on a mounted seat<br/>
 	<br/>
 	Melee<br/>
 	Different kinds of weapons have different animations and effects now<br/>

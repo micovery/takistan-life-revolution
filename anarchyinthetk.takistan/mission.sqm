@@ -5472,7 +5472,7 @@ class Mission
 	};
 	class Vehicles
 	{
-		items=1460;
+		items=1462;
 		class Item0
 		{
 			position[]={5678.9585,96.308502,8893.3311};
@@ -20436,6 +20436,28 @@ class Mission
 			vehicle="CDF_WarfareBFieldhHospital";
 			skill=1;
 			init="this addEventHandler ['handleDamage', {0}];";
+		};
+		class Item1460
+		{
+			position[]={8296.5059,296.04001,1851.0839};
+			azimut=687.45502;
+			special="NONE";
+			id=1778;
+			side="EMPTY";
+			vehicle="TK_WarfareBVehicleServicePoint_Base_EP1";
+			skill=1;
+			init="this allowdamage false;";
+		};
+		class Item1461
+		{
+			position[]={-10.100187,458.02029,7090.7847};
+			azimut=687.45502;
+			special="NONE";
+			id=1779;
+			side="EMPTY";
+			vehicle="TK_GUE_WarfareBVehicleServicePoint_Base_EP1";
+			skill=1;
+			init="this allowdamage false;";
 		};
 	};
 	class Markers

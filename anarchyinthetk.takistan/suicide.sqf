@@ -68,6 +68,7 @@ if (_art == "use") then {
 	waitUntil { (currentWeapon player) == _weapon};
 	
 	reload player;
+	player groupChat format["Quick, fire the bomb!"];
 	
 	SleepWait(3)
 	
@@ -77,8 +78,6 @@ if (_art == "use") then {
 			(!([player, "restrained"] call player_get_bool))
 		) then {
 			player fire [currentWeapon player];
-		}else{
-			player groupChat format["The bomb failed to work"];
 		};
 	
 	player removeMagazine _magazine;

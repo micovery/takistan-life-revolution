@@ -340,6 +340,7 @@ stats_server_player_disconnected = {
 	_id = _this select 0; 
 	_name = _this select 1; 
 	_uid  = _this select 2; 
+	diag_log format['stats_server_player_disconnected: %1', _this];
 	
 	if (isNil "_uid") exitWith {};
 	if (typeName _uid != "STRING") exitWith {};
@@ -347,6 +348,7 @@ stats_server_player_disconnected = {
 	
 	private["_player"]; 
 	_player = [_name] call player_lookup_name;
+	if (isNull _player) exitwith {diag_log format['stats_server_player_disconnected: %1, Player Null', _this];};
 	
 	diag_log format["%1,%2,%3 - disconnected saving start", _player, _name, _uid];
 	[_player] call player_save_side_gear;
@@ -388,8 +390,9 @@ stats_load_core_libraries = {
 	_h = [] execVM "Awesome\Functions\vehicle_functions.sqf";
 	waitUntil {scriptDone _h};
 	
-//	_h = [] execVM "Awesome\Functions\player_functions.sqf";
-//	waitUntil {scriptDone _h};
+	ExecSQF("INVfunctions.sqf");
+	ExecSQF("Awesome\Retributions\functions.sqf");
+	
 	[] call player_save_side_gear_setup;
 	[] call player_init_arrays;
 	ExecSQF("broadcast.sqf");

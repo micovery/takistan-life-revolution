@@ -15,12 +15,12 @@ _Arr2 = [];
 
 private["_z"];
 for [{_z=0}, {_z < (count INV_FarmItemArray)},{_z=_z+1}] do {
-	_Arr1 = _Arr1 + [0]
+	_Arr1 set[count _Arr1, 0];
 };
 
 private["_z"];
 for [{_z=0}, {_z < (count INV_Licenses)},{_z=_z+1}] do {
-	_Arr2 = _Arr2 + [0]
+	_Arr2 set[count _Arr2, 0];
 };
 
 shopusearray = [];

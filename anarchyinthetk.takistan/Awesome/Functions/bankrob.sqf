@@ -102,7 +102,10 @@ bankRob_victimStart = {
 	format['
 		if (isClient) then {
 				titleText ["%1", "PLAIN DOWN"];
-				{_x say "Bank_alarm";} forEach [%2, copbase1];
+				if (missionNamespace getVariable ["player_rejoin_camera_complete", true])then{
+					{_x say "Bank_alarm";} forEach [%2, copbase1];
+				};
+				
 			};
 	', _message, _safe] call broadcast;
 };

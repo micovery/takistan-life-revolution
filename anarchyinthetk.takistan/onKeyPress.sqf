@@ -304,6 +304,8 @@ keyboard_surrender_handler = {
 keyboard_switch_normal_handler = {
 	if(!INV_shortcuts) exitWith {false};	
 	if(keyblock) exitWith {false};
+	if(stunning) exitWith {false};
+	if(StunActiveTime > 0)exitwith {false};
 	if ((speed player) > 7) exitwith {false};
 	keyblock=true; 
 	[] spawn {

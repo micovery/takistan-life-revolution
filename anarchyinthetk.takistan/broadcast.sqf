@@ -30,8 +30,12 @@ broadcast_server = {
 	_code = _this;
 	if (isNil "_code") exitWith {};
 	if (typeName _code != "STRING") exitWith {};
-	missionNamespace setVariable [player_broadcast_buffer, _code];
-	publicVariableServer player_broadcast_buffer;
+	if (isServer) then {
+		[] call compile _code;
+	}else{
+		missionNamespace setVariable [player_broadcast_buffer, _code];
+		publicVariableServer player_broadcast_buffer;
+	};
 };
 
 broadcast_client = {

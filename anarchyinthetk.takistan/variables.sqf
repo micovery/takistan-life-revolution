@@ -472,8 +472,6 @@ player_connected_handler = {
 	[_uid] call ftf_connected;
 };
 
-restrain_respawn = false;
-
 if(isServer)then {
 	onPlayerConnected { [_id, _name, _uid] call player_connected_handler };
 };

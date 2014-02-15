@@ -57,41 +57,4 @@ A_DYNO_OG	= compile (preprocessfilelinenumbers "ca\modules\dyno\data\scripts\obj
 
 A_HALO_VEHICLE = objNull;
 
-M_smoke = "SmokeShell";
-
-//	SmokeShell
-//	SmokeShellBlue
-//	SmokeShellGreen
-//	SmokeShellOrange
-//	SmokeShellPurple
-//	SmokeShellRed
-//	SmokeShellYellow
-
-//	G_40mm_Smoke
-//	G_40mm_SmokeGreen
-//	G_40mm_SmokeRed
-//	G_40mm_SmokeYellow
-
-M_flare = "F_40mm_Yellow";
-
-//F_40mm_Green
-//F_40mm_Red
-//F_40mm_White
-//F_40mm_Yellow
-
-	M_ill_style = "highest";
-//	M_ill_style = "timed";
-//		M_ill_delay = 10;
-//	M_ill_style = "height";
-//		M_ill_height = 100;	
-
-//	M_ill_lit = "F";
-//	M_ill_lit = "T";
-//		M_ill_time = 60;
-//	M_ill_lit = "G";
-//		M_ill_decent = 0.0075;
-M_ill_lit = "TG";
-M_ill_time = 60;
-M_ill_decent = 0.0075;
-
 pmc_shop_list = [pmccar, pmcair, pmcbox, fortshop2, "pmc_license_journeyman", "pmc_license_defense", "pmc_license_air"];

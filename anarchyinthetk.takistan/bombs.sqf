@@ -306,6 +306,10 @@ if (_art == "use") then {
     _item   = _this select 1;
     _anzahl = _this select 2;
         
+	if true exitwith {
+		player groupChat "Bombs are temporarily Disabled until they have been redone.";
+	};
+
     if (_item == "zeitzuenderbombe") then {
         if (!(createDialog "timebombconfig")) exitWith {
             hint "Dialog Error!";

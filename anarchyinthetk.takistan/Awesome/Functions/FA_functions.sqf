@@ -28,6 +28,7 @@ FA_fHeal = {
 		} forEach FA_hitList;
 		
 		format['if(local %1)then{{%1 setHit [_x, 0]} forEach FA_hitList;}', _unit] call broadcast;
+		[_unit] call player_client_saveDamage;
 	};
 	
 // Handle Heal, for healing event handler. Return false for not handled, true for handled

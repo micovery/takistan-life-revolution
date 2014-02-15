@@ -54,6 +54,7 @@ INV_Heal = {
 		player setdamage _damage;
 		player setHit ["legs", 0];
 		_this setVariable ["legs", 0, true];
+		[_this] call player_client_saveDamage;
 		player groupChat format[localize "STRS_inv_items_medikit_fertig"];
 		true
 	};
@@ -61,17 +62,18 @@ INV_Heal = {
 	format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 	player groupChat "Healing...";
 	SleepWait(5)
-	_this setdamage _damage;
 	
 	format['
 	if(local %1)then{
+			%1 setdamage %4;
 			%1 setHit ["legs", 0];
+			%1 setVariable ["legs", 0, true];
+			
+			[%1] call player_client_saveDamage;
 			%1 groupchat "You have been healed by %2-%3";
 		};
-	', _this, player, name(player)] call broadcast;
+	', _this, player, name(player), _damage] call broadcast;
 	
-	_this setVariable ["legs", 0, true];
-
 	true
 };
 
@@ -378,7 +380,7 @@ INV_RemoveIllegalStorage = {
 	};
 
 	[_object, _arrayname, "drug"] call INV_StorageRemoveKindOf;
-	(format ["if (player == %2) then {player groupChat ""%1 had drugs in its trunk, you removed them. You should jail the owner of %1 for %4 minutes or give him a ticket of $%5.""}; titletext [format[localize ""STRS_civmenucheck_haddrugs"", %1, %3], ""plain""];", _vcl, player, _drugs_value, ceil(_drugs_value/20000), ceil(_drugs_value/2)]) call broadcast;
+	(format ["if (player == %2) then {player groupChat ""%1 had drugs in its trunk, you removed them. You should jail the owner of %1 for %4 minutes or give him a ticket of $%5.""}; server globalChat format[localize ""STRS_civmenucheck_haddrugs"", %1, %3];", _vcl, player, _drugs_value, ceil(_drugs_value/20000), ceil(_drugs_value/2)]) call broadcast;
 	true
 };
 

@@ -1,7 +1,3 @@
-// Droo_k6
-// Start
-
-
 Clothes =
 [
 // 0.NAME, 					1.CLASSNAME, 					2.DISPLAY NAME, 						3.SIDE, 		4.faction, 			5.bool test,6.cost, 	7.Licenses/training
@@ -449,6 +445,14 @@ Clothing_Shops =
 ];
 
 
+terror_skin_list = [];
+
+private["_array"];
+{
+	_array = [_x] call C_array_d;
+	terror_skin_list set[(count terror_skin_list), (_array select 1)];
+} forEach CSL_TER_1;
+
 pmc_skin_list = [];
 
 private["_array"];
@@ -456,6 +460,3 @@ private["_array"];
 	_array = [_x] call C_array_d;
 	pmc_skin_list set[(count pmc_skin_list), (_array select 1)];
 } forEach CSL_PMC_1;
-
-
-// End

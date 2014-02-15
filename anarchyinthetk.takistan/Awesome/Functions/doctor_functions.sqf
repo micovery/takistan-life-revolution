@@ -59,5 +59,4 @@ A_DK_operation = {
 	keyblock = false;
 	
 	[_player] call FA_fHeal;
-	
 };

@@ -316,20 +316,18 @@ Tear_gas = {
 		_array = [];	
 		
 		while{(time < (_timenow + 10)) || (!(isnull _projectile))}do {
-				if(!gasmask) then {
-						sleep 1;
-						if(!(isnull _projectile))then{
-								if(count(nearestObjects [_Bpos, ["Man"], 10]) > 0)then{
-										{
-											_x setVariable ["flashed",true, true];
-											_array set [count _array,_x];
-										} foreach nearestObjects [_Bpos, ["Man"], 10];			
-									}else{			
-										{
-											_x setVariable ["flashed",false, true];	
-										}foreach _array;				
-										_array = [];
-									};
+					sleep 1;
+					if(!(isnull _projectile))then{
+							if(count(nearestObjects [_Bpos, ["Man"], 10]) > 0)then{
+								{
+									_x setVariable ["flashed",true, true];
+									_array set [count _array,_x];
+								} foreach nearestObjects [_Bpos, ["Man"], 10];			
+							}else{			
+								{
+									_x setVariable ["flashed",false, true];	
+								}foreach _array;				
+								_array = [];
 							};
 					};
 			};	
@@ -408,6 +406,33 @@ respawn_location = {
 	_marker = format[_marker, _sideString];
 	
 	(getMarkerPos _marker)
+};
+
+findTurrets_Recurse = {
+	private ["_root", "_class", "_path", "_currentPath","_result"];
+	_root = (_this select 0);
+	_path = (_this select 1);
+	_result = [];
+	_resultSub = [];
+	_currentPath = [];
+	
+	private["_i"];
+	for [{_i=0}, {_i < (count _root)}, {_i=_i+1}] do {
+		_class = _root select _i;
+		if (isClass _class) then {
+			_currentPath = + _path;
+			_currentPath set[(count _path), _i];
+			_result set [count _result, _currentPath];
+			_subsub = _class >> "turrets";					
+			if ((count _subsub) > 0) then {
+				_resultSub = [_subsub, _currentPath] call findTurrets_Recurse;
+				{
+					_result set[(count _result), _x];
+				} forEach _resultSub;
+			};
+		};
+	};
+	_result
 };
 
 [] call buildings_protect;

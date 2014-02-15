@@ -131,7 +131,7 @@ interact_arrest_player = {
 	};
 	
 	private["_seconds", "_victim_side"];
-	_minutes = if ([_victim] call player_civilian) then { _minutes } else { (15 max _minutes)};
+	_minutes = if ([_victim] call player_civilian) then { _minutes } else {10};
 	
 	private["_message"];
 	_message = format["%1-%2 was arrested by %3-%4", _victim, (name _victim), _player, (name _player)];
@@ -168,7 +168,7 @@ interact_arrest_player = {
 		[_victim, 0] call player_set_bounty;
 	};
 	
-	[format['player setUnconscious false;'],_victim] call broadcast_client;
+	[format['player setUnconscious false;'], _victim] call broadcast_client;
 	format['[%1, %2] call player_prison_time;', _victim, _minutes] call broadcast;
 	format['[%1, %2] call player_prison_bail;', _victim, _bail_percent] call broadcast;
 	format['[%1] call player_prison_convict;', _victim] call broadcast;
@@ -988,13 +988,13 @@ interact_check_armed = {
 	_target = _this select 1;
 	_interaction = _this select 2;
 
-	if (not([_player] call player_human)) exitWith {};
-	if (not([_target] call player_human)) exitWith {};
+	if (!([_player] call player_human)) exitWith {};
+	if (!([_target] call player_human)) exitWith {};
 	if (isNil "_interaction") exitWith {};
 	if (typeName _interaction != "STRING") exitWith {};
 
 	
-	if (not([player] call check_armed_player)) exitWith {
+	if (!([player] call check_armed_player)) exitWith {
 		player groupChat format["You cannot %1 %2-%3, you are not armed", _interaction, _target, (name _target)];
 		false
 	};
@@ -1009,8 +1009,8 @@ interact_heal_player = {
 	_player = _this select 0;
 	_target = _this select 1;
 	
-	if (not([_player] call player_human)) exitWith {};
-	if (not([_target] call player_human)) exitWith {};
+	if (!([_player] call player_human)) exitWith {};
+	if (!([_target] call player_human)) exitWith {};
 	
 	private["_interaction"];
 	_interaction = "heal";
@@ -1042,6 +1042,7 @@ interact_heal_receive = {
 	if (_target != player) exitWith {};
 	
 	player setDamage _damage;
+	[player] call player_client_saveDamage;
 	player groupChat format["%1-%2 healed you", _player, (name _player)];
 };
 
@@ -1241,7 +1242,7 @@ interact_drug_search_response = {
 	player groupChat _message;
 	
 	_message = format["%1-%2 had $%3 worth of drugs!", _target, (name _target), strM(_amount)];
-	format['titleText [toString(%1), "PLAIN"];', toArray(_message)] call broadcast;	
+	format['server globalChat toString(%1);', toArray(_message)] call broadcast;	
 };
 
 interact_drug_search_count = {

@@ -30,7 +30,7 @@ if (R3F_LOG_mutex_local_verrou) then {
 		
 		if (_objet_a_decharger isKindOf "StaticWeapon") then {									
 				_objet_a_decharger setVariable ["attached", false, true];
-				_objet setVariable ["attachedTo", objNull, true];
+				_objet_a_decharger setVariable ["attachedTo", objNull, true];
 			};
 		
 		if ({_objet_a_decharger isKindOf _x} count R3F_LOG_CFG_objets_deplacables > 0) then {

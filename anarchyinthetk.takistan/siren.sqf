@@ -68,12 +68,14 @@ if (_art == "client") then {
 			{
 				sleep 1;
 			} else {
-				if (speed _vcl > 60) then {
-					_vcl say ["Siren_Long", 1];
-					sleep _longDur;
-				} else {
-					_vcl say ["Siren_Short", 1];
-					sleep _shortDur;
+				if (missionNamespace getVariable ["player_rejoin_camera_complete", true])then{
+					if (speed _vcl > 60) then {
+						_vcl say ["Siren_Long", 1];
+						sleep _longDur;
+					} else {
+						_vcl say ["Siren_Short", 1];
+						sleep _shortDur;
+					};
 				};
 			};
 		}

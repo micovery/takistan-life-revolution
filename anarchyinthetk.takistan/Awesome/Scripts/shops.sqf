@@ -24,7 +24,7 @@ _fs =
 	];
 
 //Item Shop
-//perch, trout, walleye, bass, Bread, Medikit, Mobile phone, Lighter, Fishing Rod
+//perch, trout, walleye, bass, Bread, Medikit, Mobile phone, Fishing Rod
 _is = 
 	[
 		["perch", 20, 40],
@@ -33,8 +33,6 @@ _is =
 		["bass", 20, 40],
 		["Bread", 10, 20],
 		["medikit", 0, 10],
-		["handy", -1, -1],
-		["lighter", -1, -1],
 		["fishingpole", -1, -1]
 	];
 	
@@ -79,7 +77,6 @@ _gs =
 //Binocular, GPS, lockpick, Fuelline, Stone
 _es = 
 	[
-		["handy", -1, -1],
 		["Binocular", 80, 80],
 		["GPS", 40, 80],
 		["lockpick", 30, 30],
@@ -238,7 +235,6 @@ _gangshop_buy =
 		["kleinesreparaturkit", -1, -1],
 		["reparaturkit", -1, -1],
 		["lockpick", -1, -1],
-		["lighter", -1, -1],
 		["Fuelline", -1, -1],
 		["kanister", -1, -1],
 		["medikit", -1, -1],
@@ -408,7 +404,6 @@ _pmcair =
 //COP Shop
 _copshop =
 	[
-		["handy", -1, -1],
 		["kleinesreparaturkit", -1, -1],
 		["reparaturkit", -1, -1],
 		["kanister", -1, -1],
@@ -623,7 +618,6 @@ _copshop_sobr =
 //PMC Items
 _pmcs        =
 	[
-		["handy", -1, -1],
 		["GPS", -1, -1],
 		["NVGoggles", -1, -1],
 		["Binocular", -1, -1],
@@ -742,7 +736,6 @@ _pmcs        =
 //Terror Shop
 _terrorshop_buy = 
 	[
-		["handy", -1, -1],
 		["GPS_ill", -1, -1],
 		["Binocular_ill", -1, -1],
 		["Binocular_Vector_ill", -1, -1],
@@ -765,11 +758,11 @@ _terrorshop_buy =
 		["gasmask", -1, -1],
 		["stun_light_ter", -1, -1],
 		["selbstmordbombe", -1, -1],
-		["fernzuenderbombe", -1, -1],
-		["zeitzuenderbombe", -1, -1],
-		["aktivierungsbombe", -1, -1],
-		["geschwindigkeitsbombe", -1, -1],
-		["fernzuender", -1, -1],
+//		["fernzuenderbombe", -1, -1],
+//		["zeitzuenderbombe", -1, -1],
+//		["aktivierungsbombe", -1, -1],
+//		["geschwindigkeitsbombe", -1, -1],
+//		["fernzuender", -1, -1],
 		["Colt_ill", -1, -1],
 		["Rnd_45ACP_1911", -1, -1],
 		["revolver_ill", -1, -1],
@@ -857,14 +850,12 @@ _terrorshop_buy =
 //Smuggler Weapons
 _smgrw =
 	[
-		["handy", -1, -1],
 		["GPS_ill", -1, -1],
 		["Binocular_ill", -1, -1],
 		["NVGoggles_ill", -1, -1],
 		["kleinesreparaturkit", -1, -1],
 		["reparaturkit", -1, -1],
 		["lockpick", -1, -1],
-		["lighter", -1, -1],
 		["Fuelline", -1, -1],
 		["kanister", -1, -1],
 		["medikit", -1, -1],
@@ -1054,7 +1045,6 @@ _ihs =
 
 _isup = 
 	[
-		["handy", -1, -1],
 		["lockpick", -1, -1],
 		["medikit", -1, -1],
 		["kleinesreparaturkit", -1, -1],
@@ -1069,11 +1059,11 @@ _isup =
 		["Mammo_WP", -1, -1],
 		["Mammo_IL", -1, -1],
 		["selbstmordbombe", -1, -1],
-		["fernzuenderbombe", -1, -1],
-		["zeitzuenderbombe", -1, -1],
-		["aktivierungsbombe", -1, -1],
-		["geschwindigkeitsbombe", -1, -1],
-		["fernzuender", -1, -1],
+//		["fernzuenderbombe", -1, -1],
+//		["zeitzuenderbombe", -1, -1],
+//		["aktivierungsbombe", -1, -1],
+//		["geschwindigkeitsbombe", -1, -1],
+//		["fernzuender", -1, -1],
 		["gasmask", -1, -1],
 		["stun_light_ter", -1, -1]
 	];
@@ -1093,6 +1083,7 @@ _bt =
 _ihvy = 
 	[
 		["LandRover_Special_CZ_EP1", -1, -1],
+		["LandRover_MG_TK_INS_EP1", -1, -1],
 		["Offroad_SPG9_TK_GUE_EP1", -1, -1],
 		["BTR40_MG_TK_GUE_EP1", -1, -1],
 		["BTR40_TK_GUE_EP1", -1, -1],
@@ -1216,7 +1207,6 @@ _rgs =
 
 _rsup = 
 	[
-		["handy", -1, -1],
 		["lockpick", -1, -1],
 		["medikit", -1, -1],
 		["kleinesreparaturkit", -1, -1],
@@ -1267,6 +1257,8 @@ _rhvy =
 		["GAZ_Vodnik", -1, -1],
 		["GAZ_Vodnik_MedEvac", -1, -1],
 		["UAZ_SPG9_INS", -1, -1],
+		["LandRover_MG_TK_EP1", -1, -1],
+		["LandRover_SPG9_TK_EP1", -1, -1],
 		["BRDM2_HQ_TK_GUE_EP1", -1, -1]
 	];
 
@@ -1304,6 +1296,7 @@ _as_2 =
 _fs1 =
 	[
 		["SearchLight_UN", -1, -1],
+		["MGNEST_M240", -1, -1],
 		["Wire", -1, -1],
 		["Hedgehog", -1, -1],
 		["BagFenceC", -1, -1],
@@ -1378,6 +1371,7 @@ _fs3 =
 _fs4 =
 	[
 		["GuerillaCacheBox_EP1", -1, -1],
+		["MGNEST_PK1", -1, -1],
 		["Wire", -1, -1],
 		["Hedgehog", -1, -1],
 		["Fort_Crate_wood", -1, -1],
@@ -1404,7 +1398,8 @@ _fs4 =
 // Opfor
 _fs5 =
 	[
-		["SearchLight_UN", -1, -1],
+		["SearchLight_TK_EP1", -1, -1],
+		["MGNEST_PK2", -1, -1],
 		["GuerillaCacheBox_EP1", -1, -1],
 		["Wire", -1, -1],
 		["Hedgehog", -1, -1],
@@ -1435,6 +1430,7 @@ _fs5 =
 _fs6 =
 	[
 		["GuerillaCacheBox_EP1", -1, -1],
+		["MGNEST_PK1", -1, -1],
 		["Wire", -1, -1],
 		["Hedgehog", -1, -1],
 		["Fort_Crate_wood", -1, -1],
@@ -1474,8 +1470,6 @@ _russ =
 		["Binocular_ill", -1, -1],
 		["NVGoggles_ill", -1, -1],
 		["lockpick", -1, -1],
-		["lighter", -1, -1],
-		["handy", -1, -1],
 		["medikit", -1, -1],
 		["stun_light_ill", -1, -1],
 		["M9_ill", -1, -1],

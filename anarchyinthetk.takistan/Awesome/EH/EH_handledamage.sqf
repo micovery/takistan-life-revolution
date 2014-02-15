@@ -1,22 +1,22 @@
-private["_unit", "_select", "_damage", "_source", "_projectile", "_distance", "_nvcls","_veh","_inveh", "_reduce","_source_cop", "_weapon", "_exit"];
+private["_unit", "_select", "_damage", "_source", "_projectile", "_distance","_veh","_inveh", "_reduce","_source_cop", "_weapon", "_exit"];
 _unit 			= _this select 0;
 _select			= _this select 1;
 _damage			= _this select 2;
 _source			= _this select 3;
 _projectile		= _this select 4;
 
-
 _distance 		= 0;
 
+if !(alive _unit) exitWith {0};
+if ([_unit] call player_get_dead) exitWith {};
 
-format['EH_handleDamage: Starting, %1', _this] call A_DEBUG_S;
 
 if( ((_unit distance getmarkerpos "respawn_west" < 100))  || 
 	((_unit distance getmarkerpos "respawn_east" < 100)) || 
 	((_unit distance getmarkerpos "respawn_guerrila" < 100)) || 
 	(_unit distance getmarkerpos "respawn_civilian" < 100)
 	) exitwith {
-		format['EH_handleDamage: Exit 1'] call A_DEBUG_S;
+		0
 	};
 
 _exit = false;
@@ -24,7 +24,6 @@ _exit = false;
 {
 	private["_y"];
 	_y = _x select 5;
-	if ((_unit distance (getPosATL _y)) <= 10) then {_exit = true; format['EH_handleDamage: Exit 2'] call A_DEBUG_S;};
 } forEach Clothing_Shops;
 
 if !_exit then {
@@ -33,20 +32,10 @@ if !_exit then {
 	}else{
 		[_unit] call player_get_arrest
 	};
-	
-	if _exit then {
-		format['EH_handleDamage: Exit 3'] call A_DEBUG_S;
-	};
 };
 
-if _exit exitwith {
-	format['EH_handleDamage: Exit Passed'] call A_DEBUG_S;
-};
+if _exit exitwith {0};
 
-format['EH_handleDamage: Exit Checks passed'] call A_DEBUG_S;
-
-
-_nvcls = nearestObjects [getPosATL _unit, ["LandVehicle"], 5];
 
 _reduce = false;
 
@@ -87,27 +76,18 @@ if (_projectile == "B_12Gauge_74Slug") then {
 	};
 };
 	
-[_select,_damage,_source, _unit, _nvcls, _reduce] spawn {
-	private["_select", "_damage", "_shooter", "_unit", "_nvcls", "_reduce"];
-	_select		= _this select 0;
-	_damage		= _this select 1;
-	_shooter	= _this select 2;
-	_unit		= _this select 3;
-	_nvcls		= _this select 4;
-	_reduce		= _this select 5;
-	
-	if (_reduce) then {
-		_damage = _damage * 0.25;
-	};
-	
-	_unit SetHit [_select, _damage];
-	_unit setVariable [_select, _damage, true];
 
-	if(_select == "" and _damage >= 1 and !isnull _shooter) then {
-		_unit setdamage 1;
-	};
-
-	//player groupChat format["EH: %1, %2", _this, (alive _unit)];
-	if (alive _unit) exitWith {};
-	[_shooter, _unit] call victim;
+if (_reduce) then {
+	_damage = _damage * 0.25;
 };
+
+/*
+_unit setVariable [_select, _damage, true];
+_unit SetHit [_select, _damage];
+
+if((_select == "") and (_damage >= 1) and !(isnull _source)) then {
+	_unit setdamage 1;
+};
+*/
+
+_damage 

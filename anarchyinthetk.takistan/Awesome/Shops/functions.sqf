@@ -2,6 +2,8 @@
 #include  "macro.h"
 #include "constants.h"
 
+#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
+
 if (not(isNil "shop_functions_defined")) exitWith {};
 
 shop_lookup = {
@@ -563,7 +565,7 @@ shop_buy_item_validate_data = {
 	_license_2 = _data select shop_buy_item_license_2;
 	_logic = _data select shop_buy_item_logic;
 	
-	_near_vehicles = if (isNil "_logic") then { [] } else { nearestobjects [getPosATL _logic, ["Ship","car","motorcycle","truck"], 3] };
+	_near_vehicles = if (isNil "_logic") then { [] } else { nearestobjects [getPosATL _logic, ["Air", "Ship","car","motorcycle","truck"], 3] };
 	_near_vehicles_count = if (isNil "_near_vehicles") then { 0 } else { count _near_vehicles };
 	_supply = [_item, _shop_id] call INV_GetStock;
 	_max_stock = [_item, _shop_id] call INV_GetMaxStock;
@@ -660,9 +662,8 @@ shop_buy_item_validate_data = {
 		["The item you have selected can only be bought one at a time", _quiet] call shop_set_status_message; ""
 	};
 	
-	if((_isFort || _isVehicle) && _near_vehicles_count > 0) exitWith {
+	if((_isFort || _isVehicle) && (_near_vehicles_count > 0)) exitWith {
 		["There is a vehicle blocking the spawn", _quiet] call shop_set_status_message; 
-		#define SleepWait(timeA) private["_waittt"]; _waittt = time + timeA; waitUntil {time >= _waittt};
 		[_near_vehicles, _logic] spawn {SleepWait(60) {if ((_x distance (_this select 1)) <= 3) then {[_x, "spawn_remove"] call A_impound_spawnBlock;};} forEach (_this select 0)};
 		""
 	};
@@ -1207,13 +1208,13 @@ shop_sell_vehicle = {
 	_vehicle setVariable ["uid_sold", _uid, true];
 	player groupChat format["Vehicle being sold, please wait 5 seconds"];
 	closeDialog 0;
-	sleep 5;
+	SleepWait(5)
 	private["_uid_sold"];
 	_uid_sold = _vehicle getVariable "uid_sold";
 	_uid_sold = if (isNil "_uid_sold") then {""} else {_uid_sold};
 	_uid_sold = if (typeName _uid_sold != "STRING") then {""} else {_uid_sold};
 	
-	if (_uid_sold != _uid || isNil "_vehicle") exitWith {
+	if ((_uid_sold != _uid) || (isNil "_vehicle")) exitWith {
 		player groupChat format["ERROR: Someone already sold this vehicle"];
 		false
 	};
@@ -1553,7 +1554,7 @@ shop_drug_search = {
 			 [_player, "(drug-trafficking)", _profit, 50, false] call player_update_warrants;
 			private["_message"];
 			_message = format["%1-%2 is wanted for trafficking $%3 worth of drugs!", _player, (name _player), strM(_profit)];
-			format['titleText [toString(%1), "PLAIN"];', toArray(_message)] call broadcast;
+			format['server globalChat toString(%1);', toArray(_message)] call broadcast;
 		};
 	} foreach _list;
 	

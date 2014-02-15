@@ -427,7 +427,7 @@ vehicle_init_stats = {
 	if (isNil "_vehicle") exitWith {false};
 	if (typeName _vehicle != "OBJECT") exitWith {false};
 	
-	private["_driver", "_velocity", "_position_atl", "_vector_direction", "_vector_up", "_fuel", "_damage", "_engine_state", "_weapons", "_magazines", "_speed", "_nitro"];
+	private["_driver", "_velocity", "_position_atl", "_vector_direction", "_vector_up", "_fuel", "_damage", "_engine_state", "_weapons", "_magazines", "_speed", "_nitro", "_side"];
 	
 	_velocity = [_vehicle, "velocity"] call vehicle_get_array;
 	_position_atl = [_vehicle, "position_atl"] call vehicle_get_array;
@@ -441,7 +441,9 @@ vehicle_init_stats = {
 	_magazines= [_vehicle, "magazines"] call vehicle_get_array;
 	
 	_speed = [_vehicle, "tuning"] call vehicle_get_scalar;
-	_nitro =[_vehicle, "nitro"] call vehicle_get_scalar;
+	_nitro = [_vehicle, "nitro"] call vehicle_get_scalar;
+	
+	_side	= [_vehicle, "spawnedSide"] call vehicle_get_string;
 	
 	if ((typeName _speed) != "SCALAR") then {
 		_speed = 0;
@@ -461,13 +463,18 @@ vehicle_init_stats = {
 	
 	if ((typeName _vector_direction) != "ARRAY") exitwith {
 			format['vehicle_init_stats: _vector_direction-%1, error', _vector_direction] call A_DEBUG_S;
+			server globalChat format['vehicle_init_stats: _vector_direction-%1, error', _vector_direction];
 			false
 		};
 	if ((typeName _position_atl) != "ARRAY") exitwith {
 			format['vehicle_init_stats: _position_atl-%1, error', _position_atl] call A_DEBUG_S;
+			server globalChat format['vehicle_init_stats: _position_atl-%1, error', _position_atl];
 			false
 		};
-	
+		
+	if (_side == "") then {
+		[_vehicle, "spawnedSide", "Civilian"] call vehicle_set_string;
+	};
 	
 	private["_gear"];
 	_gear = [];
@@ -475,7 +482,6 @@ vehicle_init_stats = {
 	_gear set [vehicle_gear_magazines_cargo, _magazines];
 	
 	[_vehicle,_gear] call vehicle_set_gear;
-	
 	[_vehicle] call vehicle_load_storage;
 	
 	_vehicle setPosATL _position_atl;
@@ -486,6 +492,7 @@ vehicle_init_stats = {
 	_vehicle setFuel _fuel;
 	_vehicle setVariable ["tuning", _speed, true];
 	_vehicle setVariable ["nitro", _nitro, true];
+	
 	
 	true
 };
@@ -534,8 +541,8 @@ vehicle_set_modifications = {
 			processInitCommands;
 		};
 		case "SUV_TK_EP1":{
-				//_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,1,0,0.5,ca)"]'; 
-				//processInitCommands;
+		//	_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,1,0,0.5,ca)"]'; 
+		//	processInitCommands;
 		};
 		case "SUV_PMC_BAF": {
 			_vehicle setVehicleInit 'this setObjectTexture [0, "#(argb,8,8,3)color(0,0,0,0.5,ca)"]'; 
@@ -549,6 +556,8 @@ vehicle_set_modifications = {
 			[_vehicle] call armored_suv_close_minigun;
 		};
 		case "Pchela1T": {
+			_vehicle removeWeapon "FakeWeapon";
+			
 			{_vehicle addmagazine "100Rnd_762x54_PK";}forEach[1,2,3];
 			_vehicle addweapon "Pecheneg";
 		};
@@ -636,12 +645,12 @@ vehicle_set_modifications = {
 		};
 		case "BTR40_MG_TK_INS_EP1": {
 			if(not(_silent)) then { hint "Reconfiguring vehicle armament...";};
-			{_vehicle removemagazine "50Rnd_127x107_DSHKM";}forEach[1,2,3,4,5,6];
+			_vehicle removeMagazines "50Rnd_127x107_DSHKM";
 			{_vehicle addmagazine "150Rnd_127x107_DSHKM";}forEach[1,2,3];
 		};
 		case "Ka137_MG_PMC": {
 			if(not(_silent)) then { hint "Reconfiguring vehicle armament...";};
-			{_vehicle removemagazine "200Rnd_762x54_PKT";}forEach[1,2];
+			_vehicle removeMagazines "200Rnd_762x54_PKT";
 			_vehicle addmagazine "1500Rnd_762x54_PKT";
 		};
 	};
@@ -710,6 +719,7 @@ vehicle_set_init = {
 		clearWeaponCargo this;
 		clearMagazineCargo this;
 		this lock true;
+		this allowCrewInImmobile true;
 		mounted_actions_init = if (isNil "mounted_actions_init") then { [] } else {mounted_actions_init};
 		mounted_actions_init = mounted_actions_init + [%1];
 		[%1] call mounted_add_actions;
@@ -850,6 +860,8 @@ vehicle_create_shop_extended = {
 	if (isCop) then {
 		[_vehicle] call vehicle_cop_tuning;
 	};
+	
+	[_vehicle, "spawnedSide", ([player] call stats_get_faction)] call vehicle_set_string;
 	
 	//player groupChat format["_vehicle_name = %1,  _vehicle = %2", _vehicle_name, _vehicle];
 	[_vehicle, _vehicle_name] call vehicle_set_init;
@@ -1166,7 +1178,7 @@ vehicle_remove = {
 	_vehicles = _vehicles - [_vehicle];
 	_player setVariable ["vehicles_list", _vehicles, true];
 	
-	call vehicle_save;
+	[] call vehicle_save;
 };
 
 vehicle_list = {

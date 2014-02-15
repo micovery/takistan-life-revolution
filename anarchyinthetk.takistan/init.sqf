@@ -12,8 +12,6 @@ isClient = !isServer || (isServer && !isDedicated);
 
 ExecSQFwait("Awesome\BIS\init.sqf")
 
-sleep 0.5;
-
 ExecSQF("Awesome\Functions\debug.sqf");
 ExecSQF("Awesome\Functions\restart.sqf");
 ExecSQF("Awesome\Functions\encodingfunctions.sqf");
@@ -77,6 +75,7 @@ ExecSQF("Awesome\Functions\money_functions.sqf");
 ExecSQF("Awesome\Functions\gang_functions.sqf");
 ExecSQF("Awesome\Functions\convoy_functions.sqf");
 ExecSQF("Awesome\Functions\factory_functions.sqf");
+ExecSQFwait("Awesome\MountedSlots\functions.sqf");
 
 if (isClient) then {
 		[0.6] call stats_client_update_loading_progress;
@@ -96,7 +95,6 @@ if(isClient) then {
 	ExecSQFwait("Awesome\Functions\admin_functions.sqf")
 	ExecSQFwait("Awesome\Functions\markers.sqf");
 	ExecSQFwait("Awesome\Functions\holster.sqf");
-	ExecSQFwait("Awesome\MountedSlots\functions.sqf");
 	ExecSQFspawn("clientloop.sqf");
 	[] spawn gangs_loop;
 	ExecSQFspawn("respawn.sqf");

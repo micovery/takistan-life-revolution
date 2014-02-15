@@ -21,6 +21,9 @@ admin_actions_list = {
 		["Camera (Toggle)", {
 			[] call camera_toggle;
 		}],
+/*		["Global Teleport", {
+			format['onMapSingleClick "(vehicle player) setPosATL _pos";'] call broadcast;
+		}],*/
 		["Carmagedon", {
 			private["_text"];
 			_text = _this select 2;
@@ -31,15 +34,19 @@ admin_actions_list = {
 			[format["Starting Carmagedon at %1 Meters", _distance]] call logAdmin;
 			player groupchat format["Starting Carmagedon at a range of %1 meters", _distance];
 			
-			{
-				{		
-					if (({alive _x} count crew _x == 0)&&((count ([_x] call mounted_get_occupants)) <= 0)) then {
-						deleteVehicle _x;
+//			"LandVehicle", "Air", "Car", "Motorcycle", "Bicycle", "UAV",  "Wreck_Base", "HelicopterWreck", "UH1Wreck", "UH1_Base", "UH1H_base", "AH6_Base_EP1","CraterLong", "Ka60_Base_PMC", "Ka137_Base_PMC", "A10"
+
+			private["_array"];
+			_array = droppableitems + ["Car", "Motorcycle", "Tank", "StaticWeapon", "Air", "Ship", "StaticShip", "Wreck", "Wreck_Base"];
+			{			
+				private["_veh"];
+				_veh = _x;
+				if (({alive _veh} count crew _veh == 0)&&((count ([_veh] call mounted_get_occupants)) <= 0)) then {
+					if (({_veh isKindOf _x}count["ReammoBox","FlagCarrierCore"]) <= 0) then {
+						deleteVehicle _veh;
 					};
-				} foreach((getPosATL player) nearObjects [_x, _distance]);
-			} forEach (droppableitems + ["LandVehicle", "Air", "Car", "Motorcycle", "Bicycle", "UAV", "Wreck", "Wreck_Base", 
-						"HelicopterWreck", "UH1Wreck", "UH1_Base", "UH1H_base", "AH6_Base_EP1","CraterLong", "Ka60_Base_PMC", 
-						"Ka137_Base_PMC", "A10"]);
+				};
+			} foreach (nearestObjects[(getPosATL player),_array, _distance]);
 		}],
 		["Remove Statics",{
 			private["_text"];
@@ -51,13 +58,11 @@ admin_actions_list = {
 			[format["Removing Statics at %1 Meters", _distance]] call logAdmin;
 			player groupchat format["Removing Statics at a range of %1 meters", _distance];
 			
-			{
-				{		
-					if ((({alive _x} count (crew _x)) == 0)&&((count ([_x] call mounted_get_occupants)) <= 0)) then {
-						deleteVehicle _x;
-					};
-				} foreach((getPosATL player) nearObjects [_x, _distance]);
-			} forEach ["StaticWeapon"];
+			{		
+				if ((({alive _x} count (crew _x)) == 0)&&((count ([_x] call mounted_get_occupants)) <= 0)) then {
+					deleteVehicle _x;
+				};
+			} foreach((getPosATL player) nearObjects [["StaticWeapon"], _distance]);
 		}],
 		["Remove Fortifications",{
 			private["_text"];
@@ -68,16 +73,13 @@ admin_actions_list = {
 			
 			[format["Removing Fortifications at %1 Meters", _distance]] call logAdmin;
 			player groupchat format["Removing Fortifications at a range of %1 meters", _distance];
-			
 			{
-				{
-					if !(_x isKindOf "StaticWeapon") then {
-						if (isNull(_x getVariable ["R3F_LOG_est_deplace_par", objNull])) then {
-							deleteVehicle _x;
-						};
+				if !(_x isKindOf "StaticWeapon") then {
+					if (isNull(_x getVariable ["R3F_LOG_est_deplace_par", objNull])) then {
+						deleteVehicle _x;
 					};
-				} foreach((getPosATL player) nearObjects [_x, _distance]);
-			} forEach R3F_LOG_CFG_objets_deplacables;
+				};
+			} foreach((getPosATL player) nearObjects [R3F_LOG_CFG_objets_deplacables, _distance]);
 		}],
 		["Remove Crates",{
 			private["_text"];
@@ -95,7 +97,7 @@ admin_actions_list = {
 				};
 			} foreach((getPosATL player) nearObjects ["ReammoBox", _distance]);
 		}],
-		["Remove Ammo/Weapon piles",{
+		["Wipe Gear from Boxes/Vehicles ",{
 			private["_text"];
 			_text = _this select 2;
 			_distance = [(_text)] call parse_number;
@@ -104,16 +106,13 @@ admin_actions_list = {
 			
 			[format["Wiping Gear Piles at %1 Meters", _distance]] call logAdmin;
 			player groupchat format["Wiping gear at a range of %1 meters", _distance];
-			
 			{
-				{
-					clearMagazineCargoGlobal _x;
-					clearWeaponCargoGlobal _x;
-					clearBackpackCargoGlobal _x;
-				} foreach((getPosATL player) nearObjects [_x, _distance]);
-			} forEach ["ReammoBox", "LandVehicle", "Air", "Ship"];
+				clearMagazineCargoGlobal _x;
+				clearWeaponCargoGlobal _x;
+				clearBackpackCargoGlobal _x;
+			} foreach((getPosATL player) nearObjects [["ReammoBox", "LandVehicle", "Air", "Ship"], _distance]);
 		}],
-		["Wipe Gear from Boxes/Vehicles",{
+		["Remove Ammo/Weapon piles",{
 			private["_text"];
 			_text = _this select 2;
 			_distance = [(_text)] call parse_number;
@@ -138,12 +137,10 @@ admin_actions_list = {
 			player groupchat format["Removing Bodies at a range of %1 meters", _distance];
 			
 			{
-				{
-					if !(alive _x) then {
-						deleteVehicle _x;
-					};
-				} foreach((getPosATL player) nearObjects [_x, _distance]);
-			} forEach ["CAManBase"];
+				if !(alive _x) then {
+					deleteVehicle _x;
+				};
+			} foreach((getPosATL player) nearObjects [["CAManBase"], _distance]);
 		}],
 		["check player equipment", {
 			private["_player", "_target"];
@@ -246,6 +243,50 @@ admin_actions_list = {
 			
 			[_target] call player_reset_side_inventory;
 		}],
+		["Add to all Player's banks (use input field)", {
+			private["_text", "_amount"];
+			_text = _this select 2;
+			_amount = [(_text)] call parse_number;
+			
+			if (_amount <= 0) exitwith {
+				server globalChat "Error, value less than or equal to zero";
+			};
+			
+			[format["Adding %1 to all player's banks", strM(_amount)]] call logAdmin;
+			server globalChat format["Adding $%1 to all player's banks", strM(_amount)];
+			
+			{
+				private["_player_variable_name", "_player_variable"];
+				_player_variable_name = _x;
+				_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
+				if ([_player_variable] call player_human) then {
+					[_player_variable, _amount] call bank_transaction;
+				};
+			} forEach playerstringarray;
+			
+		}],
+		["Add/Remove to player's (use input field)", {
+			private["_target", "_text", "_amount"];
+			_target = _this select 1;
+			if (not([_target] call player_human)) exitWith {};
+			_text = _this select 2;
+			_amount = [(_text)] call parse_number;
+			
+			[format["%1-%2 (%3), adding $%4 to bank", _target, (name _target), (getPlayerUID _target), strM(_amount)]] call logAdmin;
+			server globalChat format["%1-%2 (%3), adding $%4 to bank", _target, (name _target), (getPlayerUID _target), strM(_amount)];
+			
+			[_target, _amount] call bank_transaction;
+		}],
+		["Set player free from prison", {
+			private["_target"];
+			_target = _this select 1;
+			if (not([_target] call player_human)) exitWith {};
+			
+			[format["%1-%2 (%3), Setting free from prison", _target, (name _target), (getPlayerUID _target)]] call logAdmin;
+			server globalChat format["%1-%2, Set free from prison", _target, (name _target)];
+			
+			[_target, false] call player_set_arrest;
+		}],
 		["Kill player", {
 			private["_player", "_target"];
 			_player = _this select 0;
@@ -331,6 +372,9 @@ admin_actions_list = {
 		["COP - 1 List", {
 			["COP_1"] spawn A_WBL_F_DIALOG_INIT;
 		}],
+/*		["PMC - 1 List", {
+			["PMC_1"] spawn A_WBL_F_DIALOG_INIT;
+		}],*/
 		["BLANK", {}]
 	]
 };
