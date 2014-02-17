@@ -1433,6 +1433,34 @@ vehicle_clean_trigOn = {
 		};
 };
 
+vehicle_ignoreWeapons = ["CarHorn","SmokeLauncher"];
+
+vehicle_armed = {
+	private["_vehicle","_return"];
+	_vehicle = _this select 0;
+	_return = false;
+	
+	if (isNull _vehicle) exitwith {_return};
+	
+	private["_class","_turrets"];
+	_class = configFile >> "CfgVehicles" >> (typeOf _vehicle) >> "turrets";
+	_turrets = [_class, []] call findTurrets_Recurse; 
+	_turrets set[(count _turrets), [-1]];
+		
+	{
+		private["_path","_weapons"];
+		_path = _x;
+		_weapons = _vehicle weaponsTurret _path;
+		if ((count _weapons) > 0) then {
+			if (({private["_weapon"];_weapon = _x; (({[_weapon, _x] call shop_weapon_inherits_from} count vehicle_ignoreWeapons) <= 0)} count _weapons) > 0) then {
+				_return = true;
+			};
+		};
+	} forEach _turrets;
+		
+	_return
+};
+
 
 [] call vehicle_load;
 [] call vehicle_save_gear_setup;

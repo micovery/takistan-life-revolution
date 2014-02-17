@@ -147,7 +147,7 @@ marker_side_loop_draw = {
 
 marker_side_loop = {
 	if (isNil "marker_side_array") then {
-		marker_side_array = call marker_side_init;
+		marker_side_array = [] call marker_side_init;
 	};
 	
 	private["_marker_loop_i"];

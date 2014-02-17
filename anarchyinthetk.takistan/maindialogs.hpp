@@ -615,7 +615,7 @@ class manage_gang_menu {
 	};
 };
 
-class ja_nein {
+class dialog_yes_no {
 	idd = -1;
 	movingEnable = true;
 	controlsBackground[] = {DLG_BACK1, background};

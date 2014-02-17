@@ -563,20 +563,7 @@ player_vehicle_armed = {
 		
 		if (_unit == _vehicle) exitwith {_return};
 		
-		private["_class","_turrets"];
-		_class = configFile >> "CfgVehicles" >> (typeOf _vehicle) >> "turrets";
-		_turrets = [_class, []] call findTurrets_Recurse; 
-		_turrets set[(count _turrets), [-1]];
-		
-		{
-			private["_path"];
-			_path = _x;
-			if ((count (_vehicle weaponsTurret _path)) > 0) then {
-				_return = true;
-			};
-		} forEach _turrets;
-		
-		_return
+		([_vehicle] call vehicle_armed)
 	};
 
 player_update_armed = {
@@ -2129,7 +2116,7 @@ player_rejoin_camera = {
 	_end_time = time + _delay;
 	
 	[_end_time] spawn player_rejoin_camera_text;
-	[_end_time] spawn  player_rejoin_camera_movement;
+	[_end_time] call  player_rejoin_camera_movement;
 };
 
 player_rejoin_camera_text = {
@@ -2433,7 +2420,7 @@ player_dead_camera = {
 	
 	_end_time = time + _delay;
 	[_end_time] spawn player_rejoin_camera_text;
-	[_end_time] spawn player_rejoin_camera_movement;
+	[_end_time] call player_rejoin_camera_movement;
 };
 
 
@@ -2918,7 +2905,7 @@ player_spawn = {
 	
 	//mark the player alive when we are done with the dead camera
 	[_player, false] call player_set_dead;
-	[_player] call name_tags_3d_controls_setup;
+	[] call name_tags_3d_controls_setup;
 };
 
 
@@ -3163,7 +3150,7 @@ player_init_stats = {
 	[_player, "extradeadtime", 0] call player_set_scalar;
 	[_player] call FA_setup;
 	
-	if (not(iscop)) then {
+	if (!(iscop)) then {
 		[_player, "sidemarkers", true] call player_set_bool;	
 	};
 	
@@ -3200,7 +3187,7 @@ player_handle_mpkilled = { _this spawn {
 	[_player] call player_reset_ui;
 	[_player] call player_reset_stats;
 	[_player] call player_dead_camera;
-	[_player] call name_tags_3d_controls_setup;
+	[] call name_tags_3d_controls_setup;
 	
 	mpKilledRunning = false;
 };};

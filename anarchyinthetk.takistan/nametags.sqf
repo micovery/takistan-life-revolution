@@ -1,6 +1,6 @@
 #include "constants.h"
 
-call disableserialization;
+disableserialization;
 private ["_name_tags_i"];
 _name_tags_i = 0;
 
@@ -350,7 +350,6 @@ name_tags_3d_controls_setup = {
 	_marker_id = tags_marker_start + 1;
 	_end = tags_marker_end + 1;
 	
-	
 	name_3d_controls = if (isNil "name_3d_controls") then { [] } else { name_3d_controls - [controlNull] };
 	if (count name_3d_controls > 0) exitWith {};
 	
@@ -373,14 +372,14 @@ name_tags_3d_controls_setup = {
 };
 
 name_tags_control = {
-	( (uiNamespace getVariable 'TAGS_HUD') displayCtrl tags_name_id)
+	((uiNamespace getVariable 'TAGS_HUD') displayCtrl tags_name_id)
 };
 
 onEachFrameHack = {
 	//player groupChat format["onEachFrameHack %1", _this];
 	[player, ([player] call player_side)] call name_3d_tags_draw;
-	if (not([player] call name_tags_draw)) then {
-		(call name_tags_control) ctrlShow false;
+	if (!([player] call name_tags_draw)) then {
+		([] call name_tags_control) ctrlShow false;
 	};
 };
 
@@ -401,10 +400,10 @@ name_tags_loop = {
 			_cplayer = _x;
 			if (not(isNil "_cplayer")) then { 
 				if ((typeName _cplayer) == "OBJECT") then {
-					if (not(isNull _cplayer)) then { 
+					if !(isNull _cplayer) then { 
 						_cside = side _cplayer;
 						if (_cside == _side) then {
-							if (not(_cplayer in name_tags_side_units)) then {
+							if !(_cplayer in name_tags_side_units) then {
 								name_tags_side_units set [count(name_tags_side_units), _cplayer];
 							};
 						};

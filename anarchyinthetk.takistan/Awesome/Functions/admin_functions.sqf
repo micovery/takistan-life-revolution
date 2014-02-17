@@ -21,6 +21,20 @@ admin_actions_list = {
 		["Camera (Toggle)", {
 			[] call camera_toggle;
 		}],
+/*		["Create poll (use input field)", {
+			private["_text"];
+			_text = _this select 2;
+			player groupChat format["Creating poll!"];
+			[parseText(_text), (getPlayerUID player)] call admin_create_poll;
+			[format["Creating Poll: %1", parseText(_text)]] call logAdmin;
+		}],
+		["Call poll for restart", {
+			private["_text"];
+			player groupChat format["Polling for Restart."];
+			["Would you like to restart the server?", (getPlayerUID player)] call admin_create_poll;
+			[format["Creating Restart Poll"]] call logAdmin;
+		}],
+*/
 /*		["Global Teleport", {
 			format['onMapSingleClick "(vehicle player) setPosATL _pos";'] call broadcast;
 		}],*/

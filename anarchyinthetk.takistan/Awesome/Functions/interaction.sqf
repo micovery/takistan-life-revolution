@@ -719,7 +719,7 @@ interact_check_trx_minimum = {
 	private["_minimum"];
 	_minimum = 10;
 	if (_amount < _minimum) exitWith {
-		player groupChat format["THe minimum about for a bank transaction is $%1", strM(_minimum)];
+		player groupChat format["The minimum about for a bank transaction is $%1", strM(_minimum)];
 		true
 	};
 	false
@@ -1423,7 +1423,7 @@ interact_ticket_receive = { _this spawn {
 	_amount = round(_amount);
 
 	response = false;
-	if (!(createDialog "ja_nein")) exitWith {hint "Dialog Error!"};
+	if (!(createDialog "dialog_yes_no")) exitWith {hint "Dialog Error!"};
 	ctrlSetText [1, format["%1-%2 gave you a ticket of $%3. Do you agree to pay?", _player, (name _player), strM(_amount)]];
 	waitUntil{(not(ctrlVisible 1023))};
 	
@@ -1587,7 +1587,7 @@ interact_stranded_check = {
 	if (not([_player] call player_stranded)) exitWith {};
 	
 	response = false;
-	if (!(createDialog "ja_nein")) exitWith {hint "Dialog Error!";};
+	if (!(createDialog "dialog_yes_no")) exitWith {hint "Dialog Error!";};
 	
 	ctrlSetText [1, format["Hey there, looks like you are stranded. Do you want to quickly respawn? Note that as a penalty, you will lose your gear, and inventory."]];
 	waitUntil{(not(ctrlVisible 1023))};
