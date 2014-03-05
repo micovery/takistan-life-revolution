@@ -13,7 +13,7 @@ isClient = !isServer || (isServer && !isDedicated);
 ExecSQFwait("Awesome\BIS\init.sqf")
 
 ExecSQF("Awesome\Functions\debug.sqf");
-ExecSQF("Awesome\Functions\restart.sqf");
+ExecSQF("Awesome\Functions\uid_lists.sqf");
 ExecSQF("Awesome\Functions\encodingfunctions.sqf");
 ExecSQF("Awesome\Functions\music.sqf");
 ExecSQF("Awesome\MyStats\persist.sqf");

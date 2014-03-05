@@ -88,25 +88,16 @@ if ((isNil "A_AI_ARRAY")) then {
 	};
 };
 
-private["_sleep", "_counter", "_time", "_time_wait", "_wait", "_restartTime", "_restartShort", "_restartInit"];
+private["_sleep", "_counter", "_time", "_time_wait", "_wait"];
 _sleep = 10;
 _counter = 0;
 _time = 0;
 _time_wait = 5;
 _wait = _time + (60 * _time_wait);
 
-// Time when Restart is
-_restartTime = 12 * (60^2);
-// Time before restart to begin kicking/refusing loading
-_restartShort = 2 * 60;
-// Time when restart process will begin
-_restartInit = _restartTime - _restartShort;
-
 format['SERVER_LOOP: '] call A_DEBUG_S;
 
 while {true} do {
-
-	if ( time >= _restartInit ) exitwith {[] call A_RESTART_S};
 
 	if (_time >= _wait) then {
 		format[''] call A_DEBUG_S;
@@ -114,6 +105,8 @@ while {true} do {
 	};
 		
 	[] call A_WBL_F_REFRESH_S;
+//	[] call listFile_loadDonators;
+	[] call listFile_refreshAdmins_S;
 			
 	{
 		if ((group _x) != (group server)) then {
@@ -121,14 +114,15 @@ while {true} do {
 		};
 	} forEach A_AI_ARRAY;
 		
-	private["_groups"];
+/*	private["_groups"];
 	_groups = allGroups;
 		
 	if (_time >= _wait) then {
 		format['SERVER_LOOP: allGroups Count- %1	Empty- %2	West- %3	East- %4	Resistance- %5	Civilian- %6	isNull groups- %7', count _groups, {(count (units _x)) <= 0} count _groups, {(side _x) == west} count _groups, {(side _x) == east} count _groups, {(side _x) == resistance} count _groups, {(side _x) == civilian} count _groups, {isNull _x} count _groups] call A_DEBUG_S;
 		format['SERVER_LOOP: allGroups- %1', _groups] call A_DEBUG_S;
 	};
-		
+
+	
 	{
 		private["_group", "_units", "_count"];
 		_group = _x;
@@ -152,6 +146,7 @@ while {true} do {
 		format['SERVER_LOOP: allGroups Count- %1	Empty- %2	West- %3	East- %4	Resistance- %5	Civilian- %6	isNull groups- %7', count _groups, {(count (units _x)) <= 0} count _groups, {(side _x) == west} count _groups, {(side _x) == east} count _groups, {(side _x) == resistance} count _groups, {(side _x) == civilian} count _groups, {isNull _x} count _groups] call A_DEBUG_S;
 		format['SERVER_LOOP: allGroups- %1', _groups] call A_DEBUG_S;
 	};
+*/
 		
 	{
 		private["_string", "_player", "_uid"];
@@ -159,45 +154,83 @@ while {true} do {
 		_player	= missionNamespace getVariable [_string, objNull];
 		_uid = getPlayerUID _player;
 		
-		if ((!isNull _player) && (isPlayer _player) && (_uid != "")) then {
-			private["_player_cop"];
+		if ((!isNull _player) && (alive _player) && (isPlayer _player) && (_uid != "")) then {
+			private["_player_cop","_player_opf","_player_ins"];
 			_player_cop = ([_player] call player_cop);
-			if ( _player_cop && (alive _player) ) then {
-				private["_update"];
-				_update = true;
-							
+			_player_opf = ([_player] call player_opfor);
+			_player_ins = ([_player] call player_insurgent);
+			
+			if (_player_cop) then {					
 				if (A_WBL_V_ACTIVE_COP_1 == 1) then {
 					if (!(_uid in A_WBL_V_W_COP_1)) then { 
-						_update = false; 
-						format
-						[
-							'
-							if (player != %1) exitwith {};
+						[format['
 							[] spawn {
 									server globalChat "You are not on the Police Whitelist - you will be kicked back to the lobby in 10 seconds";
 									sleep 10;
 									failMission "END1"; 
 								};
-							', _player
-						] call broadcast;
+						'], _player] call broadcast_client;
 					};	
 				} else { if (A_WBL_V_ACTIVE_COP_1 == 2) then {
 					if ((_uid in A_WBL_V_B_COP_1)) then {
-						_update = false; 
-						format
-						[
-							'
-							if (player != %1) exitwith {};
+						[format['
 							[] spawn {
 									server globalChat "You are on the Police Blacklist - you will be kicked back to the lobby in 10 seconds";
 									sleep 10;
 									failMission "END1";
 								};
-							', _player
-						] call broadcast;
+						'], _player] call broadcast_client;
 					};
 				};};
-			};	
+			}else{
+				if (_player_ins) then {				
+					if (A_WBL_V_ACTIVE_COP_1 == 1) then {
+						if (!(_uid in A_WBL_V_W_COP_1)) then { 
+							[format['
+								[] spawn {
+										server globalChat "You are not on the Insurgent Whitelist - you will be kicked back to the lobby in 10 seconds";
+										sleep 10;
+										failMission "END1"; 
+									};
+							'], _player] call broadcast_client;
+						};	
+					} else { if (A_WBL_V_ACTIVE_COP_1 == 2) then {
+						if ((_uid in A_WBL_V_B_COP_1)) then {
+							[format['
+								[] spawn {
+										server globalChat "You are on the Insurgent Blacklist - you will be kicked back to the lobby in 10 seconds";
+										sleep 10;
+										failMission "END1";
+									};
+							'], _player] call broadcast_client;
+						};
+					};};
+				}else{
+					if (_player_opf) then {				
+						if (A_WBL_V_ACTIVE_COP_1 == 1) then {
+							if (!(_uid in A_WBL_V_W_COP_1)) then { 
+								[format['
+									[] spawn {
+											server globalChat "You are not on the Opfor Whitelist - you will be kicked back to the lobby in 10 seconds";
+											sleep 10;
+											failMission "END1"; 
+										};
+								'], _player] call broadcast_client;
+							};	
+						} else { if (A_WBL_V_ACTIVE_COP_1 == 2) then {
+							if ((_uid in A_WBL_V_B_COP_1)) then {
+								[format['
+									[] spawn {
+											server globalChat "You are on the Opfor Blacklist - you will be kicked back to the lobby in 10 seconds";
+											sleep 10;
+											failMission "END1";
+										};
+								'], _player] call broadcast_client;
+							};
+						};};
+					};
+				};
+			};
 		};
 	} forEach playerstringarray;
 

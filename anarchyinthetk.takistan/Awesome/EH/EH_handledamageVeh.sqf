@@ -9,10 +9,8 @@ if( ((_unit distance (getmarkerpos "respawn_west")) < 120) ||
 	((_unit distance (getmarkerpos "respawn_east")) < 100) || 
 	((_unit distance (getmarkerpos "respawn_guerrila")) < 100) || 
 	((_unit distance (getmarkerpos "respawn_civilian")) < 130)
-	) then {
-		0
-	}else{
-		_this select 2
-	};
+	) exitwith {0};
 
+if !([_source] call vehicle_validShooter) exitwith {0};
 	
+_damage

@@ -578,6 +578,6 @@ if (_art == "distribute") then {
 };
 
 if (_art == "pmc_whitelist") then {
-	if (not(ischief)) exitWith { player groupChat "Cannot access PMC whitelist: You are not the police chief";};
+	if (!(ischief)) exitWith { player groupChat "Cannot access PMC whitelist: You are not the police chief";};
 	["PMC_1"] spawn A_WBL_F_DIALOG_INIT;
 };

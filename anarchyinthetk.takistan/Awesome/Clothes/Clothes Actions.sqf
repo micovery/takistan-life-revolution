@@ -190,32 +190,6 @@ C_transferDamage = {
 	
 	_new setDamage (damage _old);
 	
-	private["_total","_head","_body","_hands","_legs"];
-	_total = _old getVariable ["", 0];
-	_head = _old getVariable ["head_hit", 0];
-	_body = _old getVariable ["body", 0];
-	_hands = _old getVariable ["hands", 0];
-	_legs = _old getVariable ["legs", 0];
-	
-	_new setVariable ["", _total, true];
-	_new setVariable ["head_hit", _head, true];
-	_new setVariable ["body", _body, true];
-	_new setVariable ["hands", _hands, true];
-	_new setVariable ["legs", _legs, true];
-	
-	private["_part", "_value"];
-	{
-		_part = _x select 0;
-		_value = _x select 1;
-		_new setHit [_part, _value]
-	} forEach [
-			["", _total],
-			["head_hit", _head],
-			["body", _body],
-			["hands", _hands],
-			["legs", _legs]
-		];
-	
 	[_old] call A_fnc_EH_remove;
 	[_new] call A_fnc_EH_init;
 };

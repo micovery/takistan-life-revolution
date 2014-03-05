@@ -21,6 +21,10 @@ _ctrl_1 buttonSetAction "respawnButtonPressed = time;";
 		
 _delayR = 30;
 _delayA = [] call player_escape_menu_abortCheck;
+
+if (_delayA > _delayR) then {
+	_delayR = _delayA;
+};
 		
 _EML = if (_delayA > _delayR)then{_delayA}else{_delayR};
 		

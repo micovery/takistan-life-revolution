@@ -102,6 +102,10 @@ A_impound_action = {
 				player groupchat "this vehicle is in a carpark. you cannot impound it!"
 			};
 		
+		if ( ((_vcl distance (getmarkerpos "respawn_west")) < 120) && !ischief) exitwith {
+			player groupChat "Only the police chief can impound vehicles in the blufor base";
+		};
+		
 		[_vcl] spawn A_impound;
 		player groupChat localize "STRS_inventar_impound_success";
 		format['hintSilent format[localize "STRS_inventar_impound_gesehen", "%1", "(%2)", %3]', name player, player, _vcl] call broadcast;

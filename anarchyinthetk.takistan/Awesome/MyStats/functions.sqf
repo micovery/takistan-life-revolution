@@ -396,7 +396,7 @@ stats_load_core_libraries = {
 	[] call player_save_side_gear_setup;
 	[] call player_init_arrays;
 	ExecSQF("broadcast.sqf");
-	ExecSQF("Awesome\Scripts\white_black_list.sqf");
+	ExecSQF("Awesome\Functions\white_black_list.sqf");
 	
 	_h = [] execVM "Awesome\Clothes\Clothes.sqf";
 	waitUntil {scriptDone _h};
@@ -420,7 +420,6 @@ stats_server_setup = {
 	private["_data"];
 	_data = [stats_server_uid] call stats_load_request_send;
 	[_data, server] call stats_compile_sequential;
-	
 	
 	//keep a count of how many times the server has restarted
 	private["_restart_count"];

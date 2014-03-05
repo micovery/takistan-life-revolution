@@ -14,7 +14,7 @@ link3[] = {3,5};
 link4[] = {4,3};
 link5[] = {5,2};
 globals[] = {25.000000,1,0,0,16777215,640,480,1,19,6316128,1,-515.331238,618.791016,229.254959,-500.911407,1415,911,1};
-window[] = {2,-1,-1,-1,-1,755,25,1285,25,3,1433};
+window[] = {2,-1,-1,-1,-1,855,125,1385,125,3,1433};
 *//*%FSM</HEAD>*/
 class FSM
 {
@@ -29,7 +29,7 @@ class FSM
        "		""_checkTime"", ""_vehicleArray"", ""_timeWait""" \n
        "	];" \n
        "" \n
-       "format['SERVER VEHICLE LOOP: Start - 1'] call A_DEBUG_S;" \n
+       "//format['SERVER VEHICLE LOOP: Start - 1'] call A_DEBUG_S;" \n
        "" \n
        "_checkTime = vehicle_clean_checkTime;" \n
        "_vehicleArray= [];" \n
@@ -54,7 +54,7 @@ class FSM
     class Main
     {
       name = "Main";
-      init = /*%FSM<STATEINIT""">*/"format['SERVER VEHICLE LOOP: Main Loop Start - %1', time] call A_DEBUG_S;" \n
+      init = /*%FSM<STATEINIT""">*/"//format['SERVER VEHICLE LOOP: Main Loop Start - %1', time] call A_DEBUG_S;" \n
        "" \n
        "_vehicleArray = [] call vehicle_clean_getArray;" \n
        "" \n
@@ -71,7 +71,7 @@ class FSM
        "" \n
        "_timeWait = time + vehicle_clean_checkTime;" \n
        "" \n
-       "format['SERVER VEHICLE LOOP: Main Loop End - %1', time] call A_DEBUG_S;" \n
+       "//format['SERVER VEHICLE LOOP: Main Loop End - %1', time] call A_DEBUG_S;" \n
        ""/*%FSM</STATEINIT""">*/;
       precondition = /*%FSM<STATEPRECONDITION""">*/""/*%FSM</STATEPRECONDITION""">*/;
       class Links

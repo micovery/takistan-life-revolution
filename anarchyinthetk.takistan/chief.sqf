@@ -7,9 +7,14 @@ private["_spielernum", "_kandidatnum", "_waehlernum", "_item", "_mag", "_weap", 
 if (_art == "ClientWahlc") then {
 	if (isNil("WahlChief")) then { WahlChief = false;};
 	if (WahlChief) exitWith { player groupChat "You just voted."; };
-	_spielernum   = call compile (_this select 1);
+	_spielernum   = [] call compile (_this select 1);
+	
+	private["_player_string","_player"];
+	_player_string = (playerstringarray select _spielernum);
+	_player = missionNamespace getVariable [_player_string, objNull];
+	
 	format["if (isServer) then {[0,1,2,[""ServerChief"", %1, %2]] execVM ""chief.sqf"";};", _spielernum, rolenumber] call broadcast;
-	player groupChat format[localize "STRS_chief_votedfor", (playerstringarray select _spielernum)];
+	player groupChat format[localize "STRS_chief_votedfor", _player_string];
 	WahlChief = true;
 	sleep 15;
 	WahlChief = false;

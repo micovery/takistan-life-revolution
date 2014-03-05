@@ -7,12 +7,13 @@ _pmcCheckBool = false;
 
 waitUntil {ALL_LOADING_DONE};
 
-while {true} do {
-	if ([] call A_RESTART_CHECK) exitwith {[] spawn A_RESTART_C};
-	
-	if ( ((group player) == (group server)) && not(C_changing)) then {
+
+while {true} do {	
+	if ( ((group player) == (group server)) && !(C_changing)) then {
 		[player] joinSilent grpNull;
 	};
+	
+	[] call listFile_refreshAdmins_C;
 	
 	if (isCiv && (!isOpf) && (!isIns)) then {
 			if ( ([player] call player_isPMCclothes) && !([player] call player_isPMCwhitelist) ) then {
@@ -30,7 +31,9 @@ while {true} do {
 					_pmcCheckBool = false;
 				};
 		};
-		
+	
+	
+	
 	sleep 10;
 	_group_loop_i =_group_loop_i + 1;
 	if (_group_loop_i >= 5000) exitwith {[] execVM "Awesome\Client\client_loop.sqf";};

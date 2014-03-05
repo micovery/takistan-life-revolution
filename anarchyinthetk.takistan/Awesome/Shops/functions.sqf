@@ -664,7 +664,7 @@ shop_buy_item_validate_data = {
 	
 	if((_isFort || _isVehicle) && (_near_vehicles_count > 0)) exitWith {
 		["There is a vehicle blocking the spawn", _quiet] call shop_set_status_message; 
-		[_near_vehicles, _logic] spawn {SleepWait(60) {if ((_x distance (_this select 1)) <= 3) then {[_x, "spawn_remove"] call A_impound_spawnBlock;};} forEach (_this select 0)};
+		[_near_vehicles, _logic] spawn {SleepWait(90) {if ((_x distance (_this select 1)) <= 3) then {[_x, "spawn_remove"] call A_impound_spawnBlock;};} forEach (_this select 0)};
 		""
 	};
 	

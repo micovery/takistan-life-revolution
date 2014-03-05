@@ -1,4 +1,5 @@
 INV_CarryingCapacity = 60;
+INV_PrivateStorageCapacity = 10000;
 INV_TaxesPaid = 0;
 
 INV_VehiclePark = [

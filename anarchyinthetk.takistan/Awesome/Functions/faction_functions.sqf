@@ -88,7 +88,7 @@ ftf_faction_allowed = {
 	};
 	
 	//Manual overrides:
-	if ((_uid in alldonators) or (_uid in A_LIST_ADMINS) or (ignoreFactionPlaytime)) exitWith {true};
+	if ((_uid in alldonators) or (_uid in listAdmins) or (ignoreFactionPlaytime)) exitWith {true};
 	
 	
 	//Get side var

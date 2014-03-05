@@ -49,9 +49,9 @@ server_set_array_checked = {
 	[_variable_name, _variable_value] call stats_server_save;
 };
 
-
-
-
+server_test_running = {
+	server getVariable ["testServer", false]
+};
 
 //player groupChat format["server functions defined"];
 server_functions_defined =  true;

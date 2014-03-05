@@ -55,7 +55,7 @@ if (_art == "serverloop") then {
 				if !(isNil "_player_variable") then {
 					if !(isNull _player_variable) then {
 						_MaxStimmen = (count (WahlArrayc select _i));
-						_MaxPos = _i;
+						_MaxPos = _i;			
 					};
 				};
 			};

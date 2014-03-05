@@ -25,39 +25,17 @@ zinsen_dauer                 = 1200;
 robenable                    = true;
 
 if (isServer) then {
-	private["_file","_fileLoad"];
-	
-	donators0	= [];
-	donators1	= [];
-	donators2	= [];
-	donators3	= [];
-	donators4	= [];
-	
-	_file = "server\donators.sqf";
-	
-	if (_file != "") then {
-		_fileLoad = preProcessFileLineNumbers _file;
-		if (_fileLoad != "") then {
-			[] call compile _fileLoad;
-		};
-	};
-	
-	server setVariable ["donators0", donators0, true];
-	server setVariable ["donators1", donators1, true];
-	server setVariable ["donators2", donators2, true];
-	server setVariable ["donators3", donators3, true];
-	server setVariable ["donators4", donators4, true];
-	sleep 0.5;
-	server setVariable ["DONATOR_LOAD", true, true];
+	_handle = [] spawn listFile_loadDonators_Init;
+	 waitUntil{scriptDone _handle};
 } else {
 	private["_timeout"];
 	_timeout = time + 5;
 	waitUntil {(server getVariable ["DONATOR_LOAD", false]) || (time > _timeout)};
-	donators0     = server getVariable "donators0";
-	donators1     = server getVariable "donators1";
-	donators2     = server getVariable "donators2";
-	donators3     = server getVariable "donators3";
-	donators4     = server getVariable "donators4";
+	donators0     = server getVariable ["donators0",[]];
+	donators1     = server getVariable ["donators1",[]];
+	donators2     = server getVariable ["donators2",[]];
+	donators3     = server getVariable ["donators3",[]];
+	donators4     = server getVariable ["donators4",[]];
 	alldonators   = donators1 + donators2 + donators3 + donators4;
 };
 	

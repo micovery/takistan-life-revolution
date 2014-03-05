@@ -4,24 +4,34 @@
 // 2 - Black list
 A_WBL_V_ACTIVE_PMC_1 = 1;
 A_WBL_V_ACTIVE_COP_1 = 2;
+A_WBL_V_ACTIVE_INS_1 = 2;
+A_WBL_V_ACTIVE_OPF_1 = 2;
 
 // White list variable
 A_WBL_V_W_PMC_1		= [];
 A_WBL_V_W_COP_1		= [];
+A_WBL_V_W_INS_1		= [];
+A_WBL_V_W_OPF_1		= [];
 
 // Black list variable
 A_WBL_V_B_PMC_1		= [];
 A_WBL_V_B_COP_1		= [];
+A_WBL_V_B_INS_1		= [];
+A_WBL_V_B_OPF_1		= [];
 
 A_WBL_FOLDER		= "LISTS\";
 
 // White list file
 A_WBL_WL_PMC_1		= format["%1WBL_white_list_pmc_1.log", A_WBL_FOLDER];
 A_WBL_WL_COP_1		= format["%1WBL_white_list_cop_1.log", A_WBL_FOLDER];
+A_WBL_WL_ins_1		= format["%1WBL_white_list_ins_1.log", A_WBL_FOLDER];
+A_WBL_WL_opf_1		= format["%1WBL_white_list_opf_1.log", A_WBL_FOLDER];
 
 // Black list file
 A_WBL_BL_PMC_1		= format["%1WBL_black_list_pmc_1.log", A_WBL_FOLDER];
 A_WBL_BL_COP_1		= format["%1WBL_black_list_cop_1.log", A_WBL_FOLDER];
+A_WBL_BL_ins_1		= format["%1WBL_black_list_ins_1.log", A_WBL_FOLDER];
+A_WBL_BL_opf_1		= format["%1WBL_black_list_opf_1.log", A_WBL_FOLDER];
 
 // Public variable server sends out to update clients list
 A_WBL_PV_S_W_PMC_1 = [];
@@ -30,6 +40,11 @@ A_WBL_PV_S_B_PMC_1 = [];
 A_WBL_PV_S_W_COP_1 = [];
 A_WBL_PV_S_B_COP_1 = [];
 
+A_WBL_PV_S_W_INS_1 = [];
+A_WBL_PV_S_B_INS_1 = [];
+
+A_WBL_PV_S_W_OPF_1 = [];
+A_WBL_PV_S_B_OPF_1 = [];
 
 // Public variable a client sends out to update servers list
 A_WBL_PV_C_W_PMC_1 = [];
@@ -38,6 +53,11 @@ A_WBL_PV_C_B_PMC_1 = [];
 A_WBL_PV_C_W_COP_1 = [];
 A_WBL_PV_C_B_COP_1 = [];
 
+A_WBL_PV_C_W_INS_1 = [];
+A_WBL_PV_C_B_INS_1 = [];
+
+A_WBL_PV_C_W_OPF_1 = [];
+A_WBL_PV_C_B_OPF_1 = [];
 
 // List of variables
 // PMC-1: White List
@@ -54,8 +74,14 @@ A_WBL_LISTS =
 	["A_WBL_WL_PMC1", "A_WBL_V_W_PMC_1", A_WBL_WL_PMC_1, "A_WBL_PV_S_W_PMC_1", "A_WBL_PV_C_W_PMC_1"],
 	["A_WBL_BL_PMC1", "A_WBL_V_B_PMC_1", A_WBL_BL_PMC_1, "A_WBL_PV_S_B_PMC_1", "A_WBL_PV_C_B_PMC_1"],
 	
-	["A_WBL_WL_COP1", "A_WBL_V_W_COP_1", A_WBL_WL_COP_1, "A_WBL_PV_S_W_COP_1", "A_WBL_PV_C_B_PMC_1"],
-	["A_WBL_BL_COP1", "A_WBL_V_B_COP_1", A_WBL_BL_COP_1, "A_WBL_PV_S_B_COP_1", "A_WBL_PV_C_B_COP_1"]
+	["A_WBL_WL_COP1", "A_WBL_V_W_COP_1", A_WBL_WL_COP_1, "A_WBL_PV_S_W_COP_1", "A_WBL_PV_C_W_COP_1"],
+	["A_WBL_BL_COP1", "A_WBL_V_B_COP_1", A_WBL_BL_COP_1, "A_WBL_PV_S_B_COP_1", "A_WBL_PV_C_B_COP_1"],
+	
+	["A_WBL_WL_INS1", "A_WBL_V_W_INS_1", A_WBL_WL_INS_1, "A_WBL_PV_S_W_INS_1", "A_WBL_PV_C_W_INS_1"],
+	["A_WBL_BL_INS1", "A_WBL_V_B_INS_1", A_WBL_BL_INS_1, "A_WBL_PV_S_B_INS_1", "A_WBL_PV_C_B_INS_1"],
+	
+	["A_WBL_WL_OPF1", "A_WBL_V_W_OPF_1", A_WBL_WL_OPF_1, "A_WBL_PV_S_W_OPF_1", "A_WBL_PV_C_W_OPF_1"],
+	["A_WBL_BL_OPF1", "A_WBL_V_B_OPF_1", A_WBL_BL_OPF_1, "A_WBL_PV_S_B_OPF_1", "A_WBL_PV_C_B_OPF_1"]
 ];
 
 // List of list names for variables
@@ -66,54 +92,12 @@ A_WBL_LISTS =
 A_WBL_LISTS_ALL =
 [
 	["PMC_1", "A_WBL_WL_PMC1", "A_WBL_BL_PMC1", A_WBL_V_ACTIVE_PMC_1],
-	["COP_1", "A_WBL_WL_COP1", "A_WBL_BL_COP1", A_WBL_V_ACTIVE_COP_1]
-];
-
-A_WBL_SAVING = false;
-
-A_LIST_ADMINS	=
-[
-	"1039168", 
-	"815680",  
-	"966656",  
-	"146561",  
-	"12544",  
-	"4160710",  
-	"3855360",  
-	"8337542",  
-	"9828358",  
-	"9739718",  
-	"4022918",  
-	"6125382",  
-	"31922886", 
-	"35492678", 
-	"36142086", 
-	"1999302", 
-	"11124934", 
-	"2069056", 
-	"26082630", 
-	"24943814", 
-	"15457926", 
-	"11060102",
-	"7547206",
-	"9784838",
-	"76476806",
-	"92317702",
-	"4022278",
-	"37713478",
-	"610753AX",
-	"106972294",
-	"135130118",
-	"121911814",
-	"28237446",
-	"6903040",
-	"59597766",
-	"44772870"
+	["COP_1", "A_WBL_WL_COP1", "A_WBL_BL_COP1", A_WBL_V_ACTIVE_COP_1],
+	["INS_1", "A_WBL_WL_INS1", "A_WBL_BL_INS1", A_WBL_V_ACTIVE_INS_1],
+	["OPF_1", "A_WBL_WL_OPF1", "A_WBL_BL_OPF1", A_WBL_V_ACTIVE_OPF_1]
 ];
 
 A_LIST_DONATORS = [];
-
-isAdmin = (getPlayerUID player) in A_LIST_ADMINS;
 
 // Used for white-black list dialog
 A_WBL_F_DIALOG_INIT = {
@@ -296,9 +280,9 @@ A_WBL_F_DIALOG_INIT = {
 								_uid, 
 								(name _x), 
 								(_x),
-								(call compile format["""%1"" in %2;", _uid, _whiteList_variable]), 
-								(call compile format["""%1"" in %2;", _uid, _blackList_variable]),
-								(_uid in A_LIST_ADMINS), (_uid in A_LIST_DONATORS)
+								([] call compile format["""%1"" in %2;", _uid, _whiteList_variable]), 
+								([] call compile format["""%1"" in %2;", _uid, _blackList_variable]),
+								(_uid in listAdmins), (_uid in A_LIST_DONATORS)
 							  ]
 						);
 					} 
@@ -675,7 +659,7 @@ A_WBL_GETTYPE_NUM = {
 	_uid	= _this select 0;
 	_return = -1;
 
-	if (_uid in A_LIST_ADMINS) then {
+	if (_uid in listAdmins) then {
 			_return = 0;
 	} else { if (_uid in A_LIST_DONATORS) then {
 			_return = 1;

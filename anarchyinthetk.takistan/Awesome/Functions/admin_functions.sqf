@@ -35,9 +35,10 @@ admin_actions_list = {
 			[format["Creating Restart Poll"]] call logAdmin;
 		}],
 */
-/*		["Global Teleport", {
+		["Global Teleport (Test Server only)", {
+			if !([] call server_test_running) exitwith {};
 			format['onMapSingleClick "(vehicle player) setPosATL _pos";'] call broadcast;
-		}],*/
+		}],
 		["Carmagedon", {
 			private["_text"];
 			_text = _this select 2;
@@ -76,7 +77,7 @@ admin_actions_list = {
 				if ((({alive _x} count (crew _x)) == 0)&&((count ([_x] call mounted_get_occupants)) <= 0)) then {
 					deleteVehicle _x;
 				};
-			} foreach((getPosATL player) nearObjects [["StaticWeapon"], _distance]);
+			} foreach (nearestObjects[(getPosATL player), ["StaticWeapon"], _distance]);
 		}],
 		["Remove Fortifications",{
 			private["_text"];
@@ -93,7 +94,7 @@ admin_actions_list = {
 						deleteVehicle _x;
 					};
 				};
-			} foreach((getPosATL player) nearObjects [R3F_LOG_CFG_objets_deplacables, _distance]);
+			} foreach (nearestObjects[(getPosATL player), R3F_LOG_CFG_objets_deplacables, _distance]);
 		}],
 		["Remove Crates",{
 			private["_text"];
@@ -109,7 +110,7 @@ admin_actions_list = {
 				if (!(_x in bankflagarray) && !(_x in INV_ItemShops_IgnoreObjects)) then {
 					deleteVehicle _x;
 				};
-			} foreach((getPosATL player) nearObjects ["ReammoBox", _distance]);
+			} foreach (nearestObjects[(getPosATL player), ["ReammoBox"], _distance]);
 		}],
 		["Wipe Gear from Boxes/Vehicles ",{
 			private["_text"];
@@ -124,7 +125,7 @@ admin_actions_list = {
 				clearMagazineCargoGlobal _x;
 				clearWeaponCargoGlobal _x;
 				clearBackpackCargoGlobal _x;
-			} foreach((getPosATL player) nearObjects [["ReammoBox", "LandVehicle", "Air", "Ship"], _distance]);
+			} foreach (nearestObjects[(getPosATL player), ["ReammoBox", "LandVehicle", "Air", "Ship"], _distance]);
 		}],
 		["Remove Ammo/Weapon piles",{
 			private["_text"];
@@ -139,7 +140,7 @@ admin_actions_list = {
 			
 			{
 				deleteVehicle _x;
-			} foreach((getPosATL player) nearObjects ["WeaponHolder", _distance]);
+			} foreach (nearestObjects[(getPosATL player), ["WeaponHolder"], _distance]);
 		}],
 		["Clear Bodies",{
 			private["_text"];
@@ -148,13 +149,14 @@ admin_actions_list = {
 			
 			if (_distance <= 0) exitWith {};
 			
+			[format["Removing Bodies at a range of %1 Meters", _distance]] call logAdmin;
 			player groupchat format["Removing Bodies at a range of %1 meters", _distance];
 			
 			{
 				if !(alive _x) then {
 					deleteVehicle _x;
 				};
-			} foreach((getPosATL player) nearObjects [["CAManBase"], _distance]);
+			} foreach (nearestObjects[(getPosATL player), ["CAManBase"], _distance]);
 		}],
 		["check player equipment", {
 			private["_player", "_target"];
@@ -383,12 +385,19 @@ admin_actions_list = {
 			};
 		}],
 		["------ White / Black Lists ------", {}],
-		["COP - 1 List", {
+		["COP/INS/OPF - Black List", {
 			["COP_1"] spawn A_WBL_F_DIALOG_INIT;
 		}],
-/*		["PMC - 1 List", {
+/*		["INS - 1 Black List", {
+			["INS_1"] spawn A_WBL_F_DIALOG_INIT;
+		}],
+		["OPF - 1 Black List", {
+			["OPF_1"] spawn A_WBL_F_DIALOG_INIT;
+		}],
+*/		["PMC - 1 List (Test Server only)", {
+			if !([] call server_test_running) exitwith {};
 			["PMC_1"] spawn A_WBL_F_DIALOG_INIT;
-		}],*/
+		}],
 		["BLANK", {}]
 	]
 };

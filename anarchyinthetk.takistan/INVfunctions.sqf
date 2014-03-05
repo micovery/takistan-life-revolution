@@ -2,7 +2,7 @@
 
 
 INV_Heal = {
-	private["_paramedic","_medic","_damage","_legs"];
+	private["_paramedic","_medic","_damage"];
 	
 	_paramedic = ("paramedic_license" call INV_HasLicense);
 	_medic = [player] call FA_isMedic;
@@ -16,11 +16,8 @@ INV_Heal = {
 					_damage = 0.1;
 				};
 		};
-		
-	_legs = false;
-	_legs = (_this getVariable ["legs", 0]) > 0;
 	
-	if ((_paramedic && _legs) && ((damage _this) <= _damage)) exitwith {
+	if ((_paramedic) && ((damage _this) <= _damage)) exitwith {
 			
 			format ["%1 switchmove ""AinvPknlMstpSlayWrflDnon_medic"";", player] call broadcast;
 			player groupChat "Healing...";
@@ -37,7 +34,6 @@ INV_Heal = {
 					', _this, player, name(player)] call broadcast;
 				};
 			
-			_this setVariable ["legs", 0, true];
 			player groupChat "Legs healed, but nothing more can be done with the medkit";
 			true
 		};
@@ -53,7 +49,6 @@ INV_Heal = {
 		SleepWait(5)
 		player setdamage _damage;
 		player setHit ["legs", 0];
-		_this setVariable ["legs", 0, true];
 		[_this] call player_client_saveDamage;
 		player groupChat format[localize "STRS_inv_items_medikit_fertig"];
 		true
@@ -67,7 +62,6 @@ INV_Heal = {
 	if(local %1)then{
 			%1 setdamage %4;
 			%1 setHit ["legs", 0];
-			%1 setVariable ["legs", 0, true];
 			
 			[%1] call player_client_saveDamage;
 			%1 groupchat "You have been healed by %2-%3";

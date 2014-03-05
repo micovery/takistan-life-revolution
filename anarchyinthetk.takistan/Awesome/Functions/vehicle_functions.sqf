@@ -726,6 +726,8 @@ vehicle_set_init = {
 	
 		this addEventHandler ["GetIn", { _this spawn vehicle_GetIn_handler}];
 		this addEventHandler ["GetOut", { _this spawn vehicle_GetOut_handler}];
+		this addEventHandler ["handleDamage", {_this call A_fnc_EH_hDamageV}];
+		this addEventHandler ["fired", {_this spawn A_fnc_EH_firedV}];
 	',_vehicle_name];
 	processInitCommands;
 	
@@ -738,8 +740,6 @@ vehicle_set_init_server addPublicVariableEventHandler {
 		private["_vehicle"];
 		_vehicle = missionNamespace getVariable (_this select 1);
 		
-		_vehicle addEventHandler ["handleDamage", {_this call A_fnc_EH_hDamageV}];
-		_vehicle addEventHandler ["fired", {_this spawn A_fnc_EH_firedV}];
 		_vehicle addMPEventhandler ["MPKilled", {_this call vehicle_handle_mpkilled}];
 	};
 
@@ -1247,7 +1247,7 @@ vehicle_clean_getArray = {
 	
 	_timeEnd = diag_tickTime;
 	
-	format["VEHICLE CLEAN ARRAY GRAB - %1 Minutes - %2 Grab Time - Count %3", round(time / 60), (_timeEnd - _timeStart), _aCount] call A_DEBUG_S;
+//	format["VEHICLE CLEAN ARRAY GRAB - %1 Minutes - %2 Grab Time - Count %3", round(time / 60), (_timeEnd - _timeStart), _aCount] call A_DEBUG_S;
 	
 	_vehicleArray
 };
@@ -1293,7 +1293,7 @@ vehicle_clean_check = {
 			_this call vehicle_clean_check_impound;
 		};
 	
-	format['Vehicle Clean Check - %1: Starting', _vehicle] call A_DEBUG_S;
+//	format['Vehicle Clean Check - %1: Starting', _vehicle] call A_DEBUG_S;
 	
 	private["_checkAllowed", "_despawnTime", "_times", "_timeIn", "_timeOut", "_timeLast"];
 	
@@ -1312,14 +1312,16 @@ vehicle_clean_check = {
 	_timeOut = _times select 1;
 	
 	_timeLast = if (_timeIn > _timeOut) then {_timeIn}else{_timeOut};
+
 	
-	format['Vehicle Clean Check - %1: TL - %2, TI - %3, TO - %4', _vehicle, _timeLast, _timeIn, _timeOut]  call A_DEBUG_S;
+//	format['Vehicle Clean Check - %1: TL - %2, TI - %3, TO - %4', _vehicle, _timeLast, _timeIn, _timeOut]  call A_DEBUG_S;
 	
 	if ( (time - _timeLast) <  _despawnTime) exitwith {
-			format['Vehicle Clean Check - %1: Time Exit', _vehicle]  call A_DEBUG_S;
+//			format['Vehicle Clean Check - %1: Time Exit', _vehicle]  call A_DEBUG_S;
 		};
 	
-	format['Vehicle Clean Check - %1: Cleanup', _vehicle]  call A_DEBUG_S;
+//	format['Vehicle Clean Check - %1: Cleanup', _vehicle]  call A_DEBUG_S;
+
 	
 	[_vehicle] call vehicle_clean_cleanUp;
 	
@@ -1461,6 +1463,22 @@ vehicle_armed = {
 	_return
 };
 
+vehicle_validShooter = {
+	private["_source"];
+	_source = _this select 0;
+	
+	if (isNull _source) exitwith {false};
+	if (_source isKindOf "CAManBase") exitwith {[_source] call player_validShooter};
+	if ((count(crew _source)) <= 0) exitwith {false};
+	
+	if( ((_source distance (getmarkerpos "respawn_west")) < 120) || 
+	((_source distance (getmarkerpos "respawn_east")) < 100) || 
+	((_source distance (getmarkerpos "respawn_guerrila")) < 100) || 
+	((_source distance (getmarkerpos "respawn_civilian")) < 130)
+	) exitwith {false};
+	
+	true
+};
 
 [] call vehicle_load;
 [] call vehicle_save_gear_setup;

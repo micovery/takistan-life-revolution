@@ -1653,6 +1653,7 @@ INV_ItemShops = [
 		[redairveh,"Aircraft",dummyobj,redairspawn,_rair,_rair,true],
 
 		[cparts,"Car Parts",dummyobj,dummyobj,_carparts,_carparts,true],
+		[cparts2,"Car Parts",dummyobj,dummyobj,_carparts,_carparts,true],
 
 		[airshop3,"Armed Vehicles",dummyobj,asairspawn3,_as_2,_as_2,true],
 

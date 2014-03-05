@@ -22,11 +22,6 @@ FA_fHeal = {
 		
 		_unit setDamage 0;
 		
-		{
-			_sel = _x;
-			_unit setVariable [_sel, 0, true];
-		} forEach FA_hitList;
-		
 		format['if(local %1)then{{%1 setHit [_x, 0]} forEach FA_hitList;}', _unit] call broadcast;
 		[_unit] call player_client_saveDamage;
 	};

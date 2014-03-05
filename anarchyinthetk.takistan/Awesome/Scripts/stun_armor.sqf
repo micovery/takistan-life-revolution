@@ -7,6 +7,7 @@ _amount = _this select 2;
 
 switch _item do {
 	case "stun_light": {
+		if (([player, "stun_full_on"] call INV_GetItemAmount > 0) || ([player, "stun_light_on"] call INV_GetItemAmount > 0)) exitwith {player groupChat "You already have stun armor on";};
 		player setvariable ["stun_armor", "light", true];
 		player groupchat "You put on light stun Armor";
 		[player, _item, -1] call INV_AddInventoryItem;
@@ -14,6 +15,7 @@ switch _item do {
 	};
 
 	case "stun_light_ter": {
+		if (([player, "stun_full_on"] call INV_GetItemAmount > 0) || ([player, "stun_light_on"] call INV_GetItemAmount > 0)) exitwith {player groupChat "You already have stun armor on";};
 		player setvariable ["stun_armor", "light", true];
 		player groupchat "You put on light stun Armor";
 		[player, _item, -1] call INV_AddInventoryItem;
@@ -21,6 +23,7 @@ switch _item do {
 	};
 
 	case "stun_light_ill": {
+		if (([player, "stun_full_on"] call INV_GetItemAmount > 0) || ([player, "stun_light_on"] call INV_GetItemAmount > 0)) exitwith {player groupChat "You already have stun armor on";};
 		player setvariable ["stun_armor", "light", true];
 		player groupchat "You put on light stun Armor";
 		[player, _item, -1] call INV_AddInventoryItem;
@@ -28,6 +31,7 @@ switch _item do {
 	};
 	
 	case "stun_full": {
+		if (([player, "stun_full_on"] call INV_GetItemAmount > 0) || ([player, "stun_light_on"] call INV_GetItemAmount > 0)) exitwith {player groupChat "You already have stun armor on";};
 		player setvariable ["stun_armor", "full", true];
 		player groupchat "You put on Full stun Armor";
 		[player, _item, -1] call INV_AddInventoryItem;

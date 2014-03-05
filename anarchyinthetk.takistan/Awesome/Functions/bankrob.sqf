@@ -7,15 +7,11 @@ bankRob_v_inUse = "inUse";
 bankRob_v_useTime = "useTime";
 bankRob_v_robTime = "lastRob";
 bankRob_v_robbed = "robTime";
-bankRob_v_localLoss = "local_loss";
 bankRob_v_amountStolen = "stolenAmount";
 bankRob_v_robDisc = "RobberDisconnect";
 
 bankRob_pv_checkUse = "bankRob_checkUse";
 bankRob_pv_checkUse addpublicVariableEventHandler {(_this select 1) call bankRob_safeInUse_s};
-
-bankRob_pv_lossAdd = "bankRob_lossAdd";
-bankRob_pv_lossAdd addpublicVariableEventHandler {(_this select 1) call bankRob_addLosses_s};
 
 bankRob_timeCrack = 30;
 bankRob_timeCool = 60 * 60;
@@ -55,7 +51,7 @@ bankRob_rob = {
 				!(alive _player)
 				|| ((damage _player) != _damage) 
 				|| (_player getVariable ["isstunned", false]) 
-				|| (_player getVariable ["isstunned", false])
+				|| (_player getVariable ["restrained", false])
 				) then {
 					_i = 6;
 					_interupt = true;
@@ -65,7 +61,7 @@ bankRob_rob = {
 	keyblock = false; 
 	
 	if _interupt exitwith {
-			_player groupChat "Your Cracking attempt was interrupted, the tool is now useless";
+			_player groupChat "Your Cracking attempt was interrupted";
 			format['[false, %1] call bankRob_victimEnd;', _money] call broadcast;
 		};
 	
@@ -180,7 +176,7 @@ bankRob_victimEnd = {
 
 // Get money available in safe
 bankRob_checkSafe = {
-	private["_safe", "_robTime", "_total_cash", "_local_cash", "_local_losses", "_player_Cash", "_player_UID"];
+	private["_safe", "_robTime", "_total_cash", "_local_cash", "_player_Cash", "_player_loss"];
 	_safe = _this select 0;
 	_robTime = _this select 1;
 	
@@ -191,23 +187,20 @@ bankRob_checkSafe = {
 	
 	[_safe] call bankRob_safeSetTime;
 	
-	_local_losses = [];
-	
 	_total_cash = 0;
 	_local_cash = 0;
 	{
 		if (!isNull _x) then {
 				if (isPlayer _x) then {
 						_player_Cash = ([_x] call bank_get_value);
-						_player_UID = getPlayerUID _x;
+						_player_loss = [_x, _player_Cash] call bankRob_getLoss;
 						
-						_local_losses set[(count _local_losses), [_player_UID, ([_x, _player_Cash] call bankRob_getLoss), _robTime]];
-						_total_cash = _total_cash + _player_Cash;
+						if (_player_loss > 0) then {
+							_total_cash = _total_cash + _player_Cash;
+						};
 					};
 			};
 	} forEach playableUnits;
-	
-	[player, _local_losses] call bankRob_addLosses;
 	player setVariable [bankRob_v_robbed, _robTime, true];
 	
 	_local_cash = round(_total_cash / bankRob_divide);
@@ -307,13 +300,11 @@ bankRob_getLoss = {
 	_player = _this select 0;
 	_money = _this select 1;
 	
-	
 	_fdic = 100000;			
 	if (_money <= _fdic) exitWith {0};
 				
 	_insurances = ([_player, 'bankversicherung'] call INV_GetItemAmount) + ([_player, 'bankversicherung', 'private_storage'] call INV_GetStorageAmount);
 	if (_insurances > 0) exitwith {0};
-	
 	
 	_percent = 0;
 	switch true do {
@@ -329,88 +320,6 @@ bankRob_getLoss = {
 		};
 		
 	(_money * _percent)
-};
-
-// Adds losses to global losses array, and to local player losses
-bankRob_addLosses = {
-	private["_player", "_losses", "_currentLoss"];
-	_player = _this select 0;
-	_losses = _this select 1;
-	
-	_currentLoss = player getVariable [bankRob_v_localLoss, []];
-	{
-		_currentLoss set[(count _currentLoss), _x];
-	} forEach _losses;
-	
-	player setVariable [bankRob_v_localLoss, _currentLoss, false];
-	
-	missionNamespace setVariable [bankRob_pv_lossAdd, [str(player), _currentLoss]];
-	publicVariableServer bankRob_pv_lossAdd;
-};
-
-// Adds losses to global array on server
-bankRob_addLosses_s = {
-	private["_playerStr", "_player", "_loss", "_array"];
-	_playerStr = _this select 0;
-	_loss = _this select 1;
-	
-	_player = missionNamespace getVariable [_playerStr, objNull];
-	if (isNull _player) exitwith {format['bankRob_addLosses_s, Player is Null, %1', _this] call A_DEBUG_S;};
-	
-	_array = _player getVariable [bankRob_v_localLoss, []];
-	{
-		_array set[(count _array), _x];
-	} forEach _loss;
-	
-	_player setVariable [bankRob_v_localLoss, _loss, false];
-};
-
-bankRob_totalloss = {
-	private["_player", "_array", "_totalMoney", "_money"];
-	_player = _this select 0;
-	_array = _player getVariable [bankRob_v_localLoss, []];
-	
-	_totalMoney = 0;
-	{
-		_money = _x select 1;
-		_totalMoney = _totalMoney + _money;
-	} forEach _array;
-	
-	_totalMoney
-};
-
-// Return amounts to all
-bankRob_returnLost = {
-	private["_player", "_lossArray", "_uid", "_money", "_time"];
-	_player = _this select 0;
-	_lossArray = _player getVariable [bankRob_v_localLoss, []];
-	
-	{
-		_uid = _x select 0;
-		_money = _x select 1;
-		_time = _x select 2;
-		
-		if (_money > 0) then {
-				{
-					if (!isNull _x) then {
-							if (isPlayer _x) then {
-									if ((getPlayerUID _x) == _uid) then {
-											format['
-												if !(isClient) exitwith {};
-												if ((getPlayerUID player) == "%1") then {
-														player groupChat "Your money from the robbery has been returned - %3";
-														[player, %2] call bank_transaction;
-													};
-											', _uid, _money, strM(_money)] call broadcast;
-										};
-								};
-						};
-				} forEach playableUnits;
-			};
-	} forEach _lossArray;
-	
-	_player setVariable [bankRob_v_localLoss, [], false];
-	format['%1 setVariable [bankRob_v_localLoss, [], false]', _player] call broadcast_server;
 };
 
 // Add stolen amount
@@ -439,14 +348,13 @@ bankRob_resetStolen = {
 
 // Check if a player is considered a robber
 bankRob_checkRobber = {
-	private["_player", "_losses", "_robTime", "_reason"];
+	private["_player", "_robTime", "_reason"];
 	_player = _this select 0;
 	
-	_losses = [_player] call bankRob_totalloss;
-	_robTime = _player getVariable [bankRob_v_robbed, - (60 * 10)];
+	_robTime = _player getVariable [bankRob_v_robbed, 0];
 	_reason = [_player] call bankRob_robReason;
 	
-	( (((time - _robTime) < (10 * 60)) && (_losses > 0)) || _reason)
+	((((time - _robTime) < (10 * 60)) && (_robTime > 0)) || _reason)
 };
 
 // Check if player is wanted for cracking/robbing a safe
@@ -465,9 +373,8 @@ bankRob_disconnect = {
 	_robAbort = _player getVariable [bankRob_v_robbed, 0];
 	
 	if ( ((time - _robAbort) < (60 * 3)) && (_robAbort > 0) ) exitwith {
-			[_player] call bankRob_returnLost;
 			[_player, bankRob_v_robDisc, true] call player_set_bool;
-			format['server globalChat "%1-%2 was a robber and disconnected too early, money returned";', _player, (name _player)] call broadcast;
+			format['server globalChat "%1-%2 was a robber and disconnected too early";', _player, (name _player)] call broadcast;
 		};
 };
 

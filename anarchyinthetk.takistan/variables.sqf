@@ -456,7 +456,6 @@ civclassarray         =
 
 civslavearray          = ["Hooker1","Hooker2","Hooker3","Hooker4","RU_Hooker1","RU_Hooker2","RU_Hooker3","RU_Hooker4"];
 civworkerarray         = ["Worker1","Worker2","Worker3","Worker4"];
-terroristarray         = ["TK_GUE_Soldier_3_EP1","TK_GUE_Soldier_AAT_EP1","TK_GUE_Soldier_AT_EP1","TK_GUE_Soldier_EP1","TK_GUE_Soldier_HAT_EP1","TK_INS_Soldier_AAT_EP1","TK_INS_Soldier_EP1"];
 
 player_connected_handler = {
 	private["_id", "_name", "_uid"];

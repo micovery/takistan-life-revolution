@@ -18,6 +18,8 @@ if( ((_unit distance getmarkerpos "respawn_west" < 100))  ||
 	) exitwith {
 		0
 	};
+	
+if !([_source] call vehicle_validShooter) exitwith {0};
 
 _exit = false;
 
@@ -80,14 +82,5 @@ if (_projectile == "B_12Gauge_74Slug") then {
 if (_reduce) then {
 	_damage = _damage * 0.25;
 };
-
-/*
-_unit setVariable [_select, _damage, true];
-_unit SetHit [_select, _damage];
-
-if((_select == "") and (_damage >= 1) and !(isnull _source)) then {
-	_unit setdamage 1;
-};
-*/
 
 _damage 

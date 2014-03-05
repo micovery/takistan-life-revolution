@@ -925,7 +925,6 @@ player_prison_strip = {
 		private["_message"];
 		_message = format["%1-%2 was a bank robber, and has been charged $%3!", _player, (name _player), _charge];
 		format['server globalChat toString(%1);', toArray(_message)] call broadcast;
-		[_player] spawn bankRob_returnLost;
 	};
 };
 
@@ -1783,28 +1782,14 @@ player_save_side_damage = {
 	_player = _this select 0;
 	if (not([_player] call player_exists)) exitWith {};
 	
-	private["_side", "_damage", "_total", "_head", "_body", "_hands", "_legs"];
+	private["_side", "_damage"];
 		
 	_side = ([_player] call player_side);
 	_side = toLower(str(_side));
 	
 	_damage = damage _player;
 	
-	_total = _player getVariable ["", 0];
-	_head = _player getVariable ["head_hit", 0];
-	_body = _player getVariable ["body", 0];
-	_hands = _player getVariable ["hands", 0];
-	_legs = _player getVariable ["legs", 0];
-	
 	[_player, format["damage_%1", _side], _damage] call player_set_scalar;
-	
-	[_player, format["total_%1", _side], _total] call player_set_scalar;
-	[_player, format["head_%1", _side], _head] call player_set_scalar;
-	[_player, format["body_%1", _side], _body] call player_set_scalar;
-	[_player, format["hands_%1", _side], _hands] call player_set_scalar;
-	[_player, format["legs_%1", _side], _legs] call player_set_scalar;
-	
-	format['Saving player damage - %1, %2. Damage: %3, Total: %4, Legs: %5', _player, _side, _damage, _total, _legs] call A_DEBUG_S;
 };
 
 player_load_side_damage = {
@@ -1812,34 +1797,14 @@ player_load_side_damage = {
 	_player = _this select 0;
 	if (not([_player] call player_exists)) exitWith {};
 	
-	private["_side", "_damage", "_total", "_head", "_body", "_hands", "_legs"];
+	private["_side", "_damage"];
 	
 	_side = ([_player] call player_side);
 	_side = toLower(str(_side));
 
 	_damage = [_player, format["damage_%1", _side]] call player_get_scalar;
 	
-	_total = [_player, format["total_%1", _side]] call player_get_scalar;
-	_head = [_player, format["head_%1", _side]] call player_get_scalar;
-	_body = [_player, format["body_%1", _side]] call player_get_scalar;
-	_hands = [_player, format["hands_%1", _side]] call player_get_scalar;
-	_legs = [_player, format["legs_%1", _side]] call player_get_scalar;
-
-	_player setVariable ["", _total, true];
-	_player setVariable ["head_hit", _head, true];
-	_player setVariable ["body", _body, true];
-	_player setVariable ["hands", _hands, true];
-	_player setVariable ["legs", _legs, true];
-	
 	_player setDamage _damage;
-	
-	_player setHit["", _total];
-	_player setHit["head_hit", _head];
-	_player setHit["body", _body];
-	_player setHit["hands", _hands];
-	_player setHit["legs", _legs];
-	
-	format['Loading player damage - %1, %2. Damage: %3, Total: %4, Legs: %5, Dead: %6', _player, _side, _damage, _total, _legs, [_player] call player_get_dead] call A_DEBUG_S;
 };
 
 
@@ -2749,6 +2714,10 @@ player_continuity = {
 	
 	private["_player"];
 	_player = player;
+	
+	waitUntil {(vehicle _player == _player) && !(isNull player)};
+	[player, "playername", (toArray(name player))] call player_set_array;
+	
 	[_player] call player_reset_gear;
 	
 	ExecSQF("Awesome\EH\init.sqf");
@@ -3346,6 +3315,23 @@ player_vehicleGrabKiller = {
 	
 	_unit
 };
+
+player_validShooter = {
+	private["_source"];
+	_source = _this select 0;
+	
+	if (isNull _source) exitwith {false};
+	if !(_source isKindOf "CAManBase") exitwith {[_source] call vehicle_validShooter};
+	
+	if( ((_source distance (getmarkerpos "respawn_west")) < 120) || 
+	((_source distance (getmarkerpos "respawn_east")) < 100) || 
+	((_source distance (getmarkerpos "respawn_guerrila")) < 100) || 
+	((_source distance (getmarkerpos "respawn_civilian")) < 130)
+	) exitwith {false};
+	
+	true
+};
+
 
 player_resrain_disconnect = {
 	private["_player", "_robAbort"];

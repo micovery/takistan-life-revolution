@@ -14,8 +14,8 @@ interact_human = {
 	civ_variable_name = str(_target);
 	civ_player_variable  = _target;
 	
-	if (([_player] call player_cop) && (not([_target] call player_cop) || ischief)) exitWith {
-		if (not(createDialog "civmenu")) exitWith { hint "Dialog Error!";};
+	if (([_player] call player_cop) && (!([_target] call player_cop) || ischief)) exitWith {
+		if (!(createDialog "civmenu")) exitWith { hint "Dialog Error!";};
 		true;
 	};
 	
@@ -242,7 +242,7 @@ interact_toggle_restrains = {
 		private["_exit"];
 		_exit = false;
 		
-		_exit = !([_victim] call player_vulnerable);
+		_exit = !([_victim] call player_vulnerable) && !(isChief && ([_victim] call player_cop));
 		
 		if _exit exitwith{
 				player groupChat format["%1-%2 cannot be restrained, he is not subdued.", _victim, _victim_name];
@@ -1127,7 +1127,7 @@ interact_rob_inventory = {
 	
 	
 	private["_near_cops"];
-	if (([player, 40] call player_near_cops) && not([_target] call player_cop)) then {
+	if (([player, 50] call player_near_cops) && not([_target] call player_cop)) then {
 		player groupChat format["You cannot rob %1-%2, there is a cop near", _target, (name _target)];
 	};
 
@@ -1596,8 +1596,10 @@ interact_stranded_check = {
 		titleText ["", "BLACK OUT", 1];
 		sleep 1;
 		[_player] call player_teleport_spawn;
-		[_player] call player_reset_gear;
-		[_player] call player_reset_side_inventory;
+		if !([_player] call player_cop) then {
+			[_player] call player_reset_gear;
+			[_player] call player_reset_side_inventory;
+		};
 		titleText ["", "BLACK IN", 1];
 	}
 	else {
@@ -1829,7 +1831,9 @@ interact_private_storage_menu = {
 		_player = %1;
 		_storage = "%2";
 		_weight = [_player, _storage] call INV_GetStorageWeight;
-		("Storage " + strM(_weight) + "/Unlimited" )
+		_max_weight = INV_PrivateStorageCapacity;
+//		("Storage " + strM(_weight) + "/Unlimited" )
+		("Storage " + strM(_weight) + "/" + strM(_max_weight))
 	', _player, _private_storage_name];
 	
 	_right_label_code = compile format['

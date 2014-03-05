@@ -61,7 +61,7 @@ check_armed_vehicle = {
 	private["_in_vehicle", "_horns",  "_player", "_vehicle"];
 	
 	_player = _this select 0;
-	_vehicle = (vehicle player);
+	_vehicle = (vehicle _player);
 	_in_vehicle = (_vehicle != _player);
 	
 	if (!(_in_vehicle)) then {
@@ -74,6 +74,7 @@ check_armed_vehicle = {
 	private["_weapon"];
 	_weapon = currentWeapon _vehicle;
 	if ([(currentWeapon _vehicle), "CarHorn"] call shop_weapon_inherits_from) exitWith { false };
+	if ([_vehicle] call vehicle_armed) exitwith {true};
 	
 	([_vehicle] call check_armed_mounted)
 };
@@ -305,7 +306,6 @@ check_workplaces = {
 	} forEach workplacearray;
 };
 
-
 logics_check_object = 0;
 logics_check_warn_distance = 1;
 logics_check_teleport_distance = 2;
@@ -528,23 +528,22 @@ check_droppable_items = {
 };
 
 check_restrains = {
-	if (iscop) exitWith {};
-	if (not(alive player)) exitWith {};
+//	if (iscop) exitWith {};
+	if (!(alive player)) exitWith {};
 	
 	private["_physicallyRestrained", "_logicallyRestrained"];
 	_physicallyRestrained = ((animationState player) ==  "civillying01");
 	_logicallyRestrained = [player, "restrained"] call player_get_bool;
 	
-	if (_logicallyRestrained && not(_physicallyRestrained)) then {
+	if (_logicallyRestrained && !(_physicallyRestrained)) then {
 		format['%1 switchMove "civillying01";', player] call broadcast;
-	}
-	else { if (not(_logicallyRestrained) && _physicallyRestrained) then {
+	} else { if (!(_logicallyRestrained) && _physicallyRestrained) then {
 		format['%1 switchMove "amovppnemstpsnonwnondnon";', player] call broadcast;
 		[player, "isstunned", false] call player_set_bool;
 		StunActiveTime=0;
 	}
 	else { if (_logicallyRestrained && _physicallyRestrained) then {
-		if (not([player, 50] call player_near_cops)) then {
+		if (!([player, 50] call player_near_cops)) then {
 			[player, "restrained", false] call player_set_bool;
 			player groupChat format["You have managed to unrestrain yourself!"];
 		};

@@ -9,15 +9,7 @@ _ammo			= _this select 4;
 _magazine		= _this select 5;
 _projectile		= _this select 6;
 
-
-///////////////
 // Distance checks
-///////////////
-/*
-_bullet = nearestObject  [getpos player, _ammo];
-_bullets = nearestObjects  [getpos player, [_ammo], 10];
-*/
-
 if (
 		(_unit distance (getmarkerpos "respawn_west") < 100)
 		|| (_unit distance (getmarkerpos "respawn_east") < 100)
