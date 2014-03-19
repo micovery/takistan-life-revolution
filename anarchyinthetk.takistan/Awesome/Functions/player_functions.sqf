@@ -2703,6 +2703,16 @@ isleep = {
 	waitUntil { _sleep < serverTime };
 };
 
+player_donator_setup = {
+	private["_player","_amountArr","_amount"];
+	_player = _this select 0;
+	
+	_amountArr = [_player, "donatedAmount"] call player_get_array;
+	_amount = _amountArr call decode_number;
+	
+	DonatedAmount = _amount;
+};
+
 player_continuity = { 
 	if (not(isClient)) exitWith {};
 	
@@ -2717,6 +2727,9 @@ player_continuity = {
 	
 	waitUntil {(vehicle _player == _player) && !(isNull player)};
 	[player, "playername", (toArray(name player))] call player_set_array;
+	
+	// Donator
+	[_player] call player_donator_setup;
 	
 	[_player] call player_reset_gear;
 	

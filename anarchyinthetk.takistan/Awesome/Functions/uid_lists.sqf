@@ -1,7 +1,6 @@
 // Functions for donator and admin lists on the server
 
 listFile_Dir = "server\";
-listFile_Donators = listFile_Dir + "donators.sqf";
 listFile_Admins = listFile_Dir + "admins.log";
 
 listFile_RunFile = {
@@ -74,27 +73,5 @@ listFile_refreshAdmins_S = {
 listFile_refreshAdmins_C = {
 	listAdmins = server getVariable ["listAdmins", []];
 	isAdmin = (getPlayerUID player) in listAdmins;
-};
-
-listFile_loadDonators = {
-	[listFile_Donators] call listFile_RunFile;
-	
-	server setVariable ["donators0", donators0, true];
-	server setVariable ["donators1", donators1, true];
-	server setVariable ["donators2", donators2, true];
-	server setVariable ["donators3", donators3, true];
-	server setVariable ["donators4", donators4, true];
-};
-
-listFile_loadDonators_Init = {
-	donators0	= [];
-	donators1	= [];
-	donators2	= [];
-	donators3	= [];
-	donators4	= [];
-		
-	[] call listFile_loadDonators;
-	sleep 1;
-	server setVariable ["DONATOR_LOAD", true, true];
 };
 

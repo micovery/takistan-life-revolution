@@ -68,7 +68,7 @@ ftf_disconnected = {
 };
 
 ftf_faction_allowed = {
-	private["_player", "_faction", "_uid"];
+	private["_player", "_faction", "_uid", "_amount"];
 	_player = _this select 0;
 	
 	if (isNil "_player") exitWith {false};
@@ -87,8 +87,10 @@ ftf_faction_allowed = {
 		playtime = [_player, "playtime"] call player_get_scalar;
 	};
 	
+	_amount = ([_player, "donatedAmount"] call player_get_array) call decode_number;
+	
 	//Manual overrides:
-	if ((_uid in alldonators) or (_uid in listAdmins) or (ignoreFactionPlaytime)) exitWith {true};
+	if ((_amount > 0) or (_uid in listAdmins) or (ignoreFactionPlaytime)) exitWith {true};
 	
 	
 	//Get side var

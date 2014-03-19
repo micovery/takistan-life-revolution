@@ -89,7 +89,7 @@ if ((isNil "A_AI_ARRAY")) then {
 };
 
 private["_sleep", "_counter", "_time", "_time_wait", "_wait"];
-_sleep = 10;
+_sleep = 5;
 _counter = 0;
 _time = 0;
 _time_wait = 5;
@@ -105,7 +105,6 @@ while {true} do {
 	};
 		
 	[] call A_WBL_F_REFRESH_S;
-//	[] call listFile_loadDonators;
 	[] call listFile_refreshAdmins_S;
 			
 	{

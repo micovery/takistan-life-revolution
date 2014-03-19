@@ -24,36 +24,33 @@ zinsen_prozent               = 1;
 zinsen_dauer                 = 1200;
 robenable                    = true;
 
+// Game experiences some issues at start if this is not here.
+sleep 1;
 if (isServer) then {
-	_handle = [] spawn listFile_loadDonators_Init;
-	 waitUntil{scriptDone _handle};
-} else {
-	private["_timeout"];
-	_timeout = time + 5;
-	waitUntil {(server getVariable ["DONATOR_LOAD", false]) || (time > _timeout)};
-	donators0     = server getVariable ["donators0",[]];
-	donators1     = server getVariable ["donators1",[]];
-	donators2     = server getVariable ["donators2",[]];
-	donators3     = server getVariable ["donators3",[]];
-	donators4     = server getVariable ["donators4",[]];
-	alldonators   = donators1 + donators2 + donators3 + donators4;
+	server setVariable ["LOAD", true, true];
+}else{
+	waitUntil {(server getVariable ["LOAD", false])};
 };
-	
-private["_uid"];
-_uid = getPlayerUID player;
 
-if (_uid in donators1) then {
-    startmoneh = donatormoneh;
-}
-else { if (_uid in donators2) then {
-    startmoneh = silvermoneh;
-}
-else { if (_uid in donators3) then {
-    startmoneh = goldmoneh;
-}
-else { if (_uid in donators4) then {
-    startmoneh = platinummoneh;
-};};};};
+if (DonatedAmount > 0) then {
+	startmoneh = switch true do {
+		case (DonatedAmount >= 5 && DonatedAmount <= 24): {
+			donatormoneh
+		};
+		case (DonatedAmount >= 25 && DonatedAmount <= 49): {
+			silvermoneh
+		};
+		case (DonatedAmount >= 50 && DonatedAmount <= 99): {
+			goldmoneh
+		};
+		case (DonatedAmount >= 100): {
+			platinummoneh
+		};
+		default {
+			startmoneh
+		};
+	};
+};
 
 if (isAdmin) then {
 	startmoneh = startmoneh + adminmoneh;
