@@ -2708,7 +2708,7 @@ player_donator_setup = {
 	_player = _this select 0;
 	
 	_amountArr = [_player, "donatedAmount"] call player_get_array;
-	_amount = _amountArr call decode_number;
+	_amount = [_amountArr] call decode_number;
 	
 	DonatedAmount = _amount;
 };

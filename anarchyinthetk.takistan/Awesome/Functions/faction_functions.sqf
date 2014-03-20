@@ -87,7 +87,7 @@ ftf_faction_allowed = {
 		playtime = [_player, "playtime"] call player_get_scalar;
 	};
 	
-	_amount = ([_player, "donatedAmount"] call player_get_array) call decode_number;
+	_amount = [[_player, "donatedAmount"] call player_get_array] call decode_number;
 	
 	//Manual overrides:
 	if ((_amount > 0) or (_uid in listAdmins) or (ignoreFactionPlaytime)) exitWith {true};
