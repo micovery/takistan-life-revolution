@@ -2043,7 +2043,7 @@ interact_vehicle_storage = {
 			player groupChat format["The total weight of the items exceed the your carrying capacity"];
 		};
 		
-		player groupChat format["You took %1 item(s) out of th vehicle", strM(abs(_amount))];
+		player groupChat format["You took %1 item(s) out of the vehicle", strM(abs(_amount))];
 		_valid = true;		
 	};
 	
