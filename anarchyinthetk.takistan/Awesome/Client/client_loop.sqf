@@ -16,7 +16,7 @@ while {true} do {
 	[] call listFile_refreshAdmins_C;
 	
 	if (isCiv && (!isOpf) && (!isIns)) then {
-			if ( ([player] call player_isPMCclothes) && !([player] call player_isPMCwhitelist) ) then {
+			if ( ([player] call player_isPMCclothes) && (!([player] call player_isPMCwhitelist) || ([player] call player_isCopblacklist)) ) then {
 					if (_pmcCheckBool) then {
 							if (time >= _pmcCheckTime) then {
 									[player] call player_PMCrevoke;

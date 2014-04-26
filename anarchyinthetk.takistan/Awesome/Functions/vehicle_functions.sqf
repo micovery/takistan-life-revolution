@@ -16,7 +16,7 @@ vehicle_set_var = {
 
 vehicle_set_var_checked = {
 	private["_vehicle", "_variable_name", "_variable_value", "_checked", "_variable_type"];
-
+	
 	_vehicle = _this select 0;
 	_variable_name = _this select 1;
 	_variable_value = _this select 2;
@@ -37,8 +37,8 @@ vehicle_set_var_checked = {
 	
 	private["_current_value"];
 	_current_value = [_vehicle, _variable_name, _variable_type] call vehicle_get_var;
-	if(_checked && (str(_current_value) == str(_variable_value))) exitWith {};
 	
+	if(_checked && (str(_current_value) == str(_variable_value))) exitWith {};
 	_vehicle setVariable [_variable_name, _variable_value, true];
 	[_vehicle, _variable_name, _variable_value] call stats_vehicle_save;
 };
@@ -121,10 +121,13 @@ vehicle_get_var = {
 	if ((typeName _variable_type) != "STRING") exitWith {};
 	
 	_variable_value = _vehicle getVariable _variable_name;
-	_variable_value = if(isNil "_variable_value") then { "" } else { _variable_value };
-	_variable_value = if ((typeName _variable_value) != _variable_type) then { "" } else { _variable_value };
+	format['vehicle_get_var 1: %1-%2-%3-%4', _vehicle, _variable_name, _variable_type, if(isNil "_variable_value") then{"Nily"}else{_variable_value}] call A_DEBUG_S;
 	
-	format['vehicle_get_var: %1-%2-%3-%4', _vehicle, _variable_name, _variable_type, _variable_value] call A_DEBUG_S;
+	_variable_value = if(isNil "_variable_value") then { "" } else { _variable_value };
+//	format['vehicle_get_var 2: %1-%2-%3-%4', _vehicle, _variable_name, _variable_type, if(isNil "_variable_value") then{"Nily"}else{_variable_value}] call A_DEBUG_S;
+	
+	_variable_value = if ((typeName _variable_value) != _variable_type) then { "" } else { _variable_value };
+//	format['vehicle_get_var 3: %1-%2-%3-%4', _vehicle, _variable_name, _variable_type, if(isNil "_variable_value") then{"Nily"}else{_variable_value}] call A_DEBUG_S;
 	
 	
 /*	_variable_value = "failure";
@@ -239,18 +242,17 @@ vehicle_GetIn_handler = {
 	
 	if (_position == "driver") then {
 		[_player] call player_save_side_vehicle;
-		private["_entred_driver_uid"];
-		_entred_driver_uid = ([_player] call stats_get_uid);
-		_vehicle setVariable ["active_driver_uid", _entred_driver_uid, true];
+		private["_entered_driver_uid"];
+		_entered_driver_uid = ([_player] call stats_get_uid);
+		[_vehicle, "active_driver_uid", _entered_driver_uid] call vehicle_set_string;
 		
 		private["_saved_driver_uid"];
 		_saved_driver_uid = [_vehicle, "saved_driver_uid"] call vehicle_get_string;
 		
-		if (_saved_driver_uid == _entred_driver_uid) then {
+		if (_saved_driver_uid == _entered_driver_uid) then {
 			[_vehicle, "saved_driver_uid", ""] call vehicle_set_string;
 			[_vehicle] call vehicle_stop_track;
-		}
-		else {
+		} else {
 			[_vehicle] call vehicle_track;
 		};
 		
@@ -275,7 +277,7 @@ vehicle_GetOut_handler = {
 	
 	if (_position == "driver") then {
 		[_player] call player_save_side_vehicle;
-		_vehicle setVariable ["active_driver_uid", "", true];
+		[_vehicle, "active_driver_uid", ""] call vehicle_set_string;
 		
 		private["_exited_driver_uid"];
 		_exited_driver_uid = [_player] call stats_get_uid;
@@ -388,6 +390,7 @@ vehicle_save_stats = {
 	private["_driver_uid"];
 	//_driver_uid = [_vehicle, "active_driver_uid"] call vehicle_get_string;
 	_driver_uid = "";
+	
 	if ([_driver] call player_exists) then {
 		_driver_uid = [_driver] call stats_get_uid;
 	};
@@ -402,19 +405,23 @@ vehicle_save_stats = {
 	[_vehicle, "name", _name] call vehicle_set_string;
 	[_vehicle, "saved_driver_uid", _driver_uid] call vehicle_set_string;
 	[_vehicle, "class", _class] call vehicle_set_string;
+	
 	[_vehicle, "velocity", _velocity] call vehicle_set_array;
 	[_vehicle, "position_atl", _position_atl] call vehicle_set_array;
 	[_vehicle, "vector_direction", _vector_direction] call vehicle_set_array;
 	[_vehicle, "vector_up", _vector_up] call vehicle_set_array;
+	
 	[_vehicle, "fuel", _fuel] call vehicle_set_scalar;
 	[_vehicle, "damage", _damage] call vehicle_set_scalar;
-	[_vehicle, "engine_state", _engine_state] call vehicle_set_bool;
-	
 	[_vehicle, "tuning", (_vehicle getVariable ["tuning", 0])] call vehicle_set_scalar;
 	[_vehicle, "nitro", (_vehicle getVariable ["nitro", 0])] call vehicle_set_scalar;
 	
+	[_vehicle, "engine_state", _engine_state] call vehicle_set_bool;
+	
 	[_vehicle] call vehicle_save_gear;
+	
 	[_vehicle] call vehicle_save_storage;
+	
 	[_vehicle, "item_name", ([_vehicle, "item_name"] call vehicle_get_string), false] call vehicle_set_string_checked; 
 };
 
@@ -492,7 +499,6 @@ vehicle_init_stats = {
 	_vehicle setFuel _fuel;
 	_vehicle setVariable ["tuning", _speed, true];
 	_vehicle setVariable ["nitro", _nitro, true];
-	
 	
 	true
 };
@@ -803,9 +809,9 @@ vehicle_recreate = {
 	_name = _this select 0;
 	_class = _this select 1;
 	
-	if (isNil "_name") exitWith {};
+	if (isNil "_name") exitWith {nil};
 	if (typeName _name != "STRING") exitWith {nil};
-	if (isNil "_class") exitWith {};
+	if (isNil "_class") exitWith {nil};
 	if (typeName _class != "STRING") exitWith {nil};
 	
 	private["_vehicle"];
@@ -815,8 +821,11 @@ vehicle_recreate = {
 	
 	private["_data"];
 	//player groupChat format["Recreating _name = %1", _name];
+	
 	_data = [_name] call stats_load_request_send;
+	
 	_vehicle = [_class, [0,0,0], false] call vehicle_create;
+	
 	[_vehicle, _name] call vehicle_set_init;	
 	[_data, _vehicle] call stats_compile_sequential;
 	sleep 1;
@@ -834,6 +843,7 @@ vehicle_recreate = {
 	_item_name = [_vehicle, "item_name"] call vehicle_get_string;
 	[_vehicle, _item_name, true] call vehicle_set_modifications;
 	[player, _vehicle] call vehicle_add;
+	
 	(_vehicle)
 };
 
@@ -1003,7 +1013,7 @@ vehicle_cop_tuning = {
 	if(!(_vehicle iskindof "car"))exitwith{};
 	if (({_vehicle isKindOf _x} count ["StrykerBase_EP1"]) > 0) exitwith {};
 	
-	_vehicle setVariable ["tuning", 2, true];
+	[_vehicle, "tuning", 2] call vehicle_set_scalar;
 };
 
 vehicle_toggle_lock = {

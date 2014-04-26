@@ -125,7 +125,7 @@ class Mission
 	};
 	class Groups
 	{
-		items=163;
+		items=164;
 		class Item0
 		{
 			side="LOGIC";
@@ -5477,6 +5477,26 @@ class Mission
 					leader=1;
 					skill=1;
 					text="impoundarea3";
+				};
+			};
+		};
+		class Item163
+		{
+			side="LOGIC";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={6260,67,10538};
+					azimut=76.26;
+					special="NONE";
+					id=1781;
+					side="LOGIC";
+					vehicle="Land_Church_03";
+					leader=1;
+					skill=1;
+					text="church";
 				};
 			};
 		};
@@ -20514,8 +20534,6 @@ class Mission
 			text="Workplace 1";
 			type="hd_flag";
 			colorName="ColorYellow";
-			a=1;
-			b=1;
 		};
 		class Item5
 		{
@@ -20534,7 +20552,6 @@ class Mission
 			name="govManmarker";
 			text="Takistan Government Complex";
 			type="Faction_TKG_EP1";
-			b=1;
 		};
 		class Item7
 		{
@@ -20803,7 +20820,6 @@ class Mission
 			text=" Takistan National Bank";
 			type="Faction_TKG_EP1";
 			colorName="ColorWhite";
-			b=1;
 		};
 		class Item42
 		{
@@ -20876,8 +20892,6 @@ class Mission
 			text="Vehicle Factory";
 			type="mil_flag";
 			colorName="ColorOrange";
-			a=1;
-			b=1;
 		};
 		class Item49
 		{
@@ -20886,8 +20900,6 @@ class Mission
 			text="Gas Station 1";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item50
 		{
@@ -20896,8 +20908,6 @@ class Mission
 			text="Gas Station 2";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item51
 		{
@@ -20906,8 +20916,6 @@ class Mission
 			text="Gas Station 3";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item52
 		{
@@ -20916,8 +20924,6 @@ class Mission
 			text="Gas Station 4";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item53
 		{
@@ -20926,8 +20932,6 @@ class Mission
 			text="General Factory";
 			type="mil_flag";
 			colorName="ColorOrange";
-			a=1;
-			b=1;
 		};
 		class Item54
 		{
@@ -20936,7 +20940,6 @@ class Mission
 			text=" Weapon Factory";
 			type="Faction_GUE";
 			colorName="ColorOrange";
-			b=1;
 		};
 		class Item55
 		{
@@ -20944,8 +20947,6 @@ class Mission
 			name="gunlicense";
 			text="Weapon Licenses";
 			type="mil_flag";
-			a=1;
-			b=1;
 		};
 		class Item56
 		{
@@ -21030,8 +21031,6 @@ class Mission
 			text="Market Exports";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item65
 		{
@@ -21040,8 +21039,6 @@ class Mission
 			text="Workplace 2";
 			type="mil_flag";
 			colorName="ColorYellow";
-			a=1;
-			b=1;
 		};
 		class Item66
 		{
@@ -21062,8 +21059,6 @@ class Mission
 			text="Workplace 3";
 			type="mil_flag";
 			colorName="ColorYellow";
-			a=1;
-			b=1;
 		};
 		class Item68
 		{
@@ -21101,8 +21096,6 @@ class Mission
 			text="Impound Lot";
 			type="mil_flag";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item72
 		{
@@ -21123,8 +21116,6 @@ class Mission
 			text="Oil Barrel Trader";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item74
 		{
@@ -21133,8 +21124,6 @@ class Mission
 			text="Air Shop";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item75
 		{
@@ -21286,7 +21275,6 @@ class Mission
 			text=" Terrorist Hideout";
 			type="Faction_TKM_EP1";
 			colorName="ColorRed";
-			b=1;
 		};
 		class Item90
 		{
@@ -21305,8 +21293,6 @@ class Mission
 			name="tuning1";
 			type="mil_pickup";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item92
 		{
@@ -21314,8 +21300,6 @@ class Mission
 			name="tuning2";
 			type="mil_pickup";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item93
 		{
@@ -21559,8 +21543,6 @@ class Mission
 			text="Licenses&Storage";
 			type="mil_flag";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item123
 		{
@@ -21636,8 +21618,6 @@ class Mission
 			text="Furnace";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item132
 		{
@@ -21739,8 +21719,6 @@ class Mission
 			text="Ring Shop";
 			type="hd_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item143
 		{
@@ -21749,8 +21727,6 @@ class Mission
 			text="Diamond Processing";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item144
 		{
@@ -21781,8 +21757,6 @@ class Mission
 			text=" Gang Area (Drug Reprocessing)";
 			type="mil_warning";
 			colorName="ColorOrange";
-			a=1;
-			b=1;
 		};
 		class Item147
 		{
@@ -21790,8 +21764,6 @@ class Mission
 			name="passport";
 			text="Passports&Licenses";
 			type="mil_flag";
-			a=1;
-			b=1;
 		};
 		class Item148
 		{
@@ -21800,8 +21772,6 @@ class Mission
 			text="Car Shop 1";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item149
 		{
@@ -21810,8 +21780,6 @@ class Mission
 			text="Car Shop 2";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item150
 		{
@@ -21820,8 +21788,6 @@ class Mission
 			text="Car Shop 3";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item151
 		{
@@ -21830,8 +21796,6 @@ class Mission
 			text="Truck Shop";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item152
 		{
@@ -21881,8 +21845,6 @@ class Mission
 			text="Gas Station 5";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item158
 		{
@@ -21983,8 +21945,6 @@ class Mission
 			text="Gas Station 6";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item170
 		{
@@ -21993,8 +21953,6 @@ class Mission
 			text="Gas Station 7";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item171
 		{
@@ -22003,8 +21961,6 @@ class Mission
 			text="Gas Station 8";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item172
 		{
@@ -22019,8 +21975,6 @@ class Mission
 			text="Air Shop";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item174
 		{
@@ -22038,8 +21992,6 @@ class Mission
 			text="Glass Blower";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item176
 		{
@@ -22078,8 +22030,6 @@ class Mission
 			text=" Smuggler";
 			type="hd_flag";
 			colorName="ColorRed";
-			a=1;
-			b=1;
 		};
 		class Item180
 		{
@@ -22094,8 +22044,6 @@ class Mission
 			text="Gun Shop";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item182
 		{
@@ -22138,8 +22086,6 @@ class Mission
 			text="Workplace";
 			type="mil_flag";
 			colorName="ColorYellow";
-			a=1;
-			b=1;
 		};
 		class Item186
 		{
@@ -22168,8 +22114,6 @@ class Mission
 			text="Car Shop 4";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item189
 		{
@@ -22177,8 +22121,6 @@ class Mission
 			name="tuning3";
 			type="mil_pickup";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item190
 		{
@@ -22187,8 +22129,6 @@ class Mission
 			text="Car Shop 5";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item191
 		{
@@ -22197,8 +22137,6 @@ class Mission
 			text="Car Shop 6";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item192
 		{
@@ -22207,8 +22145,6 @@ class Mission
 			text="Car Shop 7";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item193
 		{
@@ -22217,8 +22153,6 @@ class Mission
 			text="Car Shop 8";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item194
 		{
@@ -22227,8 +22161,6 @@ class Mission
 			text="Truck Shop";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item195
 		{
@@ -22366,8 +22298,6 @@ class Mission
 			text="Sell Fish";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item209
 		{
@@ -22376,8 +22306,6 @@ class Mission
 			text="Gas Station 9";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item210
 		{
@@ -22396,8 +22324,6 @@ class Mission
 			text="Licenses&Passport";
 			type="mil_flag";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item212
 		{
@@ -22414,8 +22340,6 @@ class Mission
 			text="Hashish Emporium";
 			type="hd_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item214
 		{
@@ -22483,8 +22407,6 @@ class Mission
 			name="passport_1";
 			text="Insurance";
 			type="mil_flag";
-			a=1;
-			b=1;
 		};
 		class Item222
 		{
@@ -22492,8 +22414,6 @@ class Mission
 			name="carpartsmkr";
 			type="mil_pickup";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item223
 		{
@@ -22739,8 +22659,6 @@ class Mission
 			text="Shop";
 			type="mil_flag";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item250
 		{
@@ -22749,8 +22667,6 @@ class Mission
 			text="Factory";
 			type="mil_flag";
 			colorName="ColorOrange";
-			a=1;
-			b=1;
 		};
 		class Item251
 		{
@@ -22819,8 +22735,6 @@ class Mission
 			text="Activity/Job/Trade";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item257
 		{
@@ -22829,8 +22743,6 @@ class Mission
 			text="Licenses/Insurance/Passport Control";
 			type="mil_flag";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item258
 		{
@@ -22839,8 +22751,6 @@ class Mission
 			text="Blackmarket Shop";
 			type="mil_flag";
 			colorName="ColorRed";
-			a=1;
-			b=1;
 		};
 		class Item259
 		{
@@ -22848,8 +22758,6 @@ class Mission
 			name="bmshopmarker";
 			type="mil_flag";
 			colorName="ColorRed";
-			a=1;
-			b=1;
 		};
 		class Item260
 		{
@@ -22858,7 +22766,6 @@ class Mission
 			text=" UN Peacekeeper HQ";
 			type="Faction_BLUFOR_EP1";
 			colorName="ColorBlue";
-			b=1;
 		};
 		class Item261
 		{
@@ -22886,7 +22793,6 @@ class Mission
 			text=" Takistan Liberation Army HQ";
 			type="Faction_OPFOR_EP1";
 			colorName="ColorRed";
-			b=1;
 		};
 		class Item264
 		{
@@ -22895,7 +22801,6 @@ class Mission
 			text=" Mujahedin HQ";
 			type="Faction_INDFOR_EP1";
 			colorName="ColorGreen";
-			b=1;
 		};
 		class Item265
 		{
@@ -22904,8 +22809,6 @@ class Mission
 			text="Clothes Shop (Blue-BLUFOR/Green-IND/Red-OPFOR/White-CIV)";
 			type="mil_objective";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item266
 		{
@@ -23367,8 +23270,6 @@ class Mission
 			name="car_paint_shop_1m";
 			type="mil_end";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item309
 		{
@@ -23376,8 +23277,6 @@ class Mission
 			name="car_paint_shop_2m";
 			type="mil_end";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item310
 		{
@@ -23385,8 +23284,6 @@ class Mission
 			name="car_paint_shop_3m";
 			type="mil_end";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item311
 		{
@@ -23394,8 +23291,6 @@ class Mission
 			name="car_paint_shop_4m";
 			type="mil_end";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item312
 		{
@@ -23403,8 +23298,6 @@ class Mission
 			name="car_paint_shop_5m";
 			type="mil_end";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item313
 		{
@@ -23412,8 +23305,6 @@ class Mission
 			name="car_paint_shop_6m";
 			type="mil_end";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 		class Item314
 		{
@@ -23430,8 +23321,6 @@ class Mission
 			name="fort_shop_1m";
 			type="Depot";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item316
 		{
@@ -23439,8 +23328,6 @@ class Mission
 			name="fort_shop_2m";
 			type="Depot";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item317
 		{
@@ -23448,8 +23335,6 @@ class Mission
 			name="fort_shop_3m";
 			type="Depot";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item318
 		{
@@ -23457,8 +23342,6 @@ class Mission
 			name="fort_shop_4m";
 			type="Depot";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item319
 		{
@@ -23466,8 +23349,6 @@ class Mission
 			name="fort_shop_5m";
 			type="Depot";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item320
 		{
@@ -23475,8 +23356,6 @@ class Mission
 			name="fort_shop_6m";
 			type="Depot";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item321
 		{
@@ -23511,8 +23390,6 @@ class Mission
 			text="Oil Processing&Mining Tools";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item325
 		{
@@ -23521,8 +23398,6 @@ class Mission
 			text="Oil Processing&Mining Tools";
 			type="mil_flag";
 			colorName="ColorGreen";
-			a=1;
-			b=1;
 		};
 		class Item326
 		{
@@ -23531,8 +23406,6 @@ class Mission
 			text="Arms Dealer";
 			type="hd_flag";
 			colorName="ColorRed";
-			a=1;
-			b=1;
 		};
 		class Item327
 		{
@@ -23570,8 +23443,6 @@ class Mission
 			text="Aircraft Factory";
 			type="mil_flag";
 			colorName="ColorOrange";
-			a=1;
-			b=1;
 		};
 		class Item331
 		{
@@ -23580,8 +23451,6 @@ class Mission
 			text="Air Impound Lot";
 			type="mil_flag";
 			colorName="ColorBlack";
-			a=1;
-			b=1;
 		};
 		class Item332
 		{
@@ -23671,8 +23540,6 @@ class Mission
 			name="mechanic";
 			type="mil_start";
 			colorName="ColorBlue";
-			a=1;
-			b=1;
 		};
 	};
 	class Sensors

@@ -32,10 +32,10 @@ if _exit exitwith {};
 
 [player, _item, -1] call INV_AddInventoryItem;
 
-if(_item == "supgrade1")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 6; _vcl setfuel 1; _vcl setvariable ["tuning", 1, true]; player groupchat "vehicle tuned!";};
-if(_item == "supgrade2")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 7; _vcl setfuel 1; _vcl setvariable ["tuning", 2, true]; player groupchat "vehicle tuned!";};
-if(_item == "supgrade3")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 8; _vcl setfuel 1; _vcl setvariable ["tuning", 3, true]; player groupchat "vehicle tuned!";};
-if(_item == "supgrade4")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 9; _vcl setfuel 1; _vcl setvariable ["tuning", 4, true]; player groupchat "vehicle tuned!";};
-if(_item == "supgrade5")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 10; _vcl setfuel 1; _vcl setvariable ["tuning", 5, true]; player groupchat "vehicle tuned!";};
+if(_item == "supgrade1")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 6; _vcl setfuel 1; [_vcl, "tuning", 1] call vehicle_set_scalar; player groupchat "vehicle tuned!";};
+if(_item == "supgrade2")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 7; _vcl setfuel 1; [_vcl, "tuning", 2] call vehicle_set_scalar; player groupchat "vehicle tuned!";};
+if(_item == "supgrade3")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 8; _vcl setfuel 1; [_vcl, "tuning", 3] call vehicle_set_scalar; player groupchat "vehicle tuned!";};
+if(_item == "supgrade4")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 9; _vcl setfuel 1; [_vcl, "tuning", 4] call vehicle_set_scalar; player groupchat "vehicle tuned!";};
+if(_item == "supgrade5")then{player groupchat "tuning vehicle..."; _vcl setfuel 0; sleep 10; _vcl setfuel 1; [_vcl, "tuning", 5] call vehicle_set_scalar; player groupchat "vehicle tuned!";};
 
 };

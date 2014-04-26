@@ -214,13 +214,23 @@ stats_get_faction = {
 
 
 stats_get_uid = {
-	private["_object","_uid"];
+
+	private["_object","_uid","_exit"];
 	_object = _this select 0;
 	
-	_uid = _object getVariable "stats_uid";
-	if (not(isNil "_uid")) exitWith {_uid};
+//	_uid = _object getVariable "stats_uid";
+//	if !(isNil "_uid") exitWith {diag_log format['stats_get_uid: exit1']; _uid};
+
+	_uid = "";
+	_uid = _object getVariable ["stats_uid", false];
+	_exit = false;
 	
-	if (not(_object isKindOf "Man")) exitWith {
+	if (typeName _uid == "STRING") then {
+		_exit = (_uid != "");
+	};	
+	if _exit exitwith {_uid};
+	
+	if !(_object isKindOf "Man") exitWith {
 		([_object] call starts_get_vehicle_uid)
 	};
 	
@@ -229,12 +239,13 @@ stats_get_uid = {
 
 starts_get_vehicle_uid = {
 	private["_object"];
-	
 	_object = _this select 0;
 	if (isNil "_object") exitWith {""};
 	
 	private["_uid"];
+	_uid = "";
 	_uid = vehicleVarName _object;
+	
 	if (isNil "_uid") exitWith {""};
 	if (typeName _uid != "STRING") exitWith {};
 	
@@ -323,14 +334,14 @@ stats_vehicle_save = {
 	_value = _this select 2;
 	
 	private["_uid"];
+	_uid = "";
 	_uid = [_vehicle] call stats_get_uid;
 	
 	if (_uid == "") exitWith {};
-	
 	if (isNil "_variable") exitWith {};
 	if (isNil "_value") exitWith {};
 	if (typeName _variable != "STRING") exitWith {};
-		
+	
 	[_uid, _variable, _value] call stats_save;
 };
 
@@ -340,7 +351,6 @@ stats_server_player_disconnected = {
 	_id = _this select 0; 
 	_name = _this select 1; 
 	_uid  = _this select 2; 
-	diag_log format['stats_server_player_disconnected: %1', _this];
 	
 	if (isNil "_uid") exitWith {};
 	if (typeName _uid != "STRING") exitWith {};
@@ -348,9 +358,8 @@ stats_server_player_disconnected = {
 	
 	private["_player"]; 
 	_player = [_name] call player_lookup_name;
-	if (isNull _player) exitwith {diag_log format['stats_server_player_disconnected: %1, Player Null', _this];};
+	if (isNull _player) exitwith {};
 	
-	diag_log format["%1,%2,%3 - disconnected saving start", _player, _name, _uid];
 	[_player] call player_save_side_gear;
 	[_player] call player_save_side_inventory;
 	[_player] call player_save_side_position;
@@ -360,9 +369,7 @@ stats_server_player_disconnected = {
 	[_uid, _player] call ftf_disconnected;
 	[_player] spawn bankRob_disconnect;
 	[_player] spawn player_resrain_disconnect;
-	diag_log format["%1,%2,%3 - disconnected saving end", _player, _name, _uid];
 	
-
 	private["_vehicle"];
 	_vehicle = (vehicle _player);
 //	diag_log 'checking player in vehicle';

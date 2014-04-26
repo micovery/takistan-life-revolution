@@ -62,7 +62,7 @@ convoy_create_truck = {
 		clearmagazinecargo this;
 	';	
 	
-	_truck setvariable ["tuning", 5, true];
+	[_truck, "tuning", 5] call vehicle_set_scalar;
 	processinitcommands;
 	_truck
 };

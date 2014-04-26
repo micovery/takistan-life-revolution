@@ -23,7 +23,7 @@ if (_art == "use") then {
 	_vcl setfuel 0;
 	sleep 10;
 	_vcl setfuel 1;
-	_vcl setvariable ["nitro", 1, true];
+	[_vcl, "nitro", 1] call vehicle_set_scalar;
 	player groupchat "vehicle tuned!";
 	sleep 2;
 	player groupchat "press and hold shift to activate nitro";

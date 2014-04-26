@@ -259,29 +259,7 @@ admin_actions_list = {
 			
 			[_target] call player_reset_side_inventory;
 		}],
-		["Add to all Player's banks (use input field)", {
-			private["_text", "_amount"];
-			_text = _this select 2;
-			_amount = [(_text)] call parse_number;
-			
-			if (_amount <= 0) exitwith {
-				server globalChat "Error, value less than or equal to zero";
-			};
-			
-			[format["Adding %1 to all player's banks", strM(_amount)]] call logAdmin;
-			server globalChat format["Adding $%1 to all player's banks", strM(_amount)];
-			
-			{
-				private["_player_variable_name", "_player_variable"];
-				_player_variable_name = _x;
-				_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
-				if ([_player_variable] call player_human) then {
-					[_player_variable, _amount] call bank_transaction;
-				};
-			} forEach playerstringarray;
-			
-		}],
-		["Add/Remove to player's (use input field)", {
+		["Add/Remove to player's bank (use input field)", {
 			private["_target", "_text", "_amount"];
 			_target = _this select 1;
 			if (not([_target] call player_human)) exitWith {};
@@ -383,6 +361,29 @@ admin_actions_list = {
 					};
 				};
 			};
+		}],
+		["------    Are you Sure?     ------", {}],
+		["Add to all player banks (use input field)", {
+			private["_text", "_amount"];
+			_text = _this select 2;
+			_amount = [(_text)] call parse_number;
+			
+			if (_amount <= 0) exitwith {
+				server globalChat "Error, value less than or equal to zero";
+			};
+			
+			[format["Adding %1 to all player's banks", strM(_amount)]] call logAdmin;
+			server globalChat format["Adding $%1 to all player's banks", strM(_amount)];
+			
+			{
+				private["_player_variable_name", "_player_variable"];
+				_player_variable_name = _x;
+				_player_variable = missionNamespace getVariable [_player_variable_name, objNull];
+				if ([_player_variable] call player_human) then {
+					[_player_variable, _amount] call bank_transaction;
+				};
+			} forEach playerstringarray;
+			
 		}],
 		["------ White / Black Lists ------", {}],
 		["COP/INS/OPF - Black List", {

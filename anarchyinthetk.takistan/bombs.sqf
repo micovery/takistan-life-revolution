@@ -13,67 +13,14 @@ if (_art == "init") then {
     };
 
     INV_BombSpawn = {
-		private["_men1", "_men2", "_men3", "_has_admin_camera"];
-		
         if ((typeName _this) == "OBJECT") then {
             if (not(isNull _this)) then {
                 if (((getPosATL _this) select 2) < 5) then {
                     createVehicle ["Bo_GBU12_LGB", (getPosATL _this), [], 0, "NONE"];
-                        
-                    //if (player distance _this < 25) then {player setdamage 1;}; // All players within 25m die instantly
-                    // _this setDamage 1;
-                        
-                    if (!(_this isKindOf "Man")) then {
-                        _men1 = [_this] call vehicle_getCrew; 
-                        {
- 
-                            _has_admin_camera = _x getVariable ["has_admin_camera", false];
-                            if !(_has_admin_camera) then {
-									 _x setDamage 1;
-                                };               
-                        } forEach _men1;            
-                    };
-                        
-                    _men2 = nearestObjects[getPosATL _this, ["Man", "LandVehicle", "Air"], 25];
-
-                    {
-                        _has_admin_camera = _x getVariable "has_admin_camera";
-                        if ( !(isnil "_has_admin_camera") && _has_admin_camera) then {
-                        } 
-                        else {
-                            _x setDamage 1;
-                        };
-                        
-                        if(!(_x isKindOf "Man")) then {
-                            _men3 = [_x] call vehicle_getCrew;
-                            {
-                                _has_admin_camera = _x getVariable "has_admin_camera";
-                                if ( !(isnil "_has_admin_camera") && _has_admin_camera) then {
-									
-								} else {
-									_x setDamage 1;
-								};
-                            } forEach _men3;
-                        };
-                    } forEach _men2;
                 };
             };
         }else{
             createVehicle ["Bo_GBU12_LGB", (_this), [], 0, "NONE"];
-            //if (player distance _this < 25) then {player setdamage 1;}; // All players within 25m die instantly
-            _men2 = nearestObjects[_this, ["Man", "LandVehicle", "Air"], 25];
-                
-            {
-                _x setDamage 1;
-                        
-                if(!(_x isKindOf "Man")) then {
-					_men3 = [_x] call vehicle_getCrew;
-					{
-						_x setDamage 1;
-					} forEach _men3;
-				};
-                        
-            } forEach _men2;
         };
     };
 
@@ -179,6 +126,7 @@ if (_art == "server") then {
                 case "fernzuenderbombe": {
                     if (_settings select 0) then { 
                         _vehicle spawn INV_BombSpawn; 
+						format["""%1"" call INV_BombDelete", _id] call broadcast; 
                     };
                     if (_status == "defused") then { 
                         format["""%1"" call INV_BombDelete", _id] call broadcast; 
@@ -186,8 +134,9 @@ if (_art == "server") then {
                 };
 
                 case "zeitzuenderbombe": {
-                    if (_settings select 0 < time) then { 
-                        _vehicle spawn INV_BombSpawn; 
+                    if ((_settings select 0) < time) then { 
+                        _vehicle spawn INV_BombSpawn;
+						format["""%1"" call INV_BombDelete", _id] call broadcast;
                     };
                     if (_status == "defused") then { 
                         format["""%1"" call INV_BombDelete", _id] call broadcast; 
@@ -196,7 +145,7 @@ if (_art == "server") then {
 
                 case "aktivierungsbombe": {
                     if (!(_settings select 0)) then {
-                      _vehicle addEventHandler ["engine", { _vehicle = _this select 0;  if (isEngineOn _vehicle) then { _vehicle removeAllEventHandlers "engine"; _vehicle spawn INV_BombSpawn; }; }];
+                      _vehicle addEventHandler ["engine", { _vehicle = _this select 0;  if (isEngineOn _vehicle) then { _vehicle removeAllEventHandlers "engine"; _vehicle spawn INV_BombSpawn; format["""%1"" call INV_BombDelete", _id] call broadcast;}; }];
                     };
 
                     if (_status == "defused") then {
@@ -211,6 +160,7 @@ if (_art == "server") then {
                     _speed  = speed _vehicle;
                     if ((_active) and (_speed < (_settings select 0))) then { 
                         _vehicle spawn INV_BombSpawn; 
+						format["""%1"" call INV_BombDelete", _id] call broadcast;
                     };
                         
                     if (_status == "defused") then { 
@@ -306,9 +256,9 @@ if (_art == "use") then {
     _item   = _this select 1;
     _anzahl = _this select 2;
         
-	if true exitwith {
-		player groupChat "Bombs are temporarily Disabled until they have been redone.";
-	};
+//	if true exitwith {
+//		player groupChat "Bombs are temporarily Disabled until they have been redone.";
+//	};
 
     if (_item == "zeitzuenderbombe") then {
         if (!(createDialog "timebombconfig")) exitWith {

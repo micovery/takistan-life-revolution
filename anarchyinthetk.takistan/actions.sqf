@@ -226,7 +226,7 @@ action96 = _role addaction ["Raise Gates","rgate3.sqf",[],1,false,true,"","iscop
 action97 = _role addaction ["Lower Gates","lgate3.sqf",[],1,false,true,"","iscop and player distance copgate3 <= 5"];
 action98 = _role addaction ["Raise Gates","rgate4.sqf",[],1,false,true,"","iscop and player distance copgate4 <= 5"];
 action99 = _role addaction ["Lower Gates","lgate4.sqf",[],1,false,true,"","iscop and player distance copgate4 <= 5"];
-action100 = _role addaction ["Lower Gates","lgate5.sqf",[],1,false,true,"","((player distance pmcgate) <= 5) and ([player] call player_isPMCwhitelist) && (""pmc_license_journeyman"" call INV_HasLicense)"];
+action100 = _role addaction ["Lower Gates","lgate5.sqf",[],1,false,true,"","((player distance pmcgate) <= 5) and ([player] call player_isPMCwhitelist) && !([player] call player_isCopblacklist) && (""pmc_license_journeyman"" call INV_HasLicense)"];
 action101 = _role addaction ["Lower Gates","lgate6.sqf",[],1,false,true,"","isciv and player distance terrgate <= 4"];
 action102 = _role addaction ["Raise Gates","rgate5.sqf",[],1,false,true,"","isins and player distance opforgate2 <= 5"];
 action103 = _role addaction ["Lower Gates","lgate8.sqf",[],1,false,true,"","isins and player distance opforgate2 <= 5"];

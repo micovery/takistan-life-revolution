@@ -142,12 +142,12 @@ factory_globals = {
 		"MAAWS_HEDP",
 		"HandGrenade_East",
 		"PipeBomb",
-		"selbstmordbombe"
-//		"fernzuenderbombe",
-//		"zeitzuenderbombe",
-//		"aktivierungsbombe",
-//		"geschwindigkeitsbombe",
-//		"fernzuender"
+		"selbstmordbombe",
+		"fernzuenderbombe",
+		"zeitzuenderbombe",
+		"aktivierungsbombe",
+		"geschwindigkeitsbombe",
+		"fernzuender"
 	];
 
 	private["_terrorfactory"];
@@ -202,15 +202,12 @@ factory_globals = {
 		"datsun1_civil_1_open",
 		"datsun1_civil_2_covered",
 		"datsun1_civil_3_open",
-		"UAZ_Unarmed_TK_CIV_EP1",
 		"SUV_TK_CIV_EP1",
 		"Ural_TK_CIV_EP1",
 		"UralCivil",
 		"UralCivil2",
 		"V3S_Open_TK_CIV_EP1",
 		"V3S_Civ",
-		"BAF_Offroad_D",
-		"BAF_Offroad_W",
 		"LandRover_CZ_EP1",
 		"AH6X_EP1",
 		"MH6J_EP1",

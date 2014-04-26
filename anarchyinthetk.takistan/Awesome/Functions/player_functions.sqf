@@ -3206,9 +3206,11 @@ player_isPMCclothes = {
 			};
 			
 		_clothes in pmc_skin_list
-	};	
+	};
+
 player_isPMCwhitelist = {(getPlayerUID (_this select 0)) in A_WBL_V_W_PMC_1};
-player_isPMC = {([typeOf (_this select 0)] call player_isPMCclothes) && (_this call player_isPMCwhitelist)};
+player_isCopblacklist = {(getPlayerUID (_this select 0)) in A_WBL_V_B_COP_1};
+player_isPMC = {([typeOf (_this select 0)] call player_isPMCclothes) && (_this call player_isPMCwhitelist) && !(_this call player_isCopblacklist)};
 	
 player_PMCrevoke = {
 		player groupChat format["You have been off the PMC whitelist for too long and your clothes are being reprimanded"];

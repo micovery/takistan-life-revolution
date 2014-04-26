@@ -675,13 +675,13 @@ criminal_reward = {
 	if (_player != player) exitWith {};
 	
 	private["_reward","_sendReward"];
-	_reward = floor(_bounty/3);
+	_reward = floor(_bounty/5);
 	if (_victimBankMoney < _reward) then {
 		_sendReward = _victimBankMoney;
-		player groupChat format["The victim had a bounty of $%1. Because he doesn't have that much money you got 1/3 of the civs money totaling $%2", _reward, _sendReward];
+		player groupChat format["The victim had a bounty of $%1. Because he doesn't have that much money you got 1/5 of the civs money totaling $%2", _reward, _sendReward];
 	} else {
 		_sendReward = _reward;
-		player groupChat format["You got 1/3 of the civs bounty totaling $%1", _sendReward];
+		player groupChat format["You got 1/5 of the civs bounty totaling $%1", _sendReward];
 	};
 	[_player, _sendReward] call bank_transaction; 
 	[_victim, -(_sendReward)] call bank_transaction;
@@ -980,7 +980,7 @@ track_death = {
 	_qualifier = format["%1%2", _armed_str, _criminal_str];
 	
 
-	if ((_victim_side == "Civilian") and !(_victim_armed || _victim_criminal || _victim_illSkin || _victim_illVeh || _collateral) && !_victim_PMC) exitWith {
+	if ((_victim_side == "Civilian") and !(_victim_armed || _victim_criminal || _victim_illSkin || _victim_illVeh || _collateral) && !(_victim_PMC)) exitWith {
 		[_dp] call time_penalty;
 		[_dp] call remove_licenses;
 		[_dp, format["aggravated-crime%1", _qualifier], _bounty] call death_set_wanted; 
