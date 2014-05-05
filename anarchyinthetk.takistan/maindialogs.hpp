@@ -661,6 +661,49 @@ class dialog_yes_no {
 	};
 };
 
+class dialog_select_cancel {
+	idd = -1;
+	movingEnable = true;
+	controlsBackground[] = {DLG_BACK1, background};
+	objects[] = { };
+	controls[] = {selectionlist, button1, button2, dummybutton};
+	class DLG_BACK1: Rscbackground {
+		x = 0.38; y = 0.17;
+		w = 0.38; h = 0.5;
+	};
+
+	class background : RscBgRahmen {
+		x = 0.38; y = 0.17;
+		w = 0.38; h = 0.5;
+		text = $STRD_janein_header;
+	};
+
+	class selectionlist : RscListBox {
+		idc = 1;
+		x = 0.40; y = 0.21;
+		w = 0.34; h = 0.40;
+	};
+
+	class button1 : RscButton {
+		x = 0.40; y = 0.32+0.30;
+		w = 0.10; h = 0.04;
+
+		text = "Select";
+		action = "response = (lbData [1, (lbCurSel 1)]); closeDialog 0;";
+	};
+
+	class button2 : RscButton {
+		x = 0.53; y = 0.32+0.30;
+		w = 0.10; h = 0.04;
+
+		text = "Cancel";
+		action = "response = str(-1); closeDialog 0;";
+	};
+
+	class dummybutton : RscDummy {idc = 1023;
+	};
+};
+
 class chiefdialog {
 	idd = -1;
 	movingEnable = true;
