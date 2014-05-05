@@ -1,7 +1,0 @@
-First pbo uploaded to github
-
-01/14/2013
-Resolved Issue #18
-	- Changed check from "isPistol_class" to "((_weapon == "M9") || (_weapon == "M9SD"))" (EH_fired.sqf, EH_handledamage.sqf, Stun.sqf, clientloop.sqf)
-	- Changed weaponloaded to "((player ammo (currentWeapon player))" (clientloop.sqf)
-	- Removed duplicate "stun_drop_weapons" function (stun_functions.sqf)
