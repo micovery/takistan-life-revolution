@@ -65,9 +65,9 @@ action113 = _role addaction ["Reset targets","noscript.sqf",'{_x animate["terc",
 //action19 = _role addaction [format["Restore PK NEST ($%1)", PKcost],"recruitai.sqf","PK3",1,false,true,"","_gunner = gunner PK3; player distance recruitai <= 5 and (!alive _gunner or isnull _gunner or !alive PK3)"];
 //action20 = _role addaction [format["Restore PK NEST ($%1)", PKcost],"recruitai.sqf","PK4",1,false,true,"","_gunner = gunner PK4; player distance recruitai <= 5 and (!alive _gunner or isnull _gunner or !alive PK4)"];
 
-cpbkp = _role addaction ["Recruit Soldier $200000","noscript.sqf",'[player, 200000] call interact_recruit_ai;',1,false,true,"","!curreccop and player distance copbackup <= 10 and count (units group player) < 8 and iscop"];
-opbkp = _role addaction ["Recruit Soldier $150000","noscript.sqf",'[player, 150000] call interact_recruit_ai;',1,false,true,"","!currecred and player distance redbackup <= 10 and count (units group player) < 8"];
-insbkp = _role addaction ["Recruit Fighter $100000","noscript.sqf",'[player, 100000] call interact_recruit_ai;',1,false,true,"","!currecins and player distance civbackup <= 10 and count (units group player) < 8"];
+cpbkp = _role addaction ["Recruit Soldier","noscript.sqf",'[player, 200000] call interact_recruit_ai;',1,false,true,"","!curreccop and player distance copbackup <= 10 and count (units group player) < 8 and iscop"];
+opbkp = _role addaction ["Recruit Soldier","noscript.sqf",'[player, 150000] call interact_recruit_ai;',1,false,true,"","!currecred and player distance redbackup <= 10 and count (units group player) < 8"];
+insbkp = _role addaction ["Recruit Fighter","noscript.sqf",'[player, 100000] call interact_recruit_ai;',1,false,true,"","!currecins and player distance civbackup <= 10 and count (units group player) < 8"];
 //===================================== IMPOUND AREA ==================================================
 action21 = _role addaction ["Impound Lot","noscript.sqf",'[] spawn A_impound_dialog',1,false,true,"","((player distance impoundbuy1) <= 5) or ((player distance impoundbuy2) <= 5) or ((player distance copcar) <= 5)"];
 //action22 = _role addaction ["Impound Lot","maindialogs.sqf",["impound"],1,false,true,"","player distance copcar <= 5"];
