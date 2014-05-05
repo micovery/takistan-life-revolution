@@ -7,8 +7,8 @@ if (not(isNil "custom_ai_loadouts_loaded")) exitWith {};
  * 1 = check
  * 2 = Weapons array
  * 3 = Magazine array
- * 4 = class type (skin), nil = default side skin
- * 5 = price (if Nil it's default)
+ * 4 = class type (skin)
+ * 5 = price
 */
 
 /*
