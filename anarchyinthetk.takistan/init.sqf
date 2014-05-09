@@ -87,7 +87,7 @@ ExecSQF("Awesome\init.sqf");
 
 
 // initializes Fixes
-ExecSQF("Fixes\init.sqf");
+ExecSQFspawn("Fixes\init.sqf");
 
 if(isClient) then {
 	[0.8] call stats_client_update_loading_progress;

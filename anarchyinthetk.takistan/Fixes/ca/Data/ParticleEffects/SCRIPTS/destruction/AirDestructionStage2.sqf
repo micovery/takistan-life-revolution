@@ -46,6 +46,7 @@ _dirt setDropInterval 0.05;
 		_yv=velocity _v select 1;
 		_zv=velocity _v select 2;
 		_dir = abs(_xv atan2 _yv);
+		_dr = 1;
 
 		_Crater= "CraterLong" createvehiclelocal [_pos select 0, _pos select 1, 0];
 		_Crater setdir (_dir + (180 * _i));
@@ -53,15 +54,22 @@ _dirt setDropInterval 0.05;
 		_Crater setPos [_pos select 0, _pos select 1, ((0 - _i)/13)]; //all setpos commands so it is placed correctly on sloped terrain
 		_speed = (speed _v);
 
-		if (_zv>1) then {_v setvelocity [_xv/1.3,_yv/1.3,0]}
-		else {_v setvelocity [_xv/1.2,_yv/1.2,velocity _v select 2]};
+		if (_zv>1) then {
+			_v setvelocity [_xv/1.3,_yv/1.3,0];
+		} else {
+			_v setvelocity [_xv/1.2,_yv/1.2,velocity _v select 2];
+		};
 
 		_tv=abs(_xv)+abs(_yv)+abs(_zv);
-		if (_tv>2) then {_dr=1/_tv} else {_dr=1};
+		if (_tv>2) then {			
+			_dr=1/_tv;		
+		} else {			
+			_dr=1;
+		};
 		_smoke setDropInterval _dr*1.5;
 		_fire setDropInterval _dr*1.5;
 		_dirt setDropInterval _dr;
-		_shards setDropInterval _dr;
+		//_shards setDropInterval _dr;
 
 		sleep (0.25 - (_speed / 1000));
 		_i = _i + 1;
