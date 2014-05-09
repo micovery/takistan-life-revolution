@@ -85,6 +85,10 @@ if (isClient) then {
 // Starts up Awesome scripts
 ExecSQF("Awesome\init.sqf");
 
+
+// initializes Fixes
+ExecSQF("Fixes\init.sqf");
+
 if(isClient) then {
 	[0.8] call stats_client_update_loading_progress;
 	["Loading - Stage 4/5"] call stats_client_update_loading_title;
