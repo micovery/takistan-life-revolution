@@ -292,6 +292,7 @@ compensate_player = {
 };
 
 
+
 punish_player = {	
 	private["_selection"];
 	_selection = [] call get_retribution_selection;
@@ -320,6 +321,21 @@ punish_player = {
 	
 	[_euid] call remove_killer;
 	[] call fill_retributions;
+	
+	private["_konline"];
+	_konline = false;
+	{
+		if (getPlayerUID == _x) exitWith {
+			_konline = true;
+		};
+	} foreach playableUnits;
+	
+	if (not(_konline)) exitWith {
+		//Killer Offline
+		[_killer_uid, "remaining_ret", format["[%1, %2, %3, %4]", _type, _euid, _damages, _victim]] call stats_player_save_offline;
+		
+		
+	};
 	
 	format[
 	'
@@ -1252,6 +1268,21 @@ retributions_main = {
 			handling_retribution = false;
 		};
 	};
+};
+
+retributions_init = {
+	//Check for old comp requests
+	["player_rejoin_camera_complete"] call player_wait;
+	private["_oldComp"];
+	_oldComp = [player, "remaining_ret"] call player_get_array;
+	//If nothing to comp exit:
+	if (_oldComp == []) exitWith {};
+	_oldComp call punished_logic;
+	[player, "remaining_ret", []] call player_set_array;
+};
+
+if (not(isServer)) then {
+	[] spawn retributions_init;
 };
 
 retribution_functions_defined = true;

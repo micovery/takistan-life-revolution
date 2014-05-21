@@ -623,6 +623,28 @@ player_update_scalar = {
 	[_player, _variable_name, (_current_value + _variable_value)] call player_set_scalar;
 };
 
+player_set_scalar_offline = {
+	private["_player", "_variable_name", "_variable_value"];
+	_player = _this select 0;
+	_variable_name = _this select 1;
+	_variable_value = _this select 2;
+	
+	if (isNil "_player") exitWith {};
+	if (isNil "_variable_name") exitWith {};
+    if (isNil "_variable_value") exitWith {};
+	
+	if (typeName _variable_name != "STRING") exitWith {};
+	if (typeName _variable_value != "SCALAR") exitWith {};
+	
+	if ([_player] call player_human) exitWith {
+		(_this call player_set_scalar)
+	};
+	
+	if (typeName _player != "STRING") exitWith {};
+	
+	
+};
+
 player_set_scalar = {
 	private["_player", "_variable_name", "_variable_value"];
 	_player = _this select 0;
@@ -639,9 +661,9 @@ player_set_scalar = {
 	private["_current_value"];
 	_current_value = [_player, _variable_name] call player_get_scalar;
 	if (_current_value == _variable_value) exitWith {};
-	
 	_player setVariable [_variable_name, _variable_value, true];
 	[_player, _variable_name, _variable_value] call stats_player_save;
+
 };
 
 player_get_scalar = {

@@ -326,6 +326,22 @@ stats_player_save = {
 	[_uid, _variable, _value] call stats_save;
 };
 
+stats_player_save_offline = {
+	private["_player", "_variable", "_value"];
+	_player = _this select 0;
+	_variable = _this select 1;
+	_value = _this select 2;
+	
+	if (isNil "_player") exitWith {};
+	if (isNil "_variable") exitWith {};
+	if (isNil "_value") exitWith {};
+	if (typeName _player != "STRING") exitWith {};
+	if (typeName _variable != "STRING") exitWith {};
+	if (typeName _value != "SCALAR") exitWith {};
+		
+	[_uid, _variable, _value] call stats_save;
+};
+
 //method intended saving vehicle stats ... it can be run on any client
 stats_vehicle_save = {
 	private["_vehicle", "_variable", "_value"];
