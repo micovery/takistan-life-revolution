@@ -21,24 +21,6 @@ admin_actions_list = {
 		["Camera (Toggle)", {
 			[] call camera_toggle;
 		}],
-/*		["Create poll (use input field)", {
-			private["_text"];
-			_text = _this select 2;
-			player groupChat format["Creating poll!"];
-			[parseText(_text), (getPlayerUID player)] call admin_create_poll;
-			[format["Creating Poll: %1", parseText(_text)]] call logAdmin;
-		}],
-		["Call poll for restart", {
-			private["_text"];
-			player groupChat format["Polling for Restart."];
-			["Would you like to restart the server?", (getPlayerUID player)] call admin_create_poll;
-			[format["Creating Restart Poll"]] call logAdmin;
-		}],
-*/
-		["Global Teleport (Test Server only)", {
-			if !([] call server_test_running) exitwith {};
-			format['onMapSingleClick "(vehicle player) setPosATL _pos";'] call broadcast;
-		}],
 		["Carmagedon", {
 			private["_text"];
 			_text = _this select 2;
@@ -48,9 +30,6 @@ admin_actions_list = {
 			
 			[format["Starting Carmagedon at %1 Meters", _distance]] call logAdmin;
 			player groupchat format["Starting Carmagedon at a range of %1 meters", _distance];
-			
-//			"LandVehicle", "Air", "Car", "Motorcycle", "Bicycle", "UAV",  "Wreck_Base", "HelicopterWreck", "UH1Wreck", "UH1_Base", "UH1H_base", "AH6_Base_EP1","CraterLong", "Ka60_Base_PMC", "Ka137_Base_PMC", "A10"
-
 			private["_array"];
 			_array = droppableitems + ["Car", "Motorcycle", "Tank", "StaticWeapon", "Air", "Ship", "StaticShip", "Wreck", "Wreck_Base"];
 			{			
@@ -324,7 +303,7 @@ admin_actions_list = {
 			player groupChat format["Player %1(%2) is ignoring the required playtime now", _target, (name _target)];
 			
 			private["_message"];
-			_message = "You are ignoring the required playtime now. Feel free to join blufor, insurent or opfor now.";
+			_message = "You are ignoring the required playtime now. Feel free to join blufor, insurgent or opfor now.";
 			format['if (player == %1) then {player groupChat toString(%2);};', _target, toArray(_message)] call broadcast;
 		}],
 		["Check Player playtime", {
@@ -385,6 +364,24 @@ admin_actions_list = {
 			} forEach playerstringarray;
 			
 		}],
+		["Teleport player back to spawn (select in list)", {
+			private["_unit", "_side"];
+			_unit = this select 1;
+			if (not([_unit] call player_human)) exitWith {};
+			_side = if (side _unit == resistance) then {"respawn_guerrila"} else {format["respawn_%1", (side _unit)]};
+			[format["Telported %1-%2 to %3 marker", _unit, (name _unit), _side]] call logAdmin;
+			_unit setPos (getMarkerPos _side);
+		}],
+		["Teleport all player back to spawn", {
+			private["_unit", "_side"];
+			["Teleported all players back to base"] call logAdmin;
+			{
+				if ([_x] call player_human) then {
+					_side = if (side _x == resistance) then {"respawn_guerrila"} else {format["respawn_%1", (side _x)]};
+					_x setPos (getMarkerPos _side);
+				};
+			} foreach playableUnits;
+		}],
 		["------ White / Black Lists ------", {}],
 		["COP/INS/OPF - Black List", {
 			["COP_1"] spawn A_WBL_F_DIALOG_INIT;
@@ -394,8 +391,13 @@ admin_actions_list = {
 		}],
 		["OPF - 1 Black List", {
 			["OPF_1"] spawn A_WBL_F_DIALOG_INIT;
+		}],*/
+		["------ Test Server only ------", {}],
+		["Global Teleport (Test Server only)", {
+			if !([] call server_test_running) exitwith {};
+			format['onMapSingleClick "(vehicle player) setPosATL _pos";'] call broadcast;
 		}],
-*/		["PMC - 1 List (Test Server only)", {
+		["PMC - 1 List (Test Server only)", {
 			if !([] call server_test_running) exitwith {};
 			["PMC_1"] spawn A_WBL_F_DIALOG_INIT;
 		}],

@@ -315,49 +315,57 @@ punish_player = {
 	_damages = _killer_money;
 	_type_str = [_type] call kill_type_2_str;
 	
-	[player, _damages] call bank_transaction;
-	_message = format["%1 collected $%2 in damages from %3, for %4", _victim_name, _damages, _killer_name, _type_str];
-	format[' server globalChat "%1"; ', _message] call broadcast;
+
+
 	
-	[_euid] call remove_killer;
-	[] call fill_retributions;
+
 	
 	private["_konline"];
 	_konline = false;
 	{
-		if (getPlayerUID == _x) exitWith {
+		if ((getPlayerUID _x) == _killer_uid) exitWith {
 			_konline = true;
 		};
 	} foreach playableUnits;
 	
-	if (not(_konline)) exitWith {
+	if (not(_konline)) then {
 		//Killer Offline
-		[_killer_uid, "remaining_ret", format["[%1, %2, %3, %4]", _type, _euid, _damages, _victim]] call stats_player_save_offline;
-		
-		
-	};
+		_damages = _damages * 1.5;
+		[_killer_uid, "remaining_ret", [_type, _euid, _damages, player]] call stats_player_save_offline;
+		//Comp dodge message
+		_message = format["%1 collected $%2 in damages from %3, for %4. %3 comp dodged and will be punished next time he logs in!", _victim_name, _damages, _killer_name, _type_str];
+		format[' server globalChat "%1"; ', _message] call broadcast;
 	
-	format[
-	'
-		private["_pname","_puid","_pfletter"];
-		_pname = name player;
-		_puid = getPlayerUID player;
-		_pfletter = (toArray _pname) select 0;
+		
+	} else {
+	
+		_message = format["%1 collected $%2 in damages from %3, for %4", _victim_name, _damages, _killer_name, _type_str];
+		format[' server globalChat "%1"; ', _message] call broadcast;
+		format[
+		'
+			private["_pname","_puid","_pfletter"];
+			_pname = name player;
+			_puid = getPlayerUID player;
+			_pfletter = (toArray _pname) select 0;
 
-		private ["_damages", "_fees", "_killer_name", "_killer_fletter", "_killer_uid", "_euid", "_type", "_victim"];
+			private ["_damages", "_fees", "_killer_name", "_killer_fletter", "_killer_uid", "_euid", "_type", "_victim"];
 		
-		_killer_name = (name player);
-		_killer_fletter = %1;
-		_killer_uid = "%2";
-		_euid = "%3";
-		_damages = %4;
-		_type = "%5";
-		_victim = %6;
+			_killer_name = (name player);
+			_killer_fletter = %1;
+			_killer_uid = "%2";
+			_euid = "%3";
+			_damages = %4;
+			_type = "%5";
+			_victim = %6;
 		
-		if (_killer_uid == _puid && _killer_fletter == _pfletter) then {
-			[_type, _euid, _damages, _victim] call punished_logic;
-		};
-	', _killer_fletter, _killer_uid, _euid, _damages, _type, player] call broadcast;
+			if (_killer_uid == _puid && _killer_fletter == _pfletter) then {
+				[_type, _euid, _damages, _victim] call punished_logic;
+			};
+		', _killer_fletter, _killer_uid, _euid, _damages, _type, player] call broadcast;
+	};
+	[player, _damages] call bank_transaction;
+	[_euid] call remove_killer;
+	[] call fill_retributions;
 };
 
 
@@ -497,6 +505,25 @@ get_near_vehicle_driver =  {
 			_driver	= driver _x;
 		};
 	} forEach _near_vehicles;
+	if (isNull(_driver)) then {
+		{
+			if ((speed _x > 10) and (!(isNull(gunner _x)))) exitWith {
+				_driver = gunner _x;
+			};
+		} forEach _near_vehicles;
+	};
+	if (isNull(_driver)) then {
+		{
+			if ((speed _x > 10) and (!(isNull(crew _x)))) exitWith {
+				if (count (crew _x) > 1) then {
+					//To be fair I randomize here - I don't know who was on driver seat last time
+					_driver = (crew _x) select (floor(random (count _x)));
+				} else {
+					_driver = (crew _x) select 0;
+				};
+			};
+		} forEach _near_vehicles;
+	};
 	_driver
 };
 
@@ -1276,7 +1303,7 @@ retributions_init = {
 	private["_oldComp"];
 	_oldComp = [player, "remaining_ret"] call player_get_array;
 	//If nothing to comp exit:
-	if (_oldComp == []) exitWith {};
+	if (count(_oldComp) <= 0) exitWith {};
 	_oldComp call punished_logic;
 	[player, "remaining_ret", []] call player_set_array;
 };
